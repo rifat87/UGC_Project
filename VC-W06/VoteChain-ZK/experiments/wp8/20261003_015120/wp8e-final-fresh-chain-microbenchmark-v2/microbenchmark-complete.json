@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+  "freshChainPerIteration": true,
+  "ballotId": "001",
+  "candidateIndex": 0,
+  "warmupIterations": 5,
+  "measuredIterations": 20,
+  "totalIterations": 25,
+  "timedInterval": "cast-send-start-to-receipt-return",
+  "setupInsideTimedInterval": false,
+  "postReceiptChecksInsideTimedInterval": false
+}

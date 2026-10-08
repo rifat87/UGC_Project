@@ -1,0 +1,27 @@
+{
+  "allRawRows": 2400,
+  "warmupRowsExcludedFromStatistics": 400,
+  "measuredRowsIncluded": 2000,
+  "measuredIndependentElections": 25,
+  "silentOutlierDeletion": false,
+  "calldataBytesPerVote": 2340,
+  "gas": {
+    "n": 2000,
+    "mean": 1314307.1225,
+    "median": 1307355.0,
+    "min": 1306506,
+    "max": 1866414,
+    "sample_sd": 62133.00923845558,
+    "p95_nearest_rank": 1307783
+  },
+  "latencyMs": {
+    "n": 2000,
+    "mean": 760.6399339,
+    "median": 755.11115,
+    "min": 669.9123,
+    "max": 1026.0968,
+    "sample_sd": 54.87022636917149,
+    "p95_nearest_rank": 845.6926
+  },
+  "postvalidationTrailingDiagnosticReceipts": 2
+}

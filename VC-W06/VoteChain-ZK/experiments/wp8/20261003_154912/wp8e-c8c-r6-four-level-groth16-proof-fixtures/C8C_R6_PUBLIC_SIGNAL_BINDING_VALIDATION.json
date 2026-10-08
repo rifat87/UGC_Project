@@ -1,0 +1,77 @@
+{
+  "status": "PASS",
+  "publicSignalLayout": {
+    "eligibleRoot": 0,
+    "electionId": 1,
+    "candidateManifestHash": 2,
+    "candidateCount": 3,
+    "contractDomain": 4,
+    "Yx": 5,
+    "Yy": 6,
+    "electionContextHash": 7,
+    "nullifier": 8,
+    "Rx": [
+      9,
+      24
+    ],
+    "Ry": [
+      25,
+      40
+    ],
+    "Sx": [
+      41,
+      56
+    ],
+    "Sy": [
+      57,
+      72
+    ]
+  },
+  "fixtures": [
+    {
+      "candidateCount": 2,
+      "publicSignalCount": 73,
+      "publicBindingStatus": "PASS",
+      "candidateManifestSignalIndex": 2,
+      "candidateCountSignalIndex": 3,
+      "electionContextSignalIndex": 7,
+      "proofProtocol": "groth16",
+      "proofCurve": "bn128"
+    },
+    {
+      "candidateCount": 4,
+      "publicSignalCount": 73,
+      "publicBindingStatus": "PASS",
+      "candidateManifestSignalIndex": 2,
+      "candidateCountSignalIndex": 3,
+      "electionContextSignalIndex": 7,
+      "proofProtocol": "groth16",
+      "proofCurve": "bn128"
+    },
+    {
+      "candidateCount": 8,
+      "publicSignalCount": 73,
+      "publicBindingStatus": "PASS",
+      "candidateManifestSignalIndex": 2,
+      "candidateCountSignalIndex": 3,
+      "electionContextSignalIndex": 7,
+      "proofProtocol": "groth16",
+      "proofCurve": "bn128"
+    },
+    {
+      "candidateCount": 16,
+      "publicSignalCount": 73,
+      "publicBindingStatus": "PASS",
+      "candidateManifestSignalIndex": 2,
+      "candidateCountSignalIndex": 3,
+      "electionContextSignalIndex": 7,
+      "proofProtocol": "groth16",
+      "proofCurve": "bn128"
+    }
+  ],
+  "crossLevelOnlyDifferingPublicIndices": [
+    2,
+    3,
+    7
+  ]
+}

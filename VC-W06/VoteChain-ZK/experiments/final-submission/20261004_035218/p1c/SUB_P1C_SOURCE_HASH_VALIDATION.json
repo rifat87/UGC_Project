@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_PACKAGE_PLAN_SOURCE_REHASH_VALIDATION",
+  "planRows": 776,
+  "uniquePackagePaths": 776,
+  "totalSourceBytes": 111348512,
+  "totalSourceMiB": 106.19,
+  "sourceKindCounts": {
+    "PROJECT_SOURCE": 768,
+    "FROZEN_CANONICAL_ARTIFACT": 4,
+    "FROZEN_WP8_REPRODUCIBILITY_ARCHIVE": 1,
+    "SANITIZED_SCRIPT_REPLACEMENT": 1,
+    "SANITIZED_ENV_REPLACEMENT": 2
+  },
+  "errors": []
+}

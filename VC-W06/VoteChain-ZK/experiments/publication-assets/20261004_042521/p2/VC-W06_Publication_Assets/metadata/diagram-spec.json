@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "classification": "FROZEN_VOTECHAIN_ZK_PUBLICATION_DIAGRAM_SPEC",
+  "diagrams": [
+    {
+      "id": "D-PUB-01",
+      "title": "VoteChain-ZK end-to-end architecture",
+      "type": "architecture",
+      "requiredLayers": [
+        "voter / voting terminal",
+        "existing biometric authentication subsystem",
+        "eligible-set / Merkle preparation",
+        "private ballot witness construction",
+        "Circom Groth16 proving",
+        "VoteChain smart contract",
+        "nullifier enforcement",
+        "encrypted ballot ciphertext storage",
+        "homomorphic encrypted tally",
+        "threshold final decryption",
+        "public verification / result layer"
+      ],
+      "boundary": "Preserve the existing biometric face/fingerprint 3-of-5 subsystem. Do not replace it with a ZK biometric claim."
+    },
+    {
+      "id": "D-PUB-02",
+      "title": "Private vote generation and castVote verification sequence",
+      "type": "sequence",
+      "requiredStages": [
+        "authenticated eligible voter",
+        "Merkle membership witness",
+        "election-scoped nullifier",
+        "private one-hot ballot",
+        "BabyJub exponential-ElGamal encrypted slots",
+        "Groth16 proof generation",
+        "73 public signals",
+        "castVote submission",
+        "on-chain proof verification",
+        "nullifier uniqueness enforcement",
+        "ciphertext acceptance"
+      ]
+    },
+    {
+      "id": "D-PUB-03",
+      "title": "Eligibility Merkle tree and election-scoped nullifier flow",
+      "type": "cryptographic-flow",
+      "requiredFacts": {
+        "merkleDepth": 17,
+        "capacity": 131072,
+        "runtimeEligibleLeaves": "N <= capacity",
+        "nullifierScope": "election-scoped"
+      },
+      "boundary": "Eligible-set size N must never be depicted as Merkle depth."
+    },
+    {
+      "id": "D-PUB-04",
+      "title": "Encrypted ballot, homomorphic tally, and threshold-decryption flow",
+      "type": "cryptographic-flow",
+      "requiredStages": [
+        "private one-hot choice",
+        "16 encrypted candidate slots",
+        "BabyJub exponential-ElGamal ciphertexts",
+        "accepted encrypted ballots",
+        "component-wise homomorphic tally",
+        "threshold trustee decryption",
+        "final plaintext candidate totals"
+      ],
+      "boundary": "Do not depict plaintext votes being stored on-chain."
+    },
+    {
+      "id": "D-PUB-05",
+      "title": "Biometric authentication to privacy-preserving vote authorization",
+      "type": "integration-flow",
+      "requiredStages": [
+        "face / fingerprint acquisition",
+        "existing distributed biometric verification",
+        "3-of-5 agreement",
+        "eligible voter authorization",
+        "ZK vote workflow"
+      ],
+      "boundary": "Biometric authentication and ZK vote privacy are distinct subsystems connected at authorization; do not claim the Groth16 circuit proves biometric matching."
+    }
+  ],
+  "diagramsSpecified": 5,
+  "architectureChangeAuthorized": false,
+  "cryptographicChangeAuthorized": false
+}

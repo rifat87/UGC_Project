@@ -1,0 +1,1946 @@
+
+
+======================================================================
+FILE: votechain-frontend-ts/package.json
+======================================================================
+
+{
+  "name": "votechain-frontend-ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-popover": "^1.1.14",
+    "@radix-ui/react-progress": "^1.1.2",
+    "@radix-ui/react-scroll-area": "^1.2.3",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-separator": "^1.1.3",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-toast": "^1.2.6",
+    "@tanstack/react-query": "^5.76.1",
+    "caniuse-lite": "^1.0.30001731",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "ethers": "^6.13.5",
+    "lucide-react": "^0.330.0",
+    "react": "^18.2.0",
+    "react-day-picker": "^8.10.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.1",
+    "react-webcam": "^7.2.0",
+    "sonner": "^2.0.3",
+    "sooner": "^1.1.1",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "viem": "^2.29.2",
+    "wagmi": "^2.15.3",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.57",
+    "@types/react-dom": "^18.2.19",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^6.3.2"
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Voter/VoteCasting.tsx
+======================================================================
+
+import { useCallback, useEffect, useState } from "react"
+import { useContract } from "@/hooks/useContract"
+import { useWallet } from "@/components/ui/wallet-provider"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { useToast } from "@/hooks/use-toast"
+import { Vote, CheckCircle2, User, MapPin, Loader2, AlertCircle, RefreshCw } from "lucide-react"
+import { VerificationModal } from "@/components/Biometric/VerificationModal"
+import { getPublicElectionData, type PublicCandidate, type PublicElectionData, type ZkVotePreparation } from "@/services/api"
+
+export function VoteCasting() {
+  const { isWalletChecked, isConnected, address } = useWallet()
+  const { isInitialized, isAdmin, castVote, isLoading: contractLoading, error: contractError } = useContract()
+  const { toast } = useToast()
+  const [data, setData] = useState<PublicElectionData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedCandidate, setSelectedCandidate] = useState<number | null>(null)
+  const [isVoting, setIsVoting] = useState(false)
+  const [votedCandidate, setVotedCandidate] = useState<PublicCandidate | null>(null)
+  const [transactionHash, setTransactionHash] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [pendingCandidate, setPendingCandidate] = useState<number | null>(null)
+
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      setData(await getPublicElectionData())
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Failed to fetch election data")
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    void refresh()
+  }, [refresh])
+
+  const handleVote = (candidateId: number) => {
+    if (!isConnected) {
+      toast({ title: "Wallet Not Connected", description: "Connect the vote-submission wallet before voting.", variant: "destructive" })
+      return
+    }
+    if (isAdmin) {
+      toast({ title: "Admin wallet cannot use voter UI", description: "Use a non-admin vote-submission wallet.", variant: "destructive" })
+      return
+    }
+    if (data?.electionState !== "Active") {
+      toast({ title: "Voting unavailable", description: `Voting is only available while the election is Active. Current state: ${data?.electionState || "unknown"}.`, variant: "destructive" })
+      return
+    }
+    setPendingCandidate(candidateId)
+    setIsModalOpen(true)
+  }
+
+  const handleVerified = async (preparation: ZkVotePreparation) => {
+    if (pendingCandidate === null || !data) return
+    const candidateId = pendingCandidate
+    const candidate = data.candidates.find((item) => item.candidateId === candidateId) || null
+
+    try {
+      setIsVoting(true)
+      setSelectedCandidate(candidateId)
+      if (preparation.candidateId !== candidateId) throw new Error("Prepared proof candidate does not match selected candidate")
+      const receipt = await castVote(candidateId, preparation.proof)
+      setVotedCandidate(candidate)
+      setTransactionHash(receipt?.hash || null)
+      toast({ title: "Vote Cast Successfully", description: `Vote for ${candidate?.name || `candidate #${candidateId}`} was recorded on-chain.` })
+      await refresh()
+    } catch (voteError) {
+      console.error("Vote transaction failed", voteError)
+      toast({ title: "Vote Failed", description: voteError instanceof Error ? voteError.message : "There was an error casting the vote.", variant: "destructive" })
+    } finally {
+      setIsVoting(false)
+      setSelectedCandidate(null)
+      setPendingCandidate(null)
+      setIsModalOpen(false)
+    }
+  }
+
+  const modal = (
+    <VerificationModal open={isModalOpen} candidateId={pendingCandidate} onClose={() => { setIsModalOpen(false); setPendingCandidate(null) }} onVerified={handleVerified} />
+  )
+
+  if (!isWalletChecked || !isConnected || !isInitialized || loading || contractLoading) {
+    return <>{modal}<div className="container mx-auto p-4 max-w-4xl"><Card><CardHeader><CardTitle className="flex items-center gap-2"><Vote className="h-6 w-6" />Cast Your Vote</CardTitle></CardHeader><CardContent className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin" /></CardContent></Card></div></>
+  }
+
+  if (error || contractError || !data) {
+    return <>{modal}<div className="container mx-auto p-4 max-w-4xl"><Card><CardHeader><CardTitle>Cast Your Vote</CardTitle></CardHeader><CardContent className="text-center py-12"><AlertCircle className="h-8 w-8 mx-auto text-destructive" /><p className="text-destructive mt-3">{error || contractError?.message || "Election data unavailable"}</p><Button onClick={refresh} variant="outline" className="mt-4"><RefreshCw className="mr-2 h-4 w-4" />Try Again</Button></CardContent></Card></div></>
+  }
+
+  if (votedCandidate) {
+    return <>{modal}<div className="container mx-auto p-4 max-w-2xl"><Card><CardHeader className="text-center"><div className="flex items-center justify-center gap-2 text-green-600 mb-2"><CheckCircle2 className="h-8 w-8" /><CardTitle className="text-2xl">Vote Recorded</CardTitle></div></CardHeader><CardContent className="text-center space-y-4"><p>Your vote for <strong>{votedCandidate.name}</strong> was recorded on the blockchain.</p>{transactionHash && <Badge variant="secondary" className="break-all">Transaction: {transactionHash}</Badge>}</CardContent></Card></div></>
+  }
+
+  const totalVotes = data.candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0)
+  const votingEnabled = data.electionState === "Active" && !isAdmin
+
+  return (
+    <>
+      {modal}
+      <div className="container mx-auto p-4 max-w-4xl">
+        <Card className="mb-6">
+          <CardHeader><CardTitle className="flex items-center gap-2"><Vote className="h-6 w-6" />Cast Your Vote <Badge variant={data.electionState === "Active" ? "default" : "secondary"}>{data.electionState}</Badge></CardTitle></CardHeader>
+          <CardContent><Alert><AlertDescription>{votingEnabled ? "Select a candidate. Biometric verification gates backend proof generation; the blockchain receives a Semaphore membership proof without exposing a persistent voter identifier." : "Voting is disabled unless the election is Active and a non-admin vote-submission wallet is connected."}</AlertDescription></Alert></CardContent>
+        </Card>
+
+        {data.candidates.length === 0 ? (
+          <Card><CardContent className="flex items-center justify-center py-12"><div className="text-center space-y-4"><User className="h-8 w-8 mx-auto text-muted-foreground" /><p className="text-muted-foreground">No on-chain registered candidates with linked metadata were found.</p></div></CardContent></Card>
+        ) : (
+          <div className="grid gap-6">
+            {data.candidates.map((candidate) => {
+              const percentage = totalVotes > 0 ? (candidate.voteCount / totalVotes) * 100 : 0
+              const isCurrentlyVoting = isVoting && selectedCandidate === candidate.candidateId
+              return (
+                <Card key={candidate.candidateId} className="transition-all hover:shadow-md">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-2">
+                        <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" />{candidate.name}</CardTitle>
+                        <div className="text-sm text-muted-foreground">Candidate #{candidate.candidateId} · {candidate.party}</div>
+                        <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4" /><span>{candidate.location}</span></div>
+                      </div>
+                      <div className="text-right"><div className="text-2xl font-bold">{candidate.voteCount}</div><div className="text-sm text-muted-foreground">votes</div></div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2"><div className="flex justify-between text-sm"><span>Current Support</span><span>{percentage.toFixed(1)}%</span></div><Progress value={percentage} className="h-2" /></div>
+                    <Button onClick={() => handleVote(candidate.candidateId)} disabled={!votingEnabled || isVoting} className="w-full" size="lg">
+                      {isCurrentlyVoting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Processing Vote...</> : <><Vote className="mr-2 h-4 w-4" />Vote for {candidate.name}</>}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        )}
+
+        <Card className="mt-6"><CardContent className="pt-6"><div className="flex items-center justify-between text-sm text-muted-foreground"><span>Connected Wallet: {address?.slice(0, 6)}...{address?.slice(-4)}</span><span>Total Votes: {totalVotes}</span></div></CardContent></Card>
+      </div>
+    </>
+  )
+}
+
+
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx
+======================================================================
+
+import { useState } from "react"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Loader2, ScanFace, Fingerprint } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { prepareZkVote, type ZkVotePreparation } from "@/services/api"
+
+interface VerificationModalProps {
+  open: boolean
+  candidateId: number | null
+  onClose: () => void
+  onVerified: (preparation: ZkVotePreparation) => void
+}
+
+export function VerificationModal({ open, candidateId, onClose, onVerified }: VerificationModalProps) {
+  const { toast } = useToast()
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const runVerification = async (path: string, label: string) => {
+    if (!candidateId) return
+    setError(null)
+    setIsVerifying(true)
+    try {
+      const preparation = await prepareZkVote(path, candidateId)
+      toast({ title: `${label} Verified`, description: "Preparing anonymous eligibility proof completed." })
+      onVerified(preparation)
+      onClose()
+    } catch (verificationError) {
+      setError(verificationError instanceof Error ? verificationError.message : "Unknown verification error")
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(value) => !value && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Biometric Verification</DialogTitle>
+          <DialogDescription>
+            Verify the voter. After a successful match, the backend uses the encrypted Semaphore credential internally to prepare an anonymous eligibility proof.
+          </DialogDescription>
+        </DialogHeader>
+        {error && <p className="text-sm text-destructive mb-2">{error}</p>}
+        {isVerifying && <p className="text-sm text-muted-foreground">Preparing anonymous eligibility proof...</p>}
+        <div className="flex flex-col gap-4">
+          <Button disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/votes/verify-face", "Face")} className="w-full flex items-center gap-2">
+            {isVerifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <ScanFace className="h-4 w-4" />}Verify with Face
+          </Button>
+          <Button variant="outline" disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/biometric/fingerprint/detect", "Fingerprint")} className="w-full flex items-center gap-2">
+            {isVerifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Fingerprint className="h-4 w-4" />}Verify with Fingerprint
+          </Button>
+        </div>
+        <DialogFooter className="mt-4"><Button variant="ghost" onClick={onClose} disabled={isVerifying}>Cancel</Button></DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+
+
+======================================================================
+FILE: votechain-frontend-ts/src/hooks/useContract.ts
+======================================================================
+
+import { useCallback, useEffect, useRef, useState } from "react"
+import { ethers } from "ethers"
+import { createContract } from "@/config/contract"
+import { useWallet } from "@/components/ui/wallet-provider"
+import type { ElectionState, SemaphoreProofPayload } from "@/services/api"
+
+const ELECTION_STATES: Record<number, ElectionState> = {
+  0: "Registration",
+  1: "Active",
+  2: "Ended",
+}
+
+function toElectionState(value: bigint | number): ElectionState {
+  const state = ELECTION_STATES[Number(value)]
+  if (!state) throw new Error(`Unknown election state: ${value.toString()}`)
+  return state
+}
+
+export function useContract() {
+  const [contract, setContract] = useState<ethers.Contract | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const { isConnected, signer, address } = useWallet()
+  const lastAddress = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!isConnected || !address || !signer) {
+      setContract(null)
+      setIsInitialized(false)
+      setIsAdmin(false)
+      setIsLoading(false)
+      lastAddress.current = null
+      return
+    }
+
+    if (lastAddress.current === address) return
+    lastAddress.current = address
+    setIsLoading(true)
+    setError(null)
+
+    const initializeContract = async () => {
+      try {
+        const contractInstance = createContract(signer)
+        const commission = await contractInstance.electionCommission()
+        setContract(contractInstance)
+        setIsInitialized(commission !== ethers.ZeroAddress)
+        setIsAdmin(address.toLowerCase() === commission.toLowerCase())
+      } catch (initializationError) {
+        setError(initializationError as Error)
+        setContract(null)
+        setIsInitialized(false)
+        setIsAdmin(false)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void initializeContract()
+  }, [isConnected, signer, address])
+
+  const requireContract = useCallback(() => {
+    if (!contract) throw new Error("Contract not initialized")
+    return contract
+  }, [contract])
+
+  const registerCandidate = useCallback(async (candidateId: number) => {
+    const instance = requireContract()
+    const tx = await instance.registerCandidate(candidateId)
+    const receipt = await tx.wait()
+    if (receipt?.status === 0) throw new Error("Candidate registration transaction failed")
+    return receipt
+  }, [requireContract])
+
+  const registerVoterCommitment = useCallback(async (identityCommitment: string) => {
+    if (!/^\d+$/.test(identityCommitment)) throw new Error("Invalid Semaphore identity commitment")
+    const instance = requireContract()
+    const tx = await instance.registerVoterCommitment(BigInt(identityCommitment))
+    const receipt = await tx.wait()
+    if (receipt?.status === 0) throw new Error("Voter commitment registration transaction failed")
+    return receipt
+  }, [requireContract])
+
+  const castVote = useCallback(async (candidateId: number, proof: SemaphoreProofPayload) => {
+    if (!Number.isSafeInteger(candidateId) || candidateId <= 0) throw new Error("Invalid candidate ID")
+    if (BigInt(proof.message) !== BigInt(candidateId)) throw new Error("Proof is not bound to selected candidate")
+    if (!Array.isArray(proof.points) || proof.points.length !== 8) throw new Error("Invalid Semaphore proof")
+
+    const instance = requireContract()
+    const tx = await instance.castVote(candidateId, proof)
+    const receipt = await tx.wait()
+    if (receipt?.status === 0) throw new Error("Vote transaction failed")
+    return receipt
+  }, [requireContract])
+
+  const startElection = useCallback(async () => {
+    const instance = requireContract()
+    const tx = await instance.startElection()
+    return tx.wait()
+  }, [requireContract])
+
+  const endElection = useCallback(async () => {
+    const instance = requireContract()
+    const tx = await instance.endElection()
+    return tx.wait()
+  }, [requireContract])
+
+  const getElectionState = useCallback(async () => {
+    const instance = requireContract()
+    return toElectionState(await instance.getElectionState())
+  }, [requireContract])
+
+  const getVoteCount = useCallback(async (candidateId: number) => {
+    const instance = requireContract()
+    return Number(await instance.getVoteCount(candidateId))
+  }, [requireContract])
+
+  return {
+    contract,
+    isLoading,
+    error,
+    isInitialized,
+    isAdmin,
+    registerCandidate,
+    registerVoterCommitment,
+    castVote,
+    startElection,
+    endElection,
+    getElectionState,
+    getVoteCount,
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-frontend-ts/src/services/api.ts
+======================================================================
+
+import { apiUrl } from "@/config/api"
+
+export type ElectionState = "Registration" | "Active" | "Ended"
+
+export interface PublicCandidate {
+  candidateId: number
+  name: string
+  party: string
+  location: string
+  voteCount: number
+}
+
+export interface PublicElectionData {
+  electionState: ElectionState
+  candidateCount: number
+  candidates: PublicCandidate[]
+}
+
+interface ApiEnvelope<T> {
+  success: boolean
+  data?: T
+  message?: string
+  errors?: string[]
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(apiUrl(path), init)
+  const payload = (await response.json()) as ApiEnvelope<T>
+
+  if (!response.ok || payload.success === false) {
+    const detail = payload.errors?.join(", ") || payload.message || `Request failed with ${response.status}`
+    throw new Error(detail)
+  }
+
+  if (payload.data === undefined) {
+    throw new Error("API response did not contain data")
+  }
+
+  return payload.data
+}
+
+export async function getPublicElectionData() {
+  return request<PublicElectionData>("/api/elections/public/election-data")
+}
+
+export interface CandidateMetadataInput {
+  nationalId: string
+  name: string
+  party: string
+  location: string
+  age: number
+}
+
+export interface CandidateAdminRecord {
+  id: string
+  candidateId: number
+  name: string
+  party: string
+  location: string
+  age: number
+  registrationStatus: "pending" | "registered" | "failed"
+}
+
+export async function createCandidateMetadata(metadata: CandidateMetadataInput) {
+  return request<CandidateAdminRecord>("/api/candidates/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(metadata),
+  })
+}
+
+export async function updateCandidateRegistrationStatus(
+  candidateId: number,
+  registrationStatus: "pending" | "registered" | "failed",
+) {
+  return request<{ candidateId: number; registrationStatus: string }>(
+    `/api/candidates/${candidateId}/registration-status`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ registrationStatus }),
+    },
+  )
+}
+
+export interface CreateVoterInput {
+  nationalId: string
+  name: string
+  dateOfBirth: string
+  location: string
+}
+
+export interface VoterCreationResult {
+  identityCommitment: string
+}
+
+export interface SemaphoreProofPayload {
+  merkleTreeDepth: number
+  merkleTreeRoot: string
+  nullifier: string
+  message: string
+  scope: string
+  points: [string, string, string, string, string, string, string, string]
+}
+
+export interface ZkVotePreparation {
+  candidateId: number
+  electionId: string
+  proof: SemaphoreProofPayload
+}
+
+export async function createVoter(input: CreateVoterInput) {
+  const response = await fetch(apiUrl("/api/voters"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  })
+  const payload = await response.json()
+
+  if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to create voter ZK enrollment")
+  const identityCommitment = payload.data?.identityCommitment || payload.identityCommitment
+  if (!identityCommitment) throw new Error("Identity commitment was not returned from backend")
+  return { identityCommitment: String(identityCommitment) } as VoterCreationResult
+}
+
+export async function updateVoterZkRegistrationStatus(
+  identityCommitment: string,
+  registrationStatus: "registered" | "failed",
+  transactionHash?: string,
+) {
+  const response = await fetch(apiUrl("/api/voters/zk-registration-status"), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identityCommitment, registrationStatus, transactionHash }),
+  })
+  const payload = await response.json()
+  if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to reconcile voter commitment registration")
+  return payload.data as { identityCommitment: string; registrationStatus: string; groupIndex: number | null }
+}
+
+export async function prepareZkVote(path: string, candidateId: number) {
+  const response = await fetch(apiUrl(path), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ candidateId }),
+  })
+  const payload = await response.json()
+  if (!response.ok || !payload.success) throw new Error(payload.message || "Biometric verification or proof generation failed")
+  const data = payload.data || payload
+  if (!data?.proof) throw new Error("Anonymous eligibility proof was not returned")
+  return data as ZkVotePreparation
+}
+
+
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/ui/wallet-provider.tsx
+======================================================================
+
+import { createContext, useContext, useEffect, useState, useRef } from "react"
+import { BrowserProvider, JsonRpcSigner } from "ethers"
+import { useNavigate } from "react-router-dom"
+
+interface WalletState {
+  isConnected: boolean
+  address: string | null
+  provider: BrowserProvider | null
+  signer: JsonRpcSigner | null
+  isConnecting: boolean
+  isWalletChecked: boolean
+}
+
+interface WalletContextType extends WalletState {
+  connect: () => Promise<void>
+  disconnect: () => Promise<void>
+}
+
+const initialState: WalletState = {
+  isConnected: false,
+  address: null,
+  provider: null,
+  signer: null,
+  isConnecting: false,
+  isWalletChecked: false
+}
+
+const WalletContext = createContext<WalletContextType | undefined>(undefined)
+
+export function WalletProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<WalletState>(initialState)
+  const mountedRef = useRef(true)
+  const connectionRequested = useRef(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    mountedRef.current = true
+    async function checkWallet() {
+      if (typeof window.ethereum === 'undefined') {
+        setState(prev => ({ ...prev, isWalletChecked: true }))
+        return
+      }
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' })
+        if (accounts.length > 0) {
+          const provider = new BrowserProvider(window.ethereum)
+          const signer = await provider.getSigner()
+          setState({
+            isConnected: true,
+            address: accounts[0],
+            provider,
+            signer,
+            isConnecting: false,
+            isWalletChecked: true
+          })
+        } else {
+          setState(prev => ({ ...prev, isWalletChecked: true }))
+        }
+      } catch {
+        setState(prev => ({ ...prev, isWalletChecked: true }))
+      }
+    }
+    checkWallet()
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window.ethereum === 'undefined') {
+      return
+    }
+
+    const handleAccountsChanged = async (accounts: string[]) => {
+      if (!mountedRef.current) return
+
+      if (accounts.length === 0) {
+        // User disconnected their wallet
+        setState({
+          ...initialState,
+          isWalletChecked: true
+        })
+        navigate('/', { replace: true })
+      } else {
+        // Only update state if we're already connected
+        if (state.isConnected) {
+          const provider = new BrowserProvider(window.ethereum)
+          const signer = await provider.getSigner()
+          setState(prev => ({
+            ...prev,
+            address: accounts[0],
+            provider,
+            signer
+          }))
+        }
+      }
+    }
+
+    const handleChainChanged = () => {
+      if (!mountedRef.current) return
+      window.location.reload()
+    }
+
+    // Set up event listeners
+    window.ethereum.on('accountsChanged', handleAccountsChanged)
+    window.ethereum.on('chainChanged', handleChainChanged)
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged)
+        window.ethereum.removeListener('chainChanged', handleChainChanged)
+      }
+    }
+  }, [state.isConnected])
+
+  const connect = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      throw new Error('MetaMask is not installed')
+    }
+
+    // Prevent multiple simultaneous connection attempts
+    if (connectionRequested.current || state.isConnecting) {
+      return
+    }
+
+    try {
+      connectionRequested.current = true
+      setState(prev => ({ ...prev, isConnecting: true }))
+      
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      if (accounts.length > 0) {
+        const provider = new BrowserProvider(window.ethereum)
+        const signer = await provider.getSigner()
+        
+        setState({
+          isConnected: true,
+          address: accounts[0],
+          provider,
+          signer,
+          isConnecting: false,
+          isWalletChecked: true
+        })
+        
+        // Role-based routing: Check if user is admin
+        try {
+          const { createContract } = await import('@/config/contract')
+          const contractInstance = createContract(signer)
+          const commission = await contractInstance.electionCommission()
+          
+          if (accounts[0].toLowerCase() === commission.toLowerCase()) {
+            // User is admin - redirect to admin dashboard
+        navigate('/admin', { replace: true })
+          } else {
+            // User is voter - redirect to voter dashboard
+            navigate('/voter', { replace: true })
+          }
+        } catch (contractError) {
+          console.error('Error determining role:', contractError)
+          // If role determination fails, stay on current page
+          // User can manually navigate where they need to go
+        }
+      }
+    } catch (error) {
+      console.error('Error connecting to MetaMask:', error)
+      setState(prev => ({ ...prev, isConnecting: false, isWalletChecked: true }))
+      throw error
+    } finally {
+      connectionRequested.current = false
+    }
+  }
+
+  const disconnect = async () => {
+    try {
+      if (window.ethereum) {
+        // Revoke all permissions from MetaMask
+        await window.ethereum.request({
+          method: "wallet_revokePermissions",
+          params: [{ eth_accounts: {} }]
+        });
+      }
+
+      // Reset all state
+      setState({
+        ...initialState,
+        isWalletChecked: true
+      })
+      
+      // Clear any cached data
+      localStorage.removeItem('walletConnected')
+      
+      // Force a page reload to ensure clean state
+      window.location.reload()
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error)
+      // Even if there's an error, we still want to reset everything
+      setState({
+        ...initialState,
+        isWalletChecked: true
+      })
+      localStorage.removeItem('walletConnected')
+      window.location.reload()
+    }
+  }
+
+  return (
+    <WalletContext.Provider value={{ ...state, connect, disconnect }}>
+      {children}
+    </WalletContext.Provider>
+  )
+}
+
+export function useWallet() {
+  const context = useContext(WalletContext)
+  if (context === undefined) {
+    throw new Error('useWallet must be used within a WalletProvider')
+  }
+  return context
+} 
+
+
+======================================================================
+FILE: votechain-central-server/package.json
+======================================================================
+
+{
+  "name": "votechain-central-server",
+  "version": "1.0.0",
+  "description": "Central server for VoteChain application",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "node scripts/run-tests.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ethers": "^6.15.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^6.1.5",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "multer": "^1.4.5-lts.1",
+    "react-webcam": "^7.2.0",
+    "serialport": "^13.0.0",
+    "uuid": "^11.1.0",
+    "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/controllers/voteController.js
+======================================================================
+
+import Voter from '../models/Voter.js'
+import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+import { generateVoteProofForVoter } from '../services/zk/proofService.js'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import fs from 'node:fs'
+import { spawn } from 'node:child_process'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+function parseCandidateId(value) {
+  const candidateId = Number(value)
+  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) return null
+  return candidateId
+}
+
+export const verifyFace = async (req, res) => {
+  const candidateId = parseCandidateId(req.body?.candidateId)
+  if (!candidateId) {
+    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+  }
+
+  try {
+    console.log('[VoteController] Starting biometric-gated ZK proof preparation')
+    const faceRecPath = path.join(__dirname, '../../votechain-face-recognition', 'face_rec_demo.py')
+    const faceRecDir = path.dirname(faceRecPath)
+
+    if (!fs.existsSync(faceRecPath)) {
+      return res.status(500).json({ success: false, message: 'Face recognition script not found' })
+    }
+
+    const pythonProcess = spawn('python', [faceRecPath], { cwd: faceRecDir })
+    let stdout = ''
+
+    pythonProcess.stdout.on('data', (data) => {
+      stdout += data.toString()
+    })
+    pythonProcess.stderr.on('data', () => {
+      console.error('[VoteController] face-recognition process reported an error')
+    })
+
+    pythonProcess.on('close', async (code) => {
+      try {
+        if (code !== 0) {
+          return res.status(500).json({ success: false, message: 'Face recognition process failed' })
+        }
+
+        const outputLower = stdout.toLowerCase()
+        const isSuccess = outputLower.includes('face recognition successful') || outputLower.includes('result = success')
+        if (!isSuccess) return res.json({ success: false, message: 'Face not recognised' })
+
+        const idMatch = stdout.match(/Matched ID:\s*([\w-]+)/i)
+        const matchedNid = idMatch ? idMatch[1].trim() : null
+        if (!matchedNid) {
+          return res.status(422).json({ success: false, message: 'Face verification did not return a usable voter identity' })
+        }
+
+        const voter = await Voter.findOne({ nationalId: matchedNid })
+        if (!voter) return res.status(404).json({ success: false, message: 'Verified voter is not enrolled' })
+
+        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+        return res.json({
+          success: true,
+          message: 'Face verification successful; anonymous eligibility proof prepared',
+          data: proofPayload,
+        })
+      } catch (error) {
+        console.error('[VoteController] ZK proof preparation failed:', error.message)
+        return res.status(500).json({ success: false, message: 'Unable to prepare anonymous eligibility proof' })
+      }
+    })
+
+    pythonProcess.on('error', (error) => {
+      console.error('[VoteController] Failed to start face recognition:', error.message)
+      return res.status(500).json({ success: false, message: 'Failed to launch face recognition' })
+    })
+  } catch (error) {
+    console.error('[VoteController] verifyFace error:', error.message)
+    return res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/controllers/fingerprintController.js
+======================================================================
+
+// ... updated code:
+import { SerialPort } from 'serialport'
+import { ReadlineParser } from '@serialport/parser-readline'
+import Voter from '../models/Voter.js'
+import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+import { generateVoteProofForVoter } from '../services/zk/proofService.js'
+
+let parser
+let serial
+const serialPortPath = process.env.FINGERPRINT_SERIAL_PORT || 'COM3'
+
+function initSerial() {
+  if (!serial) {
+    console.log(`[Serial] Initializing serial connection on ${serialPortPath}...`)
+    serial = new SerialPort({ path: serialPortPath, baudRate: 115200 })
+    parser = serial.pipe(new ReadlineParser({ delimiter: '\n' }))
+
+    serial.on('open', () => {
+      console.log(`[Serial] Serial port ${serialPortPath} opened successfully.`)
+    })
+
+    serial.on('error', (err) => {
+      console.error("[Serial] Serial port error:", err.message)
+    })
+  }
+}
+
+function sendSerialJSON(obj) {
+  return new Promise((resolve, reject) => {
+    initSerial()
+
+    const jsonStr = JSON.stringify(obj)
+    console.log(`[Serial] Sending ${obj.cmd || 'UNKNOWN'} command`)
+
+    const onData = (data) => {
+      const clean = data.trim()
+      console.log('[Serial] Received device response')
+      try {
+        const parsed = JSON.parse(clean)
+        // Assume ESP32 always responds once per command
+        parser.removeListener('data', onData)
+        resolve(parsed)
+      } catch {
+        console.warn("[Serial] Ignored non-JSON data")
+      }
+    }
+
+    parser.on('data', onData)
+
+    serial.write(jsonStr + "\n", (err) => {
+      if (err) {
+        parser.removeListener('data', onData)
+        console.error("[Serial] Failed to write to serial port:", err.message)
+        reject(err)
+      } else {
+        console.log("[Serial] Command sent successfully.")
+      }
+    })
+  })
+}
+
+// ================== API Controllers ==================
+
+// ENROLL
+const captureFingerprint = async (req, res) => {
+  console.log("[API] /api/fingerprint/enroll called")
+  const { nid } = req.body
+  if (!nid) {
+    return res.status(400).json({ success: false, message: "NID is required" })
+  }
+
+  try {
+    const response = await sendSerialJSON({ cmd: "ENROLL", nid })
+    console.log(`[API] ENROLL result: ${response.status || 'unknown'}`)
+
+    if (response.status === "success" && response.action === "enroll") {
+      return res.status(200).json({
+        success: true,
+        message: "Fingerprint enrollment successful"
+      })
+    }
+
+    return res.status(400).json({
+      success: false,
+      message: "Enrollment failed"
+    })
+  } catch (error) {
+    console.error("[API] Enrollment error:", error.message)
+    return res.status(500).json({ success: false, error: error.message })
+  }
+}
+
+// DETECT
+const detectFingerprint = async (req, res) => {
+  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+  const candidateId = Number(req.body?.candidateId)
+  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+  }
+
+  try {
+    const response = await sendSerialJSON({ cmd: "DETECT" })
+    console.log(`[API] DETECT result: ${response.status || 'unknown'}`)
+
+    if (response.status === "success" && response.action === "detect" && response.nid) {
+      const voter = await Voter.findOne({ nationalId: response.nid })
+      if (!voter) {
+        return res.status(404).json({ success: false, message: "Fingerprint matched, but voter is not enrolled" })
+      }
+
+      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+      return res.status(200).json({
+        success: true,
+        message: "Fingerprint match successful; anonymous eligibility proof prepared",
+        data: proofPayload,
+      })
+    }
+
+    return res.status(400).json({ success: false, message: "No match found" })
+  } catch (error) {
+    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+    return res.status(500).json({ success: false, message: "Unable to prepare anonymous eligibility proof" })
+  }
+}
+
+// Optional: Format DB (if your ESP32 firmware supports it)
+const formatFingerprintDatabase = async (req, res) => {
+  console.log("[API] /api/fingerprint/format called")
+  try {
+    const response = await sendSerialJSON({ cmd: "FORMAT" })
+    console.log(`[API] FORMAT result: ${response.status || 'unknown'}`)
+
+    if (response.status === "success") {
+      return res.status(200).json({ success: true, message: "Fingerprint database cleared" })
+    }
+
+    return res.status(400).json({ success: false, message: "Format failed" })
+  } catch (error) {
+    console.error("[API] Format error:", error.message)
+    return res.status(500).json({ success: false, error: error.message })
+  }
+}
+
+export default {
+  captureFingerprint,
+  detectFingerprint,
+  formatFingerprintDatabase,
+}
+
+
+======================================================================
+FILE: votechain-central-server/services/zk/biometricProofGate.js
+======================================================================
+
+/**
+ * Pure authentication gate placed in front of Semaphore proof generation.
+ * The caller injects the backend proof generator only after a successful biometric match,
+ * which keeps this boundary testable without loading blockchain/network dependencies.
+ */
+export async function prepareProofAfterBiometricAuthentication({
+  biometricAccepted,
+  voter,
+  candidateId,
+  proofGenerator,
+}) {
+  if (biometricAccepted !== true) {
+    throw new Error('Biometric authentication is required before ZK proof generation')
+  }
+  if (!voter) {
+    throw new Error('Biometrically verified voter record is required before ZK proof generation')
+  }
+  if (typeof proofGenerator !== 'function') {
+    throw new Error('Backend ZK proof generator is required')
+  }
+
+  return proofGenerator(voter, candidateId)
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/services/zk/proofCore.js
+======================================================================
+
+import { decryptZkCredential } from './credentialCrypto.js'
+import { normalizeSemaphoreProof } from './proofSerialization.js'
+
+function validateCandidateId(candidateId) {
+  const value = Number(candidateId)
+  if (!Number.isSafeInteger(value) || value <= 0) throw new Error('A positive candidateId is required')
+  return value
+}
+
+export async function generateBoundSemaphoreProof({ runtime, voter, candidateId, electionId, group, chainRegistered, secret, snarkArtifacts }) {
+  if (!voter) throw new Error('Verified voter record is required')
+  if (chainRegistered !== true) throw new Error('Voter ZK commitment is not registered on-chain')
+  if (!voter.zkIdentityCommitment || !voter.zkCredential) throw new Error('Voter does not have an enrolled ZK credential')
+
+  const selectedCandidateId = validateCandidateId(candidateId)
+  const normalizedElectionId = BigInt(electionId)
+  const exportedCredential = decryptZkCredential(voter.zkCredential, voter.zkIdentityCommitment, secret)
+  const identity = runtime.Identity.import(exportedCredential)
+
+  if (identity.commitment.toString() !== voter.zkIdentityCommitment.toString()) {
+    throw new Error('Decrypted Semaphore identity does not match stored commitment')
+  }
+
+  const proof = await runtime.generateProof(
+    identity,
+    group,
+    BigInt(selectedCandidateId),
+    normalizedElectionId,
+    undefined,
+    snarkArtifacts,
+  )
+  const normalized = normalizeSemaphoreProof(proof)
+
+  if (BigInt(normalized.message) !== BigInt(selectedCandidateId)) throw new Error('Generated proof message does not match candidateId')
+  if (BigInt(normalized.scope) !== normalizedElectionId) throw new Error('Generated proof scope does not match electionId')
+
+  if (typeof runtime.verifyProof === 'function' && !(await runtime.verifyProof(proof))) {
+    throw new Error('Generated Semaphore proof failed local verification')
+  }
+
+  return {
+    candidateId: selectedCandidateId,
+    electionId: normalizedElectionId.toString(),
+    proof: normalized,
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/services/zk/proofService.js
+======================================================================
+
+import { getContract } from '../../utils/contract.js'
+import { loadSemaphoreRuntime } from './semaphoreRuntime.js'
+import { reconstructElectionGroup } from './groupService.js'
+import { generateBoundSemaphoreProof } from './proofCore.js'
+import { getConfiguredSnarkArtifacts } from './snarkArtifacts.js'
+
+export async function generateVoteProofForVoter(voter, candidateId, options = {}) {
+  const runtime = options.runtime || await loadSemaphoreRuntime()
+  const contract = options.contract || getContract()
+  const normalizedCandidateId = Number(candidateId)
+
+  if (!Number.isSafeInteger(normalizedCandidateId) || normalizedCandidateId <= 0) {
+    throw new Error('A positive candidateId is required before ZK proof generation')
+  }
+  if (!voter?.zkIdentityCommitment || !/^\d+$/.test(String(voter.zkIdentityCommitment))) {
+    throw new Error('Verified voter does not have a valid ZK identity commitment')
+  }
+
+  const [{ group }, electionId, chainRegistered, electionState, candidateState] = await Promise.all([
+    reconstructElectionGroup({ runtime, contract, fromBlock: options.fromBlock }),
+    contract.electionId(),
+    contract.registeredCommitments(BigInt(voter.zkIdentityCommitment)),
+    contract.getElectionState(),
+    contract.candidates(BigInt(normalizedCandidateId)),
+  ])
+
+  if (Number(electionState) !== 1) {
+    throw new Error('Anonymous vote proof generation is only available while the election is Active')
+  }
+  const candidateExists = Boolean(candidateState?.exists ?? candidateState?.[0])
+  if (!candidateExists) {
+    throw new Error('Selected candidate is not registered on-chain')
+  }
+
+  return generateBoundSemaphoreProof({
+    runtime,
+    voter,
+    candidateId: normalizedCandidateId,
+    electionId,
+    group,
+    chainRegistered: Boolean(chainRegistered),
+    secret: options.secret,
+    snarkArtifacts: options.snarkArtifacts || getConfiguredSnarkArtifacts(),
+  })
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/services/zk/groupService.js
+======================================================================
+
+import { getContract } from '../../utils/contract.js'
+import { loadSemaphoreRuntime } from './semaphoreRuntime.js'
+import { reconstructGroupFromRecords } from './groupCore.js'
+import { commitmentRecordsFromRegistrationEvents } from './groupEvents.js'
+
+export async function reconstructElectionGroup({ runtime, contract, fromBlock } = {}) {
+  const semaphoreRuntime = runtime || await loadSemaphoreRuntime()
+  const zkContract = contract || getContract()
+  const startBlock = fromBlock ?? Number(process.env.ZK_CONTRACT_DEPLOYMENT_BLOCK || 0)
+
+  if (!Number.isSafeInteger(Number(startBlock)) || Number(startBlock) < 0) {
+    throw new Error('ZK_CONTRACT_DEPLOYMENT_BLOCK must be a non-negative safe integer when configured')
+  }
+
+  if (!zkContract.filters?.VoterCommitmentRegistered || typeof zkContract.queryFilter !== 'function') {
+    throw new Error('ZK contract event-query interface is required for deterministic group reconstruction')
+  }
+
+  // ZKLocalVoting is itself the Semaphore group admin and exposes no update/remove
+  // membership operation. Therefore its successful registration events form the
+  // authoritative append-only member ordering for this election group.
+  const filter = zkContract.filters.VoterCommitmentRegistered()
+  const events = await zkContract.queryFilter(filter, Number(startBlock), 'latest')
+  const voterRecords = commitmentRecordsFromRegistrationEvents(events)
+
+  const [chainSize, chainRoot] = await Promise.all([
+    zkContract.getGroupSize(),
+    zkContract.getGroupRoot(),
+  ])
+
+  return reconstructGroupFromRecords({
+    runtime: semaphoreRuntime,
+    voterRecords,
+    chainSize,
+    chainRoot,
+  })
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/models/Voter.js
+======================================================================
+
+import mongoose from 'mongoose'
+
+const voterSchema = new mongoose.Schema({
+  nationalId: {
+    type: String,
+    required: [true, 'National ID is required'],
+    unique: true,
+    trim: true,
+    match: [/^\d{10}$/, 'National ID must be exactly 10 digits'],
+  },
+  name: {
+    type: String,
+    required: [true, 'Name is required'],
+    trim: true,
+    minlength: [3, 'Name must be at least 3 characters long'],
+    maxlength: [50, 'Name cannot exceed 50 characters'],
+    match: [/^[A-Za-z ]+$/, 'Name should contain only letters and spaces'],
+  },
+  dateOfBirth: {
+    type: Date,
+    required: [true, 'Date of birth is required'],
+    validate: {
+      validator(value) {
+        if (!value) return false
+        const today = new Date()
+        let age = today.getFullYear() - value.getFullYear()
+        const monthDifference = today.getMonth() - value.getMonth()
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < value.getDate())) age -= 1
+        return age >= 18 && age <= 120
+      },
+      message: 'Voter must be between 18 and 120 years old',
+    },
+  },
+  location: {
+    type: String,
+    required: [true, 'Location is required'],
+    trim: true,
+    minlength: [2, 'Location must be at least 2 characters long'],
+    maxlength: [100, 'Location cannot exceed 100 characters'],
+    match: [/^[A-Za-z ,.-]+$/, 'Location can only contain letters, spaces, commas, hyphens, and periods'],
+  },
+
+  // Active VoteChain-ZK identity material. The private Semaphore identity is never
+  // stored in plaintext; only its public commitment and authenticated ciphertext are persisted.
+  zkIdentityCommitment: {
+    type: String,
+    trim: true,
+    match: [/^\d+$/, 'ZK identity commitment must be a decimal integer string'],
+  },
+  zkCredential: {
+    version: { type: Number },
+    iv: { type: String },
+    ciphertext: { type: String },
+    authTag: { type: String },
+  },
+  zkRegistrationStatus: {
+    type: String,
+    enum: ['pending', 'registered', 'failed', 'legacy'],
+    default: 'legacy',
+  },
+  zkGroupIndex: {
+    type: Number,
+    min: 0,
+    validate: {
+      validator(value) {
+        return value === undefined || value === null || Number.isSafeInteger(value)
+      },
+      message: 'ZK group index must be a safe integer',
+    },
+  },
+  zkRegistrationTxHash: {
+    type: String,
+    trim: true,
+  },
+
+  // Historical VC-W01/VC-W02 fields. They remain readable for archived baseline
+  // records only; new ZK enrollment does not populate or use them.
+  voterHash: {
+    type: String,
+    trim: true,
+  },
+  encryptedSalt: {
+    iv: { type: String },
+    encryptedData: { type: String },
+    authTag: { type: String },
+  },
+}, {
+  timestamps: true,
+  collection: 'voterCollection',
+})
+
+voterSchema.index({ nationalId: 1 })
+voterSchema.index(
+  { voterHash: 1 },
+  {
+    name: 'legacy_voterHash_unique_when_present',
+    unique: true,
+    partialFilterExpression: { voterHash: { $type: 'string' } },
+  },
+)
+voterSchema.index(
+  { zkIdentityCommitment: 1 },
+  {
+    name: 'zkIdentityCommitment_unique_when_present',
+    unique: true,
+    partialFilterExpression: { zkIdentityCommitment: { $type: 'string' } },
+  },
+)
+voterSchema.index(
+  { zkGroupIndex: 1 },
+  {
+    name: 'zkGroupIndex_unique_registered',
+    unique: true,
+    partialFilterExpression: {
+      zkRegistrationStatus: 'registered',
+      zkGroupIndex: { $type: 'number' },
+    },
+  },
+)
+voterSchema.index({ name: 'text', location: 'text' })
+
+voterSchema.pre('save', function trimStringFields(next) {
+  Object.keys(this.schema.paths).forEach((key) => {
+    if (this.schema.paths[key].instance === 'String' && this[key]) this[key] = this[key].trim()
+  })
+  next()
+})
+
+voterSchema.post('save', function duplicateKeyError(error, _doc, next) {
+  if ((error.name === 'MongoError' || error.name === 'MongoServerError') && error.code === 11000) {
+    next(new Error('A voter with this National ID or ZK identity commitment already exists'))
+  } else {
+    next(error)
+  }
+})
+
+const Voter = mongoose.model('Voter', voterSchema)
+export default Voter
+
+
+
+======================================================================
+FILE: votechain-central-server/controllers/electionController.js
+======================================================================
+
+import Candidate from '../models/Candidate.js'
+import { getContract } from '../utils/contract.js'
+import { buildPublicElectionData } from '../services/electionDataService.js'
+
+const getElectionData = async (_req, res) => {
+  try {
+    const candidateRecords = await Candidate.find({ candidateId: { $exists: true } }).sort({ candidateId: 1 }).lean()
+    const data = await buildPublicElectionData({ candidateRecords, contract: getContract() })
+    return res.json({ success: true, data })
+  } catch (error) {
+    console.error('Error fetching public election data:', error.message)
+    return res.status(500).json({ success: false, message: 'Failed to fetch election data' })
+  }
+}
+
+export default { getElectionData }
+
+
+
+======================================================================
+FILE: votechain-central-server/services/electionDataService.js
+======================================================================
+
+import { mapElectionState } from '../utils/electionState.js'
+
+export async function buildPublicElectionData({ candidateRecords, contract }) {
+  const electionState = mapElectionState(await contract.getElectionState())
+  const candidates = []
+
+  for (const candidate of candidateRecords) {
+    if (!Number.isSafeInteger(Number(candidate.candidateId)) || Number(candidate.candidateId) <= 0) continue
+
+    const chainCandidate = await contract.candidates(candidate.candidateId)
+    const exists = Boolean(chainCandidate.exists ?? chainCandidate[0])
+    if (!exists) continue
+
+    const voteCountRaw = chainCandidate.voteCount ?? chainCandidate[1]
+    candidates.push({
+      candidateId: Number(candidate.candidateId),
+      name: candidate.name,
+      party: candidate.party,
+      location: candidate.location,
+      voteCount: Number(voteCountRaw),
+    })
+  }
+
+  return {
+    electionState,
+    candidateCount: candidates.length,
+    candidates,
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/services/privacyProjection.js
+======================================================================
+
+export function toCandidateWorkflowResponse(candidate) {
+  return {
+    id: String(candidate._id),
+    candidateId: candidate.candidateId,
+    name: candidate.name,
+    party: candidate.party,
+    location: candidate.location,
+    age: candidate.age,
+    registrationStatus: candidate.registrationStatus,
+  }
+}
+
+export function toSafeVoterResponse(voter) {
+  return {
+    id: String(voter._id),
+    name: voter.name,
+    location: voter.location,
+    zkRegistrationStatus: voter.zkRegistrationStatus,
+  }
+}
+
+export function toZkVoterEnrollmentResponse(voter) {
+  return {
+    voter: toSafeVoterResponse(voter),
+    identityCommitment: voter.zkIdentityCommitment,
+  }
+}
+
+
+
+======================================================================
+FILE: votechain-central-server/routes/voteRoutes.js
+======================================================================
+
+import express from 'express'
+import { verifyFace } from '../controllers/voteController.js'
+
+const router = express.Router()
+
+// Successful face verification gates backend-only Semaphore credential use and proof generation.
+router.post('/verify-face', verifyFace)
+
+router.get('/', (_req, res) => {
+  res.json({ message: 'VoteChain-ZK vote routes working' })
+})
+
+export default router
+
+
+
+======================================================================
+FILE: votechain-central-server/routes/biometricRoutes.js
+======================================================================
+
+import express from 'express';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fingerprintController from '../controllers/fingerprintController.js';
+
+const router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Test route
+router.get('/', (req, res) => {
+    res.json({ message: 'Biometric routes working' });
+});
+
+// Face capture
+router.post('/capture-face', async (req, res) => {
+    const { nid } = req.body;
+
+    if (!nid) {
+        return res.status(400).json({ success: false, message: 'NID is required' });
+    }
+
+    let responseSent = false;
+
+    try {
+        const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+        const pythonProcess = spawn('python', ['dataset.py', nid], {
+            cwd: faceRecognitionPath,
+            stdio: ['pipe', 'pipe', 'pipe']
+        });
+
+        pythonProcess.stdout.on('data', (data) => {
+            void data;
+            console.log('Face capture process produced output');
+        });
+
+        pythonProcess.stderr.on('data', (data) => {
+            void data;
+            console.error('Face capture process reported an error');
+        });
+
+        pythonProcess.on('close', (code) => {
+            console.log(`Python process exited with code ${code}`);
+
+            if (!responseSent) {
+                if (code === 0) {
+                    res.json({
+                        success: true,
+                        message: 'Face captured successfully'
+                    });
+                } else {
+                    res.status(500).json({
+                        success: false,
+                        message: 'Face capture failed'
+                    });
+                }
+                responseSent = true;
+            }
+        });
+
+        pythonProcess.on('error', (err) => {
+            console.error('Failed to start Python process:', err);
+            if (!responseSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Failed to start face capture process',
+                    error: err.message
+                });
+                responseSent = true;
+            }
+        });
+
+    } catch (error) {
+        console.error('Error in face capture:', error);
+        if (!responseSent) {
+            res.status(500).json({
+                success: false,
+                message: 'Failed to start face capture process',
+                error: error.message
+            });
+            responseSent = true;
+        }
+    }
+});
+
+// Fingerprint routes (JSON-based)
+router.post('/fingerprint/enroll', fingerprintController.captureFingerprint);
+router.post('/fingerprint/detect', fingerprintController.detectFingerprint);
+router.post('/fingerprint/format', fingerprintController.formatFingerprintDatabase);
+
+export default router;
+
+
+
+======================================================================
+FILE: votechain-central-server/server.js
+======================================================================
+
+import express from 'express'
+import mongoose from 'mongoose'
+import cors from 'cors'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import voterRoutes from './routes/voterRoutes.js'
+import candidateRoutes from './routes/candidateRoutes.js'
+import electionRoutes from './routes/electionRoutes.js'
+import voteRoutes from './routes/voteRoutes.js'
+import biometricRoutes from './routes/biometricRoutes.js'
+import blockchainRoutes from './routes/blockchainRoutes.js'
+import { getServerConfig } from './config/env.js'
+
+const { port, mongoUri, frontendOrigins } = getServerConfig()
+const app = express()
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", ...frontendOrigins],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      fontSrc: ["'self'"],
+    },
+  },
+}))
+
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+}))
+
+app.use(cors({
+  origin: frontendOrigins.length > 0 ? frontendOrigins : false,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}))
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+mongoose.connect(mongoUri)
+  .then(() => console.log('MongoDB connected'))
+  .catch((error) => console.error('MongoDB connection error:', error.message))
+
+app.use('/api/voters', voterRoutes)
+app.use('/api/candidates', candidateRoutes)
+app.use('/api/elections', electionRoutes)
+app.use('/api/votes', voteRoutes)
+app.use('/api/biometric', biometricRoutes)
+app.use('/api/blockchain', blockchainRoutes)
+
+app.use((error, _req, res, _next) => {
+  console.error(error.stack)
+  res.status(500).json({ success: false, message: 'Something went wrong!' })
+})
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`)
+})
+
+
+
+======================================================================
+FILE: votechain-central-server/__tests__/zkActivePath.test.js
+======================================================================
+
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+
+const activeBackendFiles = [
+  '../controllers/voteController.js',
+  '../controllers/fingerprintController.js',
+  '../controllers/voterController.js',
+  '../services/zk/proofCore.js',
+  '../services/zk/proofService.js',
+]
+
+const activeFrontendFiles = [
+  '../../votechain-frontend-ts/src/hooks/useContract.ts',
+  '../../votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx',
+  '../../votechain-frontend-ts/src/components/Voter/VoteCasting.tsx',
+  '../../votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx',
+  '../../votechain-frontend-ts/src/services/api.ts',
+]
+
+test('active biometric and blockchain ZK path does not use voterHash or encryptedSalt', () => {
+  for (const relative of [...activeBackendFiles, ...activeFrontendFiles]) {
+    const source = readFileSync(new URL(relative, import.meta.url), 'utf8')
+    assert.doesNotMatch(source, /voterHash|encryptedSalt/, `legacy identity primitive remains active in ${relative}`)
+  }
+})
+
+test('active voter flow sends candidateId plus Semaphore proof and keeps wallet identity separate', () => {
+  const hook = readFileSync(new URL('../../votechain-frontend-ts/src/hooks/useContract.ts', import.meta.url), 'utf8')
+  assert.match(hook, /castVote\(candidateId,\s*proof\)/)
+  assert.match(hook, /registerVoterCommitment\(BigInt\(identityCommitment\)\)/)
+  assert.doesNotMatch(hook, /msg\.sender|authorizedVoteWallet|onlyVoteWallet/)
+})
+
+test('backend gates ZK enrollment to Registration and proof preparation to Active valid candidates', () => {
+  const voterController = readFileSync(new URL('../controllers/voterController.js', import.meta.url), 'utf8')
+  const proofService = readFileSync(new URL('../services/zk/proofService.js', import.meta.url), 'utf8')
+
+  assert.match(voterController, /getElectionState\(\)/)
+  assert.match(voterController, /electionState !== 0/)
+  assert.match(proofService, /getElectionState\(\)/)
+  assert.match(proofService, /Number\(electionState\) !== 1/)
+  assert.match(proofService, /contract\.candidates\(BigInt\(normalizedCandidateId\)\)/)
+  assert.match(proofService, /Selected candidate is not registered on-chain/)
+})
+
+
+
+======================================================================
+FILE: votechain-central-server/__tests__/zkBiometricGate.test.js
+======================================================================
+
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+
+test('successful biometric authentication may cross the proof-generation gate', async () => {
+  const voter = { id: 'synthetic-voter' }
+  let calls = 0
+  const result = await prepareProofAfterBiometricAuthentication({
+    biometricAccepted: true,
+    voter,
+    candidateId: 7,
+    proofGenerator: async (receivedVoter, candidateId) => {
+      calls += 1
+      assert.equal(receivedVoter, voter)
+      assert.equal(candidateId, 7)
+      return { proof: 'synthetic-proof' }
+    },
+  })
+
+  assert.equal(calls, 1)
+  assert.deepEqual(result, { proof: 'synthetic-proof' })
+})
+
+test('failed biometric authentication cannot reach proof generation', async () => {
+  let calls = 0
+  await assert.rejects(
+    prepareProofAfterBiometricAuthentication({
+      biometricAccepted: false,
+      voter: { id: 'synthetic-voter' },
+      candidateId: 7,
+      proofGenerator: async () => {
+        calls += 1
+        return { proof: 'must-not-exist' }
+      },
+    }),
+    /Biometric authentication is required/i,
+  )
+  assert.equal(calls, 0)
+})
+
+
+
+======================================================================
+FILE: votechain-central-server/__tests__/zkProofCore.test.js
+======================================================================
+
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { encryptZkCredential } from '../services/zk/credentialCrypto.js'
+import { generateBoundSemaphoreProof } from '../services/zk/proofCore.js'
+
+const secret = '12345678901234567890123456789012'
+const commitment = '555555'
+
+class FakeIdentity {
+  static import(serialized) {
+    assert.equal(serialized, 'serialized-secret')
+    return { commitment: 555555n }
+  }
+}
+
+const runtime = {
+  Identity: FakeIdentity,
+  async generateProof(identity, group, message, scope) {
+    assert.equal(identity.commitment, 555555n)
+    assert.equal(group.marker, 'group')
+    return {
+      merkleTreeDepth: 1,
+      merkleTreeRoot: 999n,
+      nullifier: 777n,
+      message: BigInt(message),
+      scope: BigInt(scope),
+      points: [1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n],
+    }
+  },
+  async verifyProof() { return true },
+}
+
+function voter(overrides = {}) {
+  return {
+    zkIdentityCommitment: commitment,
+    zkRegistrationStatus: 'registered',
+    zkCredential: encryptZkCredential('serialized-secret', commitment, secret),
+    ...overrides,
+  }
+}
+
+test('biometric-authorized proof core binds candidateId as message and electionId as scope', async () => {
+  const result = await generateBoundSemaphoreProof({
+    runtime,
+    voter: voter(),
+    candidateId: 7,
+    electionId: 20260818n,
+    group: { marker: 'group' },
+    chainRegistered: true,
+    secret,
+  })
+
+  assert.equal(result.candidateId, 7)
+  assert.equal(result.electionId, '20260818')
+  assert.equal(result.proof.message, '7')
+  assert.equal(result.proof.scope, '20260818')
+  assert.equal(result.proof.nullifier, '777')
+  assert.equal('identity' in result, false)
+  assert.equal('credential' in result, false)
+  assert.equal('voterHash' in result, false)
+})
+
+test('proof generation refuses voters whose ZK commitment is not chain-registered', async () => {
+  await assert.rejects(
+    () => generateBoundSemaphoreProof({
+      runtime,
+      voter: voter({ zkRegistrationStatus: 'pending' }),
+      candidateId: 7,
+      electionId: 20260818n,
+      group: { marker: 'group' },
+      chainRegistered: false,
+      secret,
+    }),
+    /not registered/i,
+  )
+})
+
+test('proof generation detects encrypted credential/commitment mismatch', async () => {
+  const mismatched = voter({ zkIdentityCommitment: '666666' })
+  mismatched.zkCredential = encryptZkCredential('serialized-secret', '666666', secret)
+  await assert.rejects(
+    () => generateBoundSemaphoreProof({
+      runtime,
+      voter: mismatched,
+      candidateId: 7,
+      electionId: 20260818n,
+      group: { marker: 'group' },
+      chainRegistered: true,
+      secret,
+    }),
+    /does not match stored commitment/i,
+  )
+})
+
+
+
+======================================================================
+FILE: votechain-central-server/__tests__/zkAbiCompatibility.test.js
+======================================================================
+
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+
+const abi = JSON.parse(readFileSync(new URL('../abi/ZKLocalVoting.json', import.meta.url), 'utf8'))
+const functions = abi.filter((entry) => entry.type === 'function')
+const byName = new Map(functions.map((entry) => [entry.name, entry]))
+
+function signature(name) {
+  const entry = byName.get(name)
+  return entry ? `${name}(${entry.inputs.map((input) => input.type).join(',')})` : null
+}
+
+test('ZK ABI exposes candidateId/commitment/proof lifecycle', () => {
+  assert.equal(signature('registerCandidate'), 'registerCandidate(uint256)')
+  assert.equal(signature('registerVoterCommitment'), 'registerVoterCommitment(uint256)')
+  assert.equal(signature('castVote'), 'castVote(uint256,tuple)')
+  assert.equal(signature('startElection'), 'startElection()')
+  assert.equal(signature('endElection'), 'endElection()')
+  assert.equal(signature('getVoteCount'), 'getVoteCount(uint256)')
+  assert.equal(signature('getElectionState'), 'getElectionState()')
+  assert.equal(signature('getGroupRoot'), 'getGroupRoot()')
+  assert.equal(signature('getGroupSize'), 'getGroupSize()')
+})
+
+test('ZK ABI has no active voterHash or civil identity transaction input', () => {
+  assert.equal(byName.has('registerVoter'), false)
+  const serialized = JSON.stringify(abi)
+  for (const forbidden of ['voterHash', 'nationalId', 'dateOfBirth', 'birthDate', 'encryptedSalt', 'biometric']) {
+    assert.equal(serialized.includes(forbidden), false, `forbidden ABI term: ${forbidden}`)
+  }
+
+  const castVote = byName.get('castVote')
+  assert.equal(castVote.inputs[0].name, 'candidateId')
+  assert.equal(castVote.inputs[1].type, 'tuple')
+  assert.equal(castVote.inputs[1].components.length, 6)
+  assert.deepEqual(castVote.inputs[1].components.map((component) => component.name), [
+    'merkleTreeDepth', 'merkleTreeRoot', 'nullifier', 'message', 'scope', 'points',
+  ])
+})
+

@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_REPAIRED_WP8_PUBLICATION_SYNTHESIS_VALIDATION",
+  "sourceFreezeRows": 9,
+  "coreResultRows": 32,
+  "c7ExactSchemaValidated": true,
+  "c7P95Key": "p95_nearest_rank",
+  "c8bExactMeasuredSummaryValidated": true,
+  "c8bWarmupSummaryUsed": false,
+  "c8bP95Key": "nearestRankP95",
+  "acceptedBallotMeasuredRows": 2000,
+  "freshChainMeasuredRows": 20,
+  "candidateCountGasMeanRange": 12.0,
+  "candidateCountLatencyMeanMonotonic": false,
+  "eligibleSetDepth": 17,
+  "eligibleSetM1MeanMonotonic": true,
+  "eligibleSetM2MeanMonotonic": true,
+  "publicationGuardrailsValidated": true,
+  "newBenchmarkExecution": false,
+  "newWitnessGeneration": false,
+  "newProofGeneration": false,
+  "onchainExecution": false
+}

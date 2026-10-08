@@ -1,0 +1,1020 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/cache/solidity-files-cache.json:1:{"_format":"","paths":{"artifacts":"out","build_infos":"out/build-info","sources":"src","tests":"test","scripts":"script","libraries":["lib"]},"files":{"src/VoteChainWP4.sol":{"lastModificationDate":1790768611210,"contentHash":"54d928b124e1ec23","interfaceReprHash":null,"sourceName":"src/VoteChainWP4.sol","imports":["src\\WP4Profile.sol"],"versionRequirement":">=0.8.20, <0.9.0","artifacts":{"BabyJubAffine":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\BabyJubAffine.json","build_id":"0fdb9ef521ecdbfe"}}},"BabyJubTallyHarness":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\BabyJubTallyHarness.json","build_id":"0fdb9ef521ecdbfe"}}},"IVerifierDigest":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\IVerifierDigest.json","build_id":"0fdb9ef521ecdbfe"}}},"IVerifierDirect":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\IVerifierDirect.json","build_id":"0fdb9ef521ecdbfe"}}},"VoteChainBase":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\VoteChainBase.json","build_id":"0fdb9ef521ecdbfe"}}},"VoteChainDirect":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\VoteChainDirect.json","build_id":"0fdb9ef521ecdbfe"}}},"VoteChainPoseidon":{"0.8.26":{"default":{"path":"VoteChainWP4.sol\\VoteChainPoseidon.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true},"src/WP4Profile.sol":{"lastModificationDate":1790768611179,"contentHash":"ed6e50dfdcd60dc6","interfaceReprHash":null,"sourceName":"src/WP4Profile.sol","imports":[],"versionRequirement":">=0.8.20, <0.9.0","artifacts":{"WP4Profile":{"0.8.26":{"default":{"path":"WP4Profile.sol\\WP4Profile.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true},"src/verifiers/VoteChainVoteDigestVerifier.sol":{"lastModificationDate":1790766586809,"contentHash":"2ab328f31af16578","interfaceReprHash":null,"sourceName":"src/verifiers/VoteChainVoteDigestVerifier.sol","imports":[],"versionRequirement":">=0.7.0, <0.9.0","artifacts":{"VoteChainVoteDigestVerifier":{"0.8.26":{"default":{"path":"VoteChainVoteDigestVerifier.sol\\VoteChainVoteDigestVerifier.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true},"src/verifiers/VoteChainVoteDirectVerifier.sol":{"lastModificationDate":1790766493497,"contentHash":"cacacadbfd88d925","interfaceReprHash":null,"sourceName":"src/verifiers/VoteChainVoteDirectVerifier.sol","imports":[],"versionRequirement":">=0.7.0, <0.9.0","artifacts":{"VoteChainVoteDirectVerifier":{"0.8.26":{"default":{"path":"VoteChainVoteDirectVerifier.sol\\VoteChainVoteDirectVerifier.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true},"test/VoteChainWP4.t.sol":{"lastModificationDate":1790768611424,"contentHash":"d27efb9afff7bef1","interfaceReprHash":null,"sourceName":"test/VoteChainWP4.t.sol","imports":["src\\VoteChainWP4.sol","src\\WP4Profile.sol","src\\verifiers\\VoteChainVoteDigestVerifier.sol","src\\verifiers\\VoteChainVoteDirectVerifier.sol","test\\WP4Fixture.sol"],"versionRequirement":">=0.8.20, <0.9.0","artifacts":{"Vm":{"0.8.26":{"default":{"path":"VoteChainWP4.t.sol\\Vm.json","build_id":"0fdb9ef521ecdbfe"}}},"VoteChainWP4Test":{"0.8.26":{"default":{"path":"VoteChainWP4.t.sol\\VoteChainWP4Test.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true},"test/WP4Fixture.sol":{"lastModificationDate":1790768611372,"contentHash":"21bd710652dabaf1","interfaceReprHash":null,"sourceName":"test/WP4Fixture.sol","imports":[],"versionRequirement":">=0.8.20, <0.9.0","artifacts":{"WP4Fixture":{"0.8.26":{"default":{"path":"WP4Fixture.sol\\WP4Fixture.json","build_id":"0fdb9ef521ecdbfe"}}}},"seenByCompiler":true}},"builds":["0fdb9ef521ecdbfe"],"profiles":{"default":{"solc":{"optimizer":{"enabled":true,"runs":200},"metadata":{"useLiteralContent":false,"bytecodeHash":"ipfs","appendCBOR":true},"outputSelection":{"*":{"*":["abi","evm.bytecode.object","evm.bytecode.sourceMap","evm.bytecode.linkReferences","evm.deployedBytecode.object","evm.deployedBytecode.sourceMap","evm.deployedBytecode.linkReferences","evm.deployedBytecode.immutableReferences","evm.methodIdentifiers","metadata"]}},"evmVersion":"prague","viaIR":true,"libraries":{}},"vyper":{"evmVersion":"prague","outputSelection":{"*":{"*":["abi","evm.bytecode","evm.deployedBytecode"]}}}}},"preprocessed":false,"mocks":[]}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:31: * BabyJub affine twisted-Edwards addition.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:40:library BabyJubAffine {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:83:            "BABYJUB_ZERO_DENOMINATOR"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:328:         * BabyJub identity = (0,1)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:527:            BabyJubAffine.Point memory oldR =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:528:                BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:533:            BabyJubAffine.Point memory newR =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:534:                BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:539:            BabyJubAffine.Point memory oldS =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:540:                BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:545:            BabyJubAffine.Point memory newS =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:546:                BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:551:            BabyJubAffine.Point memory sumR =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:552:                BabyJubAffine.add(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:557:            BabyJubAffine.Point memory sumS =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:558:                BabyJubAffine.add(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1028:contract BabyJubTallyHarness {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1058:            BabyJubAffine.Point memory sumR =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1059:                BabyJubAffine.add(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1060:                    BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1064:                    BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1070:            BabyJubAffine.Point memory sumS =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1071:                BabyJubAffine.add(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1072:                    BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1076:                    BabyJubAffine.Point(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1287:        BabyJubTallyHarness th =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1288:            new BabyJubTallyHarness();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1415:            "COMMON_BABYJUB",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp3-build-profile.json:26:  "babyjub": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp3-build-profile.json:40:  "threshold": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp3-build-profile.json:43:    "productionDkg": "DEFERRED_WP6"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp4-architecture-freeze.json:21:    "scheme": "EXPONENTIAL_ELGAMAL",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp4-architecture-freeze.json:22:    "curve": "BABYJUBJUB",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp4-architecture-freeze.json:40:    "target EVM deployment cannot accommodate measured BabyJub gas",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp5-application-profile.json:15:  "babyjub": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/package-lock.json:176:      "integrity": "sha512-vTkeohgJVCPVHu5c25XWaWQOZ4v+DkGoC42/TS2ond+PARCxTJvgTFUNDZovyQ/uAQ4EcpqqowKydcdmRKjg7A==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:26:    runDkgPoc,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:27:    partialDecrypt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:29:    thresholdDecrypt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:336:const dkg =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:337:    runDkgPoc(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:345:    "DKG commitments and no combined private key",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:348:            dkg.threshold,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:353:            dkg.trusteeCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:359:                dkg,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:367:            of dkg.shares
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:385:    "ElGamal Enc(0)/Enc(1)",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:400:                    dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:406:                dkg.shares
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:413:                                partialDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:422:                thresholdDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:447:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:455:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:490:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:497:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:504:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:511:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:519:    dkg.shares
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:526:                    partialDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:538:            thresholdDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:557:    "insufficient threshold rejected",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:572:const trustee =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:573:    dkg.shares[0];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:576:    partialDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:579:        trustee.share
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:586:        trustee.share,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:587:        trustee.publicShare,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:593:    "valid partial decryption proof",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:599:                trustee.publicShare,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:615:                trustee.publicShare,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:657:        dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:665:        dkg.publicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:729:    threshold: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:731:            dkg.mode,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:733:        threshold:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:736:        trustees:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:745:                dkg.publicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:749:            dkg.shares
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:767:    elgamal: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:776:                dkg.publicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:830:            "input_elgamal_valid_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:835:            "input_elgamal_invalid_bit_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:843:            "input_elgamal_tampered_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:858:            "input_elgamal_zero_r_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:866:            "input_elgamal_bad_r_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:874:            "input_elgamal_identity_key_final.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:908:        "elgamal_encrypt_per_slot",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:912:                dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:924:        "elgamal_encrypt_ballot_K4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:936:                    dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:956:        dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:963:        dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:970:        dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:977:        dkg.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1005:        "dkg_poc_3_of_5",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1007:            runDkgPoc(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1021:            partialDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1024:                trustee.share
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1037:                trustee.share,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1038:                trustee.publicShare,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1056:                    trustee.publicShare,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1071:        "threshold_combine_3_shares",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp2-core-final-run.mjs:1082:    thresholdDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:7:const buildBabyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:8:    pkg.buildBabyjub ??
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:9:    pkg.default?.buildBabyjub;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:16:    !buildBabyjub ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:20:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:39:const babyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:40:    await buildBabyjub();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:49:    babyjub.F;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:84:        profile.babyjub.subOrder
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:305:    babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:306:        babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:338:            babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:339:                babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:344:            babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:351:                ? babyjub.Base8
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:355:            babyjub.addPoint(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:522:    babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:523:        babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:536: * Fall back to the BabyJub order-2 point (0,-1).
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:539:    babyjub.Generator;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:559:    typeof babyjub.inSubgroup ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:561:    babyjub.inSubgroup(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:102:    babyjub: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:136:    threshold: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:143:        productionDkg:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:161:    profile.babyjub;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:203:function VC_BABYJUB_BASE8_X() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:207:function VC_BABYJUB_BASE8_Y() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:211:function VC_BABYJUB_SUBORDER() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:215:function VC_BABYJUB_SUBORDER_MINUS_ONE() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:6:const buildBabyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:7:    pkg.buildBabyjub ??
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:8:    pkg.default?.buildBabyjub;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:14:if (!buildBabyjub || !buildPoseidon) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:16:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:34:const babyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:35:    await buildBabyjub();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:40:const BF = babyjub.F;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:235:    babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:236:        babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:283:            babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:284:                babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:289:            babyjub.mulPointEscalar(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:296:                ? babyjub.Base8
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:300:            babyjub.addPoint(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:463:        babyjub.addPoint(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:483:        babyjub.addPoint(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-finalize-gas-gate.mjs:119:        "COMMON_BABYJUB"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-finalize-gas-gate.mjs:191:    babyJubTallyUpdateGasProxy:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/profile.mjs:9:  trusteeThreshold: 3,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/profile.mjs:10:  trusteeCount: 5,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/profile.mjs:16:  domainDleq: "VOTECHAIN_ZK_DLEQ_V1",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:3:    buildBabyjub,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:11:    threshold: 3,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:12:    trustees: 5,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:15:    dleqDomain: "VOTECHAIN_ZK_DLEQ_V1",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:65:        cachedBaby = await buildBabyjub();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:157:        dleq:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:159:                PROFILE.dleqDomain
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:348:            "invalid ElGamal randomness"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:557: * threshold PoC.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:562:export function runDkgPoc(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:565:    threshold,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:566:    trusteeCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:570:        trusteeCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:573:            "DKG participant mismatch"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:581:                    threshold
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:601:                        "zero DKG contribution"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:642:        recipient <= trusteeCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:703:                `DKG commitment verification failed for ${recipient}`
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:715:            "multi-party-polynomial-contribution-dkg-poc",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:717:        threshold,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:719:        trusteeCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:736:export const partialDecrypt =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:744:function lagrangeZero(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:794:    threshold
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:798:        threshold
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:801:            `need at least ${threshold} shares`
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:814:            "duplicate trustee"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:825:            lagrangeZero(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:846:export function thresholdDecrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:850:    threshold
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:856:            threshold
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:891:            d.dleq,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs:920:            "zero DLEQ nonce"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:2:import { buildBabyjub, buildPoseidon } from "circomlibjs";
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:15:const babyJub = await buildBabyjub();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:17:assert.ok(babyJub.Base8);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:18:assert.ok(babyJub.subOrder);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:19:assert.equal(PROFILE.trusteeThreshold, 3);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:20:assert.equal(PROFILE.trusteeCount, 5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:22:const G = babyJub.Base8;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:23:const twoG = babyJub.mulPointEscalar(G, 2n);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:24:const onePlusOne = babyJub.addPoint(G, G);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:27:  babyJub.F.eq(twoG[0], onePlusOne[0]) &&
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:28:  babyJub.F.eq(twoG[1], onePlusOne[1])
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:32:console.log("BABYJUB_BASE8=PASS");
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:33:console.log("BABYJUB_POINT_ARITHMETIC=PASS");
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test/preflight.mjs:34:console.log("THRESHOLD_PROFILE=3_OF_5");
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:8:    "threshold": 3,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:9:    "trustees": 5,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:12:    "dleqDomain": "VOTECHAIN_ZK_DLEQ_V1",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:38:  "threshold": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:39:    "mode": "multi-party-polynomial-contribution-dkg-poc",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:40:    "threshold": 3,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:41:    "trustees": 5,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp2-known-answer-final.json:90:  "elgamal": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture/VC-W06_CONFIGURATION_STRATEGY.md:21:- trustee identities
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture/VC-W06_CONFIGURATION_STRATEGY.md:22:- trustee threshold and trustee count
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture/VC-W06_CONFIGURATION_STRATEGY.md:83:- trustee private shares
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture/WP4_ARCHITECTURE_FREEZE.md:32:- BabyJubJub exponential ElGamal
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture/WP4_ARCHITECTURE_FREEZE.md:36:## BabyJub EVM status
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/baseline/VC-W06_DYNAMIC_CONFIG_AUDIT.md:41:Published biometric thresholds must retain scientific provenance.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/baseline/VC-W06_IMPORTED_BASELINE.md:27:trustee-tools/
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:31:- BabyJubJub Base8 availability: PASS
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:32:- BabyJubJub point arithmetic smoke check: PASS
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:33:- 3-of-5 PoC trustee profile: recorded
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:49:4. BabyJubJub exponential ElGamal Enc(0)/Enc(1).
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:51:6. 3-of-5 threshold-sharing/decryption PoC.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_BOOTSTRAP_REPORT.md:53:8. Bounded discrete-log tally decoding.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:31:- Exponential BabyJubJub ElGamal Enc(0)/Enc(1).
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:34:- Multi-party polynomial-contribution 3-of-5 threshold DKG PoC.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:35:- DKG commitment/share validation.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:37:- Partial threshold decryption.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:39:- DLEQ/Chaum-Pedersen-style share proof.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:41:- Bounded discrete-log tally decode.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:52:This DKG/share-proof implementation is a research PoC.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto/WP2_CORE_FINALMETRICS_REPORT.md:53:The final audited production DKG/share-proof mechanism
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:8:    function _sendLogPayloadImplementation(bytes memory payload) internal view {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:33:    function _sendLogPayload(bytes memory payload) internal pure {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:34:        _castToPure(_sendLogPayloadImplementation)(payload);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:38:        _sendLogPayload(abi.encodeWithSignature("log()"));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:42:        _sendLogPayload(abi.encodeWithSignature("log(int256)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:46:        _sendLogPayload(abi.encodeWithSignature("log(uint256)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:50:        _sendLogPayload(abi.encodeWithSignature("log(string)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:54:        _sendLogPayload(abi.encodeWithSignature("log(bool)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:58:        _sendLogPayload(abi.encodeWithSignature("log(address)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:62:        _sendLogPayload(abi.encodeWithSignature("log(bytes)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:66:        _sendLogPayload(abi.encodeWithSignature("log(bytes1)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:70:        _sendLogPayload(abi.encodeWithSignature("log(bytes2)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:74:        _sendLogPayload(abi.encodeWithSignature("log(bytes3)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:78:        _sendLogPayload(abi.encodeWithSignature("log(bytes4)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:82:        _sendLogPayload(abi.encodeWithSignature("log(bytes5)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:86:        _sendLogPayload(abi.encodeWithSignature("log(bytes6)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:90:        _sendLogPayload(abi.encodeWithSignature("log(bytes7)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:94:        _sendLogPayload(abi.encodeWithSignature("log(bytes8)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:98:        _sendLogPayload(abi.encodeWithSignature("log(bytes9)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:102:        _sendLogPayload(abi.encodeWithSignature("log(bytes10)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:106:        _sendLogPayload(abi.encodeWithSignature("log(bytes11)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:110:        _sendLogPayload(abi.encodeWithSignature("log(bytes12)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:114:        _sendLogPayload(abi.encodeWithSignature("log(bytes13)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:118:        _sendLogPayload(abi.encodeWithSignature("log(bytes14)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:122:        _sendLogPayload(abi.encodeWithSignature("log(bytes15)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:126:        _sendLogPayload(abi.encodeWithSignature("log(bytes16)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:130:        _sendLogPayload(abi.encodeWithSignature("log(bytes17)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:134:        _sendLogPayload(abi.encodeWithSignature("log(bytes18)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:138:        _sendLogPayload(abi.encodeWithSignature("log(bytes19)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:142:        _sendLogPayload(abi.encodeWithSignature("log(bytes20)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:146:        _sendLogPayload(abi.encodeWithSignature("log(bytes21)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:150:        _sendLogPayload(abi.encodeWithSignature("log(bytes22)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:154:        _sendLogPayload(abi.encodeWithSignature("log(bytes23)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:158:        _sendLogPayload(abi.encodeWithSignature("log(bytes24)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:162:        _sendLogPayload(abi.encodeWithSignature("log(bytes25)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:166:        _sendLogPayload(abi.encodeWithSignature("log(bytes26)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:170:        _sendLogPayload(abi.encodeWithSignature("log(bytes27)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:174:        _sendLogPayload(abi.encodeWithSignature("log(bytes28)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:178:        _sendLogPayload(abi.encodeWithSignature("log(bytes29)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:182:        _sendLogPayload(abi.encodeWithSignature("log(bytes30)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:186:        _sendLogPayload(abi.encodeWithSignature("log(bytes31)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:190:        _sendLogPayload(abi.encodeWithSignature("log(bytes32)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:194:        _sendLogPayload(abi.encodeWithSignature("log(uint256)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:198:        _sendLogPayload(abi.encodeWithSignature("log(int256)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:202:        _sendLogPayload(abi.encodeWithSignature("log(string)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:206:        _sendLogPayload(abi.encodeWithSignature("log(bool)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:210:        _sendLogPayload(abi.encodeWithSignature("log(address)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:214:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:218:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:222:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:226:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:230:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:234:        _sendLogPayload(abi.encodeWithSignature("log(string,int256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:238:        _sendLogPayload(abi.encodeWithSignature("log(string,string)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:242:        _sendLogPayload(abi.encodeWithSignature("log(string,bool)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:246:        _sendLogPayload(abi.encodeWithSignature("log(string,address)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:250:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:254:        _sendLogPayload(abi.encodeWithSignature("log(bool,string)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:258:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:262:        _sendLogPayload(abi.encodeWithSignature("log(bool,address)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:266:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:270:        _sendLogPayload(abi.encodeWithSignature("log(address,string)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:274:        _sendLogPayload(abi.encodeWithSignature("log(address,bool)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:278:        _sendLogPayload(abi.encodeWithSignature("log(address,address)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:282:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:286:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:290:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:294:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:298:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:302:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:306:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:310:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:314:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:318:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:322:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:326:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:330:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:334:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:338:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:342:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:346:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:350:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:354:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:358:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:362:        _sendLogPayload(abi.encodeWithSignature("log(string,string,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:366:        _sendLogPayload(abi.encodeWithSignature("log(string,string,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:370:        _sendLogPayload(abi.encodeWithSignature("log(string,string,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:374:        _sendLogPayload(abi.encodeWithSignature("log(string,string,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:378:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:382:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:386:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:390:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:394:        _sendLogPayload(abi.encodeWithSignature("log(string,address,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:398:        _sendLogPayload(abi.encodeWithSignature("log(string,address,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:402:        _sendLogPayload(abi.encodeWithSignature("log(string,address,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:406:        _sendLogPayload(abi.encodeWithSignature("log(string,address,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:410:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:414:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:418:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:422:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:426:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:430:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:434:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:438:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:442:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:446:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:450:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:454:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:458:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:462:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:466:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:470:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:474:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:478:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:482:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:486:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:490:        _sendLogPayload(abi.encodeWithSignature("log(address,string,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:494:        _sendLogPayload(abi.encodeWithSignature("log(address,string,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:498:        _sendLogPayload(abi.encodeWithSignature("log(address,string,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:502:        _sendLogPayload(abi.encodeWithSignature("log(address,string,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:506:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:510:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:514:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:518:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:522:        _sendLogPayload(abi.encodeWithSignature("log(address,address,uint256)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:526:        _sendLogPayload(abi.encodeWithSignature("log(address,address,string)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:530:        _sendLogPayload(abi.encodeWithSignature("log(address,address,bool)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:534:        _sendLogPayload(abi.encodeWithSignature("log(address,address,address)", p0, p1, p2));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:538:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:542:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:546:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:550:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:554:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:558:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:562:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:566:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:570:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:574:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:578:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:582:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:586:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:590:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:594:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:598:        _sendLogPayload(abi.encodeWithSignature("log(uint256,uint256,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:602:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:606:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:610:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:614:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:618:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:622:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:626:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:630:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:634:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:638:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:642:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:646:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:650:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:654:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:658:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:662:        _sendLogPayload(abi.encodeWithSignature("log(uint256,string,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:666:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:670:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:674:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:678:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:682:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:686:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:690:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:694:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:698:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:702:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:706:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:710:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:714:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:718:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:722:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:726:        _sendLogPayload(abi.encodeWithSignature("log(uint256,bool,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:730:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:734:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:738:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:742:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:746:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:750:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:754:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:758:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:762:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:766:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:770:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:774:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:778:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:782:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:786:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:790:        _sendLogPayload(abi.encodeWithSignature("log(uint256,address,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:794:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:798:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:802:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:806:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:810:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:814:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:818:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:822:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:826:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:830:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:834:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:838:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:842:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:846:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:850:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:854:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:858:        _sendLogPayload(abi.encodeWithSignature("log(string,string,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:862:        _sendLogPayload(abi.encodeWithSignature("log(string,string,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:866:        _sendLogPayload(abi.encodeWithSignature("log(string,string,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:870:        _sendLogPayload(abi.encodeWithSignature("log(string,string,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:874:        _sendLogPayload(abi.encodeWithSignature("log(string,string,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:878:        _sendLogPayload(abi.encodeWithSignature("log(string,string,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:882:        _sendLogPayload(abi.encodeWithSignature("log(string,string,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:886:        _sendLogPayload(abi.encodeWithSignature("log(string,string,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:890:        _sendLogPayload(abi.encodeWithSignature("log(string,string,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:894:        _sendLogPayload(abi.encodeWithSignature("log(string,string,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:898:        _sendLogPayload(abi.encodeWithSignature("log(string,string,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:902:        _sendLogPayload(abi.encodeWithSignature("log(string,string,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:906:        _sendLogPayload(abi.encodeWithSignature("log(string,string,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:910:        _sendLogPayload(abi.encodeWithSignature("log(string,string,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:914:        _sendLogPayload(abi.encodeWithSignature("log(string,string,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:918:        _sendLogPayload(abi.encodeWithSignature("log(string,string,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:922:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:926:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:930:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:934:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:938:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:942:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:946:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:950:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:954:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:958:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:962:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:966:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:970:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:974:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:978:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:982:        _sendLogPayload(abi.encodeWithSignature("log(string,bool,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:986:        _sendLogPayload(abi.encodeWithSignature("log(string,address,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:990:        _sendLogPayload(abi.encodeWithSignature("log(string,address,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:994:        _sendLogPayload(abi.encodeWithSignature("log(string,address,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:998:        _sendLogPayload(abi.encodeWithSignature("log(string,address,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1002:        _sendLogPayload(abi.encodeWithSignature("log(string,address,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1006:        _sendLogPayload(abi.encodeWithSignature("log(string,address,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1010:        _sendLogPayload(abi.encodeWithSignature("log(string,address,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1014:        _sendLogPayload(abi.encodeWithSignature("log(string,address,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1018:        _sendLogPayload(abi.encodeWithSignature("log(string,address,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1022:        _sendLogPayload(abi.encodeWithSignature("log(string,address,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1026:        _sendLogPayload(abi.encodeWithSignature("log(string,address,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1030:        _sendLogPayload(abi.encodeWithSignature("log(string,address,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1034:        _sendLogPayload(abi.encodeWithSignature("log(string,address,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1038:        _sendLogPayload(abi.encodeWithSignature("log(string,address,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1042:        _sendLogPayload(abi.encodeWithSignature("log(string,address,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1046:        _sendLogPayload(abi.encodeWithSignature("log(string,address,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1050:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1054:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1058:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1062:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1066:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1070:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1074:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1078:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1082:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1086:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1090:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1094:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1098:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1102:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1106:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1110:        _sendLogPayload(abi.encodeWithSignature("log(bool,uint256,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1114:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1118:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1122:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1126:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1130:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1134:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1138:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1142:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1146:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1150:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1154:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1158:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1162:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1166:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1170:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1174:        _sendLogPayload(abi.encodeWithSignature("log(bool,string,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1178:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1182:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1186:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1190:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1194:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1198:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1202:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1206:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1210:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1214:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1218:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1222:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1226:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1230:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1234:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1238:        _sendLogPayload(abi.encodeWithSignature("log(bool,bool,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1242:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1246:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1250:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1254:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1258:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1262:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1266:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1270:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1274:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1278:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1282:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1286:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1290:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1294:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1298:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1302:        _sendLogPayload(abi.encodeWithSignature("log(bool,address,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1306:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1310:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1314:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1318:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1322:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1326:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1330:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1334:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1338:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1342:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1346:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1350:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1354:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1358:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1362:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1366:        _sendLogPayload(abi.encodeWithSignature("log(address,uint256,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1370:        _sendLogPayload(abi.encodeWithSignature("log(address,string,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1374:        _sendLogPayload(abi.encodeWithSignature("log(address,string,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1378:        _sendLogPayload(abi.encodeWithSignature("log(address,string,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1382:        _sendLogPayload(abi.encodeWithSignature("log(address,string,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1386:        _sendLogPayload(abi.encodeWithSignature("log(address,string,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1390:        _sendLogPayload(abi.encodeWithSignature("log(address,string,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1394:        _sendLogPayload(abi.encodeWithSignature("log(address,string,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1398:        _sendLogPayload(abi.encodeWithSignature("log(address,string,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1402:        _sendLogPayload(abi.encodeWithSignature("log(address,string,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1406:        _sendLogPayload(abi.encodeWithSignature("log(address,string,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1410:        _sendLogPayload(abi.encodeWithSignature("log(address,string,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1414:        _sendLogPayload(abi.encodeWithSignature("log(address,string,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1418:        _sendLogPayload(abi.encodeWithSignature("log(address,string,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1422:        _sendLogPayload(abi.encodeWithSignature("log(address,string,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1426:        _sendLogPayload(abi.encodeWithSignature("log(address,string,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1430:        _sendLogPayload(abi.encodeWithSignature("log(address,string,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1434:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1438:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1442:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1446:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1450:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1454:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1458:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1462:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1466:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1470:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1474:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1478:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1482:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1486:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1490:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1494:        _sendLogPayload(abi.encodeWithSignature("log(address,bool,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1498:        _sendLogPayload(abi.encodeWithSignature("log(address,address,uint256,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1502:        _sendLogPayload(abi.encodeWithSignature("log(address,address,uint256,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1506:        _sendLogPayload(abi.encodeWithSignature("log(address,address,uint256,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1510:        _sendLogPayload(abi.encodeWithSignature("log(address,address,uint256,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1514:        _sendLogPayload(abi.encodeWithSignature("log(address,address,string,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1518:        _sendLogPayload(abi.encodeWithSignature("log(address,address,string,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1522:        _sendLogPayload(abi.encodeWithSignature("log(address,address,string,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1526:        _sendLogPayload(abi.encodeWithSignature("log(address,address,string,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1530:        _sendLogPayload(abi.encodeWithSignature("log(address,address,bool,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1534:        _sendLogPayload(abi.encodeWithSignature("log(address,address,bool,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1538:        _sendLogPayload(abi.encodeWithSignature("log(address,address,bool,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1542:        _sendLogPayload(abi.encodeWithSignature("log(address,address,bool,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1546:        _sendLogPayload(abi.encodeWithSignature("log(address,address,address,uint256)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1550:        _sendLogPayload(abi.encodeWithSignature("log(address,address,address,string)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1554:        _sendLogPayload(abi.encodeWithSignature("log(address,address,address,bool)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/console.sol:1558:        _sendLogPayload(abi.encodeWithSignature("log(address,address,address,address)", p0, p1, p2, p3));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11:    function _sendLogPayload(uint256 offset, uint256 size) private pure {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12:        function(uint256, uint256) internal view fnIn = _sendLogPayloadView;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13:        function(uint256, uint256) internal pure pureSendLogPayload;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:16:            pureSendLogPayload := fnIn
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:18:        pureSendLogPayload(offset, size);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:21:    function _sendLogPayloadView(uint256 offset, uint256 size) private view {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:61:            _sendLogPayload(offset - 0x44, length + 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:88:            _sendLogPayload(offset + 0x1c, length + 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:110:        _sendLogPayload(0x1c, 0x24);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:129:        _sendLogPayload(0x1c, 0x24);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:148:        _sendLogPayload(0x1c, 0x24);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:179:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:203:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:226:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:249:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:284:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:309:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:332:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:355:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:390:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:415:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:438:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:461:        _sendLogPayload(0x1c, 0x44);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:496:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:533:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:570:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:607:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:649:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:679:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:706:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:733:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:772:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:801:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:828:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:855:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:894:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:923:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:950:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:977:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1016:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1057:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1098:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1139:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1185:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1216:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1243:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1270:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1309:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1338:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1365:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1392:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1431:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1460:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1487:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1514:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1553:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1594:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1635:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1676:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1722:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1753:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1780:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1807:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1846:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1875:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1902:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1929:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1968:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:1997:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2024:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2051:        _sendLogPayload(0x1c, 0x64);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2090:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2131:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2172:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2213:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2259:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2302:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2343:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2384:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2430:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2473:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2514:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2555:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2601:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2644:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2685:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2726:        _sendLogPayload(0x1c, 0xa4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2772:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2820:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2868:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2916:        _sendLogPayload(0x1c, 0xe4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:2969:        _sendLogPayload(0x1c, 0x124);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3005:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3036:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3067:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3110:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3143:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3174:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3205:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3248:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3281:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3312:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3343:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3386:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3431:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3476:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3521:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3571:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3606:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3637:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3668:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3711:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3744:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3775:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3806:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3849:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3882:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3913:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3944:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:3987:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4032:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4077:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4122:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4172:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4207:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4238:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4269:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4312:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4345:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4376:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4407:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4450:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4483:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4514:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4545:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4588:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4633:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4678:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4723:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4773:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4820:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4865:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4910:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:4960:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5007:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5052:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5097:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5147:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5194:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5239:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5284:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5334:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5386:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5438:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5490:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5547:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5584:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5615:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5646:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5689:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5722:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5753:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5784:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5827:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5860:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5891:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5922:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:5965:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6010:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6055:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6100:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6150:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6185:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6216:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6247:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6290:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6323:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6354:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6385:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6428:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6461:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6492:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6523:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6566:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6611:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6656:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6701:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6751:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6786:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6817:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6848:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6891:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6924:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6955:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:6986:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7029:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7062:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7093:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7124:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7167:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7212:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7257:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7302:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7352:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7399:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7444:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7489:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7539:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7586:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7631:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7676:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7726:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7773:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7818:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7863:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7913:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:7965:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8017:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8069:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8126:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8163:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8194:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8225:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8268:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8301:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8332:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8363:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8406:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8439:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8470:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8501:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8544:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8589:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8634:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8679:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8729:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8764:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8795:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8826:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8869:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8902:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8933:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:8964:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9007:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9040:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9071:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9102:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9145:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9190:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9235:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9280:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9330:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9365:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9396:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9427:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9470:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9503:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9534:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9565:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9608:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9641:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9672:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9703:        _sendLogPayload(0x1c, 0x84);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9746:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9791:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9836:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9881:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9931:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:9978:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10023:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10068:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10118:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10165:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10210:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10255:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10305:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10352:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10397:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10442:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10492:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10544:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10596:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10648:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10705:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10754:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10799:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10844:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10894:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10941:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:10986:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11031:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11081:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11128:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11173:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11218:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11268:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11320:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11372:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11424:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11481:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11530:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11575:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11620:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11670:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11717:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11762:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11807:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11857:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11904:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11949:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:11994:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12044:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12096:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12148:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12200:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12257:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12306:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12351:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12396:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12446:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12493:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12538:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12583:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12633:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12680:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12725:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12770:        _sendLogPayload(0x1c, 0xc4);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12820:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12872:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12924:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:12976:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13033:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13087:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13139:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13191:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13248:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13302:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13354:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13406:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13463:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13517:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13569:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13621:        _sendLogPayload(0x1c, 0x104);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13678:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13737:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13796:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13855:        _sendLogPayload(0x1c, 0x144);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/safeconsole.sol:13919:        _sendLogPayload(0x1c, 0x184);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:184:    function _sendLogPayload(bytes memory payload) internal pure {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:185:        _castLogPayloadViewToPure(_sendLogPayloadView)(payload);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:188:    function _sendLogPayloadView(bytes memory payload) private view {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:199:        _sendLogPayload(abi.encodeWithSignature("log(string)", p0));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:203:        _sendLogPayload(abi.encodeWithSignature("log(string,uint256)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/StdUtils.sol:207:        _sendLogPayload(abi.encodeWithSignature("log(string,string)", p0, p1));
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/Vm.sol:83:    /// An Ethereum log. Returned by `getRecordedLogs`.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/Vm.sol:634:    function getRecordedLogs() external returns (Log[] memory logs);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/src/Vm.sol:655:    function recordLogs() external;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/VC-W06_Final_Report.md:138:biometric/, backend/, frontend/, trustee-tools/, experiments/, research/, and docs/.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/VC-W06_Final_Report.md:192:- trustee-tools/.gitkeep
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:751:      "integrity": "sha512-vTkeohgJVCPVHu5c25XWaWQOZ4v+DkGoC42/TS2ond+PARCxTJvgTFUNDZovyQ/uAQ4EcpqqowKydcdmRKjg7A==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:6674:      "integrity": "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:1137:      "integrity": "sha512-vTkeohgJVCPVHu5c25XWaWQOZ4v+DkGoC42/TS2ond+PARCxTJvgTFUNDZovyQ/uAQ4EcpqqowKydcdmRKjg7A==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:8742:      "integrity": "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:11848:      "integrity": "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs:427:  babyjub:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs:428:    profile.babyjub,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:7:  buildBabyjub,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:154:const babyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:155:  await buildBabyjub()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:161:  babyjub.F
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:392:  babyjub
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs:394:      babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:15:  "babyjub": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:39:async function buildBabyjub() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:45:  return circomlib.buildBabyjub()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:103:    appProfile.babyjub.subOrder,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:134:let babyjubPromise:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:147:function getBabyjub() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:148:  if (!babyjubPromise) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:149:    babyjubPromise =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:150:      buildBabyjub()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:153:  return babyjubPromise
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:518:  babyjub: any,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:523:      babyjub.F.toObject(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:528:      babyjub.F.toObject(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:766:    const babyjub =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:767:      await getBabyjub()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:770:      babyjub.F.e(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:777:      babyjub.F.e(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:787:      typeof babyjub.inCurve ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:789:      !babyjub.inCurve(Y)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:792:        "Election BabyJub public key is not on curve",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:797:      typeof babyjub.inSubgroup ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:799:      !babyjub.inSubgroup(Y)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:802:        "Election BabyJub public key is outside the prime subgroup",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:817:      babyjub.F.e(0),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:818:      babyjub.F.e(1),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:838:        babyjub
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:840:            babyjub.Base8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:845:        babyjub
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:853:          ? babyjub.Base8
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:857:        babyjub.addPoint(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:864:          babyjub,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:870:          babyjub,

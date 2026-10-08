@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.20 <0.9.0;
+
+/*
+ * AUTO-GENERATED FROM:
+ *   crypto/config/wp3-build-profile.json
+ */
+library WP4Profile {
+    uint256 internal constant MAX_CANDIDATES = 16;
+
+    uint256 internal constant FIELD_MODULUS =
+        21888242871839275222246405745257275088548364400416034343698204186575808495617;
+
+    uint256 internal constant CIPHERTEXT_BINDING_DOMAIN =
+        19125745417040834467958581383394473365054202296533443463458738476729992215493;
+}

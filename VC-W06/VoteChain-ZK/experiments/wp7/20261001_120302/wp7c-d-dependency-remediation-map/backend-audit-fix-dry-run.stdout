@@ -1,0 +1,203 @@
+add fsevents 2.3.3
+remove ws 8.18.0
+change @adraffy/ens-normalize 1.10.1 => 1.11.1
+change ws 8.17.1 => 8.18.0
+change uuid 11.1.0 => 11.1.1
+change validator 13.15.0 => 13.15.35
+change socks 2.8.4 => 2.8.10
+change side-channel-list 1.0.0 => 1.0.1
+change side-channel 1.1.0 => 1.1.1
+change raw-body 2.5.2 => 2.5.3
+add statuses 2.0.2
+add http-errors 2.0.1
+change qs 6.13.0 => 6.16.0
+change path-to-regexp 0.1.12 => 0.1.13
+change mongoose 7.8.6 => 7.8.12
+change lodash 4.17.21 => 4.18.1
+change jws 3.2.2 => 3.2.3
+change jwa 1.4.1 => 1.4.2
+remove jsbn 1.1.0
+change ip-address 9.0.5 => 10.7.2
+remove sprintf-js 1.1.3
+change ethers 6.15.0 => 6.17.0
+add ws 8.21.0
+change express-validator 7.2.1 => 7.3.2
+remove validator 13.12.0
+change express 4.21.2 => 4.22.3
+change body-parser 1.20.3 => 1.20.8
+add statuses 2.0.2
+add http-errors 2.0.1
+
+added 6 packages, removed 4 packages, changed 19 packages, and audited 540 packages in 6s
+
+104 packages are looking for funding
+  run `npm fund` for details
+
+# npm audit report
+
+body-parser  <=1.20.6 || 2.0.0-beta.1 - 2.0.2
+Severity: moderate
+body-parser vulnerable to denial of service when invalid limit value silently disables size enforcement - https://github.com/advisories/GHSA-v422-hmwv-36x6
+Depends on vulnerable versions of qs
+fix available via `npm audit fix`
+
+  express  4.0.0-rc1 - 4.22.2 || 5.0.0-alpha.1 - 5.0.1
+  Depends on vulnerable versions of body-parser
+  Depends on vulnerable versions of path-to-regexp
+  Depends on vulnerable versions of qs
+  
+
+elliptic  *
+Elliptic Uses a Cryptographic Primitive with a Risky Implementation - https://github.com/advisories/GHSA-848j-6mx2-7j84
+fix available via `npm audit fix`
+node_modules/elliptic
+  @ethersproject/signing-key  <=5.8.0
+  Depends on vulnerable versions of elliptic
+  node_modules/@ethersproject/signing-key
+    @ethersproject/hdnode  *
+    Depends on vulnerable versions of @ethersproject/abstract-signer
+    Depends on vulnerable versions of @ethersproject/signing-key
+    Depends on vulnerable versions of @ethersproject/transactions
+    Depends on vulnerable versions of @ethersproject/wordlists
+    node_modules/@ethersproject/hdnode
+    @ethersproject/transactions  <=5.8.0
+    Depends on vulnerable versions of @ethersproject/signing-key
+    node_modules/@ethersproject/transactions
+      @ethersproject/abstract-provider  *
+      Depends on vulnerable versions of @ethersproject/transactions
+      node_modules/@ethersproject/abstract-provider
+        @ethersproject/abstract-signer  *
+        Depends on vulnerable versions of @ethersproject/abstract-provider
+        node_modules/@ethersproject/abstract-signer
+          @ethersproject/hash  5.0.6 - 5.8.0
+          Depends on vulnerable versions of @ethersproject/abstract-signer
+          node_modules/@ethersproject/hash
+            @ethersproject/abi  5.0.10 - 5.8.0
+            Depends on vulnerable versions of @ethersproject/hash
+            node_modules/@ethersproject/abi
+              @ethersproject/contracts  *
+              Depends on vulnerable versions of @ethersproject/abi
+              Depends on vulnerable versions of @ethersproject/abstract-provider
+              Depends on vulnerable versions of @ethersproject/abstract-signer
+              Depends on vulnerable versions of @ethersproject/transactions
+              node_modules/@ethersproject/contracts
+                ethers  5.0.0-beta.119 - 6.16.0
+                Depends on vulnerable versions of @ethersproject/abi
+                Depends on vulnerable versions of @ethersproject/abstract-provider
+                Depends on vulnerable versions of @ethersproject/abstract-signer
+                Depends on vulnerable versions of @ethersproject/contracts
+                Depends on vulnerable versions of @ethersproject/hash
+                Depends on vulnerable versions of @ethersproject/hdnode
+                Depends on vulnerable versions of @ethersproject/json-wallets
+                Depends on vulnerable versions of @ethersproject/providers
+                Depends on vulnerable versions of @ethersproject/signing-key
+                Depends on vulnerable versions of @ethersproject/transactions
+                Depends on vulnerable versions of @ethersproject/wallet
+                Depends on vulnerable versions of @ethersproject/wordlists
+                Depends on vulnerable versions of ws
+                
+                node_modules/circomlibjs/node_modules/ethers
+            @ethersproject/providers  *
+            Depends on vulnerable versions of @ethersproject/abstract-provider
+            Depends on vulnerable versions of @ethersproject/abstract-signer
+            Depends on vulnerable versions of @ethersproject/hash
+            Depends on vulnerable versions of @ethersproject/transactions
+            Depends on vulnerable versions of ws
+            node_modules/@ethersproject/providers
+            @ethersproject/wallet  <=5.8.0
+            Depends on vulnerable versions of @ethersproject/abstract-provider
+            Depends on vulnerable versions of @ethersproject/abstract-signer
+            Depends on vulnerable versions of @ethersproject/hash
+            Depends on vulnerable versions of @ethersproject/hdnode
+            Depends on vulnerable versions of @ethersproject/json-wallets
+            Depends on vulnerable versions of @ethersproject/signing-key
+            Depends on vulnerable versions of @ethersproject/transactions
+            Depends on vulnerable versions of @ethersproject/wordlists
+            node_modules/@ethersproject/wallet
+            @ethersproject/wordlists  5.0.8 - 5.8.0
+            Depends on vulnerable versions of @ethersproject/hash
+            node_modules/@ethersproject/wordlists
+      @ethersproject/json-wallets  *
+      Depends on vulnerable versions of @ethersproject/abstract-signer
+      Depends on vulnerable versions of @ethersproject/hdnode
+      Depends on vulnerable versions of @ethersproject/transactions
+      node_modules/@ethersproject/json-wallets
+
+ip-address  <=10.7.0
+Severity: high
+ip-address has XSS in Address6 HTML-emitting methods - https://github.com/advisories/GHSA-v2v4-37r5-5v8g
+ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass - https://github.com/advisories/GHSA-mwp4-54f8-5fhr
+ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts - https://github.com/advisories/GHSA-rpw4-54j3-4h4q
+ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range - https://github.com/advisories/GHSA-j6r3-76f7-8jcv
+ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process - https://github.com/advisories/GHSA-h3mg-xc3c-68pw
+fix available via `npm audit fix`
+
+  socks  2.7.2 - 2.8.6
+  Depends on vulnerable versions of ip-address
+  
+
+jws  <3.2.3
+Severity: high
+auth0/node-jws Improperly Verifies HMAC Signature - https://github.com/advisories/GHSA-869p-cjfg-cm3x
+fix available via `npm audit fix`
+
+
+lodash  <=4.17.23
+Severity: high
+lodash vulnerable to Code Injection via `_.template` imports key names - https://github.com/advisories/GHSA-r5fr-rjxr-66jc
+lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit` - https://github.com/advisories/GHSA-f23m-r3pf-42rh
+Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions - https://github.com/advisories/GHSA-xxjr-mmjv-4gpg
+fix available via `npm audit fix`
+
+
+mongoose  7.0.0 - 7.8.9
+Severity: high
+Mongoose's Improper Sanitization of $nor in sanitizeFilter May Allow NoSQL Injection - https://github.com/advisories/GHSA-wpg9-53fq-2r8h
+Mongoose: Prototype pollution in mongoose update casting via __proto__-prefixed dotted path (Schema._getSchema/path getter) - https://github.com/advisories/GHSA-664h-wqgq-64gw
+fix available via `npm audit fix`
+
+
+path-to-regexp  <0.1.13
+Severity: high
+path-to-regexp vulnerable to Regular Expression Denial of Service via multiple route parameters - https://github.com/advisories/GHSA-37ch-88jc-xwx2
+fix available via `npm audit fix`
+
+
+qs  <=6.15.3
+Severity: moderate
+qs's arrayLimit bypass in comma parsing allows denial of service - https://github.com/advisories/GHSA-w7fw-mjwx-w883
+qs's arrayLimit bypass in its bracket notation allows DoS via memory exhaustion - https://github.com/advisories/GHSA-6rw7-vpxm-498p
+qs has a remotely triggerable DoS: qs.stringify crashes with TypeError on null/undefined entries in comma-format arrays when encodeValuesOnly is set - https://github.com/advisories/GHSA-q8mj-m7cp-5q26
+qs: Denial of Service via Attacker Controlled isBuffer - https://github.com/advisories/GHSA-4mjr-xmp4-gh2g
+fix available via `npm audit fix`
+
+
+uuid  <11.1.1
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix`
+
+
+validator  <=13.15.20
+Severity: high
+validator.js has a URL validation bypass vulnerability in its isURL function - https://github.com/advisories/GHSA-9965-vmph-33xx
+Validator is Vulnerable to Incomplete Filtering of One or More Instances of Special Elements - https://github.com/advisories/GHSA-vghf-hv5q-vc2g
+fix available via `npm audit fix`
+
+
+  express-validator  0.2.0 - 6.4.1 || 7.1.0 - 7.2.1
+  Depends on vulnerable versions of validator
+  
+
+ws  8.0.0 - 8.20.1
+Severity: high
+ws: Uninitialized memory disclosure - https://github.com/advisories/GHSA-58qx-3vcg-4xpx
+ws: Memory exhaustion DoS from tiny fragments and data chunks - https://github.com/advisories/GHSA-96hv-2xvq-fx4p
+fix available via `npm audit fix`
+
+
+
+27 vulnerabilities (12 low, 7 moderate, 8 high)
+
+To address all issues, run:
+  npm audit fix

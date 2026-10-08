@@ -1,0 +1,709 @@
+246-        Active,
+247-        Ended,
+248-        Finalized
+249-    }
+250-
+251-    struct ElectionConfig {
+252-        uint256 eligibleRoot;
+253-
+254-        uint256 electionId;
+255-
+256-        uint256 candidateManifestHash;
+257-
+258:        uint256 candidateCount;
+259-
+260-        uint256 contractDomain;
+261-
+262-        uint256 Yx;
+263-        uint256 Yy;
+264-
+265-        uint256 electionContextHash;
+266-    }
+267-
+268-    address public immutable admin;
+269-
+270-    Phase public phase;
+271-
+272-    bool public configured;
+273-
+274-    uint256 public eligibleRoot;
+275-
+276-    uint256 public electionId;
+277-
+278-    uint256 public candidateManifestHash;
+279-
+280:    uint256 public candidateCount;
+281-
+282-    uint256 public contractDomain;
+283-
+284-    uint256 public Yx;
+285-    uint256 public Yy;
+286-
+287-    uint256 public electionContextHash;
+288-
+289-    uint256 public acceptedBallotCount;
+290-
+291-    /*
+292-     * WP6 threshold-finalization evidence.
+293-     *
+294-     * trusteeTranscriptHash is pinned during Registration.
+295-     * finalizationTranscriptHash is written only after Ended.
+296-     *
+297-     * The full threshold transcript remains public/off-chain;
+298-     * Solidity anchors its canonical SHA-256 hash and the
+299-     * independently verified plaintext aggregate totals.
+300-     */
+301-    bytes32 public trusteeTranscriptHash;
+302-
+303-    bytes32 public finalizationTranscriptHash;
+304-
+305:    uint256[16] internal finalResults;
+306-
+307-    mapping(uint256 => bool)
+308-        public usedNullifier;
+309-
+310:    uint256[16] internal tallyRx;
+311:    uint256[16] internal tallyRy;
+312:    uint256[16] internal tallySx;
+313:    uint256[16] internal tallySy;
+314-
+315-    event ElectionConfigured(
+316-        uint256 indexed electionId,
+317-        uint256 eligibleRoot,
+318-        uint256 candidateManifestHash,
+319:        uint256 candidateCount
+320-    );
+321-
+322-    event ElectionActivated(
+323-        uint256 indexed electionId
+324-    );
+325-
+326-    event ElectionEnded(
+327-        uint256 indexed electionId
+328-    );
+329-
+330-    event TrusteeTranscriptPinned(
+331-        bytes32 indexed transcriptHash
+--
+345-    constructor() {
+346-        admin =
+347-            msg.sender;
+348-
+349-        phase =
+350-            Phase.Registration;
+351-
+352-        /*
+353-         * BabyJub identity = (0,1)
+354-         */
+355-        for (
+356-            uint256 i = 0;
+357:            i < MAX;
+358-            i++
+359-        ) {
+360-            tallyRy[i] = 1;
+361-            tallySy[i] = 1;
+362-        }
+363-    }
+364-
+365-    modifier onlyAdmin() {
+366-        require(
+367-            msg.sender == admin,
+368-            "ONLY_ADMIN"
+369-        );
+--
+388-        external
+389-        onlyAdmin
+390-        inPhase(
+391-            Phase.Registration
+392-        )
+393-    {
+394-        require(
+395-            !configured,
+396-            "ALREADY_CONFIGURED"
+397-        );
+398-
+399-        require(
+400:            cfg.candidateCount >= 1 &&
+401:            cfg.candidateCount <= MAX,
+402-            "BAD_CANDIDATE_COUNT"
+403-        );
+404-
+405-        require(
+406-            cfg.eligibleRoot < P &&
+407-            cfg.candidateManifestHash < P &&
+408-            cfg.contractDomain < P &&
+409-            cfg.Yx < P &&
+410-            cfg.Yy < P &&
+411-            cfg.electionContextHash < P,
+412-            "NON_CANONICAL_CONFIG"
+413-        );
+--
+417-            "IDENTITY_PUBLIC_KEY"
+418-        );
+419-
+420-        eligibleRoot =
+421-            cfg.eligibleRoot;
+422-
+423-        electionId =
+424-            cfg.electionId;
+425-
+426-        candidateManifestHash =
+427-            cfg.candidateManifestHash;
+428-
+429:        candidateCount =
+430:            cfg.candidateCount;
+431-
+432-        contractDomain =
+433-            cfg.contractDomain;
+434-
+435-        Yx =
+436-            cfg.Yx;
+437-
+438-        Yy =
+439-            cfg.Yy;
+440-
+441-        electionContextHash =
+442-            cfg.electionContextHash;
+443-
+444-        configured =
+445-            true;
+446-
+447-        emit ElectionConfigured(
+448-            electionId,
+449-            eligibleRoot,
+450-            candidateManifestHash,
+451:            candidateCount
+452-        );
+453-    }
+454-
+455-    /*
+456-     * Pin the public DKG ceremony transcript before Active.
+457-     *
+458-     * The transcript verifier independently checks that the
+459-     * committed trustee public shares derive the configured Y.
+460-     * Existing WP4/WP5 deployment flows remain ABI-compatible:
+461-     * this is an additional registration-stage call.
+462-     */
+463-    function setTrusteeTranscriptHash(
+--
+537-     * This contract:
+538-     *
+539-     *   - requires Ended,
+540-     *   - requires a registration-stage trustee transcript pin,
+541-     *   - enforces candidate padding,
+542-     *   - enforces sum(totals) == acceptedBallotCount,
+543-     *   - anchors the independently verified transcript hash,
+544-     *   - exposes plaintext totals only in Finalized.
+545-     *
+546-     * The transcript and proofs stay independently re-verifiable.
+547-     */
+548-    function finalizeTally(
+549:        uint256[16] calldata totals,
+550-        bytes32 transcriptHash
+551-    )
+552-        external
+553-        onlyAdmin
+554-        inPhase(
+555-            Phase.Ended
+556-        )
+557-    {
+558-        require(
+559-            trusteeTranscriptHash !=
+560-                bytes32(0),
+561-            "TRUSTEE_TRANSCRIPT_NOT_PINNED"
+562-        );
+563-
+564-        require(
+565-            transcriptHash !=
+566-                bytes32(0),
+567-            "ZERO_FINALIZATION_TRANSCRIPT"
+568-        );
+569-
+570-        uint256 activeSum;
+571-
+572-        for (
+573-            uint256 i = 0;
+574:            i < MAX;
+575-            i++
+576-        ) {
+577-            if (
+578-                i <
+579:                candidateCount
+580-            ) {
+581-                require(
+582-                    totals[i] <=
+583-                        acceptedBallotCount,
+584-                    "RESULT_EXCEEDS_BALLOTS"
+585-                );
+586-
+587-                activeSum +=
+588-                    totals[i];
+589-            } else {
+590-                require(
+591-                    totals[i] == 0,
+--
+621-        external
+622-        view
+623-        returns (uint256)
+624-    {
+625-        require(
+626-            phase ==
+627-                Phase.Finalized,
+628-            "NOT_FINALIZED"
+629-        );
+630-
+631-        require(
+632-            slot <
+633:                candidateCount,
+634-            "BAD_FINAL_RESULT_SLOT"
+635-        );
+636-
+637-        return
+638-            finalResults[slot];
+639-    }
+640-
+641-    function getTally(
+642-        uint256 slot
+643-    )
+644-        external
+645-        view
+--
+654-            slot < MAX,
+655-            "BAD_SLOT"
+656-        );
+657-
+658-        return (
+659-            tallyRx[slot],
+660-            tallyRy[slot],
+661-            tallySx[slot],
+662-            tallySy[slot]
+663-        );
+664-    }
+665-
+666:    function _requireCanonicalCiphertext(
+667:        uint256[16] calldata rx,
+668:        uint256[16] calldata ry,
+669:        uint256[16] calldata sx,
+670:        uint256[16] calldata sy
+671-    )
+672-        internal
+673-        pure
+674-    {
+675-        for (
+676-            uint256 i = 0;
+677:            i < MAX;
+678-            i++
+679-        ) {
+680-            require(
+681-                rx[i] < P &&
+682-                ry[i] < P &&
+683-                sx[i] < P &&
+684-                sy[i] < P,
+685-                "NON_CANONICAL_CIPHERTEXT"
+686-            );
+687-        }
+688-    }
+689-
+690:    function _applyTally(
+691:        uint256[16] calldata rx,
+692:        uint256[16] calldata ry,
+693:        uint256[16] calldata sx,
+694:        uint256[16] calldata sy
+695-    )
+696-        internal
+697-    {
+698-        for (
+699-            uint256 i = 0;
+700:            i < MAX;
+701-            i++
+702-        ) {
+703-            BabyJubAffine.Point memory oldR =
+704-                BabyJubAffine.Point(
+705-                    tallyRx[i],
+706-                    tallyRy[i]
+707-                );
+708-
+709-            BabyJubAffine.Point memory newR =
+710-                BabyJubAffine.Point(
+711-                    rx[i],
+712-                    ry[i]
+--
+743-                sumR.y;
+744-
+745-            tallySx[i] =
+746-                sumS.x;
+747-
+748-            tallySy[i] =
+749-                sumS.y;
+750-        }
+751-    }
+752-
+753-    function _accept(
+754-        uint256 nullifier,
+755:        uint256[16] calldata rx,
+756:        uint256[16] calldata ry,
+757:        uint256[16] calldata sx,
+758:        uint256[16] calldata sy
+759-    )
+760-        internal
+761-    {
+762-        require(
+763-            phase == Phase.Active,
+764-            "NOT_ACTIVE"
+765-        );
+766-
+767-        require(
+768-            !usedNullifier[
+769-                nullifier
+770-            ],
+771-            "NULLIFIER_USED"
+772-        );
+773-
+774-        usedNullifier[
+775-            nullifier
+776-        ] =
+777-            true;
+778-
+779:        _applyTally(
+780-            rx,
+781-            ry,
+782-            sx,
+783-            sy
+784-        );
+785-
+786-        acceptedBallotCount +=
+787-            1;
+788-
+789-        emit EncryptedVoteAccepted(
+790-            nullifier,
+791-            keccak256(
+--
+815-                address(0),
+816-            "ZERO_VERIFIER"
+817-        );
+818-
+819-        verifier =
+820-            IVerifierDirect(
+821-                verifierAddress
+822-            );
+823-    }
+824-
+825-    function _buildInputs(
+826-        uint256 nullifier,
+827:        uint256[16] calldata rx,
+828:        uint256[16] calldata ry,
+829:        uint256[16] calldata sx,
+830:        uint256[16] calldata sy
+831-    )
+832-        private
+833-        view
+834-        returns (
+835-            uint256[73] memory input
+836-        )
+837-    {
+838-        input[0] =
+839-            eligibleRoot;
+840-
+841-        input[1] =
+842-            electionId;
+843-
+844-        input[2] =
+845-            candidateManifestHash;
+846-
+847-        input[3] =
+848:            candidateCount;
+849-
+850-        input[4] =
+851-            contractDomain;
+852-
+853-        input[5] =
+854-            Yx;
+855-
+856-        input[6] =
+857-            Yy;
+858-
+859-        input[7] =
+860-            electionContextHash;
+861-
+862-        input[8] =
+863-            nullifier;
+864-
+865-        uint256 offset =
+866-            9;
+867-
+868-        for (
+869-            uint256 i = 0;
+870:            i < MAX;
+871-            i++
+872-        ) {
+873-            input[
+874-                offset + i
+875-            ] =
+876-                rx[i];
+877-        }
+878-
+879-        offset += MAX;
+880-
+881-        for (
+882-            uint256 i = 0;
+883:            i < MAX;
+884-            i++
+885-        ) {
+886-            input[
+887-                offset + i
+888-            ] =
+889-                ry[i];
+890-        }
+891-
+892-        offset += MAX;
+893-
+894-        for (
+895-            uint256 i = 0;
+896:            i < MAX;
+897-            i++
+898-        ) {
+899-            input[
+900-                offset + i
+901-            ] =
+902-                sx[i];
+903-        }
+904-
+905-        offset += MAX;
+906-
+907-        for (
+908-            uint256 i = 0;
+909:            i < MAX;
+910-            i++
+911-        ) {
+912-            input[
+913-                offset + i
+914-            ] =
+915-                sy[i];
+916-        }
+917-    }
+918-
+919-    function castVote(
+920-        uint256[2] calldata a,
+921-        uint256[2][2] calldata b,
+922-        uint256[2] calldata c,
+923-        uint256 nullifier,
+924:        uint256[16] calldata rx,
+925:        uint256[16] calldata ry,
+926:        uint256[16] calldata sx,
+927:        uint256[16] calldata sy
+928-    )
+929-        external
+930-    {
+931-        require(
+932-            phase == Phase.Active,
+933-            "NOT_ACTIVE"
+934-        );
+935-
+936-        require(
+937-            !usedNullifier[
+938-                nullifier
+939-            ],
+940-            "NULLIFIER_USED"
+941-        );
+942-
+943:        _requireCanonicalCiphertext(
+944-            rx,
+945-            ry,
+946-            sx,
+947-            sy
+948-        );
+949-
+950-        uint256[73] memory input =
+951-            _buildInputs(
+952-                nullifier,
+953-                rx,
+954-                ry,
+955-                sx,
+--
+1033-            data.length >= 32,
+1034-            "POSEIDON_CALL_FAILED"
+1035-        );
+1036-
+1037-        return
+1038-            abi.decode(
+1039-                data,
+1040-                (uint256)
+1041-            );
+1042-    }
+1043-
+1044-    function _binding(
+1045:        uint256[16] calldata rx,
+1046:        uint256[16] calldata ry,
+1047:        uint256[16] calldata sx,
+1048:        uint256[16] calldata sy
+1049-    )
+1050-        private
+1051-        view
+1052-        returns (uint256 state)
+1053-    {
+1054-        state =
+1055-            WP4Profile
+1056-                .CIPHERTEXT_BINDING_DOMAIN;
+1057-
+1058-        for (
+1059-            uint256 i = 0;
+1060:            i < MAX;
+1061-            i++
+1062-        ) {
+1063-            uint256[5] memory values;
+1064-
+1065-            values[0] =
+1066-                state;
+1067-
+1068-            values[1] =
+1069-                rx[i];
+1070-
+1071-            values[2] =
+1072-                ry[i];
+--
+1076-
+1077-            values[4] =
+1078-                sy[i];
+1079-
+1080-            state =
+1081-                _poseidon(
+1082-                    values
+1083-                );
+1084-        }
+1085-    }
+1086-
+1087-    function previewBindingDigest(
+1088:        uint256[16] calldata rx,
+1089:        uint256[16] calldata ry,
+1090:        uint256[16] calldata sx,
+1091:        uint256[16] calldata sy
+1092-    )
+1093-        external
+1094-        view
+1095-        returns (uint256)
+1096-    {
+1097:        _requireCanonicalCiphertext(
+1098-            rx,
+1099-            ry,
+1100-            sx,
+1101-            sy
+1102-        );
+1103-
+1104-        return
+1105-            _binding(
+1106-                rx,
+1107-                ry,
+1108-                sx,
+1109-                sy
+1110-            );
+1111-    }
+1112-
+1113-    function castVote(
+1114-        uint256[2] calldata a,
+1115-        uint256[2][2] calldata b,
+1116-        uint256[2] calldata c,
+1117-        uint256 nullifier,
+1118:        uint256[16] calldata rx,
+1119:        uint256[16] calldata ry,
+1120:        uint256[16] calldata sx,
+1121:        uint256[16] calldata sy
+1122-    )
+1123-        external
+1124-    {
+1125-        require(
+1126-            phase == Phase.Active,
+1127-            "NOT_ACTIVE"
+1128-        );
+1129-
+1130-        require(
+1131-            !usedNullifier[
+1132-                nullifier
+1133-            ],
+1134-            "NULLIFIER_USED"
+1135-        );
+1136-
+1137:        _requireCanonicalCiphertext(
+1138-            rx,
+1139-            ry,
+1140-            sx,
+1141-            sy
+1142-        );
+1143-
+1144-        uint256 digest =
+1145-            _binding(
+1146-                rx,
+1147-                ry,
+1148-                sx,
+1149-                sy
+--
+1152-        uint256[10] memory input;
+1153-
+1154-        input[0] =
+1155-            eligibleRoot;
+1156-
+1157-        input[1] =
+1158-            electionId;
+1159-
+1160-        input[2] =
+1161-            candidateManifestHash;
+1162-
+1163-        input[3] =
+1164:            candidateCount;
+1165-
+1166-        input[4] =
+1167-            contractDomain;
+1168-
+1169-        input[5] =
+1170-            Yx;
+1171-
+1172-        input[6] =
+1173-            Yy;
+1174-
+1175-        input[7] =
+1176-            electionContextHash;
+--
+1193-
+1194-        _accept(
+1195-            nullifier,
+1196-            rx,
+1197-            ry,
+1198-            sx,
+1199-            sy
+1200-        );
+1201-    }
+1202-}
+1203-
+1204-contract BabyJubTallyHarness {
+1205:    uint256[16] internal tallyRx;
+1206:    uint256[16] internal tallyRy;
+1207:    uint256[16] internal tallySx;
+1208:    uint256[16] internal tallySy;
+1209-
+1210-    constructor() {
+1211-        for (
+1212-            uint256 i = 0;
+1213-            i < 16;
+1214-            i++
+1215-        ) {
+1216-            tallyRy[i] = 1;
+1217-            tallySy[i] = 1;
+1218-        }
+1219-    }
+1220-
+1221-    function applyBallot(
+1222:        uint256[16] calldata rx,
+1223:        uint256[16] calldata ry,
+1224:        uint256[16] calldata sx,
+1225:        uint256[16] calldata sy
+1226-    )
+1227-        external
+1228-    {
+1229-        for (
+1230-            uint256 i = 0;
+1231-            i < 16;
+1232-            i++
+1233-        ) {
+1234-            BabyJubAffine.Point memory sumR =
+1235-                BabyJubAffine.add(
+1236-                    BabyJubAffine.Point(
+1237-                        tallyRx[i],

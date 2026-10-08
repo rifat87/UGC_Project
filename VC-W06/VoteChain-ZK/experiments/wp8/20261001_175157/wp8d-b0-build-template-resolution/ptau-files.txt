@@ -1,0 +1,3 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/pot18_0000.ptau
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/pot18_0001.ptau
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/pot18_final.ptau

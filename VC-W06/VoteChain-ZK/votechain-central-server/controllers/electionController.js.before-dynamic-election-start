@@ -1,0 +1,105 @@
+import Candidate from "../models/Candidate.js"
+import {
+  getContract,
+} from "../utils/contract.js"
+import {
+  buildPublicElectionData,
+} from "../services/electionDataService.js"
+import {
+  createElectionRecord,
+} from "../services/elections/electionLifecycleService.js"
+
+const getElectionData =
+  async (_req, res) => {
+    try {
+      const candidateRecords =
+        await Candidate
+          .find({
+            candidateId: {
+              $exists: true,
+            },
+          })
+          .sort({
+            candidateId: 1,
+          })
+          .lean()
+
+      const data =
+        await buildPublicElectionData({
+          candidateRecords,
+          contract:
+            getContract(),
+        })
+
+      return res.json({
+        success: true,
+        data,
+      })
+    } catch (error) {
+      console.error(
+        "Error fetching public election data:",
+        error.message,
+      )
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch election data",
+      })
+    }
+  }
+
+const createElection =
+  async (req, res) => {
+    try {
+      const election =
+        await createElectionRecord({
+          adminAddress:
+            req.voteChainAdmin
+              .address,
+        })
+
+      return res.status(201).json({
+        success: true,
+        message:
+          "Election created; registration is open",
+        data: {
+          electionId:
+            election.electionId,
+          status:
+            election.status,
+          chainId:
+            election.chainId,
+          createdAt:
+            election.createdAt,
+        },
+      })
+    } catch (error) {
+      if (
+        error.code ===
+        "ELECTION_IN_PROGRESS"
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            error.message,
+        })
+      }
+
+      console.error(
+        "Election creation failed:",
+        error.message,
+      )
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to create election",
+      })
+    }
+  }
+
+export default {
+  getElectionData,
+  createElection,
+}

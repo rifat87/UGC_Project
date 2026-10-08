@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "hasVoteChainDirect": true,
+  "hasCastVote": true,
+  "hasAcceptedBallotCount": true,
+  "hasUsedNullifier": true,
+  "hasCandidateCount": true,
+  "hasCandidateManifestHash": true,
+  "hasElectionContextHash": true,
+  "hasEligibleRoot": true,
+  "hasEncryptedTally": false,
+  "hasMaxCandidates16Literal": false,
+  "castVoteMentionsFourFixedArrays": true,
+  "requiredStaticFactsPass": false
+}

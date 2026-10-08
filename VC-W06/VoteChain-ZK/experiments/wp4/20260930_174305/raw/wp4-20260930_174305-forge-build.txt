@@ -1,0 +1,1835 @@
+Compiling 6 files with Solc 0.8.26
+Solc 0.8.26 finished in 10.10s
+Compiler run successful!
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> src\VoteChainWP4.sol:4:8
+  |
+4 | import "./WP4Profile.sol";
+  |        ^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\VoteChainWP4.t.sol:4:8
+  |
+4 | import "../src/VoteChainWP4.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\VoteChainWP4.t.sol:5:8
+  |
+5 | import "../src/verifiers/VoteChainVoteDirectVerifier.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\VoteChainWP4.t.sol:6:8
+  |
+6 | import "../src/verifiers/VoteChainVoteDigestVerifier.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\VoteChainWP4.t.sol:8:8
+  |
+8 | import "./WP4Fixture.sol";
+  |        ^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> test\VoteChainWP4.t.sol:44:26
+   |
+44 |     Vm internal constant vm =
+   |                          ^^ help: consider using: `VM`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:30:22
+   |
+30 |     uint256 constant alphax  = 3276588131376954711018985783206380915185374830543389229739120455363509123708;
+   |                      ^^^^^^ help: consider using: `ALPHAX`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:31:22
+   |
+31 |     uint256 constant alphay  = 10876920078701985759753540011653370828583604690189438520952714592784998765358;
+   |                      ^^^^^^ help: consider using: `ALPHAY`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+   --> test\VoteChainWP4.t.sol:995:12
+    |
+995 |         vm.writeLine(
+    |            ^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+    --> test\VoteChainWP4.t.sol:1014:12
+     |
+1014 |         vm.writeFile(
+     |            ^^^^^^^^^
+     |
+     = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> src\VoteChainWP4.sol:262:17
+    |
+262 |         uint256 Yx;
+    |                 ^^ help: consider using: `yx`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+  --> test\WP4Fixture.sol:20:21
+   |
+20 |             uint256 Yx,
+   |                     ^^ help: consider using: `yx`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:32:22
+   |
+32 |     uint256 constant betax1  = 12886918795052538051195878795365564796754749566417155271886591230140949402779;
+   |                      ^^^^^^ help: consider using: `BETAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:33:22
+   |
+33 |     uint256 constant betax2  = 4653911053990191035360736558180472058000909448240994088078887140296080747839;
+   |                      ^^^^^^ help: consider using: `BETAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:34:22
+   |
+34 |     uint256 constant betay1  = 3116840996616139066436074109895739643572527610299936856154825236692608047940;
+   |                      ^^^^^^ help: consider using: `BETAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> src\VoteChainWP4.sol:263:17
+    |
+263 |         uint256 Yy;
+    |                 ^^ help: consider using: `yy`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+   --> src\VoteChainWP4.sol:268:30
+    |
+268 |     address public immutable admin;
+    |                              ^^^^^ help: consider using: `ADMIN`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> src\VoteChainWP4.sol:284:20
+    |
+284 |     uint256 public Yx;
+    |                    ^^ help: consider using: `yx`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+   --> src\VoteChainWP4.sol:285:20
+    |
+285 |     uint256 public Yy;
+    |                    ^^ help: consider using: `yy`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[mixed-case-variable]: mutable variables should use mixedCase
+  --> test\WP4Fixture.sol:21:21
+   |
+21 |             uint256 Yy,
+   |                     ^^ help: consider using: `yy`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+   --> src\VoteChainWP4.sol:632:26
+    |
+632 |         public immutable verifier;
+    |                          ^^^^^^^^ help: consider using: `VERIFIER`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:30:22
+   |
+30 |     uint256 constant alphax  = 3276588131376954711018985783206380915185374830543389229739120455363509123708;
+   |                      ^^^^^^ help: consider using: `ALPHAX`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:35:22
+   |
+35 |     uint256 constant betay2  = 20237524035299007731289299366653036497221071699915534846054267726357688050369;
+   |                      ^^^^^^ help: consider using: `BETAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:36:22
+   |
+36 |     uint256 constant gammax1 = 11559732032986387107991004021392285783925812861821192530917403151452391805634;
+   |                      ^^^^^^^ help: consider using: `GAMMAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:37:22
+   |
+37 |     uint256 constant gammax2 = 10857046999023057135944570762232829481370756359578518086990519993285655852781;
+   |                      ^^^^^^^ help: consider using: `GAMMAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:38:22
+   |
+38 |     uint256 constant gammay1 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
+   |                      ^^^^^^^ help: consider using: `GAMMAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:39:22
+   |
+39 |     uint256 constant gammay2 = 8495653923123431417604973247489272438418190587263600148770280649306958101930;
+   |                      ^^^^^^^ help: consider using: `GAMMAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:40:22
+   |
+40 |     uint256 constant deltax1 = 12816465193324361720228706274318304377147638186921203357567817035237502910208;
+   |                      ^^^^^^^ help: consider using: `DELTAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+   --> src\VoteChainWP4.sol:807:26
+    |
+807 |         public immutable verifier;
+    |                          ^^^^^^^^ help: consider using: `VERIFIER`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:31:22
+   |
+31 |     uint256 constant alphay  = 10876920078701985759753540011653370828583604690189438520952714592784998765358;
+   |                      ^^^^^^ help: consider using: `ALPHAY`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+   --> src\VoteChainWP4.sol:810:26
+    |
+810 |         public immutable poseidon5;
+    |                          ^^^^^^^^^ help: consider using: `POSEIDON5`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:32:22
+   |
+32 |     uint256 constant betax1  = 12886918795052538051195878795365564796754749566417155271886591230140949402779;
+   |                      ^^^^^^ help: consider using: `BETAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:41:22
+   |
+41 |     uint256 constant deltax2 = 4018698858353901520961519590510417504568694793169867793600458615276711724057;
+   |                      ^^^^^^^ help: consider using: `DELTAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:42:22
+   |
+42 |     uint256 constant deltay1 = 11583613316988557437996125805070374383027166125225022275776397091636146216957;
+   |                      ^^^^^^^ help: consider using: `DELTAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:43:22
+   |
+43 |     uint256 constant deltay2 = 18647240842115038955900029800794883128545944692017196527450683278006598142764;
+   |                      ^^^^^^^ help: consider using: `DELTAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:46:22
+   |
+46 |     uint256 constant IC0x = 9243233680261064993583348510072073872961056925574611631695256949143294524025;
+   |                      ^^^^ help: consider using: `IC0X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:47:22
+   |
+47 |     uint256 constant IC0y = 13588178958711202149967787112172679735063547153556016957886051569514699483359;
+   |                      ^^^^ help: consider using: `IC0Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:49:22
+   |
+49 |     uint256 constant IC1x = 14507118868331503904142242132239152094251605514051691149461032757020894717520;
+   |                      ^^^^ help: consider using: `IC1X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:50:22
+   |
+50 |     uint256 constant IC1y = 16046824835181173036369756518809517949225274397226033011452113999385071975808;
+   |                      ^^^^ help: consider using: `IC1Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:52:22
+   |
+52 |     uint256 constant IC2x = 13935595086822263968802690369224891452260342983211012173468492256329586377804;
+   |                      ^^^^ help: consider using: `IC2X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:53:22
+   |
+53 |     uint256 constant IC2y = 17498456542667080746616908099513275143164522696933729578071957350956427270796;
+   |                      ^^^^ help: consider using: `IC2Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:55:22
+   |
+55 |     uint256 constant IC3x = 2838758307691864092818729350078054633594311651334409222773825270043096404260;
+   |                      ^^^^ help: consider using: `IC3X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:56:22
+   |
+56 |     uint256 constant IC3y = 5286665008173164808467750188272102780980137455142456736773916324548342088196;
+   |                      ^^^^ help: consider using: `IC3Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:58:22
+   |
+58 |     uint256 constant IC4x = 21354952214001322447863178666540107384709732476222151880429788290380388834391;
+   |                      ^^^^ help: consider using: `IC4X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:59:22
+   |
+59 |     uint256 constant IC4y = 3819264919862406411071545835727856047460466402982955928918725096557100258095;
+   |                      ^^^^ help: consider using: `IC4Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:33:22
+   |
+33 |     uint256 constant betax2  = 4653911053990191035360736558180472058000909448240994088078887140296080747839;
+   |                      ^^^^^^ help: consider using: `BETAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:34:22
+   |
+34 |     uint256 constant betay1  = 3116840996616139066436074109895739643572527610299936856154825236692608047940;
+   |                      ^^^^^^ help: consider using: `BETAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+   --> src\VoteChainWP4.sol:340:5
+    |
+340 | /     modifier onlyAdmin() {
+341 | |         require(
+342 | |             msg.sender == admin,
+343 | |             "ONLY_ADMIN"
+...   |
+346 | |         _;
+347 | |     }
+    | |_____^
+    |
+help: wrap modifier logic to reduce code size
+    |
+340 ~     modifier onlyAdmin() {
+341 +         _onlyAdmin();
+342 +         _;
+343 +     }
+344 + 
+345 +     function _onlyAdmin() internal {
+346 +         require(
+347 +             msg.sender == admin,
+348 +             "ONLY_ADMIN"
+349 +         );
+350 +     }
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:35:22
+   |
+35 |     uint256 constant betay2  = 20237524035299007731289299366653036497221071699915534846054267726357688050369;
+   |                      ^^^^^^ help: consider using: `BETAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+   --> src\VoteChainWP4.sol:349:5
+    |
+349 | /     modifier inPhase(
+350 | |         Phase expected
+351 | |     ) {
+352 | |         require(
+...   |
+357 | |         _;
+358 | |     }
+    | |_____^
+    |
+help: wrap modifier logic to reduce code size
+    |
+349 ~     modifier inPhase(Phase expected) {
+350 +         _inPhase(expected);
+351 +         _;
+352 +     }
+353 + 
+354 +     function _inPhase(Phase expected) internal {
+355 +         require(
+356 +             phase == expected,
+357 +             "WRONG_PHASE"
+358 +         );
+359 +     }
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:36:22
+   |
+36 |     uint256 constant gammax1 = 11559732032986387107991004021392285783925812861821192530917403151452391805634;
+   |                      ^^^^^^^ help: consider using: `GAMMAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:61:22
+   |
+61 |     uint256 constant IC5x = 17797786715291854089051166880873859579723650949107000623716815139998854257022;
+   |                      ^^^^ help: consider using: `IC5X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:37:22
+   |
+37 |     uint256 constant gammax2 = 10857046999023057135944570762232829481370756359578518086990519993285655852781;
+   |                      ^^^^^^^ help: consider using: `GAMMAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:38:22
+   |
+38 |     uint256 constant gammay1 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
+   |                      ^^^^^^^ help: consider using: `GAMMAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:62:22
+   |
+62 |     uint256 constant IC5y = 10613270856625728798101504454902538648338470896700994212003729744883909202432;
+   |                      ^^^^ help: consider using: `IC5Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:64:22
+   |
+64 |     uint256 constant IC6x = 6861652979003682666047052994053435957058582224456471989138924636484102353904;
+   |                      ^^^^ help: consider using: `IC6X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:65:22
+   |
+65 |     uint256 constant IC6y = 10669526185436523816567723634797040187315777972350074996300930278150212995647;
+   |                      ^^^^ help: consider using: `IC6Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:67:22
+   |
+67 |     uint256 constant IC7x = 13339567477067913580785643530233258438806971660494130955507487836987232212515;
+   |                      ^^^^ help: consider using: `IC7X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:68:22
+   |
+68 |     uint256 constant IC7y = 4291475885256037513563922597126456122842047914542404783845657112957963990815;
+   |                      ^^^^ help: consider using: `IC7Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:70:22
+   |
+70 |     uint256 constant IC8x = 10948034242361717183994580979179387480046185186480017203085302334196046097486;
+   |                      ^^^^ help: consider using: `IC8X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:71:22
+   |
+71 |     uint256 constant IC8y = 490501369114215449501186701113848254407620536539494601246594437167426015860;
+   |                      ^^^^ help: consider using: `IC8Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:39:22
+   |
+39 |     uint256 constant gammay2 = 8495653923123431417604973247489272438418190587263600148770280649306958101930;
+   |                      ^^^^^^^ help: consider using: `GAMMAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:40:22
+   |
+40 |     uint256 constant deltax1 = 464854374863243960333898220621719695055979248236649983602121528165150020124;
+   |                      ^^^^^^^ help: consider using: `DELTAX1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:41:22
+   |
+41 |     uint256 constant deltax2 = 16069611601507337166521067864997608567898771024492011812922699973358291542111;
+   |                      ^^^^^^^ help: consider using: `DELTAX2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:42:22
+   |
+42 |     uint256 constant deltay1 = 7805088676300532088859802550153282707837349045892811658250130636252926855737;
+   |                      ^^^^^^^ help: consider using: `DELTAY1`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:43:22
+   |
+43 |     uint256 constant deltay2 = 14190552727242429802855621061276405333085043383362343914127224168953012973180;
+   |                      ^^^^^^^ help: consider using: `DELTAY2`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:46:22
+   |
+46 |     uint256 constant IC0x = 2318917228452392812801575227121753941853407277144162384457857381283071472479;
+   |                      ^^^^ help: consider using: `IC0X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:73:22
+   |
+73 |     uint256 constant IC9x = 3590156786294814951025578683238736122280994030595542406473582477552315803462;
+   |                      ^^^^ help: consider using: `IC9X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:47:22
+   |
+47 |     uint256 constant IC0y = 6017847483618057669268984251192213986292125662963311280382342966903031297238;
+   |                      ^^^^ help: consider using: `IC0Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:49:22
+   |
+49 |     uint256 constant IC1x = 16891472786516922587746692158558996906134953725882696151968968452694495660723;
+   |                      ^^^^ help: consider using: `IC1X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:50:22
+   |
+50 |     uint256 constant IC1y = 15127022885110798084508180706030596052746706155022109575376000523004549959526;
+   |                      ^^^^ help: consider using: `IC1Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:52:22
+   |
+52 |     uint256 constant IC2x = 18871762560962680965259217113069547433990871559938092958406337519858377586000;
+   |                      ^^^^ help: consider using: `IC2X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:53:22
+   |
+53 |     uint256 constant IC2y = 3538360880844526192755346023850981716682539125497131103740238937696572533083;
+   |                      ^^^^ help: consider using: `IC2Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:55:22
+   |
+55 |     uint256 constant IC3x = 14329855237875523365805447371520823106739824598317316306340089122348953496644;
+   |                      ^^^^ help: consider using: `IC3X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:56:22
+   |
+56 |     uint256 constant IC3y = 19656573762011237371433269972394716363674234452726489846172264143268191099775;
+   |                      ^^^^ help: consider using: `IC3Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:58:22
+   |
+58 |     uint256 constant IC4x = 19368627680518896855330224011438455603512837648868267850264862230982736903595;
+   |                      ^^^^ help: consider using: `IC4X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:59:22
+   |
+59 |     uint256 constant IC4y = 10614329583762669304210078100238321999348511770288299783024041552610374764596;
+   |                      ^^^^ help: consider using: `IC4Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:61:22
+   |
+61 |     uint256 constant IC5x = 8524863377904538289657571281092519818113535213681392917773368833334057129692;
+   |                      ^^^^ help: consider using: `IC5X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:62:22
+   |
+62 |     uint256 constant IC5y = 9881572041663554000396077869081371091868361560938961800869438601762693867607;
+   |                      ^^^^ help: consider using: `IC5Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:64:22
+   |
+64 |     uint256 constant IC6x = 3410154346382149084414394682433510620579686136543495081403354177424704081104;
+   |                      ^^^^ help: consider using: `IC6X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:65:22
+   |
+65 |     uint256 constant IC6y = 2471802235208764784697021887584159892336636168540109074826302291791127630395;
+   |                      ^^^^ help: consider using: `IC6Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:67:22
+   |
+67 |     uint256 constant IC7x = 12739189175302826865279831601578307236535695855411956831664221242550442267327;
+   |                      ^^^^ help: consider using: `IC7X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:74:22
+   |
+74 |     uint256 constant IC9y = 4973533036903771764893105666345371719454427806553549525977671957547205562564;
+   |                      ^^^^ help: consider using: `IC9Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:68:22
+   |
+68 |     uint256 constant IC7y = 7503563576073190522588310863152297303642002096177632538718106017203634017351;
+   |                      ^^^^ help: consider using: `IC7Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:70:22
+   |
+70 |     uint256 constant IC8x = 16052884909360422465700488213773897594635076591989611606764643489204655710904;
+   |                      ^^^^ help: consider using: `IC8X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:71:22
+   |
+71 |     uint256 constant IC8y = 16146256198061724770530025216566347107591577783661031566183007938038302416749;
+   |                      ^^^^ help: consider using: `IC8Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:73:22
+   |
+73 |     uint256 constant IC9x = 19971325939135663666216644708686918549369974613469928258008043873938206303590;
+   |                      ^^^^ help: consider using: `IC9X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:74:22
+   |
+74 |     uint256 constant IC9y = 698284509414018674191666115358665719970366955757184224766947655284598424000;
+   |                      ^^^^ help: consider using: `IC9Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:76:22
+   |
+76 |     uint256 constant IC10x = 14153137851907483292680970857965582368408361081759712412629469533375346607093;
+   |                      ^^^^^ help: consider using: `IC10X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:77:22
+   |
+77 |     uint256 constant IC10y = 10451850859592527842945635214950653738997492388200851006849729561226292691570;
+   |                      ^^^^^ help: consider using: `IC10Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:76:22
+   |
+76 |     uint256 constant IC10x = 10405064544999157904009931885758170777070172613235501215990936930758840102213;
+   |                      ^^^^^ help: consider using: `IC10X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:77:22
+   |
+77 |     uint256 constant IC10y = 3197094848416566153930466909870827186736392551385649736365351712916827384108;
+   |                      ^^^^^ help: consider using: `IC10Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:81:21
+   |
+81 |     uint16 constant pVk = 0;
+   |                     ^^^ help: consider using: `P_VK`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:82:21
+   |
+82 |     uint16 constant pPairing = 128;
+   |                     ^^^^^^^^ help: consider using: `P_PAIRING`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDigestVerifier.sol:84:21
+   |
+84 |     uint16 constant pLastMem = 896;
+   |                     ^^^^^^^^ help: consider using: `P_LAST_MEM`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:79:22
+   |
+79 |     uint256 constant IC11x = 13377734453051978271862636022123258798129167726191482606871285495121528135351;
+   |                      ^^^^^ help: consider using: `IC11X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:80:22
+   |
+80 |     uint256 constant IC11y = 1009726789279554280310699740602831572827341305119309586528839167640751080120;
+   |                      ^^^^^ help: consider using: `IC11Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:82:22
+   |
+82 |     uint256 constant IC12x = 6607580715688753994562431575261904818821063775712920986670689692817799718329;
+   |                      ^^^^^ help: consider using: `IC12X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:83:22
+   |
+83 |     uint256 constant IC12y = 3884751883609426723231492683578135511247592279326418618887288126047091306604;
+   |                      ^^^^^ help: consider using: `IC12Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:85:22
+   |
+85 |     uint256 constant IC13x = 10602862316120543456695818963590358786152359349449765234136341355735842682849;
+   |                      ^^^^^ help: consider using: `IC13X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:86:22
+   |
+86 |     uint256 constant IC13y = 21569015770160039719213779864404903081496612164629259422855718909947681645690;
+   |                      ^^^^^ help: consider using: `IC13Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:88:22
+   |
+88 |     uint256 constant IC14x = 12177988187179529938783034991723861755180531364852026881120699706146155647267;
+   |                      ^^^^^ help: consider using: `IC14X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:89:22
+   |
+89 |     uint256 constant IC14y = 17916940195973584137472378869973017130374685196222020192770622269778396167523;
+   |                      ^^^^^ help: consider using: `IC14Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:91:22
+   |
+91 |     uint256 constant IC15x = 15213014716432564621359377633873226428544232596034841306685285188414581907927;
+   |                      ^^^^^ help: consider using: `IC15X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:92:22
+   |
+92 |     uint256 constant IC15y = 10912681891323010325938995284996728668604797076487339153890676493795249684043;
+   |                      ^^^^^ help: consider using: `IC15Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:94:22
+   |
+94 |     uint256 constant IC16x = 1183788474119653808513358702352016205976482596968140719572925718734781324598;
+   |                      ^^^^^ help: consider using: `IC16X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:95:22
+   |
+95 |     uint256 constant IC16y = 14519383729132507613092015385847357561208109919057084017730422600197125715327;
+   |                      ^^^^^ help: consider using: `IC16Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:97:22
+   |
+97 |     uint256 constant IC17x = 20636647512322798384664211159316655398053950024793798667687301170420914612304;
+   |                      ^^^^^ help: consider using: `IC17X`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+  --> src\verifiers\VoteChainVoteDirectVerifier.sol:98:22
+   |
+98 |     uint256 constant IC17y = 10331499482172991587874213835833532217098942024396767186608375171058905000949;
+   |                      ^^^^^ help: consider using: `IC17Y`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:100:22
+    |
+100 |     uint256 constant IC18x = 8401411125362216841628598308412926758289809060727385394580962420954196703367;
+    |                      ^^^^^ help: consider using: `IC18X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:101:22
+    |
+101 |     uint256 constant IC18y = 17114671491080440330632260832718432911136974694092040279221340452461391499816;
+    |                      ^^^^^ help: consider using: `IC18Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:103:22
+    |
+103 |     uint256 constant IC19x = 7913513471892530042393650434445330926410258480988242491578309991432287764509;
+    |                      ^^^^^ help: consider using: `IC19X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:104:22
+    |
+104 |     uint256 constant IC19y = 9927890994332635062872174492556858763631310662705166912962031974940630741736;
+    |                      ^^^^^ help: consider using: `IC19Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:106:22
+    |
+106 |     uint256 constant IC20x = 15233231453041795649038184422333260365032261659402306129973158308033049891283;
+    |                      ^^^^^ help: consider using: `IC20X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:107:22
+    |
+107 |     uint256 constant IC20y = 11274874940729462977987672946118227059727585622257002108488031520039525153740;
+    |                      ^^^^^ help: consider using: `IC20Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:109:22
+    |
+109 |     uint256 constant IC21x = 16312745583983119501132243794240645975580955007557312595898825172001364422607;
+    |                      ^^^^^ help: consider using: `IC21X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:110:22
+    |
+110 |     uint256 constant IC21y = 1068875132185128331628791253953170383953245326886059512804525582025382780912;
+    |                      ^^^^^ help: consider using: `IC21Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:112:22
+    |
+112 |     uint256 constant IC22x = 10982488569705229553254748242276017867824965623476911840788835452211453075201;
+    |                      ^^^^^ help: consider using: `IC22X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:113:22
+    |
+113 |     uint256 constant IC22y = 15703466283714494362776269790547838725465890045136586853681095010563238329704;
+    |                      ^^^^^ help: consider using: `IC22Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:115:22
+    |
+115 |     uint256 constant IC23x = 12234745982951257385828042774296442105227467906368358366593877006601676359186;
+    |                      ^^^^^ help: consider using: `IC23X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:116:22
+    |
+116 |     uint256 constant IC23y = 16045964227694188706854008736335302843759543403550161430303700109170087613349;
+    |                      ^^^^^ help: consider using: `IC23Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:118:22
+    |
+118 |     uint256 constant IC24x = 8970720301435082057735710509103088652937987098507978543920751801831850286241;
+    |                      ^^^^^ help: consider using: `IC24X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:119:22
+    |
+119 |     uint256 constant IC24y = 9335244178294986019564043600818441150349666533409063516697303615261222278382;
+    |                      ^^^^^ help: consider using: `IC24Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:121:22
+    |
+121 |     uint256 constant IC25x = 16836761837756992640349329463902861486695009323641552811145710536643445738233;
+    |                      ^^^^^ help: consider using: `IC25X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:122:22
+    |
+122 |     uint256 constant IC25y = 14708583105424676990391127185542485468157660967182453036929299576950696035620;
+    |                      ^^^^^ help: consider using: `IC25Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:124:22
+    |
+124 |     uint256 constant IC26x = 18011872976348728497364889575346365954057121441310014544853124299734373798756;
+    |                      ^^^^^ help: consider using: `IC26X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:125:22
+    |
+125 |     uint256 constant IC26y = 10192514574979694055923856540980811858936992630154326482673406252026927774072;
+    |                      ^^^^^ help: consider using: `IC26Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:127:22
+    |
+127 |     uint256 constant IC27x = 2328823225226461712936132685247887613735921576290531286709905036740903799391;
+    |                      ^^^^^ help: consider using: `IC27X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:128:22
+    |
+128 |     uint256 constant IC27y = 11993366924801979370889641178881110486633797778866161073103963416666586536328;
+    |                      ^^^^^ help: consider using: `IC27Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:130:22
+    |
+130 |     uint256 constant IC28x = 1546872417406771119205141296435998526528621140833145143742228489920742372104;
+    |                      ^^^^^ help: consider using: `IC28X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:131:22
+    |
+131 |     uint256 constant IC28y = 15064687718442328262285846114377612825963313913708215556953050491148801343559;
+    |                      ^^^^^ help: consider using: `IC28Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:133:22
+    |
+133 |     uint256 constant IC29x = 692932701446661596593430068743964068539701813118095607701327321194433252095;
+    |                      ^^^^^ help: consider using: `IC29X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:134:22
+    |
+134 |     uint256 constant IC29y = 8786936068414661552383895360094730831293431611005261221021785866976876460909;
+    |                      ^^^^^ help: consider using: `IC29Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:136:22
+    |
+136 |     uint256 constant IC30x = 6383493143016201789907779419767073175415157447054229444897016380353782845283;
+    |                      ^^^^^ help: consider using: `IC30X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:137:22
+    |
+137 |     uint256 constant IC30y = 11773345041504190844521276433006240472345559048709362257166579630725729592778;
+    |                      ^^^^^ help: consider using: `IC30Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:139:22
+    |
+139 |     uint256 constant IC31x = 14258435509539619136441571542060375431284457238228781510370364984750130031349;
+    |                      ^^^^^ help: consider using: `IC31X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:140:22
+    |
+140 |     uint256 constant IC31y = 84366570180533109520104751592246801049522181836892977714204447895450351592;
+    |                      ^^^^^ help: consider using: `IC31Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:142:22
+    |
+142 |     uint256 constant IC32x = 3257497296499086249200812059629214137416475630785811324833945323973678431422;
+    |                      ^^^^^ help: consider using: `IC32X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:143:22
+    |
+143 |     uint256 constant IC32y = 21273703228921794142840584356400650925385047602112383714319458268808211562937;
+    |                      ^^^^^ help: consider using: `IC32Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:145:22
+    |
+145 |     uint256 constant IC33x = 9315344431735393729079759672547234950148123301608400573400096830843844168890;
+    |                      ^^^^^ help: consider using: `IC33X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:146:22
+    |
+146 |     uint256 constant IC33y = 13110574770426373279241948538635497256665752351344012972957820257827535889923;
+    |                      ^^^^^ help: consider using: `IC33Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:148:22
+    |
+148 |     uint256 constant IC34x = 18066995716805599715895332418555333646208619703716790865138642701678603755940;
+    |                      ^^^^^ help: consider using: `IC34X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:149:22
+    |
+149 |     uint256 constant IC34y = 17716792402547648666605270987029029074265249450537372674667701209360831240839;
+    |                      ^^^^^ help: consider using: `IC34Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:151:22
+    |
+151 |     uint256 constant IC35x = 7377864068437404649708011282483467684006963031315654215203994359082269371123;
+    |                      ^^^^^ help: consider using: `IC35X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:152:22
+    |
+152 |     uint256 constant IC35y = 4826605728698974807142591670423971274689650671173095248044883936386015956015;
+    |                      ^^^^^ help: consider using: `IC35Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:154:22
+    |
+154 |     uint256 constant IC36x = 21225282898039697836529420108811176137371585219664423091900510879889697500176;
+    |                      ^^^^^ help: consider using: `IC36X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:155:22
+    |
+155 |     uint256 constant IC36y = 5017036161241812060186695784663432885960282289906266323569957660365107946755;
+    |                      ^^^^^ help: consider using: `IC36Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:157:22
+    |
+157 |     uint256 constant IC37x = 1877445120217842716553239860398445867513421061110992462771778049071931418461;
+    |                      ^^^^^ help: consider using: `IC37X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:158:22
+    |
+158 |     uint256 constant IC37y = 6568195665161124065920333955428655468836812453477515538082836358458090970333;
+    |                      ^^^^^ help: consider using: `IC37Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:160:22
+    |
+160 |     uint256 constant IC38x = 12597851832847563607837677472663540566180643154332330105775044327771425045426;
+    |                      ^^^^^ help: consider using: `IC38X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:161:22
+    |
+161 |     uint256 constant IC38y = 13019727063640373162201717083645910085151234576774310173460485706854038433556;
+    |                      ^^^^^ help: consider using: `IC38Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:163:22
+    |
+163 |     uint256 constant IC39x = 5215362866220246021979851738680009383533796385897187542094666151729162510525;
+    |                      ^^^^^ help: consider using: `IC39X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:164:22
+    |
+164 |     uint256 constant IC39y = 7378985072674122209791522887402182879120450833211850912119014782425076421143;
+    |                      ^^^^^ help: consider using: `IC39Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:166:22
+    |
+166 |     uint256 constant IC40x = 18212946492633486350870476560927145669909295139822558883383510257206807474365;
+    |                      ^^^^^ help: consider using: `IC40X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:167:22
+    |
+167 |     uint256 constant IC40y = 4129710891115349043398056848401397772902556336122490856040073110779046262107;
+    |                      ^^^^^ help: consider using: `IC40Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:169:22
+    |
+169 |     uint256 constant IC41x = 17237440019175507143041512377827469688120095391092961224535361699347840551232;
+    |                      ^^^^^ help: consider using: `IC41X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:170:22
+    |
+170 |     uint256 constant IC41y = 14621671836409149100553486008249517830266568509606840320758068508994771098148;
+    |                      ^^^^^ help: consider using: `IC41Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:172:22
+    |
+172 |     uint256 constant IC42x = 3386246282932179973150173122836423217121081754966570689695962982834420408656;
+    |                      ^^^^^ help: consider using: `IC42X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:173:22
+    |
+173 |     uint256 constant IC42y = 7592091023844176536223149920633642781553181046361433274940243679566534919229;
+    |                      ^^^^^ help: consider using: `IC42Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:175:22
+    |
+175 |     uint256 constant IC43x = 13342990885244689180570161401341577553813941822979800421324849465229238721188;
+    |                      ^^^^^ help: consider using: `IC43X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:176:22
+    |
+176 |     uint256 constant IC43y = 8020604044625015733139185792272952817465157225584418820946130185758463891307;
+    |                      ^^^^^ help: consider using: `IC43Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:178:22
+    |
+178 |     uint256 constant IC44x = 14979368293369255093869526467860526029892787808390849146187444062984969918284;
+    |                      ^^^^^ help: consider using: `IC44X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:179:22
+    |
+179 |     uint256 constant IC44y = 12387122889503444992797130571256217556698012474977247544558996967306544180938;
+    |                      ^^^^^ help: consider using: `IC44Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:181:22
+    |
+181 |     uint256 constant IC45x = 6572597007198306920113504801550161301992162674291804681932651761874823657830;
+    |                      ^^^^^ help: consider using: `IC45X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:182:22
+    |
+182 |     uint256 constant IC45y = 12643884342891565782185741549895052285742775370460463676831506422694109989268;
+    |                      ^^^^^ help: consider using: `IC45Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:184:22
+    |
+184 |     uint256 constant IC46x = 7561750907286791410177632362584216813618414042460935950592804379156797119614;
+    |                      ^^^^^ help: consider using: `IC46X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:185:22
+    |
+185 |     uint256 constant IC46y = 831152870153477294143413259581092857530472835326368255404642324659689037867;
+    |                      ^^^^^ help: consider using: `IC46Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:187:22
+    |
+187 |     uint256 constant IC47x = 21010642961127422484323828749476180679749743300555478184999645088237044867692;
+    |                      ^^^^^ help: consider using: `IC47X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:188:22
+    |
+188 |     uint256 constant IC47y = 1812443146407100516123334273283999113769637910978113176259209429950386695344;
+    |                      ^^^^^ help: consider using: `IC47Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:190:22
+    |
+190 |     uint256 constant IC48x = 1306833831192488483629032455711616440849092873801529569962930707829718930352;
+    |                      ^^^^^ help: consider using: `IC48X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:191:22
+    |
+191 |     uint256 constant IC48y = 12668825454268954482982773429724957026829388880314307468736721751597826281770;
+    |                      ^^^^^ help: consider using: `IC48Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:193:22
+    |
+193 |     uint256 constant IC49x = 950810047751030253222970985564143978876700338768167921317246732386790259877;
+    |                      ^^^^^ help: consider using: `IC49X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:194:22
+    |
+194 |     uint256 constant IC49y = 19654280228980500504215099759107646773403377929112940755878324825687656300312;
+    |                      ^^^^^ help: consider using: `IC49Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:196:22
+    |
+196 |     uint256 constant IC50x = 20847559591665303141673010153363742811134251808142751375116249943775524361299;
+    |                      ^^^^^ help: consider using: `IC50X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:197:22
+    |
+197 |     uint256 constant IC50y = 16808597908959339392621723254114881729895861393661003889881001623119441955476;
+    |                      ^^^^^ help: consider using: `IC50Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:199:22
+    |
+199 |     uint256 constant IC51x = 6112354712324103790897569714252292576641729122573368458493830524960577758286;
+    |                      ^^^^^ help: consider using: `IC51X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:200:22
+    |
+200 |     uint256 constant IC51y = 20955632746089930179293905150426654378294018269637001076345955207882076218403;
+    |                      ^^^^^ help: consider using: `IC51Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:202:22
+    |
+202 |     uint256 constant IC52x = 13823181675462511090699827270703828332817227181912016957817753973685116508776;
+    |                      ^^^^^ help: consider using: `IC52X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:203:22
+    |
+203 |     uint256 constant IC52y = 5247336690097557275637895881195221768935761604024344673216663112353254786673;
+    |                      ^^^^^ help: consider using: `IC52Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:205:22
+    |
+205 |     uint256 constant IC53x = 4881749423002773129103685631480914419065549126366861685408974326448411675232;
+    |                      ^^^^^ help: consider using: `IC53X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:206:22
+    |
+206 |     uint256 constant IC53y = 18559675115941286375263408319429626098057188992055870821586631064392924741791;
+    |                      ^^^^^ help: consider using: `IC53Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:208:22
+    |
+208 |     uint256 constant IC54x = 11876235627769026515967568004387676523881084105412712209946429401563557760416;
+    |                      ^^^^^ help: consider using: `IC54X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:209:22
+    |
+209 |     uint256 constant IC54y = 6361685958637527673911079103141801914554000979771241424965393963400519779393;
+    |                      ^^^^^ help: consider using: `IC54Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:211:22
+    |
+211 |     uint256 constant IC55x = 20948474792081561697197405106351296245487750903646024467190828852601012866452;
+    |                      ^^^^^ help: consider using: `IC55X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:212:22
+    |
+212 |     uint256 constant IC55y = 13097535171474738160929302356323870997228881724774147209926011836091039987865;
+    |                      ^^^^^ help: consider using: `IC55Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:214:22
+    |
+214 |     uint256 constant IC56x = 5120593193305519805448269358644374146069097615487817970449972506482363583933;
+    |                      ^^^^^ help: consider using: `IC56X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:215:22
+    |
+215 |     uint256 constant IC56y = 8819726780970464131681232455200688920308215182893595545053584996211193133023;
+    |                      ^^^^^ help: consider using: `IC56Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:217:22
+    |
+217 |     uint256 constant IC57x = 8550280711508442591040442394840002521270853423192570332538388452102790817220;
+    |                      ^^^^^ help: consider using: `IC57X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:218:22
+    |
+218 |     uint256 constant IC57y = 20895211534108462160045438445559177677725157406458935483105930129007269861498;
+    |                      ^^^^^ help: consider using: `IC57Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:220:22
+    |
+220 |     uint256 constant IC58x = 15901561272240189275242788506611561523052633762420872901584140978167303818302;
+    |                      ^^^^^ help: consider using: `IC58X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:221:22
+    |
+221 |     uint256 constant IC58y = 911308660663184413181800834356105069702523324668588194078286326748842336233;
+    |                      ^^^^^ help: consider using: `IC58Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:223:22
+    |
+223 |     uint256 constant IC59x = 21774641774309320238926645338307343525541922999603561589959434388421541066852;
+    |                      ^^^^^ help: consider using: `IC59X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:224:22
+    |
+224 |     uint256 constant IC59y = 19252297174841482396083237662907159369287120043329707328021327968532865355319;
+    |                      ^^^^^ help: consider using: `IC59Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:226:22
+    |
+226 |     uint256 constant IC60x = 6080685731621303150808545030363439403355095835492956727342239279356135546427;
+    |                      ^^^^^ help: consider using: `IC60X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:227:22
+    |
+227 |     uint256 constant IC60y = 13847222309786500970168754412790665659509715837630045556475546915396966465870;
+    |                      ^^^^^ help: consider using: `IC60Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:229:22
+    |
+229 |     uint256 constant IC61x = 21512790417828997927482172499691651705412738367692321039429267932159617428540;
+    |                      ^^^^^ help: consider using: `IC61X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:230:22
+    |
+230 |     uint256 constant IC61y = 20902965311254882302974142240126868000644356427417946767702264522677967633903;
+    |                      ^^^^^ help: consider using: `IC61Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:232:22
+    |
+232 |     uint256 constant IC62x = 5059943304459182830083746945386605518627356473345748682744790509975509162190;
+    |                      ^^^^^ help: consider using: `IC62X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:233:22
+    |
+233 |     uint256 constant IC62y = 3375219136161507717700907542617524926611813129143029002533772097099146057035;
+    |                      ^^^^^ help: consider using: `IC62Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:235:22
+    |
+235 |     uint256 constant IC63x = 11820502490099077071118610305318380357233741746486989861959085976985072619035;
+    |                      ^^^^^ help: consider using: `IC63X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:236:22
+    |
+236 |     uint256 constant IC63y = 21041577115855053074288810865328647413864316693550017731607371734210287214118;
+    |                      ^^^^^ help: consider using: `IC63Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:238:22
+    |
+238 |     uint256 constant IC64x = 16363950296056058835979859602185304479021700340155076511374524531801953500093;
+    |                      ^^^^^ help: consider using: `IC64X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:239:22
+    |
+239 |     uint256 constant IC64y = 12060531347319734450106629475234683420793744893392943243988823367802700440536;
+    |                      ^^^^^ help: consider using: `IC64Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:241:22
+    |
+241 |     uint256 constant IC65x = 7843037680240443262840540216418619432496485252009659099040209743647696717783;
+    |                      ^^^^^ help: consider using: `IC65X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:242:22
+    |
+242 |     uint256 constant IC65y = 13801541723238720493234962822884336400695150890711798345329546983519798384852;
+    |                      ^^^^^ help: consider using: `IC65Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:244:22
+    |
+244 |     uint256 constant IC66x = 3772076030703564959763938741098908927324923358257997468131903026358672395320;
+    |                      ^^^^^ help: consider using: `IC66X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:245:22
+    |
+245 |     uint256 constant IC66y = 8533962458337974191915192451596083520344500693796175028662676977339263397869;
+    |                      ^^^^^ help: consider using: `IC66Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:247:22
+    |
+247 |     uint256 constant IC67x = 17789303543869330369408799915574665902236754445746060965410702557593608985018;
+    |                      ^^^^^ help: consider using: `IC67X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:248:22
+    |
+248 |     uint256 constant IC67y = 1706619608792216483421703427938220446922037422692801409177230348863405260264;
+    |                      ^^^^^ help: consider using: `IC67Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:250:22
+    |
+250 |     uint256 constant IC68x = 8721818038152514270046681254587726097403223592639175138026777869567532972905;
+    |                      ^^^^^ help: consider using: `IC68X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:251:22
+    |
+251 |     uint256 constant IC68y = 2762407703473425932406132591499334242380240143845366137244763083001279042049;
+    |                      ^^^^^ help: consider using: `IC68Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:253:22
+    |
+253 |     uint256 constant IC69x = 13920457486479674176230247896558490029613473995975460890399651467887013242113;
+    |                      ^^^^^ help: consider using: `IC69X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:254:22
+    |
+254 |     uint256 constant IC69y = 8627976094323143264481177064930368670250153958560835957890762074313877671739;
+    |                      ^^^^^ help: consider using: `IC69Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:256:22
+    |
+256 |     uint256 constant IC70x = 847628836878022108918838484392622559352157270246133716360027954204965613710;
+    |                      ^^^^^ help: consider using: `IC70X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:257:22
+    |
+257 |     uint256 constant IC70y = 8787162965592869533031507441387422447882429856865305634610323072027686118618;
+    |                      ^^^^^ help: consider using: `IC70Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:259:22
+    |
+259 |     uint256 constant IC71x = 13804741971972925035531973994111794598672735112726570807959418821636007338099;
+    |                      ^^^^^ help: consider using: `IC71X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:260:22
+    |
+260 |     uint256 constant IC71y = 8861780477915853966825698467196064207833607763119306438983343139872205524621;
+    |                      ^^^^^ help: consider using: `IC71Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:262:22
+    |
+262 |     uint256 constant IC72x = 19665815512893702297647939325828007046818801955207229270083548328804293941635;
+    |                      ^^^^^ help: consider using: `IC72X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:263:22
+    |
+263 |     uint256 constant IC72y = 7763013452130858690837321439510746716572788641896669511445529083567728106788;
+    |                      ^^^^^ help: consider using: `IC72Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:265:22
+    |
+265 |     uint256 constant IC73x = 11091895807406459370862770211532331710152648826117550780356443251760961347225;
+    |                      ^^^^^ help: consider using: `IC73X`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:266:22
+    |
+266 |     uint256 constant IC73y = 20464439247602669377720725991647658874764648834371720490429523402185861069761;
+    |                      ^^^^^ help: consider using: `IC73Y`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:270:21
+    |
+270 |     uint16 constant pVk = 0;
+    |                     ^^^ help: consider using: `P_VK`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:271:21
+    |
+271 |     uint16 constant pPairing = 128;
+    |                     ^^^^^^^^ help: consider using: `P_PAIRING`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+
+note[screaming-snake-case-const]: constants should use SCREAMING_SNAKE_CASE
+   --> src\verifiers\VoteChainVoteDirectVerifier.sol:273:21
+    |
+273 |     uint16 constant pLastMem = 896;
+    |                     ^^^^^^^^ help: consider using: `P_LAST_MEM`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-const
+

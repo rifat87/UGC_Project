@@ -1,0 +1,134 @@
+WP8E C8B-R1 FINAL FRESH-CHAIN MICROBENCHMARK DESIGN FREEZE
+==========================================================
+
+CLASSIFICATION
+--------------
+FINAL_MICROBENCHMARK_PROTOCOL_AND_RUNNER_FREEZE_ONLY
+
+SYSTEM UNDER TEST
+-----------------
+DIRECT active profile.
+candidateCount = 4.
+ciphertext slots = 16.
+fixture = ballot-001.
+candidate index = 0.
+calldata bytes = 2340.
+
+FROZEN INPUTS
+-------------
+FINAL_PROTOCOL_V2_SHA256=6d2e3e2566fb00c364c8b0896eb2118c69b81cddac8a53d7e413c03c270fee00
+FROZEN_RUNNER_V2_SHA256=0b3c77a0581f83cf4cee0215aabb444ddbc739cc6865067f9cde28b8d78f2ed0
+C2_CONFIG_SHA256=6071b3f9f9cc0981593d74e992f81ccb53463f01909c1b33b523a0a96a3b1f39
+BALLOT001_FIXTURE_SHA256=5510e637f805dd37091e62c961f3313097ad7db2e09a937d1f786aa0d12c344e
+BALLOT001_CALLDATA_SHA256=a883ca98a7149137725d057d481b18160c321afa55ca33c3c944a338ba8e7835
+ACTIVE_SOLIDITY_SHA256=c833a70e832ce15cfe9d17c2ca71f202fc8806519514cd6846ba292804904d77
+ACTIVE_VERIFIER_SHA256=55b31cad6c02422bf22073abf482516d576d3f3eec0b964d4fecaf4effff7eba
+
+FINAL SAMPLE PLAN
+-----------------
+Warm-up iterations: 5.
+Measured iterations: 20.
+Total final iterations: 25.
+
+Every iteration begins from a completely fresh Anvil chain.
+
+Every iteration uses the exact same frozen ballot-001 proof/ciphertext fixture.
+
+Warm-ups execute first and are preserved but excluded from final statistics.
+
+TIMING METRIC
+-------------
+Start:
+immediately before invoking cast send for castVote.
+
+Stop:
+immediately after the cast send process returns with the receipt output.
+
+Metric:
+local cast-send-start to receipt-return wall-clock latency.
+
+Outside timed interval:
+- Anvil startup,
+- verifier deployment,
+- DIRECT deployment,
+- configure,
+- activate,
+- fixture loading,
+- initial-state checks,
+- receipt parsing,
+- post-receipt state verification,
+- Anvil shutdown.
+
+This metric is not:
+- Groth16 proving time,
+- witness-generation time,
+- public-network confirmation latency,
+- biometric/end-to-end voting latency.
+
+PER-ITERATION RAW FIELDS
+------------------------
+kind
+iteration
+repetition_id
+ballot_id
+candidate_index
+tx_hash
+receipt_status
+gas_used
+calldata_bytes
+latency_ms
+
+CORRECTNESS GATES
+-----------------
+successful cast receipt;
+acceptedBallotCount == 1;
+usedNullifier(ballot-001 nullifier) == true;
+phase remains Active;
+all 16 encrypted tally slots equal the ballot-001 ciphertext contribution.
+
+PARSER
+------
+The new runner imports and reuses the frozen Runner V2 receipt parser.
+It does not restore the obsolete json.loads(full_stdout) assumption.
+
+PILOT POLICY
+------------
+Exactly one non-final E2E pilot is available through --pilot-one.
+
+The pilot is:
+PILOT_ONLY_NOT_FINAL_BENCHMARK.
+
+Pilot observations must never be included in final statistics.
+
+FINAL EXECUTION POLICY
+----------------------
+The final 25-iteration campaign must start from iteration 1.
+
+On any final execution failure:
+- preserve all partial files,
+- do not delete observations,
+- do not silently restart,
+- do not reconstruct latency,
+- diagnose before any new attempt.
+
+STATISTICAL POLICY
+------------------
+Only the 20 measured iterations enter final microbenchmark statistics.
+
+All 5 warm-ups remain preserved.
+
+No silent outlier deletion.
+
+Report:
+mean,
+median,
+min,
+max,
+sample standard deviation,
+nearest-rank p95.
+
+R1 EXECUTION STATUS
+-------------------
+FINAL_MICROBENCHMARK_STARTED=NO
+ANVIL_STARTED=NO
+TRANSACTION_SUBMITTED=NO

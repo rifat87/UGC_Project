@@ -1,0 +1,8 @@
+{
+  "label": "N10_R4A_REVERIFY",
+  "rawByteCount": 40,
+  "ansiOrControlDecorationDetected": true,
+  "semanticPattern": "snarkJS:\\s*OK!",
+  "semanticOk": true,
+  "sanitizedText": "[INFO]  snarkJS: OK!\n"
+}

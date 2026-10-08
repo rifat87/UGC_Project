@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "classification": "C8C_FINAL_100_OBSERVATION_CAMPAIGN",
+  "totalObservations": 100,
+  "warmupObservations": 20,
+  "measuredObservations": 80,
+  "statsEligibleObservations": 80,
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "measuredPerLevel": {
+    "2": 20,
+    "4": 20,
+    "8": 20,
+    "16": 20
+  },
+  "warmupPerLevel": {
+    "2": 5,
+    "4": 5,
+    "8": 5,
+    "16": 5
+  },
+  "campaignIndexSha256": "4d2f5cc023b2b418682a9f857ace80799a8b77a2c4c68492fb45772a926a50a6",
+  "silentRetryPerformed": false,
+  "pilotObservationsIncluded": false,
+  "warmupsIncludedInFinalStatistics": false,
+  "proofGenerationDuringCampaign": false,
+  "anvilRunningAfterCampaign": false
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+<title>Private vote generation and castVote verification sequence</title>
+<metadata>{&quot;diagramId&quot;: &quot;D-PUB-02&quot;, &quot;publicSignals&quot;: 73}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800" y="52" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#111">Private vote generation and castVote verification sequence</text>
+<rect x="50" y="85" width="210" height="85" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="155.0" y="123" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Voter / terminal</text>
+<line x1="155" y1="170" x2="155" y2="825" stroke="#111" stroke-width="2" stroke-dasharray="8 8"/>
+<rect x="370" y="85" width="210" height="85" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="475.0" y="123" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Witness builder</text>
+<line x1="475" y1="170" x2="475" y2="825" stroke="#111" stroke-width="2" stroke-dasharray="8 8"/>
+<rect x="690" y="85" width="210" height="85" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="795.0" y="123" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Groth16 prover</text>
+<line x1="795" y1="170" x2="795" y2="825" stroke="#111" stroke-width="2" stroke-dasharray="8 8"/>
+<rect x="1010" y="85" width="210" height="85" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1115.0" y="123" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">VoteChain contract</text>
+<line x1="1115" y1="170" x2="1115" y2="825" stroke="#111" stroke-width="2" stroke-dasharray="8 8"/>
+<rect x="1330" y="85" width="210" height="85" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1435.0" y="123" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Encrypted tally</text>
+<line x1="1435" y1="170" x2="1435" y2="825" stroke="#111" stroke-width="2" stroke-dasharray="8 8"/>
+<line x1="155" y1="235" x2="475" y2="235" stroke="#111" stroke-width="3"/>
+<line x1="463.3792505067069" y1="242.80757204347984" x2="475" y2="235" stroke="#111" stroke-width="3"/>
+<line x1="463.3792505067069" y1="227.19242795652016" x2="475" y2="235" stroke="#111" stroke-width="3"/>
+<text x="315.0" y="223.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Authenticated authorization</text>
+<line x1="395" y1="307" x2="555" y2="307" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="314.80757204347987" x2="555" y2="307" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="299.19242795652013" x2="555" y2="307" stroke="#111" stroke-width="3"/>
+<text x="475.0" y="295.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Merkle witness + nullifier</text>
+<line x1="475" y1="379" x2="795" y2="379" stroke="#111" stroke-width="3"/>
+<line x1="783.3792505067069" y1="386.80757204347987" x2="795" y2="379" stroke="#111" stroke-width="3"/>
+<line x1="783.3792505067069" y1="371.19242795652013" x2="795" y2="379" stroke="#111" stroke-width="3"/>
+<text x="635.0" y="367.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Private one-hot ballot + encrypted slots</text>
+<line x1="715" y1="451" x2="875" y2="451" stroke="#111" stroke-width="3"/>
+<line x1="863.3792505067069" y1="458.80757204347987" x2="875" y2="451" stroke="#111" stroke-width="3"/>
+<line x1="863.3792505067069" y1="443.19242795652013" x2="875" y2="451" stroke="#111" stroke-width="3"/>
+<text x="795.0" y="439.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Generate Groth16 proof</text>
+<line x1="795" y1="523" x2="1115" y2="523" stroke="#111" stroke-width="3"/>
+<line x1="1103.379250506707" y1="530.8075720434798" x2="1115" y2="523" stroke="#111" stroke-width="3"/>
+<line x1="1103.379250506707" y1="515.1924279565202" x2="1115" y2="523" stroke="#111" stroke-width="3"/>
+<text x="955.0" y="511.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Proof + 73 public signals + ciphertexts</text>
+<line x1="1035" y1="595" x2="1195" y2="595" stroke="#111" stroke-width="3"/>
+<line x1="1183.379250506707" y1="602.8075720434798" x2="1195" y2="595" stroke="#111" stroke-width="3"/>
+<line x1="1183.379250506707" y1="587.1924279565202" x2="1195" y2="595" stroke="#111" stroke-width="3"/>
+<text x="1115.0" y="583.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Verify Groth16 proof</text>
+<line x1="1035" y1="667" x2="1195" y2="667" stroke="#111" stroke-width="3"/>
+<line x1="1183.379250506707" y1="674.8075720434798" x2="1195" y2="667" stroke="#111" stroke-width="3"/>
+<line x1="1183.379250506707" y1="659.1924279565202" x2="1195" y2="667" stroke="#111" stroke-width="3"/>
+<text x="1115.0" y="655.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Reject reused election nullifier</text>
+<line x1="1115" y1="739" x2="1435" y2="739" stroke="#111" stroke-width="3"/>
+<line x1="1423.379250506707" y1="746.8075720434798" x2="1435" y2="739" stroke="#111" stroke-width="3"/>
+<line x1="1423.379250506707" y1="731.1924279565202" x2="1435" y2="739" stroke="#111" stroke-width="3"/>
+<text x="1275.0" y="727.0" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">Accept encrypted ballot</text>
+<text x="800" y="875" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#111">Plaintext vote choice is never submitted to the smart contract.</text>
+</svg>

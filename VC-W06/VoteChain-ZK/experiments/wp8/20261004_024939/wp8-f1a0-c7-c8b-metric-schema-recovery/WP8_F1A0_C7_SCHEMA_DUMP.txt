@@ -1,0 +1,18 @@
+C7 OVERALL METRIC SCHEMA
+========================
+
+TOP_LEVEL_KEYS=allRawRows,warmupRowsExcludedFromStatistics,measuredRowsIncluded,measuredIndependentElections,silentOutlierDeletion,calldataBytesPerVote,gas,latencyMs,postvalidationTrailingDiagnosticReceipts
+
+METRIC_CANDIDATE_1_PATH=gas
+METRIC_CANDIDATE_1_KEYS=n,mean,median,min,max,sample_sd,p95_nearest_rank
+METRIC_CANDIDATE_1_OBJECT={"max": 1866414, "mean": 1314307.1225, "median": 1307355.0, "min": 1306506, "n": 2000, "p95_nearest_rank": 1307783, "sample_sd": 62133.00923845558}
+
+METRIC_CANDIDATE_2_PATH=latencyMs
+METRIC_CANDIDATE_2_KEYS=n,mean,median,min,max,sample_sd,p95_nearest_rank
+METRIC_CANDIDATE_2_OBJECT={"max": 1026.0968, "mean": 760.6399339, "median": 755.11115, "min": 669.9123, "n": 2000, "p95_nearest_rank": 845.6926, "sample_sd": 54.87022636917149}
+
+PERCENTILE_LIKE_KEYS
+--------------------
+gas.p95_nearest_rank=1307783
+latencyMs.p95_nearest_rank=845.6926
+

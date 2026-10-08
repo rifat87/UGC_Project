@@ -1,0 +1,136 @@
+25:ANVIL_PORT=8547
+26:BACKEND_PORT=5007
+27:VITE_PORT=4175
+28:CDP_PORT=9225
+30:RPC="http://127.0.0.1:$ANVIL_PORT"
+31:BACKEND_URL="http://127.0.0.1:$BACKEND_PORT"
+32:VITE_URL="http://127.0.0.1:$VITE_PORT"
+33:CDP_URL="http://127.0.0.1:$CDP_PORT"
+35:ANVIL_PID=""
+38:BROWSER_PID=""
+47:        "${BROWSER_PID:-}" \
+50:        "${ANVIL_PID:-}"
+77:echo "Mocked biometric-success boundary."
+80:echo "Actual browser worker."
+111:    "$BACK/models/Voter.js"
+116:    "$FRONT/src/components/Biometric/VerificationModal.tsx"
+135:    anvil \
+146:    echo "ERROR: Anvil research port $ANVIL_PORT already occupied."
+153:    "$CDP_URL/json/version"
+164:# 4. LOCATE CHROMIUM
+168:echo "=== 4. LOCATE CHROMIUM ==="
+170:BROWSER=""
+173:    "/c/Program Files/Google/Chrome/Application/chrome.exe" \
+174:    "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
+179:        BROWSER="$candidate"
+184:if [ -z "$BROWSER" ]; then
+185:    echo "ERROR: Chrome/Edge not found."
+189:echo "BROWSER=$BROWSER"
+209:# 6. START ISOLATED ANVIL
+213:echo "=== 6. START ANVIL ==="
+215:anvil \
+216:    --host 127.0.0.1 \
+217:    --port "$ANVIL_PORT" \
+219:    > "$EVIDENCE/anvil.log" \
+222:ANVIL_PID=$!
+238:echo "ANVIL_RUNTIME=PASS"
+278:process.env.RPC_URL =
+330:      "../models/Voter.js"
+337:      "../models/Candidate.js"
+410:process.env.WP5_CONTRACT_ADDRESS =
+416: * WP5_CONTRACT_ADDRESS. For this isolated research runtime both point
+455:    candidateId: 101,
+461:    candidateId: 102,
+467:    candidateId: 103,
+473:    candidateId: 104,
+501: * Replace DB reads at the model boundary.
+537:const candidateIds =
+540:      item.candidateId,
+545:    candidateIds,
+590:      candidateIds.length,
+603:      candidateIds.length,
+646:    biometricBoundary:
+647:      "MOCKED_SUCCESS",
+668:      "http://127.0.0.1:4175",
+761:          /candidateId|candidateIndex|selectedCandidate|voteChoice|candidateChoice/i.test(
+799:      !body.credentialPublicKey
+804:          "credentialPublicKey is required",
+810:       * The biometric-success boundary is mocked.
+819:            body.credentialPublicKey,
+836:          "Synthetic biometric boundary accepted; WP5 authorization issued",
+863:    "127.0.0.1",
+985:VITE_RPC_URL=$RPC
+1075:      /candidateId|candidateIndex|selectedCandidate|voteChoice|candidateChoice/i.test(
+1109:          item.candidateId,
+1122:  const selectedCandidateId =
+1123:    selected.candidateId
+1175:    credentialPublicKey,
+1185:      credentialPublicKey,
+1225:      selectedCandidateId,
+1256:    biometricBoundary:
+1257:      "MOCKED_SUCCESS",
+1363:    --host 127.0.0.1 \
+1390:# 12. START CHROME CDP
+1394:echo "=== 12. START CHROME CDP ==="
+1396:CHROME_PROFILE="$EVIDENCE/chrome-profile"
+1398:"$BROWSER" \
+1402:    --no-default-browser-check \
+1406:    --remote-debugging-address=127.0.0.1 \
+1407:    --remote-debugging-port="$CDP_PORT" \
+1408:    --user-data-dir="$CHROME_PROFILE" \
+1410:    > "$EVIDENCE/chrome.log" \
+1413:BROWSER_PID=$!
+1417:        "$CDP_URL/json/version" \
+1426:    "$CDP_URL/json/version" \
+1429:echo "CHROME_CDP=PASS"
+1432:# 13. CDP COLLECTOR
+1438:CDP_RUNNER="$EVIDENCE/wp5e-cdp-runner.mjs"
+1440:cat > "$CDP_RUNNER" <<'NODE'
+1446:  cdpBase,
+1469:      `${cdpBase}/json/list`,
+1494:    "WP5E browser target missing",
+1521:            "CDP websocket failed",
+1658:      `CDP_STATUS_${iteration}=${status}`,
+1703:  `BROWSER_RESULT_STATUS=${result.status}`,
+1711:    `BROWSER_RESULT_ERROR=${result.error}`,
+1719:    "BACKEND_HTTP_TO_BROWSER_WORKER=PASS",
+1727:    `BROWSER_LOCAL_PRIVACY_MS=${result.privacyMs}`,
+1734:BROWSER_RESULT="$EVIDENCE/browser-result.json"
+1737:    "$CDP_RUNNER" \
+1738:    "$CDP_URL" \
+1739:    "$BROWSER_RESULT" \
+1740:    | tee "$EVIDENCE/cdp.log"
+1784:  browserResultPath,
+1797:const browser =
+1800:      browserResultPath,
+1814:  browser.status !==
+1818:    "Browser authorization/privacy result not PASS",
+1823:  browser.ballot
+2080:    "$BROWSER_RESULT" \
+2105:  browserPath,
+2111:const browser =
+2114:      browserPath,
+2142:  browser.network
+2167:    "credentialPublicKey"
+2194:      /candidateId|candidateIndex|selectedCandidate|voteChoice|candidateChoice/i.test(
+2217:  /candidateId|candidateIndex|selectedCandidate|voteChoice|candidateChoice/i.test(
+2228:    browser.authorizationShape,
+2269:  "AUTH_REQUEST_KEYS=credentialPublicKey",
+2289:  "BACKEND_TO_BROWSER_TO_CONTRACT=PASS",
+2295:    "$BROWSER_RESULT" \
+2328:const browser=JSON.parse(
+2349:    browser.authorizationMs,
+2352:    browser.privacyMs,
+2354:  browserOverallMs:
+2355:    browser.overallMs,
+2384:    "$BROWSER_RESULT" \
+2399:    "$BROWSER_RESULT" \
+2416:' "$BROWSER_RESULT"
+2425:' "$BROWSER_RESULT"
+2479:    echo "BIOMETRIC_BOUNDARY=MOCKED_SUCCESS"
+2480:    echo "REAL_BIOMETRIC_EXECUTION=NO"
+2489:    echo "AUTH_REQUEST_KEYS=credentialPublicKey"
+2498:    echo "BROWSER_WORKER_AFTER_BACKEND_AUTH=PASS"
+2499:    echo "BROWSER_DIRECT_GROTH16=PASS"
+2507:    echo "BACKEND_TO_BROWSER_TO_CONTRACT=PASS"
+2510:    echo "BROWSER_LOCAL_PRIVACY_MS=$PRIVACY_MS"

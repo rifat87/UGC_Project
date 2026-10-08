@@ -1,0 +1,178 @@
+[
+  {
+    "k": 2,
+    "directory": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d17",
+    "directoryExists": true,
+    "compatibilityResultExists": true,
+    "compatibilityResult": {
+      "classification": "WP8D_B2B_B_FUNCTIONAL_COMPATIBILITY_ONLY",
+      "profileId": "direct-k2-d17",
+      "variant": "DIRECT",
+      "maxCandidates": 2,
+      "merkleDepth": 17,
+      "capacity": 131072,
+      "candidateCount": 2,
+      "syntheticCandidateSlot": 1,
+      "syntheticLeafIndex": 18092,
+      "publicSignalCount": 17,
+      "proofCoordinateCount": 8,
+      "proofCoordinatePayloadBytes": 256,
+      "proofCompactJsonBytes": 725,
+      "publicCompactJsonBytes": 1280,
+      "witnessBytes": 457356,
+      "verified": true,
+      "freshSyntheticInput": true,
+      "freshSyntheticEncryptionRandomness": true,
+      "privateInputPersisted": false,
+      "witnessPersisted": false,
+      "timingResult": false,
+      "result": "PASS"
+    },
+    "files": [
+      {
+        "relativePath": "compatibility-result.json",
+        "bytes": 663
+      },
+      {
+        "relativePath": "proof.json",
+        "bytes": 858
+      },
+      {
+        "relativePath": "public.json",
+        "bytes": 1333
+      }
+    ]
+  },
+  {
+    "k": 4,
+    "directory": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d17",
+    "directoryExists": true,
+    "compatibilityResultExists": true,
+    "compatibilityResult": {
+      "classification": "WP8D_B2B_B_FUNCTIONAL_COMPATIBILITY_ONLY",
+      "profileId": "direct-k4-d17",
+      "variant": "DIRECT",
+      "maxCandidates": 4,
+      "merkleDepth": 17,
+      "capacity": 131072,
+      "candidateCount": 4,
+      "syntheticCandidateSlot": 2,
+      "syntheticLeafIndex": 104413,
+      "publicSignalCount": 25,
+      "proofCoordinateCount": 8,
+      "proofCoordinatePayloadBytes": 256,
+      "proofCompactJsonBytes": 724,
+      "publicCompactJsonBytes": 1918,
+      "witnessBytes": 671692,
+      "verified": true,
+      "freshSyntheticInput": true,
+      "freshSyntheticEncryptionRandomness": true,
+      "privateInputPersisted": false,
+      "witnessPersisted": false,
+      "timingResult": false,
+      "result": "PASS"
+    },
+    "files": [
+      {
+        "relativePath": "compatibility-result.json",
+        "bytes": 664
+      },
+      {
+        "relativePath": "proof.json",
+        "bytes": 857
+      },
+      {
+        "relativePath": "public.json",
+        "bytes": 1995
+      }
+    ]
+  },
+  {
+    "k": 8,
+    "directory": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d17",
+    "directoryExists": true,
+    "compatibilityResultExists": true,
+    "compatibilityResult": {
+      "classification": "WP8D_B2B_B_FUNCTIONAL_COMPATIBILITY_ONLY",
+      "profileId": "direct-k8-d17",
+      "variant": "DIRECT",
+      "maxCandidates": 8,
+      "merkleDepth": 17,
+      "capacity": 131072,
+      "candidateCount": 8,
+      "syntheticCandidateSlot": 7,
+      "syntheticLeafIndex": 61612,
+      "publicSignalCount": 41,
+      "proofCoordinateCount": 8,
+      "proofCoordinatePayloadBytes": 256,
+      "proofCompactJsonBytes": 723,
+      "publicCompactJsonBytes": 3186,
+      "witnessBytes": 1100364,
+      "verified": true,
+      "freshSyntheticInput": true,
+      "freshSyntheticEncryptionRandomness": true,
+      "privateInputPersisted": false,
+      "witnessPersisted": false,
+      "timingResult": false,
+      "result": "PASS"
+    },
+    "files": [
+      {
+        "relativePath": "compatibility-result.json",
+        "bytes": 664
+      },
+      {
+        "relativePath": "proof.json",
+        "bytes": 856
+      },
+      {
+        "relativePath": "public.json",
+        "bytes": 3311
+      }
+    ]
+  },
+  {
+    "k": 16,
+    "directory": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d17",
+    "directoryExists": true,
+    "compatibilityResultExists": true,
+    "compatibilityResult": {
+      "classification": "WP8D_B2B_B_FUNCTIONAL_COMPATIBILITY_ONLY",
+      "profileId": "direct-k16-d17",
+      "variant": "DIRECT",
+      "maxCandidates": 16,
+      "merkleDepth": 17,
+      "capacity": 131072,
+      "candidateCount": 16,
+      "syntheticCandidateSlot": 4,
+      "syntheticLeafIndex": 4045,
+      "publicSignalCount": 73,
+      "proofCoordinateCount": 8,
+      "proofCoordinatePayloadBytes": 256,
+      "proofCompactJsonBytes": 722,
+      "publicCompactJsonBytes": 5733,
+      "witnessBytes": 1957708,
+      "verified": true,
+      "freshSyntheticInput": true,
+      "freshSyntheticEncryptionRandomness": true,
+      "privateInputPersisted": false,
+      "witnessPersisted": false,
+      "timingResult": false,
+      "result": "PASS"
+    },
+    "files": [
+      {
+        "relativePath": "compatibility-result.json",
+        "bytes": 666
+      },
+      {
+        "relativePath": "proof.json",
+        "bytes": 855
+      },
+      {
+        "relativePath": "public.json",
+        "bytes": 5954
+      }
+    ]
+  }
+]

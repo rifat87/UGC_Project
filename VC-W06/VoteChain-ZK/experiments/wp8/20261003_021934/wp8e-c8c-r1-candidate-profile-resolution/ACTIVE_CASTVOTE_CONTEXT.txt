@@ -1,0 +1,489 @@
+0292:      * WP6 threshold-finalization evidence.
+0293:      *
+0294:      * trusteeTranscriptHash is pinned during Registration.
+0295:      * finalizationTranscriptHash is written only after Ended.
+0296:      *
+0297:      * The full threshold transcript remains public/off-chain;
+0298:      * Solidity anchors its canonical SHA-256 hash and the
+0299:      * independently verified plaintext aggregate totals.
+0300:      */
+0301:     bytes32 public trusteeTranscriptHash;
+0302: 
+0303:     bytes32 public finalizationTranscriptHash;
+0304: 
+0305:     uint256[16] internal finalResults;
+0306: 
+0307:     mapping(uint256 => bool)
+0308:         public usedNullifier;
+0309: 
+0310:     uint256[16] internal tallyRx;
+0311:     uint256[16] internal tallyRy;
+0312:     uint256[16] internal tallySx;
+0313:     uint256[16] internal tallySy;
+0314: 
+0315:     event ElectionConfigured(
+0316:         uint256 indexed electionId,
+0317:         uint256 eligibleRoot,
+0318:         uint256 candidateManifestHash,
+0319:         uint256 candidateCount
+0320:     );
+0321: 
+0322:     event ElectionActivated(
+0323:         uint256 indexed electionId
+0324:     );
+0325: 
+0326:     event ElectionEnded(
+0327:         uint256 indexed electionId
+0328:     );
+0329: 
+0330:     event TrusteeTranscriptPinned(
+0331:         bytes32 indexed transcriptHash
+0332:     );
+0333: 
+0334:     event TallyFinalized(
+0335:         bytes32 indexed transcriptHash,
+0336:         uint256 acceptedBallotCount
+0337:     );
+0338: 
+0339:     event EncryptedVoteAccepted(
+0340:         uint256 indexed nullifier,
+0341:         bytes32 ciphertextHash,
+0342:         uint256 acceptedBallotCount
+0343:     );
+0344: 
+0345:     constructor() {
+0346:         admin =
+0347:             msg.sender;
+0348: 
+0349:         phase =
+0350:             Phase.Registration;
+0351: 
+0352:         /*
+0353:          * BabyJub identity = (0,1)
+0354:          */
+0355:         for (
+0356:             uint256 i = 0;
+0357:             i < MAX;
+0358:             i++
+0359:         ) {
+0360:             tallyRy[i] = 1;
+0361:             tallySy[i] = 1;
+0362:         }
+0363:     }
+0364: 
+0365:     modifier onlyAdmin() {
+0366:         require(
+0367:             msg.sender == admin,
+0368:             "ONLY_ADMIN"
+0369:         );
+0370: 
+0371:         _;
+0372:     }
+0373: 
+0374:     modifier inPhase(
+0375:         Phase expected
+0376:     ) {
+0377:         require(
+0378:             phase == expected,
+0379:             "WRONG_PHASE"
+0380:         );
+0381: 
+0382:         _;
+0383:     }
+0384: 
+0385:     function configure(
+0386:         ElectionConfig calldata cfg
+0387:     )
+0388:         external
+0389:         onlyAdmin
+0390:         inPhase(
+0391:             Phase.Registration
+0392:         )
+0393:     {
+0394:         require(
+0395:             !configured,
+0396:             "ALREADY_CONFIGURED"
+0397:         );
+0398: 
+0399:         require(
+0400:             cfg.candidateCount >= 1 &&
+0401:             cfg.candidateCount <= MAX,
+0402:             "BAD_CANDIDATE_COUNT"
+0403:         );
+0404: 
+0405:         require(
+0406:             cfg.eligibleRoot < P &&
+
+------------------------------------------------------------------------
+0641:     function getTally(
+0642:         uint256 slot
+0643:     )
+0644:         external
+0645:         view
+0646:         returns (
+0647:             uint256 rx,
+0648:             uint256 ry,
+0649:             uint256 sx,
+0650:             uint256 sy
+0651:         )
+0652:     {
+0653:         require(
+0654:             slot < MAX,
+0655:             "BAD_SLOT"
+0656:         );
+0657: 
+0658:         return (
+0659:             tallyRx[slot],
+0660:             tallyRy[slot],
+0661:             tallySx[slot],
+0662:             tallySy[slot]
+0663:         );
+0664:     }
+0665: 
+0666:     function _requireCanonicalCiphertext(
+0667:         uint256[16] calldata rx,
+0668:         uint256[16] calldata ry,
+0669:         uint256[16] calldata sx,
+0670:         uint256[16] calldata sy
+0671:     )
+0672:         internal
+0673:         pure
+0674:     {
+0675:         for (
+0676:             uint256 i = 0;
+0677:             i < MAX;
+0678:             i++
+0679:         ) {
+0680:             require(
+0681:                 rx[i] < P &&
+0682:                 ry[i] < P &&
+0683:                 sx[i] < P &&
+0684:                 sy[i] < P,
+0685:                 "NON_CANONICAL_CIPHERTEXT"
+0686:             );
+0687:         }
+0688:     }
+0689: 
+0690:     function _applyTally(
+0691:         uint256[16] calldata rx,
+0692:         uint256[16] calldata ry,
+0693:         uint256[16] calldata sx,
+0694:         uint256[16] calldata sy
+0695:     )
+0696:         internal
+0697:     {
+0698:         for (
+0699:             uint256 i = 0;
+0700:             i < MAX;
+0701:             i++
+0702:         ) {
+0703:             BabyJubAffine.Point memory oldR =
+0704:                 BabyJubAffine.Point(
+0705:                     tallyRx[i],
+0706:                     tallyRy[i]
+0707:                 );
+0708: 
+0709:             BabyJubAffine.Point memory newR =
+0710:                 BabyJubAffine.Point(
+0711:                     rx[i],
+0712:                     ry[i]
+0713:                 );
+0714: 
+0715:             BabyJubAffine.Point memory oldS =
+0716:                 BabyJubAffine.Point(
+0717:                     tallySx[i],
+0718:                     tallySy[i]
+0719:                 );
+0720: 
+0721:             BabyJubAffine.Point memory newS =
+0722:                 BabyJubAffine.Point(
+0723:                     sx[i],
+0724:                     sy[i]
+0725:                 );
+0726: 
+0727:             BabyJubAffine.Point memory sumR =
+0728:                 BabyJubAffine.add(
+0729:                     oldR,
+0730:                     newR
+0731:                 );
+0732: 
+0733:             BabyJubAffine.Point memory sumS =
+0734:                 BabyJubAffine.add(
+0735:                     oldS,
+0736:                     newS
+0737:                 );
+0738: 
+0739:             tallyRx[i] =
+0740:                 sumR.x;
+0741: 
+0742:             tallyRy[i] =
+0743:                 sumR.y;
+0744: 
+0745:             tallySx[i] =
+0746:                 sumS.x;
+0747: 
+0748:             tallySy[i] =
+0749:                 sumS.y;
+0750:         }
+0751:     }
+0752: 
+0753:     function _accept(
+0754:         uint256 nullifier,
+0755:         uint256[16] calldata rx,
+0756:         uint256[16] calldata ry,
+0757:         uint256[16] calldata sx,
+0758:         uint256[16] calldata sy
+0759:     )
+0760:         internal
+0761:     {
+0762:         require(
+0763:             phase == Phase.Active,
+0764:             "NOT_ACTIVE"
+0765:         );
+0766: 
+0767:         require(
+0768:             !usedNullifier[
+0769:                 nullifier
+0770:             ],
+0771:             "NULLIFIER_USED"
+0772:         );
+0773: 
+0774:         usedNullifier[
+0775:             nullifier
+0776:         ] =
+0777:             true;
+0778: 
+0779:         _applyTally(
+0780:             rx,
+0781:             ry,
+0782:             sx,
+0783:             sy
+0784:         );
+0785: 
+0786:         acceptedBallotCount +=
+0787:             1;
+0788: 
+0789:         emit EncryptedVoteAccepted(
+0790:             nullifier,
+0791:             keccak256(
+0792:                 abi.encode(
+0793:                     rx,
+
+------------------------------------------------------------------------
+0901:             ] =
+0902:                 sx[i];
+0903:         }
+0904: 
+0905:         offset += MAX;
+0906: 
+0907:         for (
+0908:             uint256 i = 0;
+0909:             i < MAX;
+0910:             i++
+0911:         ) {
+0912:             input[
+0913:                 offset + i
+0914:             ] =
+0915:                 sy[i];
+0916:         }
+0917:     }
+0918: 
+0919:     function castVote(
+0920:         uint256[2] calldata a,
+0921:         uint256[2][2] calldata b,
+0922:         uint256[2] calldata c,
+0923:         uint256 nullifier,
+0924:         uint256[16] calldata rx,
+0925:         uint256[16] calldata ry,
+0926:         uint256[16] calldata sx,
+0927:         uint256[16] calldata sy
+0928:     )
+0929:         external
+0930:     {
+0931:         require(
+0932:             phase == Phase.Active,
+0933:             "NOT_ACTIVE"
+0934:         );
+0935: 
+0936:         require(
+0937:             !usedNullifier[
+0938:                 nullifier
+0939:             ],
+0940:             "NULLIFIER_USED"
+0941:         );
+0942: 
+0943:         _requireCanonicalCiphertext(
+0944:             rx,
+0945:             ry,
+0946:             sx,
+0947:             sy
+0948:         );
+0949: 
+0950:         uint256[73] memory input =
+0951:             _buildInputs(
+0952:                 nullifier,
+0953:                 rx,
+0954:                 ry,
+0955:                 sx,
+0956:                 sy
+0957:             );
+0958: 
+0959:         require(
+0960:             verifier.verifyProof(
+0961:                 a,
+0962:                 b,
+0963:                 c,
+0964:                 input
+
+------------------------------------------------------------------------
+1095:         returns (uint256)
+1096:     {
+1097:         _requireCanonicalCiphertext(
+1098:             rx,
+1099:             ry,
+1100:             sx,
+1101:             sy
+1102:         );
+1103: 
+1104:         return
+1105:             _binding(
+1106:                 rx,
+1107:                 ry,
+1108:                 sx,
+1109:                 sy
+1110:             );
+1111:     }
+1112: 
+1113:     function castVote(
+1114:         uint256[2] calldata a,
+1115:         uint256[2][2] calldata b,
+1116:         uint256[2] calldata c,
+1117:         uint256 nullifier,
+1118:         uint256[16] calldata rx,
+1119:         uint256[16] calldata ry,
+1120:         uint256[16] calldata sx,
+1121:         uint256[16] calldata sy
+1122:     )
+1123:         external
+1124:     {
+1125:         require(
+1126:             phase == Phase.Active,
+1127:             "NOT_ACTIVE"
+1128:         );
+1129: 
+1130:         require(
+1131:             !usedNullifier[
+1132:                 nullifier
+1133:             ],
+1134:             "NULLIFIER_USED"
+1135:         );
+1136: 
+1137:         _requireCanonicalCiphertext(
+1138:             rx,
+1139:             ry,
+1140:             sx,
+1141:             sy
+1142:         );
+1143: 
+1144:         uint256 digest =
+1145:             _binding(
+1146:                 rx,
+1147:                 ry,
+1148:                 sx,
+1149:                 sy
+1150:             );
+1151: 
+1152:         uint256[10] memory input;
+1153: 
+1154:         input[0] =
+1155:             eligibleRoot;
+1156: 
+1157:         input[1] =
+1158:             electionId;
+
+------------------------------------------------------------------------
+1187:                 b,
+1188:                 c,
+1189:                 input
+1190:             ),
+1191:             "INVALID_PROOF"
+1192:         );
+1193: 
+1194:         _accept(
+1195:             nullifier,
+1196:             rx,
+1197:             ry,
+1198:             sx,
+1199:             sy
+1200:         );
+1201:     }
+1202: }
+1203: 
+1204: contract BabyJubTallyHarness {
+1205:     uint256[16] internal tallyRx;
+1206:     uint256[16] internal tallyRy;
+1207:     uint256[16] internal tallySx;
+1208:     uint256[16] internal tallySy;
+1209: 
+1210:     constructor() {
+1211:         for (
+1212:             uint256 i = 0;
+1213:             i < 16;
+1214:             i++
+1215:         ) {
+1216:             tallyRy[i] = 1;
+1217:             tallySy[i] = 1;
+1218:         }
+1219:     }
+1220: 
+1221:     function applyBallot(
+1222:         uint256[16] calldata rx,
+1223:         uint256[16] calldata ry,
+1224:         uint256[16] calldata sx,
+1225:         uint256[16] calldata sy
+1226:     )
+1227:         external
+1228:     {
+1229:         for (
+1230:             uint256 i = 0;
+1231:             i < 16;
+1232:             i++
+1233:         ) {
+1234:             BabyJubAffine.Point memory sumR =
+1235:                 BabyJubAffine.add(
+1236:                     BabyJubAffine.Point(
+1237:                         tallyRx[i],
+1238:                         tallyRy[i]
+1239:                     ),
+1240:                     BabyJubAffine.Point(
+1241:                         rx[i],
+1242:                         ry[i]
+1243:                     )
+1244:                 );
+1245: 
+1246:             BabyJubAffine.Point memory sumS =
+1247:                 BabyJubAffine.add(
+1248:                     BabyJubAffine.Point(
+1249:                         tallySx[i],
+1250:                         tallySy[i]
+1251:                     ),
+1252:                     BabyJubAffine.Point(
+1253:                         sx[i],
+1254:                         sy[i]
+1255:                     )
+1256:                 );
+1257: 
+1258:             tallyRx[i] =
+1259:                 sumR.x;
+1260: 
+1261:             tallyRy[i] =
+1262:                 sumR.y;
+1263: 
+1264:             tallySx[i] =
+1265:                 sumS.x;
+1266: 
+1267:             tallySy[i] =
+1268:                 sumS.y;
+1269:         }
+1270:     }
+1271: }

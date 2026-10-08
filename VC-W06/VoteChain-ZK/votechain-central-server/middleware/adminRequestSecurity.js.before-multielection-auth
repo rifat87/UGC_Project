@@ -1,0 +1,659 @@
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs'
+
+import {
+  dirname,
+  join,
+  resolve,
+} from 'node:path'
+
+import {
+  createHash,
+} from 'node:crypto'
+
+import {
+  getAddress,
+  isAddress,
+  verifyMessage,
+} from 'ethers'
+
+import {
+  getWp5Contract,
+} from '../utils/wp5Contract.js'
+
+export const ADMIN_AUTH_SCHEME =
+  'VoteChainAdmin'
+
+export const ADMIN_AUTH_VERSION =
+  'VoteChain-ZK Admin Request v1'
+
+export const ADMIN_REQUEST_MAX_AGE_MS =
+  60_000
+
+export const ADMIN_REQUEST_MAX_FUTURE_MS =
+  10_000
+
+const NONCE_PATTERN =
+  /^[0-9a-f]{32}$/
+
+const SIGNATURE_PATTERN =
+  /^0x[0-9a-fA-F]{130}$/
+
+function normalizeJson(
+  value,
+) {
+  if (
+    Array.isArray(value)
+  ) {
+    return value.map(
+      normalizeJson,
+    )
+  }
+
+  if (
+    value &&
+    typeof value === 'object'
+  ) {
+    return Object.fromEntries(
+      Object
+        .keys(value)
+        .sort()
+        .map(
+          key => [
+            key,
+            normalizeJson(
+              value[key],
+            ),
+          ],
+        ),
+    )
+  }
+
+  return value
+}
+
+export function canonicalAdminJson(
+  value,
+) {
+  return JSON.stringify(
+    normalizeJson(
+      value === undefined
+        ? null
+        : value,
+    ),
+  )
+}
+
+export function hashAdminBody(
+  value,
+) {
+  return createHash(
+    'sha256',
+  )
+    .update(
+      canonicalAdminJson(
+        value,
+      ),
+      'utf8',
+    )
+    .digest(
+      'hex',
+    )
+}
+
+export function buildAdminRequestMessage({
+  audience,
+  address,
+  method,
+  path,
+  timestamp,
+  nonce,
+  bodyHash,
+}) {
+  return [
+    ADMIN_AUTH_VERSION,
+
+    `audience:${
+      String(
+        audience,
+      ).toLowerCase()
+    }`,
+
+    `address:${
+      String(
+        address,
+      ).toLowerCase()
+    }`,
+
+    `method:${
+      String(
+        method,
+      ).toUpperCase()
+    }`,
+
+    `path:${
+      String(path)
+    }`,
+
+    `timestamp:${
+      String(timestamp)
+    }`,
+
+    `nonce:${
+      String(
+        nonce,
+      ).toLowerCase()
+    }`,
+
+    `body-sha256:${
+      String(
+        bodyHash,
+      ).toLowerCase()
+    }`,
+  ].join('\n')
+}
+
+/*
+ * Persistent atomic replay store.
+ *
+ * A successful admin signature reserves one nonce by atomically creating
+ * a nonce file with flag "wx". This survives a backend restart and also
+ * prevents two server processes sharing the same directory from accepting
+ * the same nonce concurrently.
+ *
+ * Files contain only random nonce metadata and expiry time.
+ */
+export function createFileReplayStore(
+  directory =
+    process.env
+      .ADMIN_REPLAY_CACHE_DIR
+      ?.trim() ||
+    resolve(
+      process.cwd(),
+      '.runtime',
+      'admin-request-nonces',
+    ),
+) {
+  let cleaned = false
+
+  function ensureDirectory() {
+    mkdirSync(
+      directory,
+      {
+        recursive: true,
+      },
+    )
+  }
+
+  function cleanup(
+    now,
+  ) {
+    if (cleaned) {
+      return
+    }
+
+    cleaned = true
+    ensureDirectory()
+
+    /*
+     * Cleanup is deliberately opportunistic. We only need to remove a
+     * stale file when its random nonce happens to be reused.
+     * Random 128-bit nonces make that already negligible.
+     */
+    void now
+  }
+
+  function reserve(
+    nonce,
+    expiresAt,
+    now,
+  ) {
+    cleanup(now)
+
+    const file =
+      join(
+        directory,
+        `${nonce}.json`,
+      )
+
+    const payload =
+      JSON.stringify({
+        nonce,
+        expiresAt,
+      })
+
+    try {
+      writeFileSync(
+        file,
+        payload,
+        {
+          flag: 'wx',
+          mode: 0o600,
+        },
+      )
+
+      return true
+    } catch (error) {
+      if (
+        error?.code !==
+          'EEXIST'
+      ) {
+        throw error
+      }
+    }
+
+    /*
+     * An expired nonce artifact can be removed and retried. This is mostly
+     * maintenance hygiene; a legitimate 128-bit nonce collision is not
+     * expected in practice.
+     */
+    try {
+      const existing =
+        JSON.parse(
+          readFileSync(
+            file,
+            'utf8',
+          ),
+        )
+
+      if (
+        Number(
+          existing.expiresAt,
+        ) <
+        Number(now)
+      ) {
+        unlinkSync(
+          file,
+        )
+
+        writeFileSync(
+          file,
+          payload,
+          {
+            flag: 'wx',
+            mode: 0o600,
+          },
+        )
+
+        return true
+      }
+    } catch (error) {
+      if (
+        !existsSync(file)
+      ) {
+        throw error
+      }
+    }
+
+    return false
+  }
+
+  return {
+    directory,
+    reserve,
+  }
+}
+
+let cachedAdminContextPromise =
+  null
+
+async function resolveWp5AdminContext() {
+  if (
+    !cachedAdminContextPromise
+  ) {
+    cachedAdminContextPromise =
+      (
+        async () => {
+          const contract =
+            getWp5Contract()
+
+          const [
+            admin,
+            audience,
+          ] =
+            await Promise.all([
+              contract.admin(),
+              contract.getAddress(),
+            ])
+
+          return {
+            admin:
+              getAddress(
+                admin,
+              ),
+
+            audience:
+              getAddress(
+                audience,
+              ),
+          }
+        }
+      )()
+  }
+
+  try {
+    return await cachedAdminContextPromise
+  } catch (error) {
+    cachedAdminContextPromise =
+      null
+
+    throw error
+  }
+}
+
+function parseAuthorization(
+  header,
+) {
+  if (
+    typeof header !==
+      'string'
+  ) {
+    return null
+  }
+
+  const prefix =
+    `${ADMIN_AUTH_SCHEME} `
+
+  if (
+    !header.startsWith(
+      prefix,
+    )
+  ) {
+    return null
+  }
+
+  const token =
+    header
+      .slice(
+        prefix.length,
+      )
+      .trim()
+
+  const parts =
+    token.split('.')
+
+  if (
+    parts.length !==
+      4
+  ) {
+    return null
+  }
+
+  const [
+    address,
+    timestamp,
+    nonce,
+    signature,
+  ] = parts
+
+  if (
+    !isAddress(address) ||
+    !/^\d{10,16}$/.test(
+      timestamp,
+    ) ||
+    !NONCE_PATTERN.test(
+      nonce,
+    ) ||
+    !SIGNATURE_PATTERN.test(
+      signature,
+    )
+  ) {
+    return null
+  }
+
+  return {
+    address:
+      getAddress(
+        address,
+      ),
+
+    timestamp:
+      Number(
+        timestamp,
+      ),
+
+    nonce:
+      nonce.toLowerCase(),
+
+    signature,
+  }
+}
+
+export function createAdminRequestVerifier({
+  resolveAdminContext =
+    resolveWp5AdminContext,
+
+  replayStore =
+    createFileReplayStore(),
+
+  now =
+    () =>
+      Date.now(),
+
+  maxAgeMs =
+    ADMIN_REQUEST_MAX_AGE_MS,
+
+  maxFutureMs =
+    ADMIN_REQUEST_MAX_FUTURE_MS,
+} = {}) {
+  return async function requireAdminRequest(
+    req,
+    res,
+    next,
+  ) {
+    const parsed =
+      parseAuthorization(
+        req.get(
+          'authorization',
+        ),
+      )
+
+    if (!parsed) {
+      return res.status(401).json({
+        success: false,
+        message:
+          'A valid administrator wallet signature is required',
+      })
+    }
+
+    const current =
+      Number(
+        now(),
+      )
+
+    if (
+      !Number.isSafeInteger(
+        parsed.timestamp,
+      ) ||
+      parsed.timestamp <
+        current -
+          maxAgeMs ||
+      parsed.timestamp >
+        current +
+          maxFutureMs
+    ) {
+      return res.status(401).json({
+        success: false,
+        message:
+          'Administrator request signature is expired or not yet valid',
+      })
+    }
+
+    let context
+
+    try {
+      context =
+        await resolveAdminContext()
+    } catch {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator authority is temporarily unavailable',
+      })
+    }
+
+    if (
+      !context ||
+      !isAddress(
+        context.admin,
+      ) ||
+      !isAddress(
+        context.audience,
+      )
+    ) {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator authority is not configured correctly',
+      })
+    }
+
+    const expectedAdmin =
+      getAddress(
+        context.admin,
+      )
+
+    const audience =
+      getAddress(
+        context.audience,
+      )
+
+    if (
+      parsed.address
+        .toLowerCase() !==
+      expectedAdmin
+        .toLowerCase()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          'The signing wallet is not the election administrator',
+      })
+    }
+
+    const bodyHash =
+      hashAdminBody(
+        req.body,
+      )
+
+    const message =
+      buildAdminRequestMessage({
+        audience,
+        address:
+          parsed.address,
+        method:
+          req.method,
+        path:
+          req.originalUrl,
+        timestamp:
+          parsed.timestamp,
+        nonce:
+          parsed.nonce,
+        bodyHash,
+      })
+
+    let recovered
+
+    try {
+      recovered =
+        getAddress(
+          verifyMessage(
+            message,
+            parsed.signature,
+          ),
+        )
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message:
+          'Administrator request signature is invalid',
+      })
+    }
+
+    if (
+      recovered
+        .toLowerCase() !==
+      expectedAdmin
+        .toLowerCase()
+    ) {
+      return res.status(401).json({
+        success: false,
+        message:
+          'Administrator request signature is invalid',
+      })
+    }
+
+    const expiresAt =
+      parsed.timestamp +
+      maxAgeMs +
+      maxFutureMs
+
+    let reserved
+
+    try {
+      reserved =
+        replayStore.reserve(
+          parsed.nonce,
+          expiresAt,
+          current,
+        )
+    } catch {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator replay protection is temporarily unavailable',
+      })
+    }
+
+    if (!reserved) {
+      return res.status(409).json({
+        success: false,
+        message:
+          'Administrator request replay was rejected',
+      })
+    }
+
+    req.voteChainAdmin = {
+      address:
+        expectedAdmin,
+
+      audience,
+
+      timestamp:
+        parsed.timestamp,
+
+      nonce:
+        parsed.nonce,
+    }
+
+    return next()
+  }
+}
+
+export const requireWp5AdminRequest =
+  createAdminRequestVerifier()
+
+export function requireWp5AdminMutation(
+  req,
+  res,
+  next,
+) {
+  if (
+    req.method === 'GET' ||
+    req.method === 'HEAD' ||
+    req.method === 'OPTIONS'
+  ) {
+    return next()
+  }
+
+  return requireWp5AdminRequest(
+    req,
+    res,
+    next,
+  )
+}

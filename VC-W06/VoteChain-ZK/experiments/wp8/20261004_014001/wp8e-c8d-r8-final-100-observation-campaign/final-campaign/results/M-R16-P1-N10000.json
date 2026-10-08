@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "observationId": "M-R16-P1-N10000",
+  "phase": "MEASURED",
+  "N": 10000,
+  "orderPosition": 1,
+  "configuredMerkleDepth": 17,
+  "selectedVoterIndex": 0,
+  "metricsMs": {
+    "M1": 804.1208,
+    "M2": 837.501,
+    "M3": 1020.4991,
+    "M4": 5311.3858,
+    "M5": 995.9499
+  },
+  "automaticRetry": false,
+  "wtnsCalculateRc": 0,
+  "witnessSha256": "0d5ac67b6c1b4963e21832fc85cf0c8843bdfa347434eb23c1aa0b322941dfe7",
+  "wtnsCheckRc": 0,
+  "proveRc": 0,
+  "proofSha256": "060d29cc3ed7411b073ce87051a48236683f8939a5081d983eba0f782290db60",
+  "publicSha256": "4f00fa0e6c8af596cdf72850f13456546fe46a7ecf1e82a985304de648447210",
+  "verifyRc": 0,
+  "semanticVerifyOk": true,
+  "publicSignalCount": 73,
+  "publicSignalBinding": "PASS",
+  "eligibleRoot": "17824984607998524213634133139816546926493577631255909258060628030075063946002",
+  "witnessRemoved": true
+}

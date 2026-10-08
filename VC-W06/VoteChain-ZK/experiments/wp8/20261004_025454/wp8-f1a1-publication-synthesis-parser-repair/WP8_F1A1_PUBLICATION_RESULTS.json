@@ -1,0 +1,397 @@
+{
+  "status": "PASS",
+  "classification": "WP8_AUTHORITATIVE_PUBLICATION_RESULTS_SYNTHESIS",
+  "parserRepair": {
+    "failedF1aRun": "20261004_024622",
+    "c7MetricPath": "gas and latencyMs",
+    "c7SampleSdKey": "sample_sd",
+    "c7P95Key": "p95_nearest_rank",
+    "c8bMetricSource": "measuredSummary",
+    "c8bSampleSdKey": "sampleSd",
+    "c8bP95Key": "nearestRankP95",
+    "warmupSummaryUsedForFinalC8bStatistics": false
+  },
+  "families": {
+    "acceptedBallotScaling": {
+      "measuredRows": 2000,
+      "warmupRowsExcluded": 400,
+      "independentElections": 25,
+      "gas": {
+        "n": 2000,
+        "mean": 1314307.1225,
+        "median": 1307355.0,
+        "min": 1306506.0,
+        "max": 1866414.0,
+        "sampleSd": 62133.00923845558,
+        "p95": 1307783.0
+      },
+      "localReceiptLatencyMs": {
+        "n": 2000,
+        "mean": 760.6399339,
+        "median": 755.11115,
+        "min": 669.9123,
+        "max": 1026.0968,
+        "sampleSd": 54.87022636917149,
+        "p95": 845.6926
+      },
+      "scaleLevelReview": {
+        "gasMeanN25": 1329671.68,
+        "gasMeanN150": 1311046.146667,
+        "gasMeanDelta": -18625.53333300003,
+        "gasMeanPctChange25To150": -1.4007618281379075,
+        "gasMedianAcrossScaleMin": 1307326.0,
+        "gasMedianAcrossScaleMax": 1307403.0,
+        "gasP95AcrossScaleMin": 1307759.0,
+        "gasP95AcrossScaleMax": 1307997.0,
+        "latencyMeanAcrossScaleMin": 749.865782,
+        "latencyMeanAcrossScaleMax": 773.656452,
+        "latencyMeanN25": 758.55826,
+        "latencyMeanN150": 756.355482,
+        "latencyMeanPctChange25To150": -0.29039008816540557,
+        "latencyP95AcrossScaleMin": 838.8767,
+        "latencyP95AcrossScaleMax": 859.3138
+      }
+    },
+    "freshChainMicrobenchmark": {
+      "measuredRows": 20,
+      "warmupRowsExcluded": 5,
+      "metricSource": "measuredSummary",
+      "gas": {
+        "n": 20,
+        "mean": 1866414.0,
+        "median": 1866414.0,
+        "min": 1866414.0,
+        "max": 1866414.0,
+        "sampleSd": 0.0,
+        "p95": 1866414.0
+      },
+      "localReceiptLatencyMs": {
+        "n": 20,
+        "mean": 724.03026,
+        "median": 723.3014499999999,
+        "min": 707.3267,
+        "max": 741.5839,
+        "sampleSd": 10.000788152593408,
+        "p95": 741.1692
+      },
+      "pilotIncluded": false,
+      "abortedCampaignIncluded": false,
+      "latencyReconstruction": false
+    },
+    "candidateCountScaling": {
+      "levels": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "measuredPerLevel": 20,
+      "statistics": {
+        "2": {
+          "n": 20,
+          "gas": {
+            "mean": 1866402.0,
+            "median": 1866402.0,
+            "min": 1866402.0,
+            "max": 1866402.0,
+            "sampleSd": 0.0,
+            "p95": 1866402.0
+          },
+          "latencyMs": {
+            "mean": 865.02111,
+            "median": 858.92645,
+            "min": 844.7939,
+            "max": 948.7187,
+            "sampleSd": 23.340039,
+            "p95": 899.42
+          }
+        },
+        "4": {
+          "n": 20,
+          "gas": {
+            "mean": 1866414.0,
+            "median": 1866414.0,
+            "min": 1866414.0,
+            "max": 1866414.0,
+            "sampleSd": 0.0,
+            "p95": 1866414.0
+          },
+          "latencyMs": {
+            "mean": 874.816695,
+            "median": 862.99095,
+            "min": 836.8279,
+            "max": 991.14,
+            "sampleSd": 43.828458,
+            "p95": 966.2831
+          }
+        },
+        "8": {
+          "n": 20,
+          "gas": {
+            "mean": 1866414.0,
+            "median": 1866414.0,
+            "min": 1866414.0,
+            "max": 1866414.0,
+            "sampleSd": 0.0,
+            "p95": 1866414.0
+          },
+          "latencyMs": {
+            "mean": 864.57226,
+            "median": 858.4958,
+            "min": 844.0336,
+            "max": 954.6735,
+            "sampleSd": 23.813503,
+            "p95": 884.1748
+          }
+        },
+        "16": {
+          "n": 20,
+          "gas": {
+            "mean": 1866414.0,
+            "median": 1866414.0,
+            "min": 1866414.0,
+            "max": 1866414.0,
+            "sampleSd": 0.0,
+            "p95": 1866414.0
+          },
+          "latencyMs": {
+            "mean": 863.06314,
+            "median": 858.42375,
+            "min": 841.8053,
+            "max": 975.3679,
+            "sampleSd": 28.150422,
+            "p95": 881.9232
+          }
+        }
+      },
+      "gasMeanRange": 12.0,
+      "latencyMeanMonotonic": false
+    },
+    "eligibleSetScaling": {
+      "levels": [
+        10,
+        100,
+        1000,
+        10000
+      ],
+      "configuredMerkleDepth": 17,
+      "measuredPerLevel": 20,
+      "totalMeasured": 80,
+      "statistics": {
+        "10": {
+          "M1": {
+            "metricName": "ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+            "n": 20,
+            "mean": 1.114595,
+            "median": 1.0778,
+            "min": 0.9192,
+            "max": 1.5147,
+            "sampleSd": 0.149623,
+            "p95": 1.3426
+          },
+          "M2": {
+            "metricName": "MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+            "n": 20,
+            "mean": 3.945765,
+            "median": 3.86185,
+            "min": 3.4048,
+            "max": 4.851,
+            "sampleSd": 0.349348,
+            "p95": 4.6716
+          },
+          "M3": {
+            "metricName": "CIRCUIT_WITNESS_GENERATION_MS",
+            "n": 20,
+            "mean": 1100.57204,
+            "median": 1062.11275,
+            "min": 1015.4463,
+            "max": 1365.2444,
+            "sampleSd": 97.028445,
+            "p95": 1348.9165
+          },
+          "M4": {
+            "metricName": "GROTH16_PROVE_MS",
+            "n": 20,
+            "mean": 5423.310715,
+            "median": 5315.8534,
+            "min": 5134.9083,
+            "max": 6601.977,
+            "sampleSd": 367.255959,
+            "p95": 6234.8711
+          },
+          "M5": {
+            "metricName": "GROTH16_VERIFY_MS",
+            "n": 20,
+            "mean": 1039.34342,
+            "median": 1010.76535,
+            "min": 990.0778,
+            "max": 1212.2253,
+            "sampleSd": 66.351786,
+            "p95": 1203.0848
+          }
+        },
+        "100": {
+          "M1": {
+            "metricName": "ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+            "n": 20,
+            "mean": 10.25205,
+            "median": 9.8406,
+            "min": 8.3481,
+            "max": 15.211,
+            "sampleSd": 1.644892,
+            "p95": 12.6927
+          },
+          "M2": {
+            "metricName": "MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+            "n": 20,
+            "mean": 11.923485,
+            "median": 11.757,
+            "min": 9.4674,
+            "max": 15.124,
+            "sampleSd": 1.449784,
+            "p95": 13.9724
+          },
+          "M3": {
+            "metricName": "CIRCUIT_WITNESS_GENERATION_MS",
+            "n": 20,
+            "mean": 1090.56117,
+            "median": 1049.13555,
+            "min": 1025.6235,
+            "max": 1443.6404,
+            "sampleSd": 94.72932,
+            "p95": 1177.9362
+          },
+          "M4": {
+            "metricName": "GROTH16_PROVE_MS",
+            "n": 20,
+            "mean": 5372.540045,
+            "median": 5247.85725,
+            "min": 5154.0567,
+            "max": 6490.8236,
+            "sampleSd": 304.866396,
+            "p95": 5699.9469
+          },
+          "M5": {
+            "metricName": "GROTH16_VERIFY_MS",
+            "n": 20,
+            "mean": 1030.482275,
+            "median": 1019.16935,
+            "min": 997.8337,
+            "max": 1148.1186,
+            "sampleSd": 36.062775,
+            "p95": 1087.3357
+          }
+        },
+        "1000": {
+          "M1": {
+            "metricName": "ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+            "n": 20,
+            "mean": 89.91943,
+            "median": 88.9317,
+            "min": 83.6852,
+            "max": 109.9262,
+            "sampleSd": 5.63475,
+            "p95": 95.384
+          },
+          "M2": {
+            "metricName": "MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+            "n": 20,
+            "mean": 88.38689,
+            "median": 82.3946,
+            "min": 77.8495,
+            "max": 163.2068,
+            "sampleSd": 18.29961,
+            "p95": 95.3427
+          },
+          "M3": {
+            "metricName": "CIRCUIT_WITNESS_GENERATION_MS",
+            "n": 20,
+            "mean": 1045.809035,
+            "median": 1040.54975,
+            "min": 1011.0098,
+            "max": 1108.8214,
+            "sampleSd": 25.770334,
+            "p95": 1103.5319
+          },
+          "M4": {
+            "metricName": "GROTH16_PROVE_MS",
+            "n": 20,
+            "mean": 5292.146455,
+            "median": 5279.97095,
+            "min": 5176.6587,
+            "max": 5529.8779,
+            "sampleSd": 91.718611,
+            "p95": 5473.0567
+          },
+          "M5": {
+            "metricName": "GROTH16_VERIFY_MS",
+            "n": 20,
+            "mean": 1031.746775,
+            "median": 1009.80395,
+            "min": 987.0552,
+            "max": 1192.5629,
+            "sampleSd": 52.643916,
+            "p95": 1129.7295
+          }
+        },
+        "10000": {
+          "M1": {
+            "metricName": "ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+            "n": 20,
+            "mean": 809.039505,
+            "median": 787.9796,
+            "min": 755.849,
+            "max": 984.5374,
+            "sampleSd": 55.514576,
+            "p95": 889.5141
+          },
+          "M2": {
+            "metricName": "MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+            "n": 20,
+            "mean": 797.9579,
+            "median": 781.085,
+            "min": 763.9052,
+            "max": 852.393,
+            "sampleSd": 30.52651,
+            "p95": 840.2315
+          },
+          "M3": {
+            "metricName": "CIRCUIT_WITNESS_GENERATION_MS",
+            "n": 20,
+            "mean": 1044.41367,
+            "median": 1038.0229,
+            "min": 1016.7632,
+            "max": 1134.8743,
+            "sampleSd": 27.32994,
+            "p95": 1096.7579
+          },
+          "M4": {
+            "metricName": "GROTH16_PROVE_MS",
+            "n": 20,
+            "mean": 5298.751655,
+            "median": 5309.4176,
+            "min": 5162.7099,
+            "max": 5527.5862,
+            "sampleSd": 87.191154,
+            "p95": 5380.1099
+          },
+          "M5": {
+            "metricName": "GROTH16_VERIFY_MS",
+            "n": 20,
+            "mean": 1018.917745,
+            "median": 1008.17805,
+            "min": 988.4868,
+            "max": 1110.3133,
+            "sampleSd": 31.5073,
+            "p95": 1078.8854
+          }
+        }
+      },
+      "M1MeanMonotonicIncreasing": true,
+      "M2MeanMonotonicIncreasing": true,
+      "M1N10000ToN10MeanRatio": 725.8596216562967,
+      "M2N10000ToN10MeanRatio": 202.23148109428715
+    }
+  },
+  "publicationCoreTableRows": 32
+}

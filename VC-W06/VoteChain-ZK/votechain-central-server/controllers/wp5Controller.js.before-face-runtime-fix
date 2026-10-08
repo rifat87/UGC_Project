@@ -1,0 +1,174 @@
+import path from 'node:path'
+import fs from 'node:fs'
+import { spawn } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import Voter from '../models/Voter.js'
+import {
+  authorizeWp5Voter,
+  getWp5PublicConfig,
+} from '../services/zk/wp5PrivacyService.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+function credentialPublicKey(req) {
+  return req.body?.credentialPublicKey
+}
+
+export async function getConfig(_req, res) {
+  try {
+    return res.json({
+      success: true,
+      data: await getWp5PublicConfig(),
+    })
+  } catch (error) {
+    console.error('[WP5] public config failed:', error.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to load WP5 public configuration',
+    })
+  }
+}
+
+export async function authorizeFace(req, res) {
+  try {
+    const publicKey = credentialPublicKey(req)
+
+    if (!publicKey) {
+      return res.status(400).json({
+        success: false,
+        message: 'credentialPublicKey is required',
+      })
+    }
+
+    console.log('[WP5] Starting candidate-blind face authorization')
+
+    const faceRecPath = path.join(
+      __dirname,
+      '../../votechain-face-recognition/face_rec_demo.py',
+    )
+
+    if (!fs.existsSync(faceRecPath)) {
+      return res.status(500).json({
+        success: false,
+        message: 'Face recognition script not found',
+      })
+    }
+
+    const pythonProcess = spawn(
+      'python',
+      [faceRecPath],
+      { cwd: path.dirname(faceRecPath) },
+    )
+
+    let stdout = ''
+    let responseSent = false
+
+    pythonProcess.stdout.on('data', (data) => {
+      stdout += data.toString()
+    })
+
+    pythonProcess.stderr.on('data', () => {
+      console.error(
+        '[WP5] face-recognition process reported an error',
+      )
+    })
+
+    pythonProcess.on('close', async (code) => {
+      if (responseSent) return
+      responseSent = true
+
+      try {
+        if (code !== 0) {
+          return res.status(500).json({
+            success: false,
+            message: 'Face recognition process failed',
+          })
+        }
+
+        const outputLower = stdout.toLowerCase()
+        const accepted =
+          outputLower.includes('face recognition successful') ||
+          outputLower.includes('result = success')
+
+        if (!accepted) {
+          return res.status(401).json({
+            success: false,
+            message: 'Face not recognised',
+          })
+        }
+
+        const idMatch =
+          stdout.match(/Matched ID:\s*([\w-]+)/i)
+
+        const matchedNid =
+          idMatch ? idMatch[1].trim() : null
+
+        if (!matchedNid) {
+          return res.status(422).json({
+            success: false,
+            message:
+              'Face verification did not return a usable voter identity',
+          })
+        }
+
+        const voter = await Voter.findOne({
+          nationalId: matchedNid,
+        })
+
+        if (!voter) {
+          return res.status(404).json({
+            success: false,
+            message: 'Verified voter is not enrolled',
+          })
+        }
+
+        const authorization =
+          await authorizeWp5Voter({
+            voter,
+            clientPublicKey: publicKey,
+          })
+
+        return res.json({
+          success: true,
+          message:
+            'Face verification successful; candidate-blind authorization issued',
+          data: authorization,
+        })
+      } catch (error) {
+        console.error(
+          '[WP5] face authorization failed:',
+          error.message,
+        )
+
+        return res.status(500).json({
+          success: false,
+          message:
+            'Unable to issue private-voting authorization',
+        })
+      }
+    })
+
+    pythonProcess.on('error', (error) => {
+      if (responseSent) return
+      responseSent = true
+
+      console.error(
+        '[WP5] Failed to start face recognition:',
+        error.message,
+      )
+
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to launch face recognition',
+      })
+    })
+  } catch (error) {
+    console.error('[WP5] authorizeFace error:', error.message)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    })
+  }
+}

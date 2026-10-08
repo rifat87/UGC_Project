@@ -1,0 +1,134 @@
+{
+  "status": "PASS",
+  "classification": "PUBLICATION_SAFE_ELIGIBLE_SET_SCALING_SYNTHESIS",
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "measuredObservationsPerN": 20,
+  "totalMeasuredObservations": 80,
+  "pilotExcluded": true,
+  "warmupExcluded": true,
+  "outlierDeletion": "NONE",
+  "primaryMetrics": {
+    "M1": "eligible identity leaf materialization",
+    "M2": "integrated Merkle snapshot root and target-path construction",
+    "M3": "circuit witness generation",
+    "M4": "Groth16 proof generation",
+    "M5": "Groth16 verification"
+  },
+  "primaryMeanMsByN": {
+    "10": {
+      "M1": 1.114595,
+      "M2": 3.945765,
+      "M3": 1100.57204,
+      "M4": 5423.310715,
+      "M5": 1039.34342
+    },
+    "100": {
+      "M1": 10.25205,
+      "M2": 11.923485,
+      "M3": 1090.56117,
+      "M4": 5372.540045,
+      "M5": 1030.482275
+    },
+    "1000": {
+      "M1": 89.91943,
+      "M2": 88.38689,
+      "M3": 1045.809035,
+      "M4": 5292.146455,
+      "M5": 1031.746775
+    },
+    "10000": {
+      "M1": 809.039505,
+      "M2": 797.9579,
+      "M3": 1044.41367,
+      "M4": 5298.751655,
+      "M5": 1018.917745
+    }
+  },
+  "derivedTreePreparationMeanMsByN": {
+    "10": 5.06036,
+    "100": 22.175535,
+    "1000": 178.30632,
+    "10000": 1606.997405
+  },
+  "derivedTotalTimedStageMeanMsByN": {
+    "10": 7568.286535,
+    "100": 7515.759025,
+    "1000": 7548.008585,
+    "10000": 8969.080475
+  },
+  "M1": {
+    "meanMonotonicIncreasingAcrossTestedN": true,
+    "N10000ToN10MeanRatio": 725.8596216562967
+  },
+  "M2": {
+    "meanMonotonicIncreasingAcrossTestedN": true,
+    "N10000ToN10MeanRatio": 202.23148109428715,
+    "purePathExtractionTimingClaimAllowed": false
+  },
+  "fixedDepthCryptoStageMeanRanges": {
+    "M3": {
+      "meansByNMs": {
+        "10": 1100.57204,
+        "100": 1090.56117,
+        "1000": 1045.809035,
+        "10000": 1044.41367
+      },
+      "minMeanMs": 1044.41367,
+      "maxMeanMs": 1100.57204,
+      "meanRangeMs": 56.158370000000104,
+      "relativeRangePercentOfMinimum": 5.3770236461956795
+    },
+    "M4": {
+      "meansByNMs": {
+        "10": 5423.310715,
+        "100": 5372.540045,
+        "1000": 5292.146455,
+        "10000": 5298.751655
+      },
+      "minMeanMs": 5292.146455,
+      "maxMeanMs": 5423.310715,
+      "meanRangeMs": 131.16425999999956,
+      "relativeRangePercentOfMinimum": 2.4784699576119262
+    },
+    "M5": {
+      "meansByNMs": {
+        "10": 1039.34342,
+        "100": 1030.482275,
+        "1000": 1031.746775,
+        "10000": 1018.917745
+      },
+      "minMeanMs": 1018.917745,
+      "maxMeanMs": 1039.34342,
+      "meanRangeMs": 20.425674999999956,
+      "relativeRangePercentOfMinimum": 2.0046441530959846
+    }
+  },
+  "interpretationGuardrails": [
+    "N is occupied eligible-set size; configured Merkle depth remains 17 for every profile.",
+    "M1 and M2 are the stages whose work directly incorporates the controlled eligible-set population.",
+    "M2 is an integrated snapshot/root/target-path construction metric; no isolated path-extraction timing claim is made.",
+    "M3, M4, and M5 use the same fixed-depth circuit and frozen proving artifacts for every N.",
+    "Observed M3-M5 runtime differences are descriptive runtime variation and are not interpreted as N-dependent circuit-complexity changes.",
+    "Pilot observations and warmups are excluded from final statistics.",
+    "No measured observations are removed as outliers.",
+    "No inferential regression is claimed.",
+    "No causal opcode-cost claim is made.",
+    "No on-chain eligible-set scaling claim is made.",
+    "Local cryptographic-stage latency is not directly compared with previously published biometric/IoT end-to-end voting latency."
+  ],
+  "publicationSafeConclusions": [
+    "Across the tested profiles, occupied eligible-set size N was varied from 10 to 10000 while Merkle depth remained fixed at 17.",
+    "The measured off-chain eligible-set preparation stages M1 and M2 showed monotonically increasing mean runtime across the tested N levels.",
+    "Witness generation, Groth16 proving, and Groth16 verification were measured under the same fixed-depth circuit and frozen proving artifacts; their observed runtime variation is reported descriptively rather than as eligible-set-dependent circuit-complexity scaling.",
+    "These results characterize the tested local off-chain cryptographic pipeline and do not constitute an on-chain eligible-set scaling benchmark."
+  ]
+}

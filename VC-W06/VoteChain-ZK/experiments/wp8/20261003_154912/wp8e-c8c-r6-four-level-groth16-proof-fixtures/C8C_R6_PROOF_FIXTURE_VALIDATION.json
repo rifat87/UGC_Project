@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": {
+    "fixtureRows": true,
+    "levels": true,
+    "wtnsCalculateRcZero": true,
+    "wtnsCheckRcZero": true,
+    "groth16ProveRcZero": true,
+    "groth16VerifyRcZero": true,
+    "publicSignalBinding": true,
+    "publicSignalCount73": true
+  },
+  "realGroth16ProofFixtureCount": 4,
+  "proofBytewiseUniquenessRequired": false,
+  "onchainExecutionPerformed": false
+}

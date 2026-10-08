@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "classification": "C8C_FINAL_100_OBSERVATION_ORCHESTRATOR",
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "planRows": 100,
+  "warmupRows": 20,
+  "measuredRows": 80,
+  "freshAnvilPerObservation": true,
+  "observationRunner": "experiments/wp8/20261003_182331/wp8e-c8c-r7b2-corrected-runner-static-freeze/runner/c8c-r7b2-observation-runner.py",
+  "observationRunnerSha256": "69f3e324147bdfd9af7ba513361bb04980e3ca8c52b81e27cdb2564032ab0ff0",
+  "pilotReuseAllowed": false,
+  "warmupFinalStatisticsEligible": false,
+  "measuredFinalStatisticsEligible": true,
+  "silentRetryAllowed": false,
+  "automaticResumeAllowed": false,
+  "partialFailurePolicy": "Stop immediately and preserve the partial campaign; do not rerun or replace successful observations.",
+  "transactionPerObservation": 1,
+  "proofGenerationDuringCampaign": false,
+  "timingMetricProducedByFrozenObservationRunner": true,
+  "finalStatisticsNotComputedByOrchestrator": true
+}

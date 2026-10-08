@@ -1,0 +1,1285 @@
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP2_Bootstrap.sh
+======================================================================
+15:#       circomlibjs@0.1.7
+16:#       circomlib@2.0.5
+19:#   - compiles and checks a tiny Poseidon Circom circuit;
+72:for CMD in node npm circom snarkjs sha256sum
+79:CIRCOM_VERSION="$(circom --version 2>&1 | tr -d '\r' | first_nonempty)"
+89:echo "Circom       : $CIRCOM_VERSION"
+209:    "circomlib": "2.0.5",
+210:    "circomlibjs": "0.1.7"
+220:  pocMerkleDepth: 4,
+221:  pocMaxCandidates: 4,
+240:import { buildBabyjub, buildPoseidon } from "circomlibjs";
+285:echo "  circomlibjs@0.1.7"
+286:echo "  circomlib@2.0.5"
+298:CIRCOMLIBJS_VERSION="$(node -p "require('./node_modules/circomlibjs/package.json').version")"
+299:CIRCOMLIB_VERSION="$(node -p "require('./node_modules/circomlib/package.json').version")"
+301:[ "$CIRCOMLIBJS_VERSION" = "0.1.7" ] || die "Unexpected circomlibjs version." 12
+302:[ "$CIRCOMLIB_VERSION" = "2.0.5" ] || die "Unexpected circomlib version." 13
+304:echo "[PASS] circomlibjs=$CIRCOMLIBJS_VERSION"
+305:echo "[PASS] circomlib=$CIRCOMLIB_VERSION"
+321:# 5. Tiny Poseidon Circom cross-language check
+324:section "5. CIRCOM + CIRCOMLIB CROSS-LANGUAGE CHECK"
+326:cat > "$POC/PoseidonReference.circom" <<'EOF'
+327:pragma circom 2.2.0;
+329:include "../../crypto/node_modules/circomlib/circuits/poseidon.circom";
+361:circom "$POC/PoseidonReference.circom" \
+362:    --r1cs \
+366:    > "$LOG/circom-poseidon-compile.txt" 2>&1
+368:CIRCOM_RC=$?
+370:if [ "$CIRCOM_RC" -ne 0 ]; then
+371:    cat "$LOG/circom-poseidon-compile.txt"
+375:R1CS="$BUILD/PoseidonReference.r1cs"
+389:snarkjs wtns check "$R1CS" "$WTNS" \
+393:[ "$WTNS_CHECK_RC" -eq 0 ] || die "Poseidon witness failed R1CS check." 24
+395:snarkjs r1cs info "$R1CS" > "$LOG/poseidon-r1cs-info.txt" 2>&1
+397:echo "[PASS] JS Poseidon + Circom Poseidon toolchain is usable."
+412:    "$POC/PoseidonReference.circom" \
+414:    "$R1CS" \
+446:Circom: $CIRCOM_VERSION
+451:circomlibjs: $CIRCOMLIBJS_VERSION
+452:circomlib: $CIRCOMLIB_VERSION
+462:- Circom includes from pinned circomlib: PASS
+463:- R1CS compilation: PASS
+469:The current values pocMerkleDepth=4 and pocMaxCandidates=4 are temporary PoC
+482:9. Minimal Circom proof of encryption of one valid bit.
+498:R1CS_SHA="$(sha256sum "$R1CS" | awk '{print $1}')"
+519:    echo "CIRCOM_VERSION=$CIRCOM_VERSION"
+522:    echo "CIRCOMLIBJS_VERSION=$CIRCOMLIBJS_VERSION"
+523:    echo "CIRCOMLIB_VERSION=$CIRCOMLIB_VERSION"
+528:    echo "CIRCOM_POSEIDON_COMPILE=PASS"
+529:    echo "CIRCOM_WITNESS_CHECK=PASS"
+531:    echo "R1CS_SHA256=$R1CS_SHA"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP2_CorePoC_FinalMetrics.sh
+======================================================================
+38:SETUP="$POC/dev-groth16-finalmetrics"
+54:for CMD in node npm circom snarkjs sha256sum stat; do
+59:[ -d "$CRYPTO/node_modules/circomlibjs" ] || \
+60:    fail "circomlibjs missing. Run bootstrap first." 7
+62:[ -d "$CRYPTO/node_modules/circomlib" ] || \
+63:    fail "circomlib missing. Run bootstrap first." 8
+65:CIRCOMLIBJS_VERSION="$(
+67:    node -p "require('./node_modules/circomlibjs/package.json').version"
+70:CIRCOMLIB_VERSION="$(
+72:    node -p "require('./node_modules/circomlib/package.json').version"
+75:[ "$CIRCOMLIBJS_VERSION" = "0.1.7" ] || \
+76:    fail "Expected circomlibjs 0.1.7." 9
+78:[ "$CIRCOMLIB_VERSION" = "2.0.5" ] || \
+79:    fail "Expected circomlib 2.0.5." 10
+83:CIRCOM_VERSION="$(circom --version 2>&1 | tr -d '\r' | sed -n '1p')"
+92:echo "Circom       : $CIRCOM_VERSION"
+94:echo "circomlibjs  : $CIRCOMLIBJS_VERSION"
+95:echo "circomlib    : $CIRCOMLIB_VERSION"
+110:} from "circomlibjs";
+114:    merkleDepth: 4,
+115:    maxCandidates: 4,
+306:    depth = PROFILE.merkleDepth
+2385:# CIRCOM
+2390:cat > "$POC/BitElGamalValidityFinal.circom" <<'EOF'
+2391:pragma circom 2.2.0;
+2393:include "../../crypto/node_modules/circomlib/circuits/bitify.circom";
+2394:include "../../crypto/node_modules/circomlib/circuits/compconstant.circom";
+2395:include "../../crypto/node_modules/circomlib/circuits/gates.circom";
+2396:include "../../crypto/node_modules/circomlib/circuits/babyjub.circom";
+2397:include "../../crypto/node_modules/circomlib/circuits/escalarmulfix.circom";
+2398:include "../../crypto/node_modules/circomlib/circuits/escalarmulany.circom";
+2585:CIRCUIT="$POC/BitElGamalValidityFinal.circom"
+2589:circom \
+2591:    --r1cs \
+2610:R1CS="$BUILD/BitElGamalValidityFinal.r1cs"
+2621:snarkjs r1cs info "$R1CS" \
+2622:    > "$LOG/wp2-core-final-r1cs-info.txt" \
+2626:    fail "R1CS info failed." 32
+2628:cat "$LOG/wp2-core-final-r1cs-info.txt"
+2647:    "$R1CS" \
+2653:    fail "Valid witness failed R1CS check." 34
+2698:# DEV GROTH16
+2701:section "7. DEV-ONLY GROTH16 SETUP"
+2706:PTAU0="$SETUP/pot18_0000.ptau"
+2707:PTAU1="$SETUP/pot18_0001.ptau"
+2708:PTAUF="$SETUP/pot18_final.ptau"
+2710:ZKEY0="$SETUP/elgamal_0000.zkey"
+2711:ZKEYF="$SETUP/elgamal_final.zkey"
+2717:    "$PTAU0" \
+2726:    "$PTAU0" \
+2727:    "$PTAU1" \
+2737:    "$PTAU1" \
+2738:    "$PTAUF" \
+2746:snarkjs groth16 setup \
+2747:    "$R1CS" \
+2748:    "$PTAUF" \
+2749:    "$ZKEY0" \
+2754:    fail "Groth16 setup failed." 43
+2756:snarkjs zkey contribute \
+2757:    "$ZKEY0" \
+2758:    "$ZKEYF" \
+2759:    --name="VoteChain-ZK WP2 DEV zkey" \
+2760:    -e="VOTECHAIN_ZK_WP2_DEV_ZKEY_ONLY_2026_09_30" \
+2761:    > "$LOG/wp2-core-final-zkey.txt" \
+2765:    fail "zkey contribution failed." 44
+2767:snarkjs zkey export verificationkey \
+2768:    "$ZKEYF" \
+2816:    snarkjs groth16 prove \
+2817:        "$ZKEYF" \
+2828:    snarkjs groth16 prove \
+2829:        "$ZKEYF" \
+2839:        "M04,groth16_proving,$i,$((END-START))" \
+2847:    snarkjs groth16 verify \
+2858:    snarkjs groth16 verify \
+2868:        "M05,groth16_verification,$i,$((END-START))" \
+2884:    "$LOG/wp2-core-final-r1cs-info.txt" \
+2891:    "$(bytes "$R1CS")" \
+2893:    "$(bytes "$ZKEYF")" \
+2899:    "$CIRCOM_VERSION" \
+2901:    "$CIRCOMLIBJS_VERSION" \
+2902:    "$CIRCOMLIB_VERSION" \
+2910:    r1csFile,
+2917:    r1csBytes,
+2919:    zkeyBytes,
+2925:    circomVersion,
+2927:    circomlibjsVersion,
+2928:    circomlibVersion
+3045:const r1cs =
+3047:        r1csFile,
+3084:            r1cs
+3090:            r1cs
+3096:            r1cs
+3102:            r1cs
+3117:    r1csBytes:
+3118:        Number(r1csBytes),
+3124:        Number(zkeyBytes),
+3162:    circomVersion,
+3164:    circomlibjsVersion,
+3165:    circomlibVersion,
+3185:        "MEASURED_DEV_ZKEY",
+3239:        "DEFERRED_WP2_PHASE_B",
+3242:        "DEFERRED_WP2_PHASE_B",
+3343:    "$R1CS" \
+3345:    "$ZKEYF" \
+3406:- Minimal Circom encrypted-bit proof.
+3412:- DEV-only Groth16 proof and verification.
+3420:The Groth16 ceremony in this phase is DEV-ONLY.
+3440:R1CS SHA-256:
+3441:$(sha "$R1CS")
+3446:DEV zkey SHA-256:
+3447:$(sha "$ZKEYF")
+3500:    echo "DEV_GROTH16_PROOF=PASS"
+3501:    echo "DEV_GROTH16_VERIFY=PASS"
+3505:    echo "M25_CANDIDATE_SCALING=DEFERRED_WP2_PHASE_B"
+3506:    echo "M26_MERKLE_SCALING=DEFERRED_WP2_PHASE_B"
+3512:    echo "R1CS_SHA256=$(sha "$R1CS")"
+3514:    echo "DEV_ZKEY_SHA256=$(sha "$ZKEYF")"
+3526:    echo "NEXT_ACTION=WP2_PHASE_B_CANDIDATE_AND_MERKLE_SCALING_PARAMETER_FREEZE"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP2_PhaseB_Scaling.sh
+======================================================================
+6:# WP2 Phase B
+7:# Candidate-count + Merkle-depth pilot scaling
+23:    echo "WP2 PHASE B BLOCKED"
+48:parse_r1cs_value() {
+78:grep -q '^DEV_GROTH16_VERIFY=PASS$' "$CORE_SUMMARY" || \
+79:    fail "Previous DEV Groth16 verification did not PASS." 5
+85:CORE_PTAU="$ROOT/circuits/poc/dev-groth16-finalmetrics/pot18_final.ptau"
+90:[ -f "$CORE_PTAU" ] || \
+93:for CMD in node npm circom snarkjs sha256sum grep awk wc sed find sort; do
+100:PHASEB="$ROOT/experiments/wp2/phase-b/$RUN_ID"
+101:RAW="$PHASEB/raw"
+102:RESULTS="$PHASEB/results"
+103:BUILDROOT="$PHASEB/build"
+104:SETUPROOT="$PHASEB/dev-groth16"
+106:CIRCUIT_ROOT="$ROOT/circuits/poc/phase-b"
+110:EVIDENCE="$OUT/evidence/wp2-phase-b/$RUN_ID"
+122:SAMPLES="$RAW/wp2-phase-b-samples.csv"
+123:STATIC="$RAW/wp2-phase-b-static.csv"
+130:"family,config,k,n,depth,binding,constraints,public_inputs,private_inputs,outputs,total_public_signals,r1cs_bytes,wasm_bytes,zkey_bytes,vkey_bytes,proof_bytes,public_json_bytes,compile_ms,setup_ms,zkey_contribute_ms" \
+135:CIRCOM_VERSION="$(circom --version 2>&1 | tr -d '\r' | sed -n '1p')"
+138:CIRCOMLIBJS_VERSION="$(
+140:    node -p "require('./node_modules/circomlibjs/package.json').version"
+143:CIRCOMLIB_VERSION="$(
+145:    node -p "require('./node_modules/circomlib/package.json').version"
+148:PTAU_SHA="$(sha "$CORE_PTAU")"
+155:section "VOTECHAIN-ZK — WP2 PHASE B SCALING PILOT"
+161:echo "Circom       : $CIRCOM_VERSION"
+163:echo "circomlibjs  : $CIRCOMLIBJS_VERSION"
+164:echo "circomlib    : $CIRCOMLIB_VERSION"
+169:echo "Merkle depth : 4, 7, 10, 14, 17"
+174:echo "Reuse DEV PTAU only:"
+175:echo "$CORE_PTAU"
+189:pragma circom 2.2.0;
+191:include "../../../../crypto/node_modules/circomlib/circuits/bitify.circom";
+192:include "../../../../crypto/node_modules/circomlib/circuits/compconstant.circom";
+193:include "../../../../crypto/node_modules/circomlib/circuits/gates.circom";
+194:include "../../../../crypto/node_modules/circomlib/circuits/babyjub.circom";
+195:include "../../../../crypto/node_modules/circomlib/circuits/escalarmulfix.circom";
+196:include "../../../../crypto/node_modules/circomlib/circuits/escalarmulany.circom";
+199: * WP2 Phase-B candidate scaling circuit.
+203: * Groth16 public signals.
+205: * This is a component pilot, not VoteChainVote.circom.
+337:pragma circom 2.2.0;
+339:include "../../../../crypto/node_modules/circomlib/circuits/bitify.circom";
+340:include "../../../../crypto/node_modules/circomlib/circuits/compconstant.circom";
+341:include "../../../../crypto/node_modules/circomlib/circuits/gates.circom";
+342:include "../../../../crypto/node_modules/circomlib/circuits/babyjub.circom";
+343:include "../../../../crypto/node_modules/circomlib/circuits/escalarmulfix.circom";
+344:include "../../../../crypto/node_modules/circomlib/circuits/escalarmulany.circom";
+345:include "../../../../crypto/node_modules/circomlib/circuits/poseidon.circom";
+348: * WP2 Phase-B candidate scaling circuit.
+356: * This is a component pilot, not VoteChainVote.circom.
+524:# GENERATE MERKLE-DEPTH CIRCUIT
+532:pragma circom 2.2.0;
+534:include "../../../../crypto/node_modules/circomlib/circuits/poseidon.circom";
+537: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+546:template MerkleDepth${D}() {
+590:component main = MerkleDepth${D}();
+742:    depthString,
+747:    Number(depthString);
+787:section "1. GENERATE PHASE-B CIRCUITS AND SYNTHETIC INPUTS"
+792:        "$GENERATED/CandidateDirect_K${K}.circom"
+796:        "$GENERATED/CandidateDigest_K${K}.circom"
+806:    "$GENERATED/Merkle_D4.circom"
+809:    "$GENERATED/Merkle_D7.circom"
+812:    "$GENERATED/Merkle_D10.circom"
+815:    "$GENERATED/Merkle_D14.circom"
+818:    "$GENERATED/Merkle_D17.circom"
+841:echo "[READY] Merkle depth matrix generated."
+869:    local COMPILE_LOG="$LOG/wp2-phaseb-${RUN_ID}-${CONFIG}-compile.txt"
+870:    local INFO_LOG="$LOG/wp2-phaseb-${RUN_ID}-${CONFIG}-r1cs.txt"
+871:    local SETUP_LOG="$LOG/wp2-phaseb-${RUN_ID}-${CONFIG}-setup.txt"
+872:    local ZKEY_LOG="$LOG/wp2-phaseb-${RUN_ID}-${CONFIG}-zkey.txt"
+892:    circom \
+894:        --r1cs \
+913:    BASE="$(basename "$CIRCUIT" .circom)"
+915:    local R1CS="$BUILD/${BASE}.r1cs"
+919:    [ -f "$R1CS" ] || \
+920:        fail "R1CS missing for $CONFIG." 21
+925:    snarkjs r1cs info \
+926:        "$R1CS" \
+931:        fail "R1CS info failed for $CONFIG." 23
+940:        parse_r1cs_value \
+946:        parse_r1cs_value \
+952:        parse_r1cs_value \
+958:        parse_r1cs_value \
+984:    local ZKEY0="$SETUP/${CONFIG}_0000.zkey"
+985:    local ZKEY="$SETUP/${CONFIG}_final.zkey"
+988:    echo "[RUNNING] Groth16 setup using existing DEV pot18..."
+992:    snarkjs groth16 setup \
+993:        "$R1CS" \
+994:        "$CORE_PTAU" \
+995:        "$ZKEY0" \
+1006:        fail "Groth16 setup failed for $CONFIG." 25
+1009:    echo "[PASS] Groth16 setup"
+1011:    echo "[RUNNING] DEV zkey contribution..."
+1015:    snarkjs zkey contribute \
+1016:        "$ZKEY0" \
+1017:        "$ZKEY" \
+1018:        --name="VoteChain-ZK WP2 PhaseB DEV $CONFIG" \
+1019:        -e="VOTECHAIN_ZK_WP2_PHASEB_DEV_ONLY_${CONFIG}_${RUN_ID}" \
+1020:        > "$ZKEY_LOG" \
+1026:    local ZKEY_MS=$((T1 - T0))
+1029:        cat "$ZKEY_LOG"
+1030:        fail "DEV zkey contribution failed for $CONFIG." 26
+1033:    snarkjs zkey export verificationkey \
+1034:        "$ZKEY" \
+1042:    echo "[PASS] DEV zkey"
+1085:        "$R1CS" \
+1091:        fail "Measured witness failed R1CS check for $CONFIG." 30
+1098:    echo "[RUNNING] Groth16 proving warmups 5/5..."
+1101:        snarkjs groth16 prove \
+1102:            "$ZKEY" \
+1111:    echo "[RUNNING] Groth16 proving measured 20/20..."
+1116:        snarkjs groth16 prove \
+1117:            "$ZKEY" \
+1132:"$FAMILY,$CONFIG,$K,$N,$DEPTH,$BINDING,M04,groth16_proving,$I,$((T1-T0))" \
+1141:        snarkjs groth16 verify \
+1155:        snarkjs groth16 verify \
+1170:"$FAMILY,$CONFIG,$K,$N,$DEPTH,$BINDING,M05,groth16_verification,$I,$((T1-T0))" \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP3_FullCircuit.sh
+======================================================================
+6:# WP3 — Full Custom Circom Voting Circuit
+9:#   MAX_CANDIDATES = 16
+10:#   MERKLE_DEPTH   = 17
+13:#   Proof          = Groth16 / snarkjs
+16:#   DIRECT         = ciphertext coordinates are Groth16 public inputs
+56:parse_r1cs() {
+79:PHASEB_SUMMARY="$OUT/VC-W07_WP2_PHASE_B_SUMMARY.txt"
+84:[ -f "$PHASEB_SUMMARY" ] || \
+85:    fail "WP2 Phase-B summary is missing." 4
+90:grep -q '^STATUS=PASS$' "$PHASEB_SUMMARY" || \
+91:    fail "WP2 Phase-B did not PASS." 6
+93:grep -q '^M25_CANDIDATE_SCALING_PILOT=PASS$' "$PHASEB_SUMMARY" || \
+94:    fail "Phase-B M25 gate missing." 7
+96:grep -q '^M26_MERKLE_SCALING_PILOT=PASS$' "$PHASEB_SUMMARY" || \
+97:    fail "Phase-B M26 gate missing." 8
+99:grep -q '^BABYJUB_CIRCUIT_SIDE_K16=PASS$' "$PHASEB_SUMMARY" || \
+100:    fail "Phase-B K=16 BabyJub circuit gate missing." 9
+102:PTAU="$ROOT/circuits/poc/dev-groth16-finalmetrics/pot18_final.ptau"
+104:[ -f "$PTAU" ] || \
+105:    fail "WP2 DEV pot18_final.ptau missing." 10
+108:    node npm circom snarkjs \
+149:CIRCOM_VERSION="$(circom --version 2>&1 | tr -d '\r' | sed -n '1p')"
+152:CIRCOMLIBJS_VERSION="$(
+154:    node -p "require('./node_modules/circomlibjs/package.json').version"
+157:CIRCOMLIB_VERSION="$(
+159:    node -p "require('./node_modules/circomlib/package.json').version"
+162:PTAU_SHA="$(sha "$PTAU")"
+164:PHASEB_HASH="$(
+165:    grep '^HASH_MANIFEST_SHA256=' "$PHASEB_SUMMARY" \
+174:section "VOTECHAIN-ZK — WP3 FULL CUSTOM CIRCOM CIRCUIT"
+180:echo "Circom          : $CIRCOM_VERSION"
+182:echo "circomlibjs     : $CIRCOMLIBJS_VERSION"
+183:echo "circomlib       : $CIRCOMLIB_VERSION"
+185:echo "MAX_CANDIDATES  : 16"
+186:echo "MERKLE_DEPTH    : 17"
+190:echo "DEV PTAU SHA256 : $PTAU_SHA"
+204:PROFILE_CIRCOM="$CIRCUIT_CONFIG/VoteChainBuildProfile.circom"
+215:    circomPath
+218:if (!jsonPath || !circomPath) {
+220:        "Usage: node wp3-generate-profile.mjs profile.json profile.circom"
+265:        "Groth16/snarkjs",
+268:        "Circom-2",
+270:    maxCandidates:
+273:    merkleDepth:
+370:const circom = `pragma circom 2.2.0;
+382:function VC_MAX_CANDIDATES() {
+383:    return ${profile.maxCandidates};
+386:function VC_MERKLE_DEPTH() {
+387:    return ${profile.merkleDepth};
+428:    circomPath,
+429:    circom
+440:    "$PROFILE_CIRCOM" || \
+446:[ -f "$PROFILE_CIRCOM" ] || \
+447:    fail "WP3 Circom profile missing." 22
+451:echo "       Circom : $PROFILE_CIRCOM"
+459:CORE_CIRCUIT="$CIRCUIT_LIB/VoteChainVoteCore.circom"
+461:cat > "$CORE_CIRCUIT" <<'CORE_CIRCOM'
+462:pragma circom 2.2.0;
+464:include "../config/VoteChainBuildProfile.circom";
+466:include "circomlib/circuits/poseidon.circom";
+467:include "circomlib/circuits/bitify.circom";
+468:include "circomlib/circuits/comparators.circom";
+469:include "circomlib/circuits/compconstant.circom";
+470:include "circomlib/circuits/gates.circom";
+471:include "circomlib/circuits/babyjub.circom";
+472:include "circomlib/circuits/escalarmulfix.circom";
+473:include "circomlib/circuits/escalarmulany.circom";
+490: *   candidateCount
+501: *   candidate-count range
+510:    MAX_CANDIDATES,
+511:    MERKLE_DEPTH
+515:    signal input siblings[MERKLE_DEPTH];
+516:    signal input pathBits[MERKLE_DEPTH];
+518:    signal input bit[MAX_CANDIDATES];
+519:    signal input randomness[MAX_CANDIDATES];
+525:    signal input candidateCount;
+534:    signal output Rx[MAX_CANDIDATES];
+535:    signal output Ry[MAX_CANDIDATES];
+536:    signal output Sx[MAX_CANDIDATES];
+537:    signal output Sy[MAX_CANDIDATES];
+563:    signal current[MERKLE_DEPTH + 1];
+564:    signal left[MERKLE_DEPTH];
+565:    signal right[MERKLE_DEPTH];
+567:    component merkleHash[MERKLE_DEPTH];
+574:        level < MERKLE_DEPTH;
+611:    current[MERKLE_DEPTH] ===
+644:     *   candidateCount,
+663:        candidateCount;
+678:     * candidateCount:
+679:     *   1 <= candidateCount <= 16
+681:    component candidateCountBits =
+684:    candidateCountBits.in <==
+685:        candidateCount;
+687:    component candidateCountZero =
+690:    candidateCountZero.in <==
+691:        candidateCount;
+693:    candidateCountZero.out === 0;
+695:    component candidateCountLt17 =
+698:    candidateCountLt17.in[0] <==
+699:        candidateCount;
+701:    candidateCountLt17.in[1] <==
+704:    candidateCountLt17.out === 1;
+766:    signal bitSum[MAX_CANDIDATES + 1];
+770:    component active[MAX_CANDIDATES];
+772:    component zeroR[MAX_CANDIDATES];
+773:    component rBits[MAX_CANDIDATES];
+774:    component rRange[MAX_CANDIDATES];
+776:    component rG[MAX_CANDIDATES];
+777:    component rY[MAX_CANDIDATES];
+778:    component addPoint[MAX_CANDIDATES];
+780:    signal messageX[MAX_CANDIDATES];
+781:    signal messageY[MAX_CANDIDATES];
+785:        j < MAX_CANDIDATES;
+797:         * active[j] = (j < candidateCount)
+806:            candidateCount;
+947:    bitSum[MAX_CANDIDATES] ===
+950:CORE_CIRCOM
+956:DIRECT_CIRCUIT="$ROOT/circuits/VoteChainVoteDirect.circom"
+958:cat > "$DIRECT_CIRCUIT" <<'DIRECT_CIRCOM'
+959:pragma circom 2.2.0;
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_Freeze_WP5_Preflight.sh
+======================================================================
+181:        maxCandidates:
+184:        merkleDepth:
+213:            "GROTH16",
+216:            "VoteChainVoteDirectVerifier"
+285:- Groth16
+286:- Circom 2
+290:- MAX_CANDIDATES 16
+376:    echo "MAX_CANDIDATES=16"
+377:    echo "MERKLE_DEPTH=17"
+495:        -o -name 'VoteChainVoteDirectVerifier.sol' \
+567:    echo "MAX_CANDIDATES=16"
+568:    echo "MERKLE_DEPTH=17"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_PrivateVoting_GasGate.sh
+======================================================================
+9:# Consumes frozen WP3 circuit/verifier/zkey artifacts.
+17:# - DEV Groth16 artifacts only
+82:DIRECT_BASE="VoteChainVoteDirect"
+83:DIGEST_BASE="VoteChainVoteDigest"
+87:DIRECT_R1CS="$WP3_BUILD/direct/${DIRECT_BASE}.r1cs"
+88:DIRECT_ZKEY="$WP3_ART/direct/${DIRECT_BASE}_final.zkey"
+94:DIGEST_R1CS="$WP3_BUILD/poseidon/${DIGEST_BASE}.r1cs"
+95:DIGEST_ZKEY="$WP3_ART/poseidon/${DIGEST_BASE}_final.zkey"
+103:    "$DIRECT_R1CS" \
+104:    "$DIRECT_ZKEY" \
+109:    "$DIGEST_R1CS" \
+110:    "$DIGEST_ZKEY" \
+198:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol"
+202:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol"
+204:grep -q 'contract VoteChainVoteDirectVerifier' \
+205:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol" || \
+208:grep -q 'contract VoteChainVoteDigestVerifier' \
+209:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol" || \
+226:const pkg = await import("circomlibjs");
+238:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+266:    profile.maxCandidates;
+269:    profile.merkleDepth;
+436:const candidateCount =
+470:        candidateCount,
+604:        candidateCount,
+777:            candidateCount,
+914:section "3. GENERATE WP4 CONTRACT-INTEGRATION GROTH16 PROOFS"
+923:    local ZKEY
+930:        ZKEY="$DIRECT_ZKEY"
+936:        ZKEY="$DIGEST_ZKEY"
+958:    snarkjs groth16 prove \
+959:        "$ZKEY" \
+967:    snarkjs groth16 verify \
+979:    snarkjs zkey export soliditycalldata \
+1008:    await import("circomlibjs");
+1020:        "circomlibjs poseidonContract API unavailable"
+1119:    uint256 internal constant MAX_CANDIDATES = 16;
+1374:        WP4Profile.MAX_CANDIDATES;
+1393:        uint256 candidateCount;
+1415:    uint256 public candidateCount;
+1438:        uint256 candidateCount
+1510:            cfg.candidateCount >= 1 &&
+1511:            cfg.candidateCount <= MAX,
+1512:            "BAD_CANDIDATE_COUNT"
+1539:        candidateCount =
+1540:            cfg.candidateCount;
+1561:            candidateCount
+1807:            candidateCount;
+2123:            candidateCount;
+2427: * Contains Groth16 proof data and encrypted synthetic ballots only.
+2438:            uint256 candidateCount,
+2448:        candidateCount = ${d(cfg.candidateCount)};
+2571:import "../src/verifiers/VoteChainVoteDirectVerifier.sol";
+2572:import "../src/verifiers/VoteChainVoteDigestVerifier.sol";
+2671:            cfg.candidateCount,
+2686:            VoteChainVoteDirectVerifier v
+2690:            new VoteChainVoteDirectVerifier();
+2717:            VoteChainVoteDigestVerifier v,
+2722:            new VoteChainVoteDigestVerifier();
+2958:     * the exact WP3/Circom hash vector.
+3466:        VoteChainVoteDirectVerifier v =
+3467:            new VoteChainVoteDirectVerifier();
+3591:        VoteChainVoteDirectVerifier dv =
+3592:            new VoteChainVoteDirectVerifier();
+3601:        VoteChainVoteDigestVerifier pv =
+3602:            new VoteChainVoteDigestVerifier();
+4370:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol" \
+4371:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol" \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5A_CandidateBlind_Authorization.sh
+======================================================================
+65:echo "=== 2. ENSURE CIRCOMLIBJS ==="
+69:if node -e "import('circomlibjs').then(()=>process.exit(0)).catch(()=>process.exit(1))" \
+72:    echo "[PASS] circomlibjs already available"
+74:    npm install --save-exact circomlibjs@0.1.7
+172:import { buildPoseidon } from 'circomlibjs'
+189:const DEPTH = Number(profile.merkleDepth)
+448:export async function getRegisteredWp5Candidates() {
+449:  const candidates = await Candidate
+463:  return candidates.map((candidate) => ({
+672:    candidateCount,
+678:    candidates,
+685:    contract.candidateCount(),
+691:    getRegisteredWp5Candidates(),
+695:    candidates.map((candidate) => candidate.candidateId)
+702:      BigInt(candidateCount) !== BigInt(candidateIds.length) ||
+716:    candidates,
+722:      candidateCount: String(candidateCount),
+1487:    echo "CUSTOM_MERKLE_DEPTH=17"
+1511:    echo "END_TO_END_ENCRYPTED_VOTE=NOT_YET_PHASE_B"
+1515:    echo "NEXT_ACTION=WP5B_LOCAL_PRIVACY_WORKER_DIRECT_GROTH16_AND_ACTIVE_VOTER_PATH"
+1529:echo "Phase B will wire the local privacy worker to the frozen DIRECT contract."
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5B_Compatibility_Freeze.sh
+======================================================================
+16:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+17:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+19:VERIFIER="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol"
+20:WP4_VERIFIER="$ROOT/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol"
+57:    "$ZKEY" \
+123:    circomlibjs@0.1.7
+128:  import("circomlibjs"),
+129:]).then(([snark, circom]) => {
+130:  const groth16 =
+131:    snark.groth16 ??
+132:    snark.default?.groth16
+135:    circom.buildPoseidon ??
+136:    circom.default?.buildPoseidon
+138:  if (!groth16) {
+139:    throw new Error("snarkjs.groth16 unavailable")
+143:    throw new Error("circomlibjs.buildPoseidon unavailable")
+147:  console.log("FRONTEND_CIRCOMLIBJS_IMPORT=PASS")
+163:EXPECTED_DIRECT_ZKEY_SHA256="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+166:ZKEY_SHA256="$(sha256sum "$ZKEY" | awk '{print $1}')"
+172:echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+177:if [ "$ZKEY_SHA256" != "$EXPECTED_DIRECT_ZKEY_SHA256" ]; then
+178:    echo "ERROR: DIRECT zkey does not match accepted WP3 run."
+187:echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+203:import * as circomlibPkg from "circomlibjs"
+207:  circomlibPkg.buildPoseidon ??
+208:  circomlibPkg.default?.buildPoseidon
+210:const groth16 =
+211:  snarkPkg.groth16 ??
+212:  snarkPkg.default?.groth16
+214:if (!buildPoseidon || !groth16) {
+216:    "Required circomlibjs/snarkjs runtime unavailable",
+227:  zkeyPath,
+237:  !zkeyPath ||
+433: *    state0 = Poseidon(D_MANIFEST, candidateCount)
+454:      Number(profile.maxCandidates)
+501:input16.candidateCount =
+525:  await groth16.fullProve(
+528:    zkeyPath,
+539:  await groth16.verify(
+566:  input16.candidateCount,
+590:  "WP5_K16_DIRECT_REAL_GROTH16=PASS",
+599:  zkey: sha256(zkeyPath),
+611:  maxCandidates:
+612:    Number(profile.maxCandidates),
+614:  merkleDepth:
+615:    Number(profile.merkleDepth),
+649:        ? "Poseidon(D_MANIFEST,candidateCount)"
+667:      "/zk/wp5/direct/VoteChainVoteDirect.wasm",
+669:    zkeyUrl:
+670:      "/zk/wp5/direct/VoteChainVoteDirect_final.zkey",
+739:  k16Groth16Verify:
+777:# 7. REAL K16 GROTH16 COMPATIBILITY REGRESSION
+781:echo "=== 7. REAL K16 GROTH16 COMPATIBILITY REGRESSION ==="
+790:    "$ZKEY" \
+917:  /export async function hashCandidateManifest\(candidateIds\) \{[\s\S]*?\n\}\n\nexport async function getRegisteredWp5Candidates/
+928:  if (ids.length < 1 || ids.length > Number(profile.maxCandidates)) {
+961:export async function getRegisteredWp5Candidates`
+1004:   "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+1006:cp "$ZKEY" \
+1007:   "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+1016:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm" \
+1017:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey" \
+1031:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+1033:cmp "$ZKEY" \
+1034:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+1176:    echo "MAX_CANDIDATES=16"
+1177:    echo "MERKLE_DEPTH=17"
+1183:    echo "K16_REAL_GROTH16_PROOF=PASS"
+1185:    echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+1189:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+1197:    echo "FRONTEND_CIRCOMLIBJS=0.1.7"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5B_Resume_195059.sh
+======================================================================
+19:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+20:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+22:VERIFIER="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol"
+23:WP4_VERIFIER="$ROOT/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol"
+44:echo "  - K16 Groth16 proving"
+60:    "$ZKEY" \
+98:if (report.k16Groth16Verify !== true) {
+100:    "K16 Groth16 verification was not PASS",
+143:  "K16_GROTH16_VERIFY=PASS",
+162:EXPECTED_ZKEY="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+165:ZKEY_SHA256="$(sha256sum "$ZKEY" | awk '{print $1}')"
+170:echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+174:if [ "$ZKEY_SHA256" != "$EXPECTED_ZKEY" ]; then
+175:    echo "ERROR: accepted WP3 DIRECT zkey hash changed."
+181:echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+277: * state0 = Poseidon(D_MANIFEST, candidateCount)
+289:    /export async function hashCandidateManifest\(candidateIds\) \{[\s\S]*?\n\}\n\nexport async function getRegisteredWp5Candidates/
+307:    ids.length > Number(profile.maxCandidates)
+353:export async function getRegisteredWp5Candidates`
+484:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+486:cp "$ZKEY" \
+487:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+497:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+500:    "$ZKEY" \
+501:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+510:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm" \
+511:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey" \
+539:const circomlibjs =
+540:  pkg.dependencies?.circomlibjs ??
+541:  pkg.devDependencies?.circomlibjs
+549:  "CIRCOMLIBJS_DECLARED=" +
+550:  String(circomlibjs),
+559:if (circomlibjs !== "0.1.7") {
+561:    "circomlibjs is not pinned to 0.1.7",
+739:    echo "MANIFEST_STATE0=POSEIDON(D_MANIFEST,CANDIDATE_COUNT)"
+742:    echo "MAX_CANDIDATES=16"
+743:    echo "MERKLE_DEPTH=17"
+745:    echo "K16_REAL_GROTH16_PROOF=PASS"
+749:    echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+753:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+761:    echo "FRONTEND_CIRCOMLIBJS=0.1.7"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_LocalPrivacyWorker.sh
+======================================================================
+304:  candidateCount: string
+316:  candidates: Wp5Candidate[]
+393:declare module "circomlibjs"
+409:import * as circomlibjs from "circomlibjs"
+419:  (circomlibjs as any).buildPoseidon ??
+420:  (circomlibjs as any).default?.buildPoseidon
+423:  (circomlibjs as any).buildBabyjub ??
+424:  (circomlibjs as any).default?.buildBabyjub
+426:const groth16 =
+427:  (snarkjs as any).groth16 ??
+428:  (snarkjs as any).default?.groth16
+433:  !groth16
+441:  Number(appProfile.maxCandidates)
+444:  Number(appProfile.merkleDepth)
+580:      "Candidate count is outside the frozen WP5 range",
+930:    const candidateCount =
+934:          .candidateCount,
+939:        candidateCount,
+941:      candidateCount < 1 ||
+942:      candidateCount > MAX ||
+943:      candidateCount !==
+945:          .candidates
+949:        "Public candidate count is inconsistent",
+955:        .candidates
+966:        candidateCount
+975:        .candidates
+1078:        BigInt(candidateCount),
+1276:      candidateCount:
+1277:        String(candidateCount),
+1329:      await groth16.fullProve(
+1336:          .zkeyUrl,
+1356:      String(candidateCount),
+1436:      await groth16.verify(
+1449:      await groth16
+1476:        "Unexpected Groth16 Solidity calldata shape",
+1492:          "Groth16 calldata/public-signal mismatch",
+3005:        data.candidates.find(
+3263:                BabyJub ciphertexts and DIRECT Groth16 proof before
+3270:        {data.candidates.length === 0
+3278:                    No registered candidates were found in the
+3287:              {data.candidates.map(
+3729:const circom =
+3730:  pkg.dependencies?.circomlibjs ??
+3731:  pkg.devDependencies?.circomlibjs
+3739:if (circom !== "0.1.7") {
+3741:    `Expected circomlibjs 0.1.7, got ${circom}`,
+3775:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+3776:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+3787:    "$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm" \
+3788:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+3791:    "$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey" \
+3792:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+3859:    echo "MAX_CANDIDATES=16"
+3860:    echo "MERKLE_DEPTH=17"
+3867:    echo "LOCAL_DIRECT_GROTH16_PROVING=IMPLEMENTED"
+3868:    echo "LOCAL_GROTH16_VERIFICATION=IMPLEMENTED"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume_201827.sh
+======================================================================
+22:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+23:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+140:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+141:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+146:    "$DIST_ZKEY" \
+157:cmp "$ZKEY" "$DIST_ZKEY"
+412:    echo "MAX_CANDIDATES=16"
+413:    echo "MERKLE_DEPTH=17"
+420:    echo "LOCAL_DIRECT_GROTH16_PROVING=IMPLEMENTED"
+421:    echo "LOCAL_GROTH16_VERIFICATION=IMPLEMENTED"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume2_201827.sh
+======================================================================
+25:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+26:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+224:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+225:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+230:    "$DIST_ZKEY" \
+241:cmp "$ZKEY" "$DIST_ZKEY"
+520:    echo "MAX_CANDIDATES=16"
+521:    echo "MERKLE_DEPTH=17"
+528:    echo "LOCAL_DIRECT_GROTH16_PROVING=IMPLEMENTED"
+529:    echo "LOCAL_GROTH16_VERIFICATION=IMPLEMENTED"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_ES_Worker_Fix.sh
+======================================================================
+235:    '^import .* from ["'"'"']circomlibjs["'"'"']' \
+238:    echo "ERROR: static circomlibjs import returned."
+330:      -name '*circomlibjs*.js' \
+360:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+361:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+364:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+365:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+369:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_ES_Worker_Fix_Resume.sh
+======================================================================
+317:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+318:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+321:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+322:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+326:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_No_TLA_Fix.sh
+======================================================================
+120:    '"circomlibjs"'
+139:  const circomlib: any =
+141:      "circomlibjs"
+144:  return circomlib.buildPoseidon()
+148:  const circomlib: any =
+150:      "circomlibjs"
+153:  return circomlib.buildBabyjub()
+156:async function loadGroth16() {
+162:  return snarkjs.groth16
+165:const groth16: any = {
+170:      await loadGroth16()
+181:      await loadGroth16()
+192:      await loadGroth16()
+257:const lazyGroth16 =
+259:    "async function loadGroth16()",
+271:  lazyGroth16 < 0
+285:      lazyGroth16
+315:  /from\s+["']circomlibjs["']/.test(
+336:  "STATIC_CIRCOMLIBJS_IMPORT=NO",
+478:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+479:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+482:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+483:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+487:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_Synthetic_Runtime.sh
+======================================================================
+18:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+81:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+82:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+113:CANDIDATES=(
+120:for candidate in "${CANDIDATES[@]}"; do
+205:} from "circomlibjs"
+389:    appProfile.maxCandidates,
+394:    appProfile.merkleDepth,
+501:const candidates = [
+529:  candidates.map(
+536:const candidateCount =
+540:  candidateCount < 1 ||
+541:  candidateCount > MAX
+544:    "Synthetic candidate count invalid",
+551: * state0 = Poseidon(D_MANIFEST, candidateCount)
+558:      candidateCount,
+606:      candidateCount,
+618:    candidateCount,
+671:  candidates,
+686:    candidateCount:
+688:        candidateCount,
+1872:"ASSERT_EXTERNALIZATION_RUNTIME=PASS_BROWSER_POSEIDON_BABYJUB_GROTH16_COMPLETED"
+2058:    echo "BROWSER_DIRECT_GROTH16_RUNTIME=PASS"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_v2_CDP_Runtime.sh
+======================================================================
+18:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+114:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+115:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+156:    "zkeyUrl",
+187:  "ZKEY_URL=" +
+188:  p.directArtifacts.zkeyUrl
+260:BROWSER_CANDIDATES=(
+267:for candidate in "${BROWSER_CANDIDATES[@]}"; do
+380:} from "circomlibjs"
+536:    appProfile.merkleDepth,
+631:const candidates = [
+659:  candidates.map(
+666:const candidateCount =
+673:      candidateCount,
+721:      candidateCount,
+734:      candidateCount,
+777:  candidates,
+792:    candidateCount:
+794:        candidateCount,
+1707: * A Groth16 browser proof can take materially longer
+2654:    echo "BROWSER_DIRECT_GROTH16_RUNTIME=PASS"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Auth_Network_Runtime.sh
+======================================================================
+16:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+81:echo "Actual Groth16."
+262:} from "circomlibjs"
+453:const publicCandidates = [
+522:      publicCandidates,
+538:  publicCandidates.map(
+1106:    publicConfig.candidates.find(
+1262:    candidateSelectionLocalOnly:
+2499:    echo "BROWSER_DIRECT_GROTH16=PASS"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6_Threshold_Preflight.sh
+======================================================================
+165:    'getTally|acceptedBallotCount|finalize|phase|activate|endElection|end|tally|BabyJub|candidateCount' \
+186:    'threshold|trustee|3.?of.?5|subOrder|Base8|BabyJub|decode|maxCandidates|eligibleCapacity' \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6A_Threshold_Core_Custody.sh
+======================================================================
+134:      "candidateSlot",
+192:  maxCandidates: 16,
+2322:  const candidateCount =
+2325:        .candidateCount,
+2335:    candidateCount,
+2336:    "candidateCount",
+2345:    candidateCount < 1 ||
+2346:    candidateCount >
+2347:      WP6.maxCandidates
+2350:      "invalid candidate count",
+2358:        WP6.maxCandidates ||
+2362:        WP6.maxCandidates
+2388:      WP6.maxCandidates;
+2532:      candidateCount;
+2534:      WP6.maxCandidates;
+2550:        candidateCount,
+2692:const candidateCount =
+2695:const maxCandidates =
+2696:  WP6.maxCandidates
+3069:    maxCandidates,
+3085:      maxCandidates;
+3146:        maxCandidates,
+3175:      maxCandidates;
+3215:  candidateCount,
+3433:          candidateCount,
+3452:          candidateCount,
+3539:  candidateCount,
+3541:  maxCandidates,
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6B_Trustee_CLI_Contract_Finalization.sh
+======================================================================
+79:echo "GROTH16_VERIFIER_FOR_WP6B_TALLY_SETUP=MOCKED_TEST_VERIFIER"
+80:echo "REAL_GROTH16_PATH_REPLACED=NO"
+106:    echo "WP5E_REAL_GROTH16_INTEGRATION_ACCEPTED=PASS"
+427:                candidateCount
+481:                candidateCount,
+612:        cfg.candidateCount =
+970:        cfg.candidateCount =
+1638:    const candidateCount =
+1642:          "candidate-count",
+1660:      candidateCount < 1 ||
+1661:      candidateCount >
+1662:        WP6.maxCandidates
+1665:        "invalid candidate count",
+1679:          candidateCount
+1698:        WP6.maxCandidates,
+1707:            WP6.maxCandidates,
+1721:          WP6.maxCandidates;
+1792:        candidateCount,
+2002:            WP6.maxCandidates,
+2035:      candidateCount:
+2038:            .candidateCount,
+2364:      candidateCount:
+2367:            .candidateCount,
+2549:    candidateCount:
+2552:          .candidateCount(),
+2676:  const phaseBefore =
+2683:    phaseBefore !== 2
+2758:  const candidateCount =
+2761:        .candidateCount(),
+2765:    candidateCount !==
+2768:          .candidateCount,
+2772:      "candidate count mismatch",
+2849:      candidateCount;
+2865:      candidateCount,
+2919:    phaseBefore,
+3217:        --candidate-count 4 \
+3293:echo "WP6B_GROTH16_SETUP_VERIFIER=MOCKED_AND_LABELLED"
+3692:    echo "WP5E_REAL_GROTH16_INTEGRATION_ACCEPTED=PASS"
+3737:    echo "GROTH16_VERIFIER_FOR_WP6B_TALLY_SETUP=MOCKED_TEST_VERIFIER"
+3738:    echo "REAL_GROTH16_PATH_REPLACED=NO"
+3739:    echo "REAL_GROTH16_BROWSER_ONCHAIN_PATH=ALREADY_ACCEPTED_WP5E"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7_FINAL_SECURITY_CLOSURE.sh
+======================================================================
+769:    # 10. POST-REMEDIATION REAL BROWSER / GROTH16 / CHAIN SMOKE
+797:                '^BROWSER_DIRECT_GROTH16=PASS$' \
+811:            echo "FINAL_BROWSER_HTTP_GROTH16_ONCHAIN_SMOKE=PASS"
+814:                "FINAL_BROWSER_HTTP_GROTH16_ONCHAIN_SMOKE_FAILED"
+863:            circomlibjs \
+879:            circomlibjs \
+893:            circomlibjs \
+979:        echo "CIRCOMLIBJS_VERSION_POLICY=KEEP_0.1.7"
+980:        echo "CIRCOMLIBJS_0.0.8_DOWNGRADE=REJECTED"
+1112:## CircomLibJS decision
+1114:VoteChain-ZK retains circomlibjs 0.1.7.
+1116:The npm suggestion that would install circomlibjs 0.0.8 using a forced
+1131:The Groth16 setup remains development-only. No production trusted-setup claim
+1139:service, browser privacy worker, Groth16 proof path and contract.
+1180:        echo "CIRCOMLIBJS_VERSION=0.1.7"
+1181:        echo "CIRCOMLIBJS_DOWNGRADE_TO_0.0.8=NO"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7_FINAL_SECURITY_CLOSURE_RESUME.sh
+======================================================================
+198:            '^BROWSER_DIRECT_GROTH16=PASS$' \
+499:## CircomLibJS policy
+501:VoteChain-ZK retains **circomlibjs 0.1.7**.
+503:The breaking npm proposal that would replace it with circomlibjs 0.0.8 is not
+520:Groth16 setup remains development-only.
+588:        echo "CIRCOMLIBJS_VERSION=0.1.7"
+589:        echo "CIRCOMLIBJS_DOWNGRADE_TO_0.0.8=NO"
+595:        echo "FINAL_BROWSER_HTTP_GROTH16_ONCHAIN_SMOKE=PASS"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7_Security_Preflight.sh
+======================================================================
+276:    'express\.json|limit:|validate|schema|zod|joi|isArray|Array\.isArray|Number\.is|BigInt\(|length|credentialPublicKey|candidateCount|groupIndex|merkle|proof' \
+363:    'onlyAdmin|inPhase|configure|activate|endElection|finalizeTally|usedNullifier|acceptedBallotCount|setTrusteeTranscriptHash|candidateCount|NONZERO_PADDED_RESULT|RESULT_SUM_MISMATCH|INVALID_PROOF' \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8A_Protocol_Environment_Freeze.sh
+======================================================================
+78:                -o -name '*.circom' \
+227:        "proofSystem": "Groth16",
+228:        "circuitLanguage": "Circom2",
+229:        "maxCandidates": 16,
+230:        "activeMerkleDepth": 17,
+238:    "candidateCounts": [
+268:    "candidateSlotPolicy": {
+299:                "ALL_CANDIDATE_COUNTS_X_ALL_DEPTHS"
+305:                "ALL_CANDIDATE_COUNTS_AT_DEPTH_17"
+433:candidate_counts = [
+440:depths = [
+466:for k in candidate_counts:
+467:    for depth, capacity in depths:
+476:                "candidateCount": k,
+479:                "candidateSlotRole": role,
+480:                "candidateSlot": slot,
+487:for k in candidate_counts:
+496:            "candidateCount": k,
+499:            "candidateSlotRole": role,
+500:            "candidateSlot": slot,
+516:            "candidateCount",
+519:            "candidateSlotRole",
+520:            "candidateSlot",
+584:M01,r1csConstraints,count,circuit
+587:M04,groth16Prove,ms,proof
+588:M05,groth16LocalVerify,ms,proof
+590:M07,zkeySize,bytes,artifact
+595:M12,groth16VerifierGas,gas,contract
+608:M25,candidateCount,count,scale
+647:    "candidateCount",
+650:    "candidateSlotRole",
+651:    "candidateSlot",
+692:    "candidateCount",
+753:    CIRCOM_CMD=""
+755:    if command -v circom >/dev/null 2>&1; then
+756:        CIRCOM_CMD="circom"
+757:    elif command -v circom2 >/dev/null 2>&1; then
+758:        CIRCOM_CMD="circom2"
+761:    if [ -n "$CIRCOM_CMD" ]; then
+762:        echo "CIRCOM_TOOL=PASS:$CIRCOM_CMD" \
+765:        CIRCOM_NPX_RC=1
+770:                npx --no-install circom2 --version \
+774:            CIRCOM_NPX_RC=$?
+777:        if [ "$CIRCOM_NPX_RC" -eq 0 ]; then
+778:            CIRCOM_CMD="npx --no-install circom2"
+779:            echo "CIRCOM_TOOL=PASS:$CIRCOM_CMD" \
+782:            hold "CIRCOM2_TOOL_NOT_FOUND"
+867:        if [ -n "$CIRCOM_CMD" ]; then
+868:            if [ "$CIRCOM_CMD" = "circom" ] || \
+869:               [ "$CIRCOM_CMD" = "circom2" ]
+871:                "$CIRCOM_CMD" --version 2>&1 || true
+875:                    npx --no-install circom2 --version 2>&1 || true
+980:    "candidateCount",
+1010:            -name '*.r1cs' \
+1012:            -o -name '*.zkey' \
+1036:    R1CS_COUNT="$(
+1037:        grep -ci '\.r1cs$' \
+1048:    ZKEY_COUNT="$(
+1049:        grep -ci '\.zkey$' \
+1054:    echo "R1CS_ARTIFACT_COUNT=$R1CS_COUNT"
+1056:    echo "ZKEY_ARTIFACT_COUNT=$ZKEY_COUNT"
+1058:    if [ "$R1CS_COUNT" -eq 0 ]; then
+1059:        hold "NO_R1CS_ARTIFACT_FOUND"
+1066:    if [ "$ZKEY_COUNT" -eq 0 ]; then
+1067:        hold "NO_ZKEY_ARTIFACT_FOUND"
+1082:Runtime candidateCount measurements use the frozen active architecture.
+1084:Any compile-time Merkle-depth or compile-profile scaling artifacts required
+1240:        echo "CANDIDATE_COUNTS=2,4,8,16"
+1241:        echo "MERKLE_DEPTHS=4,7,10,14,17"
+1249:        echo "R1CS_ARTIFACT_COUNT=$R1CS_COUNT"
+1251:        echo "ZKEY_ARTIFACT_COUNT=$ZKEY_COUNT"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8C_B_Stage_Resolved_Timing_Pilot.sh
+======================================================================
+23:    EXPECTED_R1CS_SHA="11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0"
+24:    EXPECTED_ZKEY_SHA="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+80:                -o -name '*.circom' \
+113:    echo "WP8C-B — STAGE-RESOLVED GROTH16 TIMING PILOT"
+175:    R1CS_SHA="$(sha256sum "$DIRECT_R1CS" | awk '{print $1}')"
+176:    ZKEY_SHA="$(sha256sum "$DIRECT_ZKEY" | awk '{print $1}')"
+179:    echo "DIRECT_R1CS_SHA256=$R1CS_SHA"
+180:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA"
+183:    if [ "$R1CS_SHA" != "$EXPECTED_R1CS_SHA" ]; then
+184:        hold "DIRECT_R1CS_HASH_DRIFT"
+187:    if [ "$ZKEY_SHA" != "$EXPECTED_ZKEY_SHA" ]; then
+188:        hold "DIRECT_ZKEY_HASH_DRIFT"
+255:    f"CANDIDATE_COUNT={data.get('candidateCount')}"
+259:    f"MERKLE_DEPTH={len(data.get('siblings', []))}"
+319:        zkeyFile,
+382:    const candidateSlot =
+387:    const candidateCount =
+388:        Number(input.candidateCount);
+467:            await snarkjs.groth16.prove(
+468:                zkeyFile,
+494:            await snarkjs.groth16.verify(
+518:                `Groth16 verification failed in trial ${trial.trialIndex}`
+539:         * Groth16 verifier proof payload:
+606:            candidateCount,
+608:            candidateSlot,
+737:        ZKEY_NATIVE="$(native_path "$DIRECT_ZKEY")"
+747:            "$ZKEY_NATIVE" \
+804:    "candidateCount",
+806:    "candidateSlot",
+1236:        echo "GROTH16_PROOF_COORDINATE_COUNT=8"
+1237:        echo "GROTH16_PROOF_COORDINATE_PAYLOAD_BYTES=256"
+1250:        echo "DIRECT_R1CS_SHA256=$EXPECTED_R1CS_SHA"
+1251:        echo "DIRECT_ZKEY_SHA256=$EXPECTED_ZKEY_SHA"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8C_C_Fresh_Input_Encryption_Pilot.sh
+======================================================================
+23:    EXPECTED_R1CS_SHA="11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0"
+24:    EXPECTED_ZKEY_SHA="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+47:    R1CS="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs"
+49:    ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+51:    WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+99:                -o -name '*.circom' \
+191:    R1CS_SHA="$(
+192:        sha256sum "$R1CS" |
+196:    ZKEY_SHA="$(
+197:        sha256sum "$ZKEY" |
+206:    echo "DIRECT_R1CS_SHA256=$R1CS_SHA"
+207:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA"
+210:    if [ "$R1CS_SHA" != "$EXPECTED_R1CS_SHA" ]; then
+211:        hold "DIRECT_R1CS_HASH_DRIFT"
+214:    if [ "$ZKEY_SHA" != "$EXPECTED_ZKEY_SHA" ]; then
+215:        hold "DIRECT_ZKEY_HASH_DRIFT"
+320:        zkeyFile,
+335:    const circomlib =
+337:            "circomlibjs"
+379:            profile.maxCandidates
+384:            profile.merkleDepth
+564:            circomlib
+566:            circomlib
+672:    const candidateCount =
+675:                .candidateCount
+706:                candidateCount
+758:            candidateSlotRole:
+760:            candidateSlot: 1,
+765:            candidateSlotRole:
+767:            candidateSlot: 0,
+772:            candidateSlotRole:
+774:            candidateSlot:
+776:                    candidateCount /
+783:            candidateSlotRole:
+785:            candidateSlot:
+786:                candidateCount -
+830:            `CANDIDATE_SLOT_ROLE=${trial.candidateSlotRole}`
+834:            `CANDIDATE_SLOT=${trial.candidateSlot}`
+934:                    trial.candidateSlot
+1097:            candidateCount:
+1099:                    candidateCount
+1240:                .groth16
+1242:                    zkeyFile,
+1268:                .groth16
+1290:                `Groth16 verification failed for trial ${trial.trialIndex}`
+1399:            candidateCount,
+1402:            candidateSlotRole:
+1403:                trial.candidateSlotRole,
+1405:            candidateSlot:
+1406:                trial.candidateSlot,
+1724:        ZKEY_NATIVE="$(
+1725:            native_path "$ZKEY"
+1744:            "$ZKEY_NATIVE" \
+1803:    "candidateCount",
+1805:    "candidateSlotRole",
+1806:    "candidateSlot",
+1941:    row.get("candidateSlot")
+2003:    if row.get("candidateCount") != 16:
+2005:            f"trial {i}: candidateCount != 16"
+2406:        echo "CANDIDATE_COUNT=16"
+2407:        echo "MERKLE_DEPTH=17"
+2418:        echo "M06_CANONICAL_GROTH16_PROOF_BYTES=256"
+2428:        echo "DIRECT_R1CS_SHA256=$EXPECTED_R1CS_SHA"
+2429:        echo "DIRECT_ZKEY_SHA256=$EXPECTED_ZKEY_SHA"
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs
+======================================================================
+5:    await import("circomlibjs");
+20:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+52:    profile.maxCandidates;
+55:    profile.merkleDepth;
+158:const candidateCount =
+411:                candidateCount,
+441:        candidateCount,
+533: * Prefer circomlibjs' full-order Generator as a
+542:    "CIRCOMLIB_GENERATOR";
+856:    x.candidateCount =
+862:            "candidate-count-zero.json"
+870:    x.candidateCount =
+876:            "candidate-count-17.json"
+1023:        candidateCount,
+1052:            maxCandidates:
+1055:            merkleDepth:
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs
+======================================================================
+8:    circomPath
+11:if (!jsonPath || !circomPath) {
+13:        "Usage: node wp3-generate-profile.mjs profile.json profile.circom"
+58:        "Groth16/snarkjs",
+61:        "Circom-2",
+63:    maxCandidates:
+66:    merkleDepth:
+163:const circom = `pragma circom 2.2.0;
+175:function VC_MAX_CANDIDATES() {
+176:    return ${profile.maxCandidates};
+179:function VC_MERKLE_DEPTH() {
+180:    return ${profile.merkleDepth};
+221:    circomPath,
+222:    circom
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs
+======================================================================
+4:const pkg = await import("circomlibjs");
+16:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+44:    profile.maxCandidates;
+47:    profile.merkleDepth;
+214:const candidateCount =
+248:        candidateCount,
+382:        candidateCount,
+555:            candidateCount,
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-generate-solidity-fixture.mjs
+======================================================================
+186: * Contains Groth16 proof data and encrypted synthetic ballots only.
+197:            uint256 candidateCount,
+207:        candidateCount = ${d(cfg.candidateCount)};
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs
+======================================================================
+83:const candidateCount =
+86:const maxCandidates =
+87:  WP6.maxCandidates
+460:    maxCandidates,
+476:      maxCandidates;
+537:        maxCandidates,
+566:      maxCandidates;
+606:  candidateCount,
+824:          candidateCount,
+843:          candidateCount,
+930:  candidateCount,
+932:  maxCandidates,
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs
+======================================================================
+589:    const candidateCount =
+593:          "candidate-count",
+611:      candidateCount < 1 ||
+612:      candidateCount >
+613:        WP6.maxCandidates
+616:        "invalid candidate count",
+630:          candidateCount
+649:        WP6.maxCandidates,
+658:            WP6.maxCandidates,
+672:          WP6.maxCandidates;
+743:        candidateCount,
+953:            WP6.maxCandidates,
+986:      candidateCount:
+989:            .candidateCount,
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/profile.mjs
+======================================================================
+5:  pocMerkleDepth: 4,
+6:  pocMaxCandidates: 4,
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp2-core-final.mjs
+======================================================================
+5:} from "circomlibjs";
+9:    merkleDepth: 4,
+10:    maxCandidates: 4,
+201:    depth = PROFILE.merkleDepth
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs
+======================================================================
+30:  maxCandidates: 16,
+2378:  const candidateCount =
+2381:        .candidateCount,
+2391:    candidateCount,
+2392:    "candidateCount",
+2401:    candidateCount < 1 ||
+2402:    candidateCount >
+2403:      WP6.maxCandidates
+2406:      "invalid candidate count",
+2414:        WP6.maxCandidates ||
+2418:        WP6.maxCandidates
+2444:      WP6.maxCandidates;
+2588:      candidateCount;
+2590:      WP6.maxCandidates;
+2606:        candidateCount,

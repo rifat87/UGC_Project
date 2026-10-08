@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "selectedVoterIndex": 0,
+  "selectedVoterSecret": "42424242424242",
+  "configuredMerkleDepth": 17,
+  "candidateCount": 16,
+  "pathBits": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "siblingsLength": 17,
+  "frozenFieldsAcrossEligibleSetLevels": [
+    "secret",
+    "pathBits",
+    "electionId",
+    "candidateManifestHash",
+    "candidateCount",
+    "contractDomain",
+    "Yx",
+    "Yy",
+    "electionContextHash",
+    "nullifier",
+    "bit",
+    "randomness",
+    "Rx",
+    "Ry",
+    "Sx",
+    "Sy"
+  ],
+  "eligibleSetDependentFields": [
+    "eligibleRoot",
+    "siblings"
+  ]
+}

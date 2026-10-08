@@ -1,0 +1,673 @@
+1-import { createHash } from "node:crypto";
+2-import {
+3-    buildBabyjub,
+4:    buildPoseidon
+5-} from "circomlibjs";
+6-
+7-export const PROFILE = Object.freeze({
+8-    profileId: "votechain-zk-wp2-finalmetrics-v1",
+9-    merkleDepth: 4,
+10-    maxCandidates: 4,
+11-    threshold: 3,
+12-    trustees: 5,
+13-    identityDomain: "VOTECHAIN_ZK_IDENTITY_V1",
+14-    nullifierDomain: "VOTECHAIN_ZK_NULLIFIER_V1",
+--
+47-
+48-export function modInv(a, m) {
+49-    const [g, s] = egcd(mod(a, m), BigInt(m));
+50-
+51-    if (g !== 1n)
+52-        throw new Error("no modular inverse");
+53-
+54-    return mod(s, m);
+55-}
+56-
+57:let cachedPoseidon;
+58-let cachedBaby;
+59-
+60-export async function context() {
+61:    if (!cachedPoseidon)
+62:        cachedPoseidon = await buildPoseidon();
+63-
+64-    if (!cachedBaby)
+65-        cachedBaby = await buildBabyjub();
+66-
+67-    return {
+68:        poseidon: cachedPoseidon,
+69-        baby: cachedBaby,
+70-        F: cachedBaby.F,
+71-        q: BigInt(cachedBaby.subOrder.toString()),
+72-        G: cachedBaby.Base8
+73-    };
+74-}
+75-
+76-export const identityPoint =
+77-    c => [c.F.e(0n), c.F.e(1n)];
+78-
+--
+106-}
+107-
+108-export const serializePoint =
+109-    (c, p) => pointInts(c, p).map(String);
+110-
+111-async function labelField(label) {
+112-    const c = await context();
+113-
+114-    const digest =
+115-        createHash("sha256")
+116:            .update(label, "utf8")
+117-            .digest("hex");
+118-
+119-    const x = BigInt(`0x${digest}`);
+120-
+121-    return BigInt(
+122:        c.poseidon.F
+123-            .toObject(
+124:                c.poseidon.F.e(x)
+125-            )
+126-            .toString()
+127-    );
+128-}
+129-
+130:export async function poseidon(values) {
+131-    const c = await context();
+132-
+133-    const out =
+134:        c.poseidon(
+135-            values.map(BigInt)
+136-        );
+137-
+138-    return BigInt(
+139:        c.poseidon.F
+140-            .toObject(out)
+141-            .toString()
+142-    );
+143-}
+144-
+145-export async function domains() {
+146-    return {
+147-        identity:
+148-            await labelField(
+149-                PROFILE.identityDomain
+--
+154-                PROFILE.nullifierDomain
+155-            ),
+156-
+157-        dleq:
+158-            await labelField(
+159-                PROFILE.dleqDomain
+160-            )
+161-    };
+162-}
+163-
+164:async function poseidonChain(domain, values) {
+165-    let state = BigInt(domain);
+166-
+167-    for (const v of values)
+168-        state =
+169:            await poseidon([
+170-                state,
+171-                BigInt(v)
+172-            ]);
+173-
+174-    return state;
+175-}
+176-
+177-export async function identityCommitment(secret) {
+178-    const d = await domains();
+179-
+180:    return poseidon([
+181-        d.identity,
+182-        BigInt(secret)
+183-    ]);
+184-}
+185-
+186-export async function electionNullifier(
+187-    secret,
+188-    electionId
+189-) {
+190-    const d = await domains();
+191-
+192:    return poseidon([
+193-        d.nullifier,
+194-        BigInt(secret),
+195-        BigInt(electionId)
+196-    ]);
+197-}
+198-
+199:export async function buildMerkleTree(
+200:    leaves,
+201-    depth = PROFILE.merkleDepth
+202-) {
+203-    const capacity = 2 ** depth;
+204-
+205:    if (leaves.length > capacity)
+206-        throw new Error(
+207:            "too many Merkle leaves"
+208-        );
+209-
+210-    const levels = [];
+211-
+212-    let current =
+213-        Array.from(
+214-            { length: capacity },
+215-            (_, i) =>
+216:                i < leaves.length
+217:                    ? BigInt(leaves[i])
+218-                    : 0n
+219-        );
+220-
+221-    levels.push(current);
+222-
+223-    for (
+224-        let level = 0;
+225-        level < depth;
+226-        level++
+227-    ) {
+228-        const next = [];
+229-
+230-        for (
+231-            let i = 0;
+232-            i < current.length;
+233-            i += 2
+234-        ) {
+235-            next.push(
+236:                await poseidon([
+237-                    current[i],
+238-                    current[i + 1]
+239-                ])
+240-            );
+241-        }
+242-
+243-        levels.push(next);
+244-        current = next;
+245-    }
+246-
+247-    return {
+248-        depth,
+249-        capacity,
+250-        levels,
+251:        root: current[0]
+252-    };
+253-}
+254-
+255:export function merkleProof(tree, index) {
+256:    const siblings = [];
+257:    const pathBits = [];
+258-
+259-    let i = index;
+260-
+261-    for (
+262-        let level = 0;
+263-        level < tree.depth;
+264-        level++
+265-    ) {
+266:        siblings.push(
+267-            tree.levels[level][i ^ 1]
+268-        );
+269-
+270:        pathBits.push(
+271-            i & 1
+272-        );
+273-
+274-        i >>= 1;
+275-    }
+276-
+277-    return {
+278:        siblings,
+279:        pathBits
+280-    };
+281-}
+282-
+283-export async function verifyMerkle(
+284-    leaf,
+285:    proof,
+286:    expectedRoot
+287-) {
+288-    let acc = BigInt(leaf);
+289-
+290-    for (
+291-        let i = 0;
+292:        i < proof.siblings.length;
+293-        i++
+294-    ) {
+295-        const sibling =
+296-            BigInt(
+297:                proof.siblings[i]
+298-            );
+299-
+300:        if (proof.pathBits[i] === 0)
+301-            acc =
+302:                await poseidon([
+303-                    acc,
+304-                    sibling
+305-                ]);
+306-
+307-        else if (
+308:            proof.pathBits[i] === 1
+309-        )
+310-            acc =
+311:                await poseidon([
+312-                    sibling,
+313-                    acc
+314-                ]);
+315-
+316-        else
+317-            return false;
+318-    }
+319-
+320-    return (
+321-        acc ===
+322:        BigInt(expectedRoot)
+323-    );
+324-}
+325-
+326-export function encryptBit(
+327-    c,
+328-    publicKey,
+329-    bit,
+330-    randomness
+331-) {
+332-    const b = BigInt(bit);
+--
+880-    const values = [
+881-        ...pointInts(c, c.G),
+882-        ...pointInts(c, publicShare),
+883-        ...pointInts(c, R),
+884-        ...pointInts(c, partial),
+885-        ...pointInts(c, A1),
+886-        ...pointInts(c, A2)
+887-    ];
+888-
+889-    return mod(
+890:        await poseidonChain(
+891-            d.dleq,
+892-            values
+893-        ),
+894-        c.q
+895-    );
+896-}
+897-
+898-export async function provePartial(
+899-    c,
+900-    R,
+--
+955-                c.q
+956-            )
+957-    };
+958-}
+959-
+960-export async function verifyPartial(
+961-    c,
+962-    R,
+963-    publicShare,
+964-    partial,
+965:    proof
+966-) {
+967-    const e =
+968-        await challenge(
+969-            c,
+970-            publicShare,
+971-            R,
+972-            partial,
+973:            proof.A1,
+974:            proof.A2
+975-        );
+976-
+977-    if (
+978-        e !==
+979-        mod(
+980:            proof.challenge,
+981-            c.q
+982-        )
+983-    )
+984-        return false;
+985-
+986-    const lhs1 =
+987-        mul(
+988-            c,
+989-            c.G,
+990:            proof.response
+991-        );
+992-
+993-    const rhs1 =
+994-        add(
+995-            c,
+996:            proof.A1,
+997-            mul(
+998-                c,
+999-                publicShare,
+1000-                e
+1001-            )
+1002-        );
+1003-
+1004-    const lhs2 =
+1005-        mul(
+1006-            c,
+1007-            R,
+1008:            proof.response
+1009-        );
+1010-
+1011-    const rhs2 =
+1012-        add(
+1013-            c,
+1014:            proof.A2,
+1015-            mul(
+1016-                c,
+1017-                partial,
+1018-                e
+1019-            )
+1020-        );
+1021-
+1022-    return (
+1023-        eq(
+1024-            c,
+
+===== wp2-core-final-run.mjs =====
+5-import { resolve } from "node:path";
+6-
+7-import {
+8-    PROFILE,
+9-    context,
+10-    identityPoint,
+11-    mul,
+12-    eq,
+13-    serializePoint,
+14-    pointInts,
+15:    poseidon,
+16-    identityCommitment,
+17-    electionNullifier,
+18:    buildMerkleTree,
+19:    merkleProof,
+20-    verifyMerkle,
+21-    encryptBit,
+22-    aggregate,
+23-    zeroTally,
+24-    addEncryptedBallot,
+25-    boundedDecode,
+26-    runDkgPoc,
+27-    partialDecrypt,
+28-    combinePartials,
+29-    thresholdDecrypt,
+--
+190-        stats:
+191-            stats(samples)
+192-    };
+193-}
+194-
+195-/* ------------------------------------------------------ */
+196-/* CRYPTO TESTS                                           */
+197-/* ------------------------------------------------------ */
+198-
+199-await check(
+200:    "Poseidon bootstrap reference",
+201-    async () => {
+202-        assert.equal(
+203-            (
+204:                await poseidon(
+205-                    [1n, 0n, 0n]
+206-                )
+207-            ).toString(),
+208-
+209-            "16319005924338521988144249782199320915969277491928916027259324394544057385749"
+210-        );
+211-    }
+212-);
+213-
+214-await check(
+--
+255-        assert.notEqual(
+256-            a,
+257-            await electionNullifier(
+258-                777n,
+259-                2n
+260-            )
+261-        );
+262-    }
+263-);
+264-
+265:const leaves = [];
+266-
+267-for (
+268-    const s
+269-    of [
+270-        111n,
+271-        123456789n,
+272-        333n,
+273-        444n
+274-    ]
+275-)
+276:    leaves.push(
+277-        await identityCommitment(
+278-            s
+279-        )
+280-    );
+281-
+282-const tree =
+283:    await buildMerkleTree(
+284:        leaves,
+285-        4
+286-    );
+287-
+288-const merkle =
+289:    merkleProof(
+290-        tree,
+291-        1
+292-    );
+293-
+294-await check(
+295-    "Merkle valid membership",
+296-    async () => {
+297-        assert.equal(
+298-            await verifyMerkle(
+299:                leaves[1],
+300-                merkle,
+301:                tree.root
+302-            ),
+303-            true
+304-        );
+305-    }
+306-);
+307-
+308-await check(
+309-    "Merkle wrong leaf rejected",
+310-    async () => {
+311-        assert.equal(
+312-            await verifyMerkle(
+313:                leaves[0],
+314-                merkle,
+315:                tree.root
+316-            ),
+317-            false
+318-        );
+319-    }
+320-);
+321-
+322-await check(
+323:    "Merkle wrong root rejected",
+324-    async () => {
+325-        assert.equal(
+326-            await verifyMerkle(
+327:                leaves[1],
+328-                merkle,
+329:                tree.root + 1n
+330-            ),
+331-            false
+332-        );
+333-    }
+334-);
+335-
+336-const dkg =
+337-    runDkgPoc(
+338-        c,
+339-        POLYS,
+--
+572-const trustee =
+573-    dkg.shares[0];
+574-
+575-const partial =
+576-    partialDecrypt(
+577-        c,
+578-        tallyCipher.R,
+579-        trustee.share
+580-    );
+581-
+582:const shareProof =
+583-    await provePartial(
+584-        c,
+585-        tallyCipher.R,
+586-        trustee.share,
+587-        trustee.publicShare,
+588-        partial,
+589-        101n
+590-    );
+591-
+592-await check(
+593:    "valid partial decryption proof",
+594-    async () => {
+595-        assert.equal(
+596-            await verifyPartial(
+597-                c,
+598-                tallyCipher.R,
+599-                trustee.publicShare,
+600-                partial,
+601:                shareProof
+602-            ),
+603-            true
+604-        );
+605-    }
+606-);
+607-
+608-await check(
+609:    "tampered partial proof rejected",
+610-    async () => {
+611-        assert.equal(
+612-            await verifyPartial(
+613-                c,
+614-                tallyCipher.R,
+615-                trustee.publicShare,
+616-                partial,
+617-                {
+618:                    ...shareProof,
+619-
+620-                    response:
+621-                        (
+622:                            shareProof
+623-                                .response +
+624-                            1n
+625-                        ) %
+626-                        c.q
+627-                }
+628-            ),
+629-            false
+630-        );
+631-    }
+632-);
+--
+705-                    123456789n,
+706-                    2026001n
+707-                )
+708-            ).toString()
+709-    },
+710-
+711-    merkle: {
+712-        depth:
+713-            tree.depth,
+714-
+715:        root:
+716:            tree.root.toString(),
+717-
+718-        targetIndex:
+719-            1,
+720-
+721:        siblings:
+722:            merkle.siblings
+723-                .map(String),
+724-
+725:        pathBits:
+726:            merkle.pathBits
+727-    },
+728-
+729-    threshold: {
+730-        mode:
+731-            dkg.mode,
+732-
+733-        threshold:
+734-            3,
+735-
+736-        trustees:
+--
+982-
+983-const emptyTally =
+984-    zeroTally(
+985-        c,
+986-        4
+987-    );
+988-
+989-metrics.push(
+990-    await benchmark(
+991-        "M17",
+992:        "homomorphic_tally_update_K4",
+993-        () =>
+994-            addEncryptedBallot(
+995-                c,
+996-                emptyTally,
+997-                ballot
+998-            )
+999-    )
+1000-);
+1001-
+1002-metrics.push(
+--
+1022-                c,
+1023-                tallyCipher.R,
+1024-                trustee.share
+1025-            )
+1026-    )
+1027-);
+1028-
+1029-metrics.push(
+1030-    await benchmark(
+1031-        "M21",
+1032:        "share_proof_generation",
+1033-        i =>
+1034-            provePartial(
+1035-                c,
+1036-                tallyCipher.R,
+1037-                trustee.share,
+1038-                trustee.publicShare,
+1039-                partial,
+1040-                BigInt(
+1041-                    5000 + i
+1042-                )
+1043-            )
+1044-    )
+1045-);
+1046-
+1047-metrics.push(
+1048-    await benchmark(
+1049-        "M22",
+1050:        "share_proof_verification",
+1051-        async () => {
+1052-            if (
+1053-                !await verifyPartial(
+1054-                    c,
+1055-                    tallyCipher.R,
+1056-                    trustee.publicShare,
+1057-                    partial,
+1058:                    shareProof
+1059-                )
+1060-            )
+1061-                throw new Error(
+1062:                    "share proof verify failed"
+1063-                );
+1064-        }
+1065-    )
+1066-);
+1067-
+1068-metrics.push(
+1069-    await benchmark(
+1070-        "M23",
+1071-        "threshold_combine_3_shares",
+1072-        () =>

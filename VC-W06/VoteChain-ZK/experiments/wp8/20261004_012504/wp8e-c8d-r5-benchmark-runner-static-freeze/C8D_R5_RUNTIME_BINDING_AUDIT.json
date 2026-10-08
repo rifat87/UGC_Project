@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "backendRelativePath": "votechain-central-server/services/zk/wp5PrivacyService.js",
+  "backendSha256": "386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7",
+  "identityDomain": "10304592805145852052914897443128100987694469729912842507111180023223117126083",
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "builder": "buildWp5MerkleSnapshot",
+  "hashPrimitive": "wp5Hash"
+}

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "classification": "WP8_PUBLICATION_CLAIM_BOUNDARIES",
+  "inferentialRegressionAuthorized": false,
+  "causalOpcodeClaimAuthorized": false,
+  "isolatedZkpOverheadClaimAuthorized": false,
+  "purePathExtractionTimingClaimAuthorized": false,
+  "onchainEligibleSetScalingClaimAuthorized": false,
+  "singleCausalCrossFamilyScalingCurveAuthorized": false,
+  "directBiometricEndToEndLatencyComparisonAuthorized": false,
+  "outlierDeletion": "NONE",
+  "notes": [
+    "Accepted-ballot, fresh-chain, candidate-count, and eligible-set campaigns answer distinct performance questions.",
+    "C8B final values are explicitly sourced from measuredSummary, not warmupSummary.",
+    "Candidate-count gas differences are transaction-level configuration sensitivity, not isolated candidateCount opcode cost.",
+    "Eligible-set M2 is integrated snapshot/root/target-path construction, not isolated path extraction.",
+    "Eligible-set M3-M5 remain fixed-depth circuit/proving stages and their variation is descriptive.",
+    "No on-chain eligible-set scaling claim is made.",
+    "Local receipt/cryptographic latency is not directly compared with biometric/IoT end-to-end voting latency."
+  ]
+}

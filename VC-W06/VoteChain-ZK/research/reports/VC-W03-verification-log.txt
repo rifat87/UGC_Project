@@ -1,0 +1,220 @@
+VoteChain VC-W03 Verification Log
+Generated: 18 August 2026
+
+Environment
+-----------
+date_utc=2026-08-18T13:21:21Z
+node=v22.16.0
+npm=10.9.2
+tsc=Version 5.8.3
+forge=unavailable
+anvil=unavailable
+mongod=unavailable
+
+1. Historical baseline preservation
+-----------------------------------
+Command:
+sha256sum src/LocalVoting.sol test/LocalVotingTest.t.sol script/LocalDeployVoting.s.sol research/gas/VC-W01-clean-baseline-gas.txt
+
+Result: PASS. Hashes match the accepted VC-W02/VC-W01 frozen baseline.
+Output:
+b5718b72b0ef3762c84c611234bc376d49b76bd09c139a9886fd91e1dd19133a  src/LocalVoting.sol
+a74ebea5402b6fcdc07a5a0a79fe8c3a7add6199cf17c472cc36d1c24c97ee90  test/LocalVotingTest.t.sol
+e28c54d0ce1627f4ea317298db6717af8f6f73a338be98c917a7f66b42f423db  script/LocalDeployVoting.s.sol
+293d244052efb22060f6133a8821a6356de89eea2a1e5c89198b0a44beb72bdc  research/gas/VC-W01-clean-baseline-gas.txt
+
+2. Backend test suite
+---------------------
+Command:
+cd votechain-central-server && npm test -- --runInBand
+
+Result: PASS.
+Relevant output:
+  duration_ms: 1.432123
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 220.295688
+
+The 31 tests include retained VC-W02 candidate/privacy/migration tests plus VC-W03 ABI/privacy, ZK credential crypto, random identity construction, deterministic group reconstruction, stale-root/size rejection, biometric proof gating, candidate/scope proof binding, chain-registration enforcement, credential/commitment mismatch, and SNARK artifact configuration tests.
+
+3. JavaScript syntax
+--------------------
+Command:
+node --check <all backend/research ZK/scripts .js/.mjs files>
+
+Result: PASS.
+Output:
+JS_SYNTAX_OK
+
+4. Frontend TypeScript/TSX syntax-only transpilation
+----------------------------------------------------
+Command:
+Global TypeScript 5.8.3 transpileModule pass over non-.d.ts files under votechain-frontend-ts/src.
+
+Result: PASS as supplemental syntax evidence only; this is NOT a dependency-based application build.
+Output:
+FRONTEND_TS_TSX_SYNTAX_OK files=46
+
+5. Active ZK path legacy voterHash/salt scan
+--------------------------------------------
+Command:
+grep -RniE 'voterHash|encryptedSalt|VOTER_SALT_SECRET_KEY' active vote/proof frontend/backend paths
+
+Result: PASS; no matches.
+
+6. ZK ABI copies
+-----------------
+Command:
+sha256sum votechain-central-server/abi/ZKLocalVoting.json votechain-frontend-ts/src/abi/ZKLocalVoting.json
+cmp <backend> <frontend>
+
+Result: PASS for byte-identical packaged copies. These copies are bootstrap interface copies pending real Foundry artifact generation; they are NOT claimed as a successful Foundry ABI sync.
+Output:
+15847b22773f3a7d41aae2066e4eed22bde0603a447b484cc155e00fb1e42c1f  votechain-central-server/abi/ZKLocalVoting.json
+15847b22773f3a7d41aae2066e4eed22bde0603a447b484cc155e00fb1e42c1f  votechain-frontend-ts/src/abi/ZKLocalVoting.json
+ZK_ABI_COPIES_IDENTICAL
+
+7. Semaphore V4 dependency installation
+----------------------------------------
+Command:
+npm run setup:zk
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED. The npm registry could not be reached from the worker runtime; the command timed out (exit 124). No partial node_modules are included in the deliverable.
+Relevant output:
+
+> setup:zk
+> bash scripts/setup-zk-deps.sh
+
+
+8. Standalone Semaphore proof PoC execution
+--------------------------------------------
+Command:
+node research/zkp/poc/semaphore-poc.mjs
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED because the pinned Semaphore runtime could not be installed.
+Relevant output:
+file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:15
+    throw new Error(
+          ^
+
+Error: Semaphore V4 runtime is not installed. Run "npm run setup:zk" first. Original error: Cannot find module '/mnt/data/vc-w03-work/VoteChain/.zk-deps/node_modules/@semaphore-protocol/core/src/index.js' imported from /mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs
+    at loadRuntime (file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:15:11)
+    at async file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:32:17
+
+Node.js v22.16.0
+
+9. Foundry gates
+----------------
+Commands:
+forge fmt --check
+forge build
+forge test -vv
+forge test --gas-report
+forge build --sizes
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED. forge is not installed in the worker runtime. Each command exited 127 with "forge: command not found".
+
+10. Real Foundry ABI synchronization
+------------------------------------
+Command:
+node scripts/sync-zk-local-voting-abi.mjs
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED because forge build could not create out/ZKLocalVoting.sol/ZKLocalVoting.json.
+Relevant output:
+node:fs:442
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/mnt/data/vc-w03-work/VoteChain/out/ZKLocalVoting.sol/ZKLocalVoting.json'
+    at Object.readFileSync (node:fs:442:20)
+    at file:///mnt/data/vc-w03-work/VoteChain/scripts/sync-zk-local-voting-abi.mjs:13:32
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/mnt/data/vc-w03-work/VoteChain/out/ZKLocalVoting.sol/ZKLocalVoting.json'
+}
+
+Node.js v22.16.0
+
+11. Backend dependency installation
+-----------------------------------
+Command:
+cd votechain-central-server && npm ci --no-audit --no-fund
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED. Registry access did not complete; attempt was forcibly capped and exited 137. Partial node_modules were deleted.
+
+12. Frontend dependency installation
+------------------------------------
+Command:
+cd votechain-frontend-ts && npm ci --no-audit --no-fund
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED. Registry access did not complete; attempt was forcibly capped and exited 137. Partial node_modules were deleted.
+
+13. Frontend build
+------------------
+Command:
+cd votechain-frontend-ts && npm run build
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED. Dependencies were unavailable, so TypeScript could not resolve Vite/plugin/Node/react-router-dom types. This is not claimed as a source-level build failure or as a PASS.
+Relevant output:
+
+> votechain-frontend-ts@0.0.0 build
+> tsc -b && vite build
+
+vite.config.ts(1,39): error TS2307: Cannot find module 'vite' or its corresponding type declarations.
+vite.config.ts(2,19): error TS2307: Cannot find module '@vitejs/plugin-react' or its corresponding type declarations.
+vite.config.ts(3,18): error TS2307: Cannot find module 'path' or its corresponding type declarations.
+vite.config.ts(6,29): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+vite.config.ts(13,43): error TS2304: Cannot find name '__dirname'.
+error TS2688: Cannot find type definition file for 'react-router-dom'.
+  The file is in the program because:
+    Entry point of type library 'react-router-dom' specified in compilerOptions
+
+14. Frontend lint
+-----------------
+Command:
+cd votechain-frontend-ts && npm run lint
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED because eslint is not installed without npm ci.
+Relevant output:
+
+> votechain-frontend-ts@0.0.0 lint
+> eslint .
+
+sh: 1: eslint: not found
+
+15. Local ZK end-to-end execution
+---------------------------------
+Command:
+node research/zkp/e2e/local-zk-e2e.mjs
+
+Result: NOT TESTED / ENVIRONMENT BLOCKED because backend ethers, Semaphore runtime, Foundry artifacts and Anvil were unavailable in this worker runtime.
+Relevant output:
+file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:15
+    throw new Error(`${label} is unavailable. Run the documented setup first. ${error.message}`)
+          ^
+
+Error: Backend ethers dependency is unavailable. Run the documented setup first. Cannot find module '/mnt/data/vc-w03-work/VoteChain/votechain-central-server/node_modules/ethers/lib.esm/index.js' imported from /mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs
+    at loadModule (file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:15:11)
+    at async file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:51:22
+
+Node.js v22.16.0
+
+16. Biometric hardware
+----------------------
+Result: NOT HARDWARE-TESTED. Existing face/fingerprint architecture was preserved. The biometric-to-proof boundary is covered by controlled backend unit tests, including an explicit test that failed biometric authentication cannot reach proof generation.
+
+17. Gas / contract size / proof measurements
+--------------------------------------------
+Result: NOT MEASURED in this runtime. No fabricated benchmark files were generated. The PoC/E2E scripts write raw JSON only after successful execution, and Foundry commands write gas/size evidence only when the toolchain is available.

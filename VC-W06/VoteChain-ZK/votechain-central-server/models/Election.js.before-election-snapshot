@@ -1,0 +1,96 @@
+import mongoose from "mongoose"
+
+const candidateSnapshotSchema = new mongoose.Schema({
+  candidateRef: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Candidate",
+    required: true,
+  },
+  candidateId: {
+    type: Number,
+    required: true,
+  },
+  slot: {
+    type: Number,
+    required: true,
+  },
+  name: String,
+  party: String,
+  location: String,
+}, {
+  _id: false,
+})
+
+const electionSchema = new mongoose.Schema({
+  electionId: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+  },
+
+  status: {
+    type: String,
+    enum: [
+      "registration",
+      "starting",
+      "active",
+      "ended",
+      "finalized",
+      "failed",
+    ],
+    default: "registration",
+    index: true,
+  },
+
+  chainId: String,
+
+  adminAddress: {
+    type: String,
+    trim: true,
+  },
+
+  lifecycleSlot: {
+    type: String,
+    enum: ["current"],
+    unique: true,
+    sparse: true,
+  },
+
+  directContractAddress: String,
+  verifierAddress: String,
+
+  eligibleRoot: String,
+  candidateManifestHash: String,
+  candidateCount: Number,
+
+  contractDomain: String,
+  Yx: String,
+  Yy: String,
+  electionContextHash: String,
+
+  trusteeTranscriptHash: String,
+  finalizationTranscriptHash: String,
+
+  acceptedBallotCount: {
+    type: String,
+    default: "0",
+  },
+
+  candidateSnapshot: {
+    type: [candidateSnapshotSchema],
+    default: [],
+  },
+
+  snapshotLockedAt: Date,
+  startedAt: Date,
+  endedAt: Date,
+  finalizedAt: Date,
+
+  failureReason: String,
+}, {
+  timestamps: true,
+})
+
+export default mongoose.models.Election ||
+  mongoose.model("Election", electionSchema)

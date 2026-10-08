@@ -1,0 +1,283 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/config/env.js:8:    throw new Error(`Missing required environment variable: ${name}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:10:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:11:    console.error('Error fetching public election data:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:12:    return res.status(500).json({ success: false, message: 'Failed to fetch election data' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:70:    return res.status(400).json({ success: false, message: "NID is required" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:84:    return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:88:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:89:    console.error("[API] Enrollment error:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:90:    return res.status(500).json({ success: false, error: error.message })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:99:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:120:    return res.status(400).json({ success: false, message: "No match found" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:121:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:122:    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:123:    return res.status(500).json({ success: false, message: "Unable to prepare anonymous eligibility proof" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:137:    return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:179:    return res.status(401).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:183:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:186:      error.message,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:189:    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:208:    return res.status(400).json({ success: false, message: "Format failed" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:209:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:210:    console.error("[API] Format error:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:211:    return res.status(500).json({ success: false, error: error.message })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:21:    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:30:      return res.status(500).json({ success: false, message: 'Face recognition script not found' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:46:          return res.status(500).json({ success: false, message: 'Face recognition process failed' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:68:      } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:69:        console.error('[VoteController] ZK proof preparation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:70:        return res.status(500).json({ success: false, message: 'Unable to prepare anonymous eligibility proof' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:75:      console.error('[VoteController] Failed to start face recognition:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:76:      return res.status(500).json({ success: false, message: 'Failed to launch face recognition' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:78:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:79:    console.error('[VoteController] verifyFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:80:    return res.status(500).json({ success: false, message: 'Internal server error' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:53:        return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:68:      return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:73:  } catch (_error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:75:    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:86:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:100:      return res.status(409).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:108:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:141:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:142:    console.error('Voter ZK enrollment failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:145:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:153:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:159:    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:161:      message: 'Error creating voter ZK enrollment',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:170:      return res.status(400).json({ success: false, message: 'Valid identityCommitment is required' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:173:      return res.status(400).json({ success: false, message: 'registrationStatus must be registered or failed' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:184:        return res.status(409).json({ success: false, message: 'Commitment is not registered in the active ZK contract' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:194:        return res.status(409).json({ success: false, message: 'Commitment is already registered on-chain and cannot be marked failed' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:210:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:211:    console.error('Voter ZK registration reconciliation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:212:    return res.status(500).json({ success: false, message: 'Failed to reconcile voter commitment registration' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:236:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:237:    console.error('Voter update failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:238:    return res.status(500).json({ message: 'Error updating voter' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:250:      return res.status(409).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:257:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:258:    console.error('Voter deletion failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:259:    return res.status(500).json({ message: 'Error deleting voter' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:24:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:25:    console.error('[WP5] public config failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:26:    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:38:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:52:      return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:83:          return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:95:          return res.status(401).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:138:      } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:141:          error.message,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:144:        return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:158:        error.message,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:161:      return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:166:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:167:    console.error('[WP5] authorizeFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:169:    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:171:      message: 'Internal server error',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validate.js:7:        return res.status(400).json({ 
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:21:        return res.status(400).json({ success: false, message: 'NID is required' });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:53:                    res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:65:                res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:74:    } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:77:            res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:80:                error: error.message
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:35:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:37:      return res.status(409).json({ success: false, message: 'A candidate with this National ID already exists' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:41:      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:44:        errors: Object.values(error.errors).map((validationError) => validationError.message),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:48:    console.error('Candidate creation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:49:    return res.status(500).json({ success: false, message: 'Failed to create candidate metadata' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:70:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:74:    return res.status(400).json({ success: false, message: error.message })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:92:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:93:    return res.status(400).json({ success: false, message: error.message })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:103:  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:104:    return res.status(500).json({ success: false, message: 'Failed to delete candidate' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:130:        return res.status(500).json({ success: false, message: 'Face training failed', code })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:134:    trainProcess.on('error', () => res.status(500).json({ success: false, message: 'Failed to start training process' }))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:135:  } catch (_error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:136:    return res.status(500).json({ success: false, message: 'Failed to train face model' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:51://     } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:11:    throw new Error('Migration blocked. Set MIGRATION_ALLOW_RUN=true only for the intended safe database.')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:15:    throw new Error('MONGO_URI is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:30:  .catch((error) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:31:    console.error(`Candidate ID migration failed: ${error.message}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:27:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:113:  throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:368:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:444:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:509:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:520:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:542:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:575:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:592:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:610:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:628:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:646:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:678:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:695:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:733:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:763:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:843:throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:48:  .catch((error) => console.error('MongoDB connection error:', error.message))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:60:  res.status(500).json({ success: false, message: 'Something went wrong!' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:12:    throw new Error('Allocated candidate ID is not a positive safe integer')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:48:    throw new Error('Invalid candidate registration status')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:68:    throw new Error('Counter floor must be a non-negative safe integer')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:35:      throw new Error(`Existing candidate record ${record._id} has an invalid candidateId`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:38:      throw new Error(`Duplicate existing candidateId ${candidateId}; migration stopped before index changes`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:13:    throw new Error('Biometric authentication is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:16:    throw new Error('Biometrically verified voter record is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:19:    throw new Error('Backend ZK proof generator is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:8:  if (!secret) throw new Error('ZK_CREDENTIAL_SECRET_KEY is missing from environment')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:10:    throw new Error('ZK_CREDENTIAL_SECRET_KEY must be exactly 32 bytes for AES-256-GCM')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:16:  if (typeof credential !== 'string' || credential.length === 0) throw new Error('Semaphore credential is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:17:  if (!identityCommitment) throw new Error('Identity commitment is required for credential binding')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:37:    throw new Error('Unsupported or missing ZK credential version')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/credentialCrypto.js:39:  if (!identityCommitment) throw new Error('Identity commitment is required for credential binding')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupCore.js:2:  if (!runtime?.Group) throw new Error('Semaphore Group runtime is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupCore.js:7:      throw new Error(`Registered voter group ordering is inconsistent at index ${index}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupCore.js:10:      throw new Error(`Registered voter at index ${index} has an invalid identity commitment`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupCore.js:20:    throw new Error(`Semaphore group is stale: backend reconstructed ${commitments.length} registered members but chain has ${normalizedChainSize}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupCore.js:23:    throw new Error('Semaphore group root mismatch between backend reconstruction and blockchain')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupEvents.js:19:      throw new Error(`VoterCommitmentRegistered event at group index ${index} is missing identityCommitment`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupService.js:12:    throw new Error('ZK_CONTRACT_DEPLOYMENT_BLOCK must be a non-negative safe integer when configured')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupService.js:16:    throw new Error('ZK contract event-query interface is required for deterministic group reconstruction')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:6:  if (!Number.isSafeInteger(value) || value <= 0) throw new Error('A positive candidateId is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:11:  if (!voter) throw new Error('Verified voter record is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:12:  if (chainRegistered !== true) throw new Error('Voter ZK commitment is not registered on-chain')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:13:  if (!voter.zkIdentityCommitment || !voter.zkCredential) throw new Error('Voter does not have an enrolled ZK credential')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:21:    throw new Error('Decrypted Semaphore identity does not match stored commitment')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:34:  if (BigInt(normalized.message) !== BigInt(selectedCandidateId)) throw new Error('Generated proof message does not match candidateId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:35:  if (BigInt(normalized.scope) !== normalizedElectionId) throw new Error('Generated proof scope does not match electionId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:38:    throw new Error('Generated Semaphore proof failed local verification')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofSerialization.js:5:    throw new Error(`Invalid Semaphore ${label}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofSerialization.js:11:    throw new Error('Invalid Semaphore proof shape')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:13:    throw new Error('A positive candidateId is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:16:    throw new Error('Verified voter does not have a valid ZK identity commitment')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:28:    throw new Error('Anonymous vote proof generation is only available while the election is Active')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:32:    throw new Error('Selected candidate is not registered on-chain')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/semaphoreRuntime.js:6:    runtimePromise = import(moduleUrl.href).catch((error) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/snarkArtifacts.js:5:  if (!wasm || !zkey) throw new Error('ZK_SNARK_WASM and ZK_SNARK_ZKEY must be configured together')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:52:    throw new Error('WP5_CREDENTIAL_SECRET_KEY is missing')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:55:    throw new Error('WP5_CREDENTIAL_SECRET_KEY must be exactly 32 bytes')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:81:    throw new Error('WP5 eligible voter capacity exhausted')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:93:    throw new Error('WP5 secret must be a nonzero BN254 field element')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:139:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:146:    throw new Error('WP5 Merkle capacity exceeded')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:175:    throw new Error('Invalid WP5 witness index')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:244:    throw new Error('Voter does not have an active WP5 custom credential')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:262:    throw new Error('WP5 Merkle index/commitment mismatch')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:283:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:322:  throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:359:    throw new Error('A public P-256 credential-release key is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:466:    throw new Error('Biometrically verified voter record is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:474:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:492:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:500:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:518:    throw new Error('WP5 credential/commitment mismatch')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:584:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/electionState.js:11:    throw new Error(`Unknown election state: ${value}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/voterHash.js:9:    throw new Error('VOTER_SALT_SECRET_KEY is missing from .env')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/voterHash.js:13:    throw new Error('VOTER_SALT_SECRET_KEY must be exactly 32 bytes for AES-256')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/wp5Contract.js:15:    throw new Error('WP5_CONTRACT_ADDRESS is not configured')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/AdminDashboard.tsx:23:    } catch (requestError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/AdminDashboard.tsx:24:      setError(requestError instanceof Error ? requestError.message : "Failed to fetch election data")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/ElectionStatus.tsx:28:    } catch (refreshError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/ElectionStatus.tsx:29:      setError(refreshError instanceof Error ? refreshError.message : "Failed to fetch election status")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/ElectionStatus.tsx:46:    } catch (actionError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/ElectionStatus.tsx:47:      toast({ title: "Transaction failed", description: actionError instanceof Error ? actionError.message : "Lifecycle transaction failed", variant: "destructive" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:36:      void getElectionState().then(setElectionState).catch(() => setElectionState(null))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:65:      } catch (chainError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:68:        } catch (statusError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:77:    } catch (registrationError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:81:        : registrationError instanceof Error ? registrationError.message : "Failed to register candidate"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:51:      void getElectionState().then(setElectionState).catch(() => setElectionState(null))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:68:      if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to train face model")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:71:    } catch (trainingError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:73:      toast({ title: "Error", description: trainingError instanceof Error ? trainingError.message : "Failed to train face model", variant: "destructive" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:118:      } catch (chainError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:119:        await updateVoterZkRegistrationStatus(identityCommitment, "failed").catch(() => undefined)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:125:    } catch (registrationError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:126:      const message = registrationError instanceof Error ? registrationError.message : "Failed to register voter"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:46:        throw new Error(errorData.message || "Failed to capture face images")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:66:        throw new Error(data.message || "Face capture failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:68:    } catch (err) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:36:        throw new Error(data.message || "Fingerprint enrollment failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:40:    } catch (err) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:127:      } catch (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:133:            ? verificationError.message
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/PublicDashboard.tsx:19:    } catch (requestError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/PublicDashboard.tsx:21:      setError(requestError instanceof Error ? requestError.message : "Could not fetch election data")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/theme-provider.tsx:70:    throw new Error("useTheme must be used within a ThemeProvider")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:118:      throw new Error('MetaMask is not installed')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:157:        } catch (contractError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:163:    } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:193:    } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:215:    throw new Error('useWallet must be used within a WalletProvider')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:161:        } catch (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:167:              ? requestError.message
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:279:        throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:340:      } catch (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:354:              ? voteError.message
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoterDashboard.tsx:21:    } catch (requestError) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoterDashboard.tsx:23:      setError(requestError instanceof Error ? requestError.message : "Could not fetch candidate data")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Wallet/WalletButton.tsx:26:    } catch (error: any) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Wallet/WalletButton.tsx:30:          description: error.message || "Failed to connect wallet",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Wallet/WalletButton.tsx:56:    } catch (error: any) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Wallet/WalletButton.tsx:59:        description: error.message || "Failed to disconnect wallet",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/config/api.ts:5:    throw new Error("VITE_API_BASE_URL is not configured")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/config/contract.ts:27:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/config/contract.ts:37:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/config/contract.ts:67:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:45:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:201:        } catch (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:286:        } catch (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:314:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:328:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:360:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:383:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:406:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:434:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:444:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:471:          throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:231:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:242:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:282:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:305:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:353:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:369:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:380:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:410:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:497:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:509:    throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:566:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:577:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:600:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:620:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:647:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:663:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:676:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:698:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:720:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:754:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:791:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:801:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:997:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1042:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1060:        throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1079:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1095:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1127:      throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1143:        throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1265:        throw new Error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1276:    } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1286:            ? error.message
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:32:    throw new Error(detail)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:36:    throw new Error("API response did not contain data")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:120:  if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to create voter ZK enrollment")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:122:  if (!identityCommitment) throw new Error("Identity commitment was not returned from backend")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:137:  if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to reconcile voter commitment registration")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:148:  if (!response.ok || !payload.success) throw new Error(payload.message || "Biometric verification or proof generation failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:150:  if (!data?.proof) throw new Error("Anonymous eligibility proof was not returned")

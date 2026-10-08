@@ -1,0 +1,53 @@
+258:        uint256 candidateCount;
+272:    bool public configured;
+280:    uint256 public candidateCount;
+289:    uint256 public acceptedBallotCount;
+308:        public usedNullifier;
+319:        uint256 candidateCount
+336:        uint256 acceptedBallotCount
+342:        uint256 acceptedBallotCount
+365:    modifier onlyAdmin() {
+374:    modifier inPhase(
+385:    function configure(
+389:        onlyAdmin
+390:        inPhase(
+395:            !configured,
+400:            cfg.candidateCount >= 1 &&
+401:            cfg.candidateCount <= MAX,
+429:        candidateCount =
+430:            cfg.candidateCount;
+444:        configured =
+451:            candidateCount
+459:     * committed trustee public shares derive the configured Y.
+463:    function setTrusteeTranscriptHash(
+467:        onlyAdmin
+468:        inPhase(
+473:            configured,
+497:    function activate()
+499:        onlyAdmin
+500:        inPhase(
+505:            configured,
+517:    function endElection()
+519:        onlyAdmin
+520:        inPhase(
+542:     *   - enforces sum(totals) == acceptedBallotCount,
+548:    function finalizeTally(
+553:        onlyAdmin
+554:        inPhase(
+579:                candidateCount
+583:                        acceptedBallotCount,
+592:                    "NONZERO_PADDED_RESULT"
+602:                acceptedBallotCount,
+603:            "RESULT_SUM_MISMATCH"
+614:            acceptedBallotCount
+633:                candidateCount,
+768:            !usedNullifier[
+774:        usedNullifier[
+786:        acceptedBallotCount +=
+799:            acceptedBallotCount
+848:            candidateCount;
+937:            !usedNullifier[
+966:            "INVALID_PROOF"
+1131:            !usedNullifier[
+1164:            candidateCount;
+1191:            "INVALID_PROOF"

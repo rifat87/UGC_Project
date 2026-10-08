@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script type="module">
+import RefreshRuntime from "/@react-refresh"
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true
+</script>
+
+  <script type="module" src="/@vite/client"></script>
+
+  <meta charset="UTF-8">
+  <title>VoteChain-ZK WP5D Runtime</title>
+</head>
+<body data-wp5d-status="RUNNING">
+  <main>
+    <h1>VoteChain-ZK WP5D Runtime</h1>
+    <p id="status">Running browser-local privacy worker...</p>
+  </main>
+
+  <script type="module" src="/src/wp5d-runtime.ts"></script>
+
+
+</body></html>

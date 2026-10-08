@@ -1,0 +1,292 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom:13:function VC_MAX_CANDIDATES() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:29: *   candidateCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:49:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:57:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:58:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:64:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:73:    signal output Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:74:    signal output Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:75:    signal output Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:76:    signal output Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:183:     *   candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:202:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:217:     * candidateCount:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:218:     *   1 <= candidateCount <= 16
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:220:    component candidateCountBits =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:223:    candidateCountBits.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:224:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:226:    component candidateCountZero =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:229:    candidateCountZero.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:230:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:232:    candidateCountZero.out === 0;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:234:    component candidateCountLt17 =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:237:    candidateCountLt17.in[0] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:238:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:240:    candidateCountLt17.in[1] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:243:    candidateCountLt17.out === 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:305:    signal bitSum[MAX_CANDIDATES + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:309:    component active[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:311:    component zeroR[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:312:    component rBits[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:313:    component rRange[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:315:    component rG[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:316:    component rY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:317:    component addPoint[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:319:    signal messageX[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:320:    signal messageY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:324:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:336:         * active[j] = (j < candidateCount)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:345:            candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:486:    bitSum[MAX_CANDIDATES] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:14:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:22:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:23:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:29:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:42:            MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:58:    core.candidateCount <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:59:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:90:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:100:    signal bindingState[MAX_CANDIDATES + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:102:    component bindingHash[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:109:        k < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:134:    bindingState[MAX_CANDIDATES] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:143:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:152:    VC_MAX_CANDIDATES(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:12:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:20:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:21:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:27:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:36:    signal input Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:37:    signal input Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:38:    signal input Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:39:    signal input Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:43:            MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:59:    core.candidateCount <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:60:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:95:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:107:        k < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:129:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:141:    VC_MAX_CANDIDATES(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp5-application-profile.json:30:    "lengthBound": "Poseidon(D_MANIFEST,candidateCount)",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp5-application-profile.json:31:    "candidateIds16": [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:158:const candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:166:const candidateIds = [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:177:            ...candidateIds
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:411:                candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:441:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:856:    x.candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:870:    x.candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:1023:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs:1024:        candidateIds,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs:175:function VC_MAX_CANDIDATES() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:214:const candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:217:const candidateIds =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:223:        ...candidateIds
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:248:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:382:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs:555:            candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-generate-solidity-fixture.mjs:197:            uint256 candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-generate-solidity-fixture.mjs:207:        candidateCount = ${d(cfg.candidateCount)};
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:589:    const candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:611:      candidateCount < 1 ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:612:      candidateCount >
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:630:          candidateCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:743:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:986:      candidateCount:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6-trustee-cli.mjs:989:            .candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs:83:const candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs:606:  candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs:824:          candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs:843:          candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp6a-threshold-functional-run.mjs:930:  candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2378:  const candidateCount =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2381:        .candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2391:    candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2392:    "candidateCount",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2401:    candidateCount < 1 ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2402:    candidateCount >
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2588:      candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src/wp6-threshold.mjs:2606:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165657/direct/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/bad-path-bit.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/candidate-count-17.json:80:  "candidateCount": "17",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/candidate-count-zero.json:80:  "candidateCount": "0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/duplicate-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/out-of-range-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/padded-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-context.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-contract-domain.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-election.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-manifest.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-nullifier.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-path.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-public-key.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-root.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-secret.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/zero-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/zero-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/bad-path-bit.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/bad-subgroup-y.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/candidate-count-17.json:80:  "candidateCount": "17",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/candidate-count-zero.json:80:  "candidateCount": "0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/duplicate-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/out-of-range-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/padded-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-binding.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-context.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-contract-domain.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-election.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-manifest.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-nullifier.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-path.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-public-key.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-root.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-secret.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/zero-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/zero-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/bad-path-bit.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/bad-subgroup-y.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/candidate-count-17.json:80:  "candidateCount": "17",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/candidate-count-zero.json:80:  "candidateCount": "0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/duplicate-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/out-of-range-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/padded-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/tampered-ciphertext.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-context.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-contract-domain.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-election.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-manifest.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-nullifier.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-path.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-public-key.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-root.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-secret.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/zero-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/zero-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/wp3-known-answer-vector.json:9:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/wp3-known-answer-vector.json:10:  "candidateIds": [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/bad-path-bit.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/bad-subgroup-y.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/candidate-count-17.json:80:  "candidateCount": "17",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/candidate-count-zero.json:80:  "candidateCount": "0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/duplicate-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/out-of-range-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/padded-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-binding.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-context.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-contract-domain.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-election.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-manifest.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-nullifier.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-path.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-public-key.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-root.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-secret.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/zero-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/zero-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/bad-path-bit.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/bad-subgroup-y.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/candidate-count-17.json:80:  "candidateCount": "17",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/candidate-count-zero.json:80:  "candidateCount": "0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/duplicate-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/out-of-range-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/padded-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/tampered-ciphertext.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/valid.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-context.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-contract-domain.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-election.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-manifest.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-nullifier.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-path.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-public-key.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-root.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-secret.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/zero-randomness.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/zero-selection.json:80:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/wp3-known-answer-vector.json:9:  "candidateCount": "4",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/wp3-known-answer-vector.json:10:  "candidateIds": [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/config/VoteChainBuildProfile.circom:13:function VC_MAX_CANDIDATES() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:29: *   candidateCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:49:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:57:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:58:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:64:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:73:    signal output Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:74:    signal output Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:75:    signal output Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:76:    signal output Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:183:     *   candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:202:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:217:     * candidateCount:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:218:     *   1 <= candidateCount <= 16
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:220:    component candidateCountBits =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:223:    candidateCountBits.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:224:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:226:    component candidateCountZero =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:229:    candidateCountZero.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:230:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:232:    candidateCountZero.out === 0;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:234:    component candidateCountLt17 =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:237:    candidateCountLt17.in[0] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:238:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:240:    candidateCountLt17.in[1] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:243:    candidateCountLt17.out === 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:305:    signal bitSum[MAX_CANDIDATES + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:309:    component active[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:311:    component zeroR[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:312:    component rBits[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:313:    component rRange[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:315:    component rG[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:316:    component rY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:317:    component addPoint[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:319:    signal messageX[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:320:    signal messageY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:324:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:336:         * active[j] = (j < candidateCount)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:345:            candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/lib/VoteChainVoteCore.circom:486:    bitSum[MAX_CANDIDATES] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:12:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:20:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:21:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:27:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:36:    signal input Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:37:    signal input Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:38:    signal input Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:39:    signal input Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:43:            MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:59:    core.candidateCount <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:60:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:95:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:107:        k < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:129:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/circuit-source/VoteChainVoteDirect.circom:141:    VC_MAX_CANDIDATES(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume/direct-k2-d4/proof/compatibility-result.json:6:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d10/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d14/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d17/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d4/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d7/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d10/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d14/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d17/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d4/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d7/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d10/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d14/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d17/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d4/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d7/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d10/compatibility-result.json:8:  "candidateCount": 8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d14/compatibility-result.json:8:  "candidateCount": 8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d17/compatibility-result.json:8:  "candidateCount": 8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d4/compatibility-result.json:8:  "candidateCount": 8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d7/compatibility-result.json:8:  "candidateCount": 8,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/poseidon-k16-d17/compatibility-result.json:8:  "candidateCount": 16,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/poseidon-k2-d17/compatibility-result.json:8:  "candidateCount": 2,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/poseidon-k4-d17/compatibility-result.json:8:  "candidateCount": 4,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/poseidon-k8-d17/compatibility-result.json:8:  "candidateCount": 8,

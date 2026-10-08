@@ -1,0 +1,1 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom

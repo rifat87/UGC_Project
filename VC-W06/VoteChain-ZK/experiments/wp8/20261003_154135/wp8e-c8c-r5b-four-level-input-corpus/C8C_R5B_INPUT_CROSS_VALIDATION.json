@@ -1,0 +1,77 @@
+{
+  "status": "PASS",
+  "levels": [
+    {
+      "candidateCount": 2,
+      "status": "PASS",
+      "checks": {
+        "candidateCount": true,
+        "candidateManifestHash": true,
+        "electionContextHash": true,
+        "eligibleRoot": true,
+        "electionId": true,
+        "contractDomain": true,
+        "publicKey": true,
+        "nullifier": true,
+        "bit": true,
+        "randomness": true,
+        "membership": true,
+        "ciphertext": true
+      }
+    },
+    {
+      "candidateCount": 4,
+      "status": "PASS",
+      "checks": {
+        "candidateCount": true,
+        "candidateManifestHash": true,
+        "electionContextHash": true,
+        "eligibleRoot": true,
+        "electionId": true,
+        "contractDomain": true,
+        "publicKey": true,
+        "nullifier": true,
+        "bit": true,
+        "randomness": true,
+        "membership": true,
+        "ciphertext": true
+      }
+    },
+    {
+      "candidateCount": 8,
+      "status": "PASS",
+      "checks": {
+        "candidateCount": true,
+        "candidateManifestHash": true,
+        "electionContextHash": true,
+        "eligibleRoot": true,
+        "electionId": true,
+        "contractDomain": true,
+        "publicKey": true,
+        "nullifier": true,
+        "bit": true,
+        "randomness": true,
+        "membership": true,
+        "ciphertext": true
+      }
+    },
+    {
+      "candidateCount": 16,
+      "status": "PASS",
+      "checks": {
+        "candidateCount": true,
+        "candidateManifestHash": true,
+        "electionContextHash": true,
+        "eligibleRoot": true,
+        "electionId": true,
+        "contractDomain": true,
+        "publicKey": true,
+        "nullifier": true,
+        "bit": true,
+        "randomness": true,
+        "membership": true,
+        "ciphertext": true
+      }
+    }
+  ]
+}

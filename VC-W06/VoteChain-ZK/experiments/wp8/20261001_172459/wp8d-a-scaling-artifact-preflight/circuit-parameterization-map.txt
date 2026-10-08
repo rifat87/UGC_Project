@@ -1,0 +1,150 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom:13:function VC_MAX_CANDIDATES() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom:17:function VC_MERKLE_DEPTH() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:29: *   candidateCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:37: *   Merkle membership
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:48:template VoteChainVoteCore(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:49:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:50:    MERKLE_DEPTH
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:54:    signal input siblings[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:55:    signal input pathBits[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:57:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:58:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:64:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:73:    signal output Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:74:    signal output Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:75:    signal output Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:76:    signal output Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:88:     * Poseidon(DOMAIN_IDENTITY, secret)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:91:        Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:100:     * Poseidon binary Merkle membership.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:102:    signal current[MERKLE_DEPTH + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:103:    signal left[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:104:    signal right[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:106:    component merkleHash[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:113:        level < MERKLE_DEPTH;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:138:            Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:150:    current[MERKLE_DEPTH] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:155:     * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:162:        Poseidon(3);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:179:     * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:183:     *   candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:190:        Poseidon(7);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:202:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:217:     * candidateCount:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:218:     *   1 <= candidateCount <= 16
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:220:    component candidateCountBits =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:223:    candidateCountBits.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:224:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:226:    component candidateCountZero =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:229:    candidateCountZero.in <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:230:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:232:    candidateCountZero.out === 0;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:234:    component candidateCountLt17 =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:237:    candidateCountLt17.in[0] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:238:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:240:    candidateCountLt17.in[1] <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:243:    candidateCountLt17.out === 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:305:    signal bitSum[MAX_CANDIDATES + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:309:    component active[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:311:    component zeroR[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:312:    component rBits[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:313:    component rRange[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:315:    component rG[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:316:    component rY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:317:    component addPoint[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:319:    signal messageX[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:320:    signal messageY[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:324:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:336:         * active[j] = (j < candidateCount)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:345:            candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom:486:    bitSum[MAX_CANDIDATES] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K16.circom:143:         * Chained Poseidon commitment:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K16.circom:146:         * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K16.circom:154:        bindingHash[j] = Poseidon(5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K2.circom:143:         * Chained Poseidon commitment:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K2.circom:146:         * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K2.circom:154:        bindingHash[j] = Poseidon(5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K4.circom:143:         * Chained Poseidon commitment:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K4.circom:146:         * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K4.circom:154:        bindingHash[j] = Poseidon(5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K8.circom:143:         * Chained Poseidon commitment:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K8.circom:146:         * Poseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/CandidateDigest_K8.circom:154:        bindingHash[j] = Poseidon(5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D10.circom:6: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D10.circom:11: * This measures depth-dependent Poseidon membership arithmetic.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D10.circom:15:template MerkleDepth10() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D10.circom:44:        hash[i] = Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D10.circom:59:component main = MerkleDepth10();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D14.circom:6: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D14.circom:11: * This measures depth-dependent Poseidon membership arithmetic.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D14.circom:15:template MerkleDepth14() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D14.circom:44:        hash[i] = Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D14.circom:59:component main = MerkleDepth14();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D17.circom:6: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D17.circom:11: * This measures depth-dependent Poseidon membership arithmetic.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D17.circom:15:template MerkleDepth17() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D17.circom:44:        hash[i] = Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D17.circom:59:component main = MerkleDepth17();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D4.circom:6: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D4.circom:11: * This measures depth-dependent Poseidon membership arithmetic.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D4.circom:15:template MerkleDepth4() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D4.circom:44:        hash[i] = Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D4.circom:59:component main = MerkleDepth4();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D7.circom:6: * WP2 Phase-B isolated Merkle-depth scaling circuit.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D7.circom:11: * This measures depth-dependent Poseidon membership arithmetic.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D7.circom:15:template MerkleDepth7() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D7.circom:44:        hash[i] = Poseidon(2);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/phase-b/generated/Merkle_D7.circom:59:component main = MerkleDepth7();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/PoseidonReference.circom:5:template PoseidonReference() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/PoseidonReference.circom:11:    component h = Poseidon(3);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/PoseidonReference.circom:19:component main {public [a, b, c]} = PoseidonReference();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:3:include "./lib/VoteChainVoteCore.circom";
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:13:template VoteChainVoteDigest(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:14:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:15:    MERKLE_DEPTH
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:19:    signal input siblings[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:20:    signal input pathBits[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:22:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:23:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:29:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:41:        VoteChainVoteCore(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:42:            MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:43:            MERKLE_DEPTH
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:58:    core.candidateCount <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:59:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:78:        d < MERKLE_DEPTH;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:90:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:100:    signal bindingState[MAX_CANDIDATES + 1];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:102:    component bindingHash[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:109:        k < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:113:            Poseidon(5);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:134:    bindingState[MAX_CANDIDATES] ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:143:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:151:} = VoteChainVoteDigest(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:152:    VC_MAX_CANDIDATES(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom:153:    VC_MERKLE_DEPTH()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:3:include "./lib/VoteChainVoteCore.circom";
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:11:template VoteChainVoteDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:12:    MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:13:    MERKLE_DEPTH
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:17:    signal input siblings[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:18:    signal input pathBits[MERKLE_DEPTH];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:20:    signal input bit[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:21:    signal input randomness[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:27:    signal input candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:36:    signal input Rx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:37:    signal input Ry[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:38:    signal input Sx[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:39:    signal input Sy[MAX_CANDIDATES];
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:42:        VoteChainVoteCore(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:43:            MAX_CANDIDATES,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:44:            MERKLE_DEPTH
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:59:    core.candidateCount <==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:60:        candidateCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:79:        d < MERKLE_DEPTH;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:95:        j < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:107:        k < MAX_CANDIDATES;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:129:        candidateCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:140:} = VoteChainVoteDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:141:    VC_MAX_CANDIDATES(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom:142:    VC_MERKLE_DEPTH()

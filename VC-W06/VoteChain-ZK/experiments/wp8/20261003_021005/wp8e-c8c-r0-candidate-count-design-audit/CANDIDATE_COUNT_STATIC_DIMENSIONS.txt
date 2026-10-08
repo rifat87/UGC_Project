@@ -1,0 +1,4 @@
+solidityHas73PublicSignalReference=YES
+verifierHas73PublicInputReference=YES
+solidityHasFixed16ArraySyntax=YES
+solidityUsesCandidateCount=YES

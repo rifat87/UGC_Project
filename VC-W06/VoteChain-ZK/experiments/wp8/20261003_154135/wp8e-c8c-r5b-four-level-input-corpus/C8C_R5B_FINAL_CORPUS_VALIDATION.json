@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "checks": {
+    "indexRows": true,
+    "witnessRows": true,
+    "indexLevels": true,
+    "witnessLevels": true,
+    "allCalculateRcZero": true,
+    "allCheckRcZero": true,
+    "inputHashesAgree": true
+  },
+  "proofGenerationPerformed": false,
+  "transactionSubmitted": false,
+  "successfulWitnessFilesRetained": false
+}

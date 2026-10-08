@@ -1,0 +1,45 @@
+----------------------------------------------------------------------
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_162416/wp8c-a-stage-resolved-preflight/probe/attempt-1/probe.log
+----------------------------------------------------------------------
+Error: ENOENT: no such file or directory, open 'D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp5\20260930_195059\wp5b-compatibility\wp5b-k16-input.json'
+    at Object.readFileSync (node:fs:442:20)
+    at main (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:25:12)
+    at Object.<anonymous> (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:106:1)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+
+----------------------------------------------------------------------
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_162416/wp8c-a-stage-resolved-preflight/probe/attempt-2/probe.log
+----------------------------------------------------------------------
+Error: ENOENT: no such file or directory, open 'D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_valid_final.json'
+    at Object.readFileSync (node:fs:442:20)
+    at main (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:25:12)
+    at Object.<anonymous> (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:106:1)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+
+----------------------------------------------------------------------
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_162416/wp8c-a-stage-resolved-preflight/probe/attempt-3/probe.log
+----------------------------------------------------------------------
+Error: ENOENT: no such file or directory, open 'D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_invalid_bit_final.json'
+    at Object.readFileSync (node:fs:442:20)
+    at main (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:25:12)
+    at Object.<anonymous> (D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261001_162416\wp8c-a-stage-resolved-preflight\probe\compatibility-probe.cjs:106:1)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+

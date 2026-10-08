@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "classification": "SANITIZED_ENV_TEMPLATE_VALIDATION",
+  "files": [
+    {
+      "file": "votechain-central-server.env.example",
+      "keyCount": 12,
+      "allValuesBlank": true
+    },
+    {
+      "file": "votechain-frontend-ts.env.example",
+      "keyCount": 4,
+      "allValuesBlank": true
+    }
+  ],
+  "originalEnvironmentExamplesModified": false,
+  "secretValuesCopied": false,
+  "secretValuesPrinted": false,
+  "packageAction": "REPLACE_ORIGINAL_ENV_EXAMPLES_WITH_SANITIZED_KEY_ONLY_TEMPLATES"
+}

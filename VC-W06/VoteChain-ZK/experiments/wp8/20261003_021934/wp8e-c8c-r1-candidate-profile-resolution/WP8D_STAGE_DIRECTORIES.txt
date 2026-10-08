@@ -1,0 +1,12 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_172459/wp8d-a-scaling-artifact-preflight
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_175157/wp8d-b0-build-template-resolution
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185035/wp8d-b1-profile-patch-resume
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_185857/wp8d-b2a-24-profile-compile
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_190442/wp8d-b2a-24-profile-compile
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_191805/wp8d-b2b-a-24-profile-dev-setup
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_225251/wp8d-c-stage-resolved-scaling-pilot
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_232137/wp8d-d-final-campaign
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/WP8D_D_PREFLIGHT_20261001_232048
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/WP8D_D_PREFLIGHT_20261001_232048/wp8d-d-final-campaign

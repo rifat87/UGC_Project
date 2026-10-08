@@ -1,0 +1,513 @@
+{
+  "status": "PASS",
+  "parserPolicy": "JSONDecoder.raw_decode first top-level JSON object",
+  "verifierDeploymentCount": 25,
+  "directDeploymentCount": 25,
+  "totalDeploymentCount": 50,
+  "trailingDiagnosticFileCount": 1,
+  "deploymentAddressField": "deployedTo",
+  "deploymentTransactionField": "transactionHash",
+  "deployerField": "deployer",
+  "records": [
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-01/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-02/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-03/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-04/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-05/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-06/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-07/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-08/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-09/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-10/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-11/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-12/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-13/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-14/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": true,
+      "trailingDiagnosticLength": 212
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-16/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-17/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-18/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-19/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-20/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-01/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-02/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-03/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-04/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "verifier",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-05/verifier-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-01/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-02/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-03/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-04/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-05/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-06/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-07/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-08/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-09/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-10/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-11/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-12/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-13/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-14/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-16/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-17/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-18/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-19/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-20/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-01/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-02/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-03/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-04/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    },
+    {
+      "kind": "direct",
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-05/direct-deploy.json",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+      "leadingWhitespaceBytes": 0,
+      "trailingDiagnosticPresent": false,
+      "trailingDiagnosticLength": 0
+    }
+  ]
+}

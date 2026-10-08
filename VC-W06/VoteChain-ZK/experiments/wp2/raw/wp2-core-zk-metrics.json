@@ -1,0 +1,141 @@
+{
+  "environment": {
+    "timestampUtc": "2026-09-29T20:52:38.697Z",
+    "osPlatform": "win32",
+    "osRelease": "10.0.26200",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalCpuCount": 16,
+    "totalMemoryBytes": 10575405056,
+    "nodeVersion": "v22.15.0",
+    "npmVersion": "10.9.1",
+    "circomVersion": "circom compiler 2.2.3",
+    "snarkjsVersion": "snarkjs@0.7.6",
+    "circomlibjsVersion": "0.1.7",
+    "circomlibVersion": "2.0.5",
+    "warmups": 5,
+    "measuredIterations": 20
+  },
+  "circuit": {
+    "compileMs": 3274,
+    "constraints": 3349,
+    "publicInputs": 6,
+    "privateInputs": 2,
+    "outputs": 0,
+    "nonlinearConstraints": 3349,
+    "linearConstraints": 3349,
+    "r1csBytes": 758192,
+    "wasmBytes": 92319,
+    "provingKeyBytes": 1834655,
+    "verificationKeyJsonBytes": 3835,
+    "proofJsonBytes": 805,
+    "publicSignalsJsonBytes": 491
+  },
+  "zkMetrics": [
+    {
+      "metricId": "M03",
+      "metric": "witness_generation",
+      "samplesMs": [
+        269,
+        266,
+        255,
+        254,
+        257,
+        259,
+        263,
+        254,
+        258,
+        238,
+        254,
+        257,
+        335,
+        255,
+        257,
+        268,
+        263,
+        261,
+        281,
+        288
+      ],
+      "statistics": {
+        "n": 20,
+        "meanMs": 264.6,
+        "medianMs": 259,
+        "minMs": 238,
+        "maxMs": 335,
+        "sampleStdDevMs": 19.60236290805135,
+        "p95Ms": 288
+      }
+    },
+    {
+      "metricId": "M04",
+      "metric": "groth16_proving",
+      "samplesMs": [
+        1717,
+        1741,
+        1762,
+        1710,
+        1690,
+        1714,
+        1705,
+        1712,
+        1699,
+        1753,
+        1689,
+        1708,
+        1696,
+        1714,
+        1780,
+        1706,
+        1659,
+        1712,
+        1710,
+        1715
+      ],
+      "statistics": {
+        "n": 20,
+        "meanMs": 1714.6,
+        "medianMs": 1712,
+        "minMs": 1659,
+        "maxMs": 1780,
+        "sampleStdDevMs": 27.056276633401684,
+        "p95Ms": 1762
+      }
+    },
+    {
+      "metricId": "M05",
+      "metric": "groth16_verification",
+      "samplesMs": [
+        1226,
+        1251,
+        1236,
+        1288,
+        1256,
+        1224,
+        1260,
+        1250,
+        1232,
+        1245,
+        1302,
+        1235,
+        1300,
+        1227,
+        1245,
+        1266,
+        1232,
+        1248,
+        1253,
+        1492
+      ],
+      "statistics": {
+        "n": 20,
+        "meanMs": 1263.4,
+        "medianMs": 1250,
+        "minMs": 1224,
+        "maxMs": 1492,
+        "sampleStdDevMs": 58.45682167206835,
+        "p95Ms": 1302
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_SUBMISSION_BASIS_AND_SENSITIVE_MATERIAL_AUDIT",
+  "repositoryRoot": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK",
+  "wp8FinalArchive": {
+    "path": "experiments/wp8/20261004_031507/f2a/wp8-final.zip",
+    "sizeBytes": 40417,
+    "sha256": "b191e1f4fdabf05feceae0e37e401499e30707594860e6c546236e2b8c3d5ec7"
+  },
+  "topLevelEntries": 44,
+  "largeFilesGe25MiB": 19,
+  "deliverableCandidateFiles": 24464,
+  "deliverableCategoryCounts": {
+    "PROJECT_README_MANUAL": 25,
+    "FINAL_PAPER_THESIS": 217,
+    "FRONTEND_BACKEND": 378,
+    "BIOMETRIC_CONFORMANCE": 348,
+    "CIRCOM_ZK_ARTIFACT": 807,
+    "SMART_CONTRACT": 160,
+    "EXPERIMENT_REPRODUCIBILITY": 23636,
+    "CRYPTO_LIBRARY": 363,
+    "LITERATURE_COMPARISON": 5
+  },
+  "coreEngineeringCategoryPresence": {
+    "PROJECT_README_MANUAL": true,
+    "BIOMETRIC_CONFORMANCE": true,
+    "CIRCOM_ZK_ARTIFACT": true,
+    "CRYPTO_LIBRARY": true,
+    "SMART_CONTRACT": true,
+    "FRONTEND_BACKEND": true,
+    "EXPERIMENT_REPRODUCIBILITY": true,
+    "LITERATURE_COMPARISON": true
+  },
+  "finalPaperOrThesisCandidateFiles": 217,
+  "sensitiveReviewRecords": 38,
+  "sensitiveReviewRequired": true,
+  "gitStatusCaptured": true,
+  "hardChecks": {
+    "wp8FinalArchivePresent": true,
+    "wp8FinalArchiveNonEmpty": true,
+    "coreEngineeringDeliverableCategoriesHaveCandidates": true,
+    "secretValuesWereNotPrintedByAudit": true
+  },
+  "submissionArchiveCreated": false,
+  "sourceFilesModified": false,
+  "nextGate": "SUB_P1_SENSITIVE_MATERIAL_CLASSIFICATION_AND_SUBMISSION_SCOPE_FREEZE"
+}

@@ -1,0 +1,107 @@
+======================================================================
+VOTECHAIN-ZK WP8E FINAL REPEATED ON-CHAIN PROTOCOL V1
+======================================================================
+
+CLASSIFICATION=FINAL_CONTROLLED_MEASUREMENT_PROTOCOL
+ARCHITECTURE=DIRECT_ACTIVE
+POSEIDON_PROFILE=REFERENCE_ONLY
+SOLIDITY_CHANGE_ALLOWED=NO
+CIRCUIT_CHANGE_ALLOWED=NO
+CRYPTO_CHANGE_ALLOWED=NO
+PROOF_REGENERATION_ALLOWED=NO
+ACTIVE_SOURCE_EDIT_ALLOWED=NO
+
+PILOT_GATE=A1B_PASS_REQUIRED
+A1B_STATUS=PASS_WP8E_A1B_VALID_CAST_RPC_PILOT
+A1B_EVIDENCE_MANIFEST_SHA256=d93313546a822a911a8a7def0b69206c4a4a938a53db9324de926e7106a47f8d
+
+POST_A1B_LEGACY_SEMAPHORE_DEPENDENCY_RESTORATION=YES
+SEMAPHORE_ROLE=LEGACY_REFERENCE_ONLY
+ACTIVE_DIRECT_DEPENDS_ON_SEMAPHORE=NO
+
+ACTIVE_PROFILE=VoteChainDirect
+ACTIVE_VERIFIER=VoteChainVoteDirectVerifier
+CANDIDATE_COUNT=4
+MAX_CANDIDATES=16
+MERKLE_DEPTH=17
+ELIGIBLE_CAPACITY=131072
+
+FIXTURE=DIRECT-A
+REUSE_ACCEPTED_PROOF=YES
+NEW_GROTH16_PROOF_GENERATED=NO
+
+WARMUP_ITERATIONS=5
+MEASURED_ITERATIONS=20
+RAW_OBSERVATIONS_PRESERVED=YES
+OUTLIER_DELETION=NO
+
+CHAIN=FRESH_ISOLATED_ANVIL_PER_ITERATION
+ELECTION_CONFIGURATION=EXACT_DIRECT_A_PUBLIC_CONTEXT
+INITIAL_ACCEPTED_BALLOT_COUNT=0
+INITIAL_NULLIFIER_USED=false
+
+REAL_ACCEPTED_CASTS_PER_ITERATION=1
+DUPLICATE_CONTROL=ETH_CALL_SIMULATION_ONLY
+FAILED_DUPLICATE_TX_MINED=NO
+
+REQUIRED_PRE_TX_GATES:
+- real DIRECT-A verifier call returns true
+- fresh contract count equals 0
+- exact DIRECT-A fixture/public-signal binding passes
+- election configure succeeds
+- election activate succeeds
+- phase is Active
+- nullifier unused
+- cast calldata encodes successfully
+- cast calldata is exactly 2340 bytes
+- accepted cast eth_call simulation succeeds
+
+PRIMARY_MEASUREMENTS:
+M12_DIRECT_VERIFIER_RPC_ESTIMATE_GAS
+M14_CAST_RECEIPT_GAS
+M15_CAST_CALLDATA_BYTES
+M16_DIRECT_VERIFIER_DEPLOY_GAS
+M16_VOTECHAIN_DIRECT_DEPLOY_GAS
+M29_TX_CONFIRMATION_LATENCY_MS
+
+STATE_CORRECTNESS:
+- acceptedBallotCount 0 -> 1
+- nullifier false -> true
+- encrypted tally changes
+- duplicate simulation rejected
+- duplicate simulation causes no state change
+
+M17_POLICY=DO_NOT_MISLABEL_POST_RECEIPT_RPC_READ_TIME_AS_TALLY_UPDATE_TIME
+M17_STATUS=INCLUDED_SYNCHRONOUSLY_IN_CAST_TRANSACTION
+
+M18_POLICY=DO_NOT_CLAIM_ISOLATED_TALLY_GAS_FROM_TOTAL_RECEIPT
+M18_STATUS=REQUIRES_SEPARATE_ISOLATED_TALLY_CAMPAIGN_IF_NUMERIC_VALUE_REQUIRED
+
+M29_DEFINITION=CAST_SEND_START_TO_RECEIPT_RETURN_WALLCLOCK
+
+FINAL_STATISTICS:
+- arithmetic mean
+- median
+- minimum
+- maximum
+- sample standard deviation
+- nearest-rank p95
+
+GAS_PRIMARY_COST_METRIC=YES
+FIAT_COST_PRIMARY_METRIC=NO
+
+FINAL_PASS_REQUIRES:
+- all 5 warmups complete
+- all 20 measured iterations complete
+- no measured iteration silently removed
+- all 20 accepted transactions receipt status = 1
+- all 20 count transitions = 0 -> 1
+- all 20 nullifier transitions = false -> true
+- all 20 encrypted tallies change
+- all 20 duplicate controls reject
+- all 20 duplicate controls leave state unchanged
+- calldata = 2340 bytes in every measured iteration
+- active source hashes unchanged from protocol freeze
+- every raw receipt/timing/state observation preserved
+- final evidence manifest SHA-256 produced
+======================================================================

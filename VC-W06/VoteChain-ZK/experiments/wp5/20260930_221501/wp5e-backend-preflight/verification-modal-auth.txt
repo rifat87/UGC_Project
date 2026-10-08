@@ -1,0 +1,62 @@
+12-import {
+13-  Button,
+14-} from "@/components/ui/button"
+15-import {
+16-  Fingerprint,
+17-  Loader2,
+18-  ScanFace,
+19-} from "lucide-react"
+20-import {
+21-  useToast,
+22-} from "@/hooks/use-toast"
+23-import {
+24:  authorizeWp5,
+25-  type Wp5Authorization,
+26-} from "@/services/api"
+27-import {
+28-  beginWp5Authorization,
+29-} from "@/privacy/wp5PrivacyClient"
+30-
+31-interface VerificationModalProps {
+32-  open: boolean
+33-  onClose: () => void
+34-  onVerified:
+35-    (
+36-      authorization:
+--
+81-      setError(null)
+82-      setIsVerifying(true)
+83-      setStatus(
+84-        `Waiting for ${label.toLowerCase()} verification...`,
+85-      )
+86-
+87-      try {
+88-        /*
+89-         * The private half of this ephemeral ECDH key
+90-         * exists only inside the local privacy worker.
+91-         */
+92-        const {
+93:          credentialPublicKey,
+94-        } =
+95-          await beginWp5Authorization()
+96-
+97-        /*
+98-         * Candidate selection is deliberately absent
+99-         * from this network request.
+100-         */
+101-        const authorization =
+102:          await authorizeWp5(
+103-            path,
+104:            credentialPublicKey,
+105-          )
+106-
+107-        setStatus(
+108-          "Biometric verification passed. Preparing the encrypted ballot locally...",
+109-        )
+110-
+111-        toast({
+112-          title:
+113-            `${label} Verified`,
+114-          description:
+115-            "Candidate-blind credential authorization succeeded.",
+116-        })

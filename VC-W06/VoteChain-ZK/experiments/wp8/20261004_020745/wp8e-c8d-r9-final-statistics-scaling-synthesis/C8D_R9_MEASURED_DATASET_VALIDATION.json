@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_FINAL_MEASURED_DATASET_VALIDATION",
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "totalCampaignObservations": 100,
+  "measuredObservations": 80,
+  "measuredPerN": {
+    "10": 20,
+    "100": 20,
+    "1000": 20,
+    "10000": 20
+  },
+  "measuredPositionCounts": {
+    "10": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "100": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "1000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "10000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    }
+  },
+  "measuredIndexEqualsMeasuredSubsetOfRawObservations": true,
+  "allStatusesPass": true,
+  "allWitnessChecksRc0": true,
+  "allVerificationsRc0": true,
+  "allSemanticVerifyPass": true,
+  "allMetricValuesFinitePositive": true,
+  "pilotIncluded": false,
+  "warmupIncluded": false,
+  "outlierDeletion": "NONE"
+}

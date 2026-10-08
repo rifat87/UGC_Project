@@ -1,0 +1,210 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-6-import {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-7-  authorizeWp5Voter,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-8-  getWp5PublicConfig,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-9-} from '../services/zk/wp5PrivacyService.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-10-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-11-const __filename = fileURLToPath(import.meta.url)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-12-const __dirname = path.dirname(__filename)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-13-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:14:function credentialPublicKey(req) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:15:  return req.body?.credentialPublicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-16-}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-17-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-18-export async function getConfig(_req, res) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-19-  try {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-20-    return res.json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-21-      success: true,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-22-      data: await getWp5PublicConfig(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-23-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-24-  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:25:    console.error('[WP5] public config failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-26-    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-27-      success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-28-      message: 'Unable to load WP5 public configuration',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-29-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-30-  }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-31-}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-32-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-33-export async function authorizeFace(req, res) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-34-  try {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:35:    const publicKey = credentialPublicKey(req)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-36-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-37-    if (!publicKey) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-38-      return res.status(400).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-39-        success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:40:        message: 'credentialPublicKey is required',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-41-      })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-42-    }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-43-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:44:    console.log('[WP5] Starting candidate-blind face authorization')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-45-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-46-    const faceRecPath = path.join(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-47-      __dirname,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-48-      '../../votechain-face-recognition/face_rec_demo.py',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-49-    )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-50-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-51-    if (!fs.existsSync(faceRecPath)) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-52-      return res.status(500).json({
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-64-    let stdout = ''
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-65-    let responseSent = false
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-66-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-67-    pythonProcess.stdout.on('data', (data) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-68-      stdout += data.toString()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-69-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-70-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-71-    pythonProcess.stderr.on('data', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:72:      console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-73-        '[WP5] face-recognition process reported an error',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-74-      )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-75-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-76-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-77-    pythonProcess.on('close', async (code) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-78-      if (responseSent) return
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-79-      responseSent = true
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-80-
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-118-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-119-        if (!voter) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-120-          return res.status(404).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-121-            success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-122-            message: 'Verified voter is not enrolled',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-123-          })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-124-        }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-125-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:126:        const authorization =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-127-          await authorizeWp5Voter({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-128-            voter,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-129-            clientPublicKey: publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-130-          })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-131-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-132-        return res.json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-133-          success: true,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-134-          message:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:135:            'Face verification successful; candidate-blind authorization issued',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:136:          data: authorization,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-137-        })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-138-      } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:139:        console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:140:          '[WP5] face authorization failed:',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-141-          error.message,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-142-        )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-143-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-144-        return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-145-          success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-146-          message:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:147:            'Unable to issue private-voting authorization',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-148-        })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-149-      }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-150-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-151-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-152-    pythonProcess.on('error', (error) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-153-      if (responseSent) return
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-154-      responseSent = true
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-155-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:156:      console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-157-        '[WP5] Failed to start face recognition:',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-158-        error.message,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-159-      )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-160-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-161-      return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-162-        success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-163-        message: 'Failed to launch face recognition',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-164-      })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-165-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-166-  } catch (error) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:167:    console.error('[WP5] authorizeFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-168-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-169-    return res.status(500).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-170-      success: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-171-      message: 'Internal server error',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-172-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-173-  }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js-174-}
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-362-  return jwk
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-363-}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-364-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-365-async function sealCredentialForClient({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-366-  plaintextSecret,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-367-  clientPublicJwk,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-368-  identityCommitment,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-369-  electionId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:370:  expiresAt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-371-}) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-372-  const subtle = crypto.webcrypto.subtle
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-373-  const clientPublicKey = await subtle.importKey(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-374-    'jwk',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-375-    validateClientJwk(clientPublicJwk),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-376-    { name: 'ECDH', namedCurve: 'P-256' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-377-    false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-378-    [],
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-421-    ['encrypt'],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-422-  )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-423-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-424-  const aad = Buffer.from(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-425-    [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-426-      'VoteChain-ZK/WP5/v1',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-427-      identityCommitment,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-428-      electionId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:429:      String(expiresAt),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-430-    ].join('|'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-431-    'utf8',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-432-  )
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-433-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-434-  const ciphertext = await subtle.encrypt(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-435-    {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-436-      name: 'AES-GCM',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-437-      iv,
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-448-    serverPublicKey: await subtle.exportKey(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-449-      'jwk',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-450-      serverKeyPair.publicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-451-    ),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-452-    salt: salt.toString('base64'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-453-    iv: iv.toString('base64'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-454-    aad: aad.toString('base64'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-455-    ciphertext: Buffer.from(ciphertext).toString('base64'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:456:    expiresAt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-457-  }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-458-}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-459-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-460-export async function authorizeWp5Voter({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-461-  voter,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-462-  clientPublicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-463-  now = Date.now(),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-464-}) {
+--
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-513-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-514-  if (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-515-    recomputedCommitment.toString() !==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-516-    String(voter.wp5IdentityCommitment)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-517-  ) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-518-    throw new Error('WP5 credential/commitment mismatch')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-519-  }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-520-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:521:  const expiresAt = now + 2 * 60 * 1000
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-522-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-523-  const credentialEnvelope =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-524-    await sealCredentialForClient({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-525-      plaintextSecret,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-526-      clientPublicJwk: clientPublicKey,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-527-      identityCommitment:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-528-        String(voter.wp5IdentityCommitment),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-529-      electionId: String(electionId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:530:      expiresAt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-531-    })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-532-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-533-  return {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-534-    version: 'VoteChain-ZK-WP5-Authorization-v1',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-535-    electionId: String(electionId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:536:    expiresAt,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-537-    membership: witness,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-538-    credentialEnvelope,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-539-  }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-540-}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-541-
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-542-export async function getWp5PublicConfig() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-543-  const contract = getWp5Contract()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js-544-

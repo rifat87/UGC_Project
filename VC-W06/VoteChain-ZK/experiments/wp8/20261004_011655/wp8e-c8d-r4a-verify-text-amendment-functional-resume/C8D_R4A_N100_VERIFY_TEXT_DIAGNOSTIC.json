@@ -1,0 +1,8 @@
+{
+  "label": "N100_R4A_VERIFY",
+  "rawByteCount": 40,
+  "ansiOrControlDecorationDetected": true,
+  "semanticPattern": "snarkJS:\\s*OK!",
+  "semanticOk": true,
+  "sanitizedText": "[INFO]  snarkJS: OK!\n"
+}

@@ -1,0 +1,8 @@
+{
+  "completedAt": "2026-10-02T23:20:57.912910+06:00",
+  "warmupAcceptedTx": 400,
+  "measuredAcceptedTx": 2000,
+  "totalAcceptedTx": 2400,
+  "elections": 30,
+  "status": "PASS"
+}

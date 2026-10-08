@@ -1,0 +1,316 @@
+======================================================================
+ACCEPTED_BALLOT_SCALING
+======================================================================
+PATH=experiments/wp8/20261002_232814/wp8e-c7-final-statistics/C7_FINAL_STATISTICAL_RECORD.txt
+SHA256=e2518adec88adb79725d88533356736cfd761b6f0c7311eb995ae218e7883aa1
+SIZE=1216
+  WP8E_C7_FINAL_STATISTICAL_ANALYSIS
+  RUN_ID=20261002_232814
+  FINAL_CAMPAIGN_RUN=20261002_224441
+  FINAL_RAW_TSV_SHA256=39d56cbb4c91fb5202e379b521a5f23409a888284e71d17dfae3c37c511e3372
+  FINAL_CAMPAIGN_MANIFEST_SHA256=7d425f4e11feaff238ff40355cf9279c37b29b5bf56e30325ee1f583fc429e9d
+  FINAL_POSTVALIDATION_SHA256=b76e7f83580c335d7028adcb577e9b9a729e2dab1cdb9ab25414521e8c306d4e
+  FINAL_RUNNER_V2_SHA256=0b3c77a0581f83cf4cee0215aabb444ddbc739cc6865067f9cde28b8d78f2ed0
+  RAW_ROWS_TOTAL=2400
+  WARMUP_ROWS_PRESERVED=400
+  WARMUP_ROWS_INCLUDED_IN_STATISTICS=0
+  MEASURED_ROWS_INCLUDED=2000
+  MEASURED_INDEPENDENT_ELECTIONS=25
+
+PATH=experiments/wp8/20261002_235112/wp8e-c7c-publication-figures/C7C_PUBLICATION_FIGURE_RECORD.txt
+SHA256=ea1461aad547be24ec1124f7f6551ec923499aa745a6d9dc4adacdb7924f4372
+SIZE=821
+  WP8E_C7C_PUBLICATION_FIGURE_RECORD
+  RUN_ID=20261002_235112
+  FINAL_CAMPAIGN_RUN=20261002_224441
+  C7_RUN=20261002_232814
+  C7B_RUN=20261002_233524
+  C7C_FIGURE_GENERATOR_SHA256=c255ead44d91c4e595975f92977bda174ca52c88fbaf840b5f491e8f23384b8a
+  C7C_FIGURE_CAPTIONS_SHA256=88ed9c0a38307a9d066372f03080c2d200d4ff590144547533fc223d9486e6ea
+  C7C_PLOTTED_DATA_SHA256=c500bacd4004e3c17764f5a42e7539f512f6bb43314822fb44bf7e25b0725595
+  FIGURE_COUNT=4
+  PNG_COUNT=4
+  SVG_COUNT=4
+  FIGURE_1=TYPICAL_GAS_BY_SCALE
+
+PATH=experiments/wp8/20261002_232814/wp8e-c7-final-statistics/C7_OVERALL_MEASURED_SUMMARY.json
+SHA256=c5529d357f6a1168be22a1d15570ef162889b5df7a69d8c1b0bfff48df0ef347
+SIZE=642
+  {
+    "allRawRows": 2400,
+    "warmupRowsExcludedFromStatistics": 400,
+    "measuredRowsIncluded": 2000,
+    "measuredIndependentElections": 25,
+    "silentOutlierDeletion": false,
+    "calldataBytesPerVote": 2340,
+    "gas": {
+      "n": 2000,
+      "mean": 1314307.1225,
+      "median": 1307355.0,
+      "min": 1306506,
+
+PATH=experiments/wp8/20261002_233524/wp8e-c7b-interpretation-audit/C7B_INTERPRETATION_AUDIT.json
+SHA256=b22442eaa9a1ba7c7537fa9ce5a07d93b1fbfc8c11da5165dc16682f010eaf08
+SIZE=8152
+  {
+    "status": "PASS",
+    "scaleLevelReview": {
+      "gasMeanN25": 1329671.68,
+      "gasMeanN150": 1311046.146667,
+      "gasMeanDelta": -18625.53333300003,
+      "gasMeanPctChange25To150": -1.4007618281379075,
+      "gasMedianAcrossScaleMin": 1307326.0,
+      "gasMedianAcrossScaleMax": 1307403.0,
+      "gasP95AcrossScaleMin": 1307759.0,
+      "gasP95AcrossScaleMax": 1307997.0,
+      "latencyMeanAcrossScaleMin": 749.865782,
+
+PATH=experiments/wp8/20261002_233524/wp8e-c7b-interpretation-audit/C7B_INTERPRETATION_AUDIT.txt
+SHA256=a8f9e4a14ed48f689180a5e4f204d7e1f0d3add94d7df820592342ff1f949ca6
+SIZE=3777
+  WP8E C7B FINAL STATISTICAL INTERPRETATION AUDIT
+  ================================================
+  SCALE-LEVEL GAS
+  ---------------
+  GAS_MEAN_N25=1329671.680
+  GAS_MEAN_N150=1311046.147
+  GAS_MEAN_PCT_CHANGE_25_TO_150=-1.400762%
+  GAS_MEDIAN_SCALE_RANGE=1307326.000..1307403.000
+  GAS_P95_SCALE_RANGE=1307759.000..1307997.000
+  SCALE-LEVEL LATENCY
+  -------------------
+  LAT_MEAN_N25_MS=758.558
+
+======================================================================
+FRESH_CHAIN_MICROBENCHMARK
+======================================================================
+PATH=experiments/wp8/20261003_020418/wp8e-c8b-r4-final-microbenchmark-statistics/C8B_R4_FINAL_STATISTICAL_REPORT.md
+SHA256=76c26b9095c2743794eacb2a3f6dffca265c88362869a35a986a3a5f46cb6603
+SIZE=2565
+  # WP8E C8B-R4 Final Fresh-Chain Microbenchmark Statistics
+  ## Final analysis population
+  The final campaign contains 25 fresh-chain iterations:
+  - 5 warm-up iterations;
+  - 20 measured iterations.
+  Only the 20 measured iterations are used for final reported statistics.
+  The 5 warm-ups are preserved separately and excluded from final statistics.
+  The earlier pilot observations and the aborted 20261003_012934 campaign are
+  excluded from final statistics.
+  No silent outlier deletion was performed.
+  No missing latency was reconstructed or imputed.
+  ## Metric definition
+
+PATH=experiments/wp8/20261003_020418/wp8e-c8b-r4-final-microbenchmark-statistics/C8B_R4_FINAL_STATISTICS.json
+SHA256=65a4805bef8590ccf758d5b0a91de00216d5749e1e751cdd0d92061061fca215
+SIZE=1954
+  {
+    "status": "PASS",
+    "classification": "FINAL_READ_ONLY_MICROBENCHMARK_STATISTICAL_ANALYSIS",
+    "finalCampaignRun": "20261003_015120",
+    "rawRows": 25,
+    "warmupRows": 5,
+    "measuredRows": 20,
+    "warmupsIncludedInFinalStatistics": false,
+    "pilotIncludedInFinalStatistics": false,
+    "abortedCampaignIncludedInFinalStatistics": false,
+    "silentOutlierDeletion": false,
+    "latencyReconstruction": false,
+
+PATH=experiments/wp8/20261003_020418/wp8e-c8b-r4-final-microbenchmark-statistics/C8B_R4_STATISTICAL_FREEZE_RECORD.txt
+SHA256=9d34bcd7d89b3869bdf14edc2a18d613e7dbfdac78b70e45f60f66ac0af34f53
+SIZE=1386
+  WP8E_C8B_R4_FINAL_FRESH_CHAIN_MICROBENCHMARK_STATISTICS
+  RUN_ID=20261003_020418
+  FINAL_CAMPAIGN_RUN=20261003_015120
+  FINAL_RAW_SHA256=507b3f933d4f701ee00d582ce6f47f5997b737b558e5791f9abe57a28f04e847
+  FINAL_COMPLETE_SHA256=feec671816d55669cfd4bfbf1525c89facf8388abcd7adb39e9cdfb168b2f7fa
+  FINAL_POSTVALIDATION_SHA256=39104f884205adce42acdaeb2514108eb7764a57b149c6f9c85e29630cea3e4e
+  FINAL_CAMPAIGN_MANIFEST_SHA256=46b31e499ef44c4e9a4a0646edbf60dcd7980c15690ace4f85bd24e031e5f637
+  C8B_R4_ANALYZER_SHA256=01fe7d3518a1731f12a364e2abe8fd23d98c0ebeb0b1f556018d859c216c561b
+  C8B_R4_FINAL_STATISTICS_JSON_SHA256=65a4805bef8590ccf758d5b0a91de00216d5749e1e751cdd0d92061061fca215
+  C8B_R4_FINAL_REPORT_SHA256=76c26b9095c2743794eacb2a3f6dffca265c88362869a35a986a3a5f46cb6603
+  C8B_R4_MEASURED_TABLE_SHA256=854ef279d1dada3435d7d7bcfe83ff0b6116eac52a7bb03f6a7971857e9cda65
+  C8B_R4_WARMUP_TABLE_SHA256=234eb3ecc90033cb1623dc40e57f0bdcf50ce81e543a8c92591cfb0837421b1b
+
+======================================================================
+CANDIDATE_COUNT_SCALING
+======================================================================
+PATH=experiments/wp8/20261003_235340/wp8e-c8c-r7f1-synthesis-repair-final-freeze/C8C_R7F1_FINAL_STATISTICS_AND_SYNTHESIS_FREEZE_RECORD.txt
+SHA256=f5a47109c367383feefa7cc6f22d5c996739ea3e954fc62fd71adbb12d62d509
+SIZE=2127
+  WP8E_C8C_R7F1_SYNTHESIS_REPAIR_AND_FINAL_STATISTICS_FREEZE
+  RUN_ID=20261003_235340
+  FAILED_R7F_RUN=20261003_212713
+  FAILED_R7F_PRESERVED=YES
+  FAILED_R7F_RERUN=NO
+  PREDECESSOR_HOLD_CLASS=SYNTHESIS_PYTHON_SYNTAX_ERROR
+  C8C_R7F_DATASET_SHA256=0fea2f3afde02b7589680d64dc27d874431d12a969ca11b184cb7f49489e0b7b
+  C8C_R7F_PER_LEVEL_STATS_SHA256=8e8e19c7cf017e72c804d9dc7d289ccb6ab86fa349c71bfb0da9c06006031ade
+  C8C_R7F_POSITION_STATS_SHA256=3aa2d5eb643b76d4206d06828f777760c05f51f5c3002b6b72d985f1beece99b
+  C8C_R7F_DELTAS_SHA256=43d37312aebf5596b78e95cd8910642bc8c62760be16ae5ab37dd2e55333789d
+  C8C_R7F_OVERALL_STATS_SHA256=83f6e9faf92071284605c1438593e46b50406136d8e697c87f1342d8ee9f9c72
+  C8C_R7F_PRIOR_VALIDATION_SHA256=57ec6fa4039d94a0d1ce3cf3d5354d1683f1549dcc21fdfa30200e23c89a7c74
+
+PATH=experiments/wp8/20261003_235340/wp8e-c8c-r7f1-synthesis-repair-final-freeze/C8C_R7F1_STATISTICAL_REVALIDATION.json
+SHA256=f432435029fe28bf1d668ff6aa21173c3c3d4222f981e1c0e741eb71df7e4758
+SIZE=2308
+  {
+    "status": "PASS",
+    "failedR7FRun": "20261003_212713",
+    "predecessorHoldClass": "SYNTHESIS_PYTHON_SYNTAX_ERROR",
+    "measuredN": 80,
+    "measuredPerLevel": 20,
+    "warmupsIncluded": false,
+    "pilotsIncluded": false,
+    "levels": [
+      2,
+      4,
+      8,
+
+PATH=experiments/wp8/20261003_235340/wp8e-c8c-r7f1-synthesis-repair-final-freeze/C8C_R7F1_PUBLICATION_SAFE_CLOSEOUT.txt
+SHA256=9a25d1793657c6bdb43ce7f2821d3d59d77d719739b6fda4cbad0483b36361cb
+SIZE=1442
+  WP8E C8C RUNTIME CANDIDATE-COUNT CLOSEOUT
+  =========================================
+  Measured population: 80 accepted-vote observations.
+  Per level: 20 observations at K=2,4,8,16.
+  Warmups excluded: YES.
+  Pilots excluded: YES.
+  Gas:
+    K2  = 1,866,402 gas.
+    K4  = 1,866,414 gas.
+    K8  = 1,866,414 gas.
+    K16 = 1,866,414 gas.
+    Within-level gas SD = 0 at every level.
+
+PATH=experiments/wp8/20261003_235340/wp8e-c8c-r7f1-synthesis-repair-final-freeze/C8C_R7F1_RUNTIME_CANDIDATECOUNT_SYNTHESIS.txt
+SHA256=e029d839fed09fac31c6f8d3320dee647e4d0c63bceb3a082d0a1e2bb2b9f012
+SIZE=4641
+  WP8E C8C-R7F1 — FINAL RUNTIME CANDIDATE-COUNT SYNTHESIS
+  ==========================================================
+  SCOPE
+  -----
+  Statistics use only the 80 measured R7E accepted-vote observations: 20 each at runtime candidateCount K={2,4,8,16}.
+  The 20 warmups and all four R7C pilots are excluded.
+  Each observation used a fresh local Anvil chain, the same active fixed-K16 circuit/verifier interface, the frozen R6 proof fixture corresponding to its runtime configuration, and the frozen R7B2 observation runner.
+  FINAL DESCRIPTIVE RESULTS
+  -------------------------
+  K2: n=20; gas mean/median/min/max/p95=1866402.000/1866402.000/1866402/1866402/1866402; gas sample SD=0.000000; latency mean=865.021110 ms; median=858.926450 ms; min=844.793900 ms; max=948.718700 ms; sample SD=23.340039 ms; nearest-rank p95=899.420000 ms.
+  K4: n=20; gas mean/median/min/max/p95=1866414.000/1866414.000/1866414/1866414/1866414; gas sample SD=0.000000; latency mean=874.816695 ms; median=862.990950 ms; min=836.827900 ms; max=991.140000 ms; sample SD=43.828458 ms; nearest-rank p95=966.283100 ms.
+  K8: n=20; gas mean/median/min/max/p95=1866414.000/1866414.000/1866414/1866414/1866414; gas sample SD=0.000000; latency mean=864.572260 ms; median=858.495800 ms; min=844.033600 ms; max=954.673500 ms; sample SD=23.813503 ms; nearest-rank p95=884.174800 ms.
+
+PATH=experiments/wp8/20261004_000155/wp8e-c8c-r7g-candidatecount-closeout-eligible-set-handoff/C8C_R7G_CANDIDATECOUNT_FINAL_CLOSEOUT.txt
+SHA256=00590b61142fdcd98acea0f01a39aa3fb1b4ddd345b7ada9d41acbaa26b5ecdf
+SIZE=1285
+  WP8E C8C — RUNTIME CANDIDATE-COUNT FINAL CLOSEOUT
+  =================================================
+  STATUS=COMPLETE
+  FINAL_SUCCESS_GATE=C8C_R7F1
+  FAILED_R7F_PRESERVED=YES
+  FAILED_R7F_RERUN=NO
+  RUNTIME_LEVELS=2,4,8,16
+  FINAL_STATS_MEASURED_OBSERVATIONS=80
+  MEASURED_PER_LEVEL=20
+  WARMUPS_EXCLUDED=YES
+  PILOTS_EXCLUDED=YES
+  K2_GAS=1866402
+
+======================================================================
+ELIGIBLE_SET_SCALING
+======================================================================
+PATH=experiments/wp8/20261004_021205/wp8e-c8d-r9a-statistics-revalidation-repair-closeout/C8D_R9A_STATISTICS_REVALIDATION_REPAIR_CLOSEOUT_RECORD.txt
+SHA256=6f3157f15372669ee052b6a020cca4b5a51888d5f4019b473b4f240b60c97e08
+SIZE=1945
+  WP8E_C8D_R9A_STATISTICS_REVALIDATION_REPAIR_AND_C8D_CLOSEOUT
+  RUN_ID=20261004_021205
+  FAILED_R9_RUN=20261004_020745
+  FAILED_R9_PRESERVED=YES
+  FAILED_R9_RERUN=NO
+  R9_HOLD_CLASS=MISSING_JSON_IMPORT_IN_REVALIDATION_HARNESS
+  FAILED_R9_MEASURED_VALIDATION_SHA256=f00d6da7c6bc18e76579ec0db5faaa7dc40e66ac540459b04d8ad9426ba39cd4
+  FAILED_R9_FINAL_STATISTICS_SHA256=e5d6267038adb927773f18bf4780f77bf1cf6e11083d75d8ab9be23cb3129ab1
+  FAILED_R9_MEAN_PROFILE_SHA256=1f84ea3ad19da2f96d3775088fa09e27ddfa4e078e0c542c6a33b77f66c15ebf
+  FAILED_R9_SYNTHESIS_JSON_SHA256=ae4b11515de819b7b81071d5434a6a420ca733ef3e02170b3ddfbf975839765e
+  FAILED_R9_SYNTHESIS_TEXT_SHA256=3d6a07aa6bd0483f9aa6f89fa81b08a9a0b7823e71f55bb804f1b420bd062ffc
+  C8D_R9A_STATISTICS_REVALIDATION_SHA256=b121f2dfb9f2e09b7f022ff83a93e778f3eb70d1d053106eddd515f926505b91
+
+PATH=experiments/wp8/20261004_020745/wp8e-c8d-r9-final-statistics-scaling-synthesis/C8D_R9_PUBLICATION_SAFE_SYNTHESIS.txt
+SHA256=3d6a07aa6bd0483f9aa6f89fa81b08a9a0b7823e71f55bb804f1b420bd062ffc
+SIZE=1790
+  WP8E-C8D ELIGIBLE-SET SCALING — PUBLICATION-SAFE SYNTHESIS
+  Scope:
+    Eligible-set sizes N = 10, 100, 1000, 10000.
+    Configured Merkle depth = 17 for every profile.
+    Final measured n = 20 observations per N; 80 measured observations total.
+    Pilot observations and warmups are excluded.
+    No outlier deletion was performed.
+  Measured means (ms):
+    N=10, depth=17: M1=1.114595, M2=3.945765, M3=1100.572040, M4=5423.310715, M5=1039.343420
+    N=100, depth=17: M1=10.252050, M2=11.923485, M3=1090.561170, M4=5372.540045, M5=1030.482275
+    N=1000, depth=17: M1=89.919430, M2=88.386890, M3=1045.809035, M4=5292.146455, M5=1031.746775
+    N=10000, depth=17: M1=809.039505, M2=797.957900, M3=1044.413670, M4=5298.751655, M5=1018.917745
+
+PATH=experiments/wp8/20261004_021205/wp8e-c8d-r9a-statistics-revalidation-repair-closeout/C8D_R9A_STATISTICS_REVALIDATION.json
+SHA256=b121f2dfb9f2e09b7f022ff83a93e778f3eb70d1d053106eddd515f926505b91
+SIZE=7109
+  {
+    "status": "PASS",
+    "classification": "REPAIRED_INDEPENDENT_FINAL_STATISTICS_REVALIDATION",
+    "repair": "added missing json import to revalidation harness only",
+    "failedR9StatisticsModified": false,
+    "failedR9MeanProfileModified": false,
+    "eligibleSetLevels": [
+      10,
+      100,
+      1000,
+      10000
+    ],
+
+PATH=experiments/wp8/20261004_021205/wp8e-c8d-r9a-statistics-revalidation-repair-closeout/C8D_R9A_SYNTHESIS_REVALIDATION.json
+SHA256=f1c4553c586d4dd530a5aef249086df50bdf795b7093f0048a712228211f078a
+SIZE=492
+  {
+    "status": "PASS",
+    "classification": "INDEPENDENT_PUBLICATION_SAFE_SYNTHESIS_REVALIDATION",
+    "eligibleSetLevels": [
+      10,
+      100,
+      1000,
+      10000
+    ],
+    "configuredMerkleDepth": 17,
+    "M1MeanMonotonicIncreasing": true,
+    "M2MeanMonotonicIncreasing": true,
+
+PATH=experiments/wp8/20261004_020745/wp8e-c8d-r9-final-statistics-scaling-synthesis/C8D_R9_FINAL_MEASURED_STATISTICS.tsv
+SHA256=e5d6267038adb927773f18bf4780f77bf1cf6e11083d75d8ab9be23cb3129ab1
+SIZE=2388
+  N	configured_merkle_depth	metric	metric_name	n	mean_ms	median_ms	min_ms	max_ms	sample_sd_ms	nearest_rank_p95_ms	nearest_rank_p95_rank
+  10	17	M1	ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS	20	1.114595	1.077800	0.919200	1.514700	0.149623	1.342600	19
+  10	17	M2	MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS	20	3.945765	3.861850	3.404800	4.851000	0.349348	4.671600	19
+  10	17	M3	CIRCUIT_WITNESS_GENERATION_MS	20	1100.572040	1062.112750	1015.446300	1365.244400	97.028445	1348.916500	19
+  10	17	M4	GROTH16_PROVE_MS	20	5423.310715	5315.853400	5134.908300	6601.977000	367.255959	6234.871100	19
+  10	17	M5	GROTH16_VERIFY_MS	20	1039.343420	1010.765350	990.077800	1212.225300	66.351786	1203.084800	19
+  100	17	M1	ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS	20	10.252050	9.840600	8.348100	15.211000	1.644892	12.692700	19
+  100	17	M2	MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS	20	11.923485	11.757000	9.467400	15.124000	1.449784	13.972400	19
+  100	17	M3	CIRCUIT_WITNESS_GENERATION_MS	20	1090.561170	1049.135550	1025.623500	1443.640400	94.729320	1177.936200	19
+  100	17	M4	GROTH16_PROVE_MS	20	5372.540045	5247.857250	5154.056700	6490.823600	304.866396	5699.946900	19
+  100	17	M5	GROTH16_VERIFY_MS	20	1030.482275	1019.169350	997.833700	1148.118600	36.062775	1087.335700	19
+  1000	17	M1	ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS	20	89.919430	88.931700	83.685200	109.926200	5.634750	95.384000	19
+
+PATH=experiments/wp8/20261004_020745/wp8e-c8d-r9-final-statistics-scaling-synthesis/C8D_R9_ELIGIBLE_SET_SCALING_SYNTHESIS.json
+SHA256=ae4b11515de819b7b81071d5434a6a420ca733ef3e02170b3ddfbf975839765e
+SIZE=4583
+  {
+    "status": "PASS",
+    "classification": "PUBLICATION_SAFE_ELIGIBLE_SET_SCALING_SYNTHESIS",
+    "eligibleSetLevels": [
+      10,
+      100,
+      1000,
+      10000
+    ],
+    "configuredMerkleDepth": 17,
+    "configuredMerkleCapacity": 131072,
+    "candidateCount": 16,
+

@@ -1,0 +1,9 @@
+{
+  "status": "HOLD",
+  "classification": "LOCAL_CHAIN_SCRIPT_LITERAL_CLASSIFICATION",
+  "sourceFile": "start-local-chain.ps1",
+  "targetLine": 18,
+  "simplePowerShellAssignment": false,
+  "secretValuePrinted": false,
+  "reason": "line 18 is not the expected simple quoted 32-byte-hex PowerShell assignment"
+}

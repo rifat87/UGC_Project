@@ -1,0 +1,3 @@
+D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp5\20260930_195059\wp5b-compatibility\wp5b-k16-input.json
+D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_valid_final.json
+D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_invalid_bit_final.json

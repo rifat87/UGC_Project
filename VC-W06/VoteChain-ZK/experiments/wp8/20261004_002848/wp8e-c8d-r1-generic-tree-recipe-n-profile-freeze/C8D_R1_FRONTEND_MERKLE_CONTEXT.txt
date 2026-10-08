@@ -1,0 +1,375 @@
+20- */
+21-;(globalThis as any).Buffer = Buffer
+22-
+23-/*
+24- * Lazy browser crypto loading.
+25- *
+26- * Buffer is assigned above before either dependency is evaluated.
+27- * Keeping the dynamic imports inside async functions avoids
+28- * top-level await while preserving browser-first initialization.
+29- */
+30:async function buildPoseidon() {
+31-  const circomlib: any =
+32-    await import(
+33-      "circomlibjs"
+34-    )
+35-
+36:  return circomlib.buildPoseidon()
+37-}
+38-
+39-async function buildBabyjub() {
+40-  const circomlib: any =
+41-    await import(
+42-      "circomlibjs"
+43-    )
+44-
+45-  return circomlib.buildBabyjub()
+46-}
+--
+86-    return api.exportSolidityCallData(
+87-      ...args
+88-    )
+89-  },
+90-}
+91-
+92-const MAX =
+93-  Number(appProfile.maxCandidates)
+94-
+95-const DEPTH =
+96:  Number(appProfile.merkleDepth)
+97-
+98-const FIELD =
+99-  BigInt(appProfile.fieldModulus)
+100-
+101-const SUBORDER =
+102-  BigInt(
+103-    appProfile.babyjub.subOrder,
+104-  )
+105-
+106-const D_ID =
+--
+127-  CryptoKeyPair | null =
+128-    null
+129-
+130-let authorizationSessionState:
+131-  "idle" |
+132-  "initializing" |
+133-  "ready" |
+134-  "consuming" =
+135-    "idle"
+136-
+137:let poseidonPromise:
+138-  Promise<any> | null =
+139-    null
+140-
+141-let babyjubPromise:
+142-  Promise<any> | null =
+143-    null
+144-
+145:function getPoseidon() {
+146:  if (!poseidonPromise) {
+147:    poseidonPromise =
+148:      buildPoseidon()
+149-  }
+150-
+151:  return poseidonPromise
+152-}
+153-
+154-function getBabyjub() {
+155-  if (!babyjubPromise) {
+156-    babyjubPromise =
+157-      buildBabyjub()
+158-  }
+159-
+160-  return babyjubPromise
+161-}
+--
+206-}
+207-
+208-async function H(
+209-  values:
+210-    Array<
+211-      string |
+212-      number |
+213-      bigint
+214-    >,
+215-) {
+216:  const poseidon =
+217:    await getPoseidon()
+218-
+219-  return BigInt(
+220:    poseidon.F.toObject(
+221:      poseidon(
+222-        values.map(
+223-          value =>
+224-            BigInt(value),
+225-        ),
+226-      ),
+227-    ),
+228-  )
+229-}
+230-
+231-async function computeManifest(
+--
+237-  ) {
+238-    throw new Error(
+239-      "Candidate count is outside the frozen WP5 range",
+240-    )
+241-  }
+242-
+243-  if (
+244-    appProfile
+245-      .candidateManifest
+246-      .algorithm !==
+247:    "POSEIDON_INDEXED_CHAIN_V1"
+248-  ) {
+249-    throw new Error(
+250-      "Unexpected WP5 candidate-manifest algorithm",
+251-    )
+252-  }
+253-
+254-  let state =
+255-    await H([
+256-      D_MANIFEST,
+257-      BigInt(
+--
+272-          candidateIds[index],
+273-        ),
+274-      ])
+275-  }
+276-
+277-  return state
+278-}
+279-
+280-async function reconstructRoot(
+281-  commitment: bigint,
+282:  siblings: string[],
+283:  pathBits: string[],
+284-) {
+285-  if (
+286:    siblings.length !== DEPTH ||
+287:    pathBits.length !== DEPTH
+288-  ) {
+289-    throw new Error(
+290:      "Invalid WP5 Merkle witness depth",
+291-    )
+292-  }
+293-
+294-  let current =
+295-    commitment
+296-
+297-  for (
+298-    let i = 0;
+299-    i < DEPTH;
+300-    i += 1
+301-  ) {
+302-    const bit =
+303:      BigInt(pathBits[i])
+304-
+305-    const sibling =
+306:      BigInt(siblings[i])
+307-
+308-    if (
+309-      bit !== 0n &&
+310-      bit !== 1n
+311-    ) {
+312-      throw new Error(
+313:        "Invalid Merkle path bit",
+314-      )
+315-    }
+316-
+317-    current =
+318-      bit === 0n
+319-        ? await H([
+320-            current,
+321-            sibling,
+322-          ])
+323-        : await H([
+--
+711-      electionId.toString()
+712-    ) {
+713-      throw new Error(
+714-        "Authorization belongs to another election",
+715-      )
+716-    }
+717-
+718-    if (
+719-      authorization
+720-        .membership
+721:        .eligibleRoot !==
+722-      publicConfig
+723-        .config
+724:        .eligibleRoot
+725-    ) {
+726-      throw new Error(
+727:        "Authorization Merkle root does not match election configuration",
+728-      )
+729-    }
+730-
+731-    secret =
+732-      await unwrapCredential(
+733-        authorization,
+734-      )
+735-
+736-    const commitment =
+737-      await H([
+--
+748-      throw new Error(
+749-        "Released credential does not match voter commitment",
+750-      )
+751-    }
+752-
+753-    const reconstructedRoot =
+754-      await reconstructRoot(
+755-        commitment,
+756-        authorization
+757-          .membership
+758:          .siblings,
+759-        authorization
+760-          .membership
+761:          .pathBits,
+762-      )
+763-
+764-    if (
+765-      reconstructedRoot.toString() !==
+766-      publicConfig
+767-        .config
+768:        .eligibleRoot
+769-    ) {
+770-      throw new Error(
+771:        "Merkle witness does not reconstruct the configured root",
+772-      )
+773-    }
+774-
+775-    const context =
+776-      await H([
+777-        D_CTX,
+778-        electionId,
+779-        manifest,
+780-        BigInt(candidateCount),
+781-        BigInt(
+--
+935-
+936-      Sy.push(
+937-        sPoint[1],
+938-      )
+939-    }
+940-
+941-    const input = {
+942-      secret:
+943-        secret.toString(),
+944-
+945:      siblings:
+946-        authorization
+947-          .membership
+948:          .siblings,
+949-
+950:      pathBits:
+951-        authorization
+952-          .membership
+953:          .pathBits,
+954-
+955-      bit:
+956-        bits.map(
+957-          value =>
+958-            value.toString(),
+959-        ),
+960-
+961-      randomness:
+962-        randomness.map(
+963-          value =>
+964-            value.toString(),
+965-        ),
+966-
+967:      eligibleRoot:
+968-        publicConfig
+969-          .config
+970:          .eligibleRoot,
+971-
+972-      electionId:
+973-        electionId.toString(),
+974-
+975-      candidateManifestHash:
+976-        manifest.toString(),
+977-
+978-      candidateCount:
+979-        String(candidateCount),
+980-
+--
+1018-        ),
+1019-
+1020-      Sy:
+1021-        Sy.map(
+1022-          value =>
+1023-            value.toString(),
+1024-        ),
+1025-    }
+1026-
+1027-    const {
+1028:      proof,
+1029-      publicSignals,
+1030-    } =
+1031-      await groth16.fullProve(
+1032-        input,
+1033-        appProfile
+1034-          .directArtifacts
+1035-          .wasmUrl,
+1036-        appProfile
+1037-          .directArtifacts
+1038-          .zkeyUrl,
+--
+1045-      publicSignals.length !== 73
+1046-    ) {
+1047-      throw new Error(
+1048-        "DIRECT prover did not return 73 public signals",
+1049-      )
+1050-    }
+1051-
+1052-    const expectedPublic = [
+1053-      publicConfig
+1054-        .config
+1055:        .eligibleRoot,
+1056-      electionId.toString(),
+1057-      manifest.toString(),
+1058-      String(candidateCount),
+1059-      publicConfig
+1060-        .config
+1061-        .contractDomain,
+1062-      publicConfig
+1063-        .config
+1064-        .Yx,
+1065-      publicConfig
+--
+1131-      )
+1132-    }
+1133-
+1134-    const verificationKey =
+1135-      await verificationKeyResponse.json()
+1136-
+1137-    const locallyVerified =
+1138-      await groth16.verify(
+1139-        verificationKey,
+1140-        publicSignals,
+1141:        proof,
+1142-      )
+1143-
+1144-    if (!locallyVerified) {
+1145-      throw new Error(
+1146:        "Locally generated DIRECT proof did not verify",
+1147-      )
+1148-    }
+1149-
+1150-    const calldataText =
+1151-      await groth16
+1152-        .exportSolidityCallData(
+1153:          proof,
+1154-          publicSignals,
+1155-        )
+1156-
+1157-    const [
+1158-      rawA,
+1159-      rawB,
+1160-      rawC,
+1161-      rawPublic,
+1162-    ] =
+1163-      JSON.parse(

@@ -1,0 +1,185 @@
+{
+  "status": "PASS",
+  "hasVoteChainDirect": true,
+  "hasCastVote": true,
+  "hasApplyTally": true,
+  "hasAcceptedBallotCount": true,
+  "hasUsedNullifier": true,
+  "hasCandidateCount": true,
+  "hasCandidateManifestHash": true,
+  "hasElectionContextHash": true,
+  "hasEligibleRoot": true,
+  "hasVerifyProof": true,
+  "fixedUint256Array16OccurrenceCount": 46,
+  "maxCandidatesReferenceCount": 1,
+  "maxCandidatesLines": [
+    {
+      "line": 239,
+      "text": "        WP4Profile.MAX_CANDIDATES;"
+    }
+  ],
+  "tallyReferenceCount": 39,
+  "tallyLines": [
+    {
+      "line": 310,
+      "text": "    uint256[16] internal tallyRx;"
+    },
+    {
+      "line": 311,
+      "text": "    uint256[16] internal tallyRy;"
+    },
+    {
+      "line": 312,
+      "text": "    uint256[16] internal tallySx;"
+    },
+    {
+      "line": 313,
+      "text": "    uint256[16] internal tallySy;"
+    },
+    {
+      "line": 334,
+      "text": "    event TallyFinalized("
+    },
+    {
+      "line": 360,
+      "text": "            tallyRy[i] = 1;"
+    },
+    {
+      "line": 361,
+      "text": "            tallySy[i] = 1;"
+    },
+    {
+      "line": 548,
+      "text": "    function finalizeTally("
+    },
+    {
+      "line": 612,
+      "text": "        emit TallyFinalized("
+    },
+    {
+      "line": 641,
+      "text": "    function getTally("
+    },
+    {
+      "line": 659,
+      "text": "            tallyRx[slot],"
+    },
+    {
+      "line": 660,
+      "text": "            tallyRy[slot],"
+    },
+    {
+      "line": 661,
+      "text": "            tallySx[slot],"
+    },
+    {
+      "line": 662,
+      "text": "            tallySy[slot]"
+    },
+    {
+      "line": 690,
+      "text": "    function _applyTally("
+    },
+    {
+      "line": 705,
+      "text": "                    tallyRx[i],"
+    },
+    {
+      "line": 706,
+      "text": "                    tallyRy[i]"
+    },
+    {
+      "line": 717,
+      "text": "                    tallySx[i],"
+    },
+    {
+      "line": 718,
+      "text": "                    tallySy[i]"
+    },
+    {
+      "line": 739,
+      "text": "            tallyRx[i] ="
+    },
+    {
+      "line": 742,
+      "text": "            tallyRy[i] ="
+    },
+    {
+      "line": 745,
+      "text": "            tallySx[i] ="
+    },
+    {
+      "line": 748,
+      "text": "            tallySy[i] ="
+    },
+    {
+      "line": 779,
+      "text": "        _applyTally("
+    },
+    {
+      "line": 1204,
+      "text": "contract BabyJubTallyHarness {"
+    },
+    {
+      "line": 1205,
+      "text": "    uint256[16] internal tallyRx;"
+    },
+    {
+      "line": 1206,
+      "text": "    uint256[16] internal tallyRy;"
+    },
+    {
+      "line": 1207,
+      "text": "    uint256[16] internal tallySx;"
+    },
+    {
+      "line": 1208,
+      "text": "    uint256[16] internal tallySy;"
+    },
+    {
+      "line": 1216,
+      "text": "            tallyRy[i] = 1;"
+    },
+    {
+      "line": 1217,
+      "text": "            tallySy[i] = 1;"
+    },
+    {
+      "line": 1237,
+      "text": "                        tallyRx[i],"
+    },
+    {
+      "line": 1238,
+      "text": "                        tallyRy[i]"
+    },
+    {
+      "line": 1249,
+      "text": "                        tallySx[i],"
+    },
+    {
+      "line": 1250,
+      "text": "                        tallySy[i]"
+    },
+    {
+      "line": 1258,
+      "text": "            tallyRx[i] ="
+    },
+    {
+      "line": 1261,
+      "text": "            tallyRy[i] ="
+    },
+    {
+      "line": 1264,
+      "text": "            tallySx[i] ="
+    },
+    {
+      "line": 1267,
+      "text": "            tallySy[i] ="
+    }
+  ],
+  "maxCandidatesBoundedLoopCount": 0,
+  "literal16BoundedLoopCount": 2,
+  "hasFixedFourCiphertextArrays": true,
+  "hasFixedTallyLoopEvidence": true,
+  "requiredExecutionFactsPass": true
+}

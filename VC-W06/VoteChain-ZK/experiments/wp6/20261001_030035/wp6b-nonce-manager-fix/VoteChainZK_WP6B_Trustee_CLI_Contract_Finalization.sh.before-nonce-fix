@@ -1,0 +1,3755 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$PWD"
+
+if [ "$(basename "$ROOT")" != "VoteChain-ZK" ]; then
+    echo "ERROR: run from VoteChain-ZK root."
+    exit 2
+fi
+
+CRYPTO="$ROOT/crypto"
+BACK="$ROOT/votechain-central-server"
+FOUNDRY="$ROOT/contracts/wp4-foundry"
+
+OUTROOT="../VoteChain_VC-W03_FinalZK/Output/VC-W07"
+
+WP6A_SUMMARY="$OUTROOT/VC-W07_WP6A_THRESHOLD_CORE_CUSTODY_SUMMARY.txt"
+WP5E_SUMMARY="$OUTROOT/VC-W07_WP5E_BACKEND_AUTH_NETWORK_SUMMARY.txt"
+
+CORE="$CRYPTO/src/wp6-threshold.mjs"
+PROFILE="$CRYPTO/config/wp6-threshold-profile.json"
+
+CONTRACT="$FOUNDRY/src/VoteChainWP4.sol"
+TESTFILE="$FOUNDRY/test/VoteChainWP6B.t.sol"
+
+CLI="$CRYPTO/scripts/wp6-trustee-cli.mjs"
+ONCHAIN="$BACK/scripts/wp6b-onchain-runtime.mjs"
+
+DIRECT_ARTIFACT="$FOUNDRY/out/VoteChainWP4.sol/VoteChainDirect.json"
+MOCK_ARTIFACT="$FOUNDRY/out/VoteChainWP6B.t.sol/WP6BMockVerifier.json"
+
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+
+EVIDENCE="$ROOT/experiments/wp6/$RUN_ID/wp6b-threshold-finalization"
+CEREMONY="$EVIDENCE/ceremony"
+PRIVATE_TMP="$EVIDENCE/.private-runtime"
+PARTIALS="$EVIDENCE/partials"
+
+SUMMARY="$OUTROOT/VC-W07_WP6B_TRUSTEE_CLI_CONTRACT_FINALIZATION_SUMMARY.txt"
+
+PORT=8556
+RPC="http://127.0.0.1:$PORT"
+
+# Anvil account 0, research local chain only.
+ADMIN_PK="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+ANVIL_PID=""
+
+cleanup() {
+    if [ -n "${ANVIL_PID:-}" ]; then
+        kill "$ANVIL_PID" 2>/dev/null || true
+        wait "$ANVIL_PID" 2>/dev/null || true
+    fi
+
+    rm -rf "$PRIVATE_TMP" 2>/dev/null || true
+}
+
+trap cleanup EXIT INT TERM
+
+mkdir -p \
+    "$EVIDENCE" \
+    "$CEREMONY/identities" \
+    "$CEREMONY/contributions" \
+    "$CEREMONY/shares" \
+    "$PARTIALS" \
+    "$PRIVATE_TMP" \
+    "$CRYPTO/scripts" \
+    "$BACK/scripts" \
+    "$OUTROOT"
+
+echo
+echo "======================================================================"
+echo "VOTECHAIN-ZK WP6B — TRUSTEE CLI / TRANSCRIPT / CONTRACT FINALIZATION"
+echo "======================================================================"
+echo "RUN_ID=$RUN_ID"
+echo
+echo "SYNTHETIC_THRESHOLD_RESEARCH=YES"
+echo "SEPARATE_NODE_PROCESS_PER_TRUSTEE_OPERATION=YES"
+echo "GROTH16_VERIFIER_FOR_WP6B_TALLY_SETUP=MOCKED_TEST_VERIFIER"
+echo "REAL_GROTH16_PATH_REPLACED=NO"
+echo "FINAL_WP8_BENCHMARK=NO"
+echo
+
+###############################################################################
+# 1. REQUIRE ACCEPTED PREDECESSORS
+###############################################################################
+
+echo "=== 1. REQUIRE ACCEPTED PREDECESSORS ==="
+
+if [ ! -f "$WP6A_SUMMARY" ]; then
+    echo "ERROR: WP6A summary missing."
+    exit 10
+fi
+
+grep -q \
+    '^STATUS=PASS_WP6A_THRESHOLD_CORE_CUSTODY$' \
+    "$WP6A_SUMMARY"
+
+echo "WP6A_ACCEPTED=PASS"
+
+if [ -f "$WP5E_SUMMARY" ] &&
+   grep -q \
+       '^STATUS=PASS_WP5E_BACKEND_AUTH_NETWORK_RUNTIME$' \
+       "$WP5E_SUMMARY"
+then
+    echo "WP5E_REAL_GROTH16_INTEGRATION_ACCEPTED=PASS"
+else
+    echo "ERROR: accepted WP5E summary missing."
+    exit 11
+fi
+
+###############################################################################
+# 2. FREEZE WP6A CRYPTO CORE
+###############################################################################
+
+echo
+echo "=== 2. VERIFY WP6A CRYPTO CORE IDENTITY ==="
+
+CORE_SHA="$(
+    sha256sum "$CORE" |
+    awk '{print $1}'
+)"
+
+PROFILE_SHA="$(
+    sha256sum "$PROFILE" |
+    awk '{print $1}'
+)"
+
+EXPECTED_CORE_SHA="53698de33e1ebe6d9005481f55ae750bb38397624d7d6c926a6ae46af8f544df"
+EXPECTED_PROFILE_SHA="f414252b10cff7d9a4fa7e51564219c90299721d18e4d7d1d171ef8a344216e0"
+
+echo "WP6A_CORE_SHA256=$CORE_SHA"
+echo "WP6A_PROFILE_SHA256=$PROFILE_SHA"
+
+if [ "$CORE_SHA" != "$EXPECTED_CORE_SHA" ]; then
+    echo "ERROR: WP6A threshold core drifted after acceptance."
+    exit 12
+fi
+
+if [ "$PROFILE_SHA" != "$EXPECTED_PROFILE_SHA" ]; then
+    echo "ERROR: WP6A threshold profile drifted after acceptance."
+    exit 13
+fi
+
+echo "WP6A_CRYPTO_CORE_FROZEN=PASS"
+
+cp "$CONTRACT" \
+   "$EVIDENCE/VoteChainWP4.sol.before-wp6b"
+
+###############################################################################
+# 3. PATCH CONTRACT FINALIZATION LIFECYCLE
+###############################################################################
+
+echo
+echo "=== 3. PATCH CONTRACT FINALIZATION LIFECYCLE ==="
+
+PATCHER="$EVIDENCE/patch-wp6b-contract.mjs"
+
+cat > "$PATCHER" <<'NODE'
+import {
+  readFile,
+  writeFile,
+} from "node:fs/promises"
+
+const file =
+  process.argv[2]
+
+let text =
+  await readFile(
+    file,
+    "utf8",
+  )
+
+text =
+  text.replace(
+    /\r\n/g,
+    "\n",
+  )
+
+function insertBefore({
+  marker,
+  anchor,
+  insertion,
+  label,
+}) {
+  if (
+    text.includes(
+      marker,
+    )
+  ) {
+    console.log(
+      `${label}=ALREADY_PRESENT`,
+    )
+
+    return
+  }
+
+  const index =
+    text.indexOf(
+      anchor,
+    )
+
+  if (
+    index < 0
+  ) {
+    throw new Error(
+      `Cannot locate ${label} anchor`,
+    )
+  }
+
+  text =
+    text.slice(
+      0,
+      index,
+    ) +
+    insertion +
+    text.slice(
+      index,
+    )
+
+  console.log(
+    `${label}=PATCHED`,
+  )
+}
+
+if (
+  !text.includes(
+    "bytes32 public trusteeTranscriptHash;",
+  )
+) {
+  const anchor =
+`    uint256 public acceptedBallotCount;
+
+`
+
+  const index =
+    text.indexOf(
+      anchor,
+    )
+
+  if (
+    index < 0
+  ) {
+    throw new Error(
+      "Cannot locate acceptedBallotCount state anchor",
+    )
+  }
+
+  const replacement =
+`    uint256 public acceptedBallotCount;
+
+    /*
+     * WP6 threshold-finalization evidence.
+     *
+     * trusteeTranscriptHash is pinned during Registration.
+     * finalizationTranscriptHash is written only after Ended.
+     *
+     * The full threshold transcript remains public/off-chain;
+     * Solidity anchors its canonical SHA-256 hash and the
+     * independently verified plaintext aggregate totals.
+     */
+    bytes32 public trusteeTranscriptHash;
+
+    bytes32 public finalizationTranscriptHash;
+
+    uint256[16] internal finalResults;
+
+`
+
+  text =
+    text.slice(
+      0,
+      index,
+    ) +
+    replacement +
+    text.slice(
+      index +
+      anchor.length,
+    )
+
+  console.log(
+    "WP6B_CONTRACT_STATE=PATCHED",
+  )
+} else {
+  console.log(
+    "WP6B_CONTRACT_STATE=ALREADY_PRESENT",
+  )
+}
+
+insertBefore({
+  marker:
+    "event TrusteeTranscriptPinned(",
+
+  anchor:
+`    event EncryptedVoteAccepted(
+`,
+
+  insertion:
+`    event TrusteeTranscriptPinned(
+        bytes32 indexed transcriptHash
+    );
+
+    event TallyFinalized(
+        bytes32 indexed transcriptHash,
+        uint256 acceptedBallotCount
+    );
+
+`,
+
+  label:
+    "WP6B_EVENTS",
+})
+
+insertBefore({
+  marker:
+    "function setTrusteeTranscriptHash(",
+
+  anchor:
+`    function activate()
+`,
+
+  insertion:
+`    /*
+     * Pin the public DKG ceremony transcript before Active.
+     *
+     * The transcript verifier independently checks that the
+     * committed trustee public shares derive the configured Y.
+     * Existing WP4/WP5 deployment flows remain ABI-compatible:
+     * this is an additional registration-stage call.
+     */
+    function setTrusteeTranscriptHash(
+        bytes32 transcriptHash
+    )
+        external
+        onlyAdmin
+        inPhase(
+            Phase.Registration
+        )
+    {
+        require(
+            configured,
+            "NOT_CONFIGURED"
+        );
+
+        require(
+            transcriptHash !=
+                bytes32(0),
+            "ZERO_TRUSTEE_TRANSCRIPT"
+        );
+
+        require(
+            trusteeTranscriptHash ==
+                bytes32(0),
+            "TRUSTEE_TRANSCRIPT_ALREADY_SET"
+        );
+
+        trusteeTranscriptHash =
+            transcriptHash;
+
+        emit TrusteeTranscriptPinned(
+            transcriptHash
+        );
+    }
+
+`,
+
+  label:
+    "WP6B_TRANSCRIPT_PIN",
+})
+
+insertBefore({
+  marker:
+    "function finalizeTally(",
+
+  anchor:
+`    function getTally(
+`,
+
+  insertion:
+`    /*
+     * WP6 prototype finalization boundary.
+     *
+     * Threshold/DLEQ verification is performed by the public
+     * transcript verifier before this transaction is submitted.
+     * This contract:
+     *
+     *   - requires Ended,
+     *   - requires a registration-stage trustee transcript pin,
+     *   - enforces candidate padding,
+     *   - enforces sum(totals) == acceptedBallotCount,
+     *   - anchors the independently verified transcript hash,
+     *   - exposes plaintext totals only in Finalized.
+     *
+     * The transcript and proofs stay independently re-verifiable.
+     */
+    function finalizeTally(
+        uint256[16] calldata totals,
+        bytes32 transcriptHash
+    )
+        external
+        onlyAdmin
+        inPhase(
+            Phase.Ended
+        )
+    {
+        require(
+            trusteeTranscriptHash !=
+                bytes32(0),
+            "TRUSTEE_TRANSCRIPT_NOT_PINNED"
+        );
+
+        require(
+            transcriptHash !=
+                bytes32(0),
+            "ZERO_FINALIZATION_TRANSCRIPT"
+        );
+
+        uint256 activeSum;
+
+        for (
+            uint256 i = 0;
+            i < MAX;
+            i++
+        ) {
+            if (
+                i <
+                candidateCount
+            ) {
+                require(
+                    totals[i] <=
+                        acceptedBallotCount,
+                    "RESULT_EXCEEDS_BALLOTS"
+                );
+
+                activeSum +=
+                    totals[i];
+            } else {
+                require(
+                    totals[i] == 0,
+                    "NONZERO_PADDED_RESULT"
+                );
+            }
+
+            finalResults[i] =
+                totals[i];
+        }
+
+        require(
+            activeSum ==
+                acceptedBallotCount,
+            "RESULT_SUM_MISMATCH"
+        );
+
+        finalizationTranscriptHash =
+            transcriptHash;
+
+        phase =
+            Phase.Finalized;
+
+        emit TallyFinalized(
+            transcriptHash,
+            acceptedBallotCount
+        );
+    }
+
+    function getFinalResult(
+        uint256 slot
+    )
+        external
+        view
+        returns (uint256)
+    {
+        require(
+            phase ==
+                Phase.Finalized,
+            "NOT_FINALIZED"
+        );
+
+        require(
+            slot <
+                candidateCount,
+            "BAD_FINAL_RESULT_SLOT"
+        );
+
+        return
+            finalResults[slot];
+    }
+
+`,
+
+  label:
+    "WP6B_FINALIZATION_FUNCTIONS",
+})
+
+const required = [
+  "bytes32 public trusteeTranscriptHash;",
+  "bytes32 public finalizationTranscriptHash;",
+  "function setTrusteeTranscriptHash(",
+  "function finalizeTally(",
+  "function getFinalResult(",
+  "event TallyFinalized(",
+]
+
+for (
+  const marker
+  of required
+) {
+  if (
+    !text.includes(
+      marker,
+    )
+  ) {
+    throw new Error(
+      `WP6B contract marker missing: ${marker}`,
+    )
+  }
+}
+
+await writeFile(
+  file,
+  text,
+  "utf8",
+)
+
+console.log(
+  "WP6B_CONTRACT_PATCH=PASS",
+)
+NODE
+
+node \
+    "$PATCHER" \
+    "$CONTRACT"
+
+###############################################################################
+# 4. WRITE FOUNDRY FINALIZATION TESTS
+###############################################################################
+
+echo
+echo "=== 4. WRITE FOUNDRY FINALIZATION TESTS ==="
+
+cat > "$TESTFILE" <<'SOL'
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.20 <0.9.0;
+
+import "../src/VoteChainWP4.sol";
+
+contract WP6BMockVerifier is
+    IVerifierDirect
+{
+    function verifyProof(
+        uint256[2] calldata,
+        uint256[2][2] calldata,
+        uint256[2] calldata,
+        uint256[73] calldata
+    )
+        external
+        pure
+        returns (bool)
+    {
+        return true;
+    }
+}
+
+contract VoteChainWP6BTest {
+    bytes32 internal constant
+        TRUSTEE_HASH =
+            bytes32(
+                uint256(
+                    0x1234
+                )
+            );
+
+    bytes32 internal constant
+        FINAL_HASH =
+            bytes32(
+                uint256(
+                    0x5678
+                )
+            );
+
+    function _newDirect(
+        bool pinTranscript
+    )
+        internal
+        returns (
+            VoteChainDirect d
+        )
+    {
+        WP6BMockVerifier verifier =
+            new WP6BMockVerifier();
+
+        d =
+            new VoteChainDirect(
+                address(
+                    verifier
+                )
+            );
+
+        VoteChainBase
+            .ElectionConfig
+            memory cfg;
+
+        cfg.eligibleRoot =
+            111;
+
+        cfg.electionId =
+            202610010006;
+
+        cfg.candidateManifestHash =
+            222;
+
+        cfg.candidateCount =
+            4;
+
+        cfg.contractDomain =
+            333;
+
+        /*
+         * Contract configuration only checks canonical/non-identity
+         * here; actual WP6B research runtime uses the DKG-derived
+         * BabyJub public key.
+         */
+        cfg.Yx =
+            1;
+
+        cfg.Yy =
+            2;
+
+        cfg.electionContextHash =
+            444;
+
+        d.configure(
+            cfg
+        );
+
+        if (
+            pinTranscript
+        ) {
+            d.setTrusteeTranscriptHash(
+                TRUSTEE_HASH
+            );
+        }
+
+        d.activate();
+    }
+
+    function _castIdentityBallot(
+        VoteChainDirect d,
+        uint256 nullifier
+    )
+        internal
+    {
+        uint256[2] memory a;
+        uint256[2][2] memory b;
+        uint256[2] memory c;
+
+        uint256[16] memory rx;
+        uint256[16] memory ry;
+        uint256[16] memory sx;
+        uint256[16] memory sy;
+
+        for (
+            uint256 i = 0;
+            i < 16;
+            i++
+        ) {
+            /*
+             * BabyJub neutral element = (0,1).
+             * The research runtime uses actual encrypted points.
+             */
+            ry[i] =
+                1;
+
+            sy[i] =
+                1;
+        }
+
+        d.castVote(
+            a,
+            b,
+            c,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+
+    function _twoVotesEnded()
+        internal
+        returns (
+            VoteChainDirect d
+        )
+    {
+        d =
+            _newDirect(
+                true
+            );
+
+        _castIdentityBallot(
+            d,
+            1001
+        );
+
+        _castIdentityBallot(
+            d,
+            1002
+        );
+
+        require(
+            d.acceptedBallotCount() ==
+                2,
+            "PRECONDITION_COUNT"
+        );
+
+        d.endElection();
+    }
+
+    function testValidFinalization()
+        public
+    {
+        VoteChainDirect d =
+            _twoVotesEnded();
+
+        uint256[16] memory totals;
+
+        totals[0] =
+            1;
+
+        totals[1] =
+            1;
+
+        d.finalizeTally(
+            totals,
+            FINAL_HASH
+        );
+
+        require(
+            d.phase() ==
+                VoteChainBase
+                    .Phase
+                    .Finalized,
+            "NOT_FINALIZED"
+        );
+
+        require(
+            d.finalizationTranscriptHash() ==
+                FINAL_HASH,
+            "FINAL_HASH"
+        );
+
+        require(
+            d.getFinalResult(
+                0
+            ) ==
+                1,
+            "RESULT_0"
+        );
+
+        require(
+            d.getFinalResult(
+                1
+            ) ==
+                1,
+            "RESULT_1"
+        );
+    }
+
+    function testFinalizeBeforeEndedRejected()
+        public
+    {
+        VoteChainDirect d =
+            _newDirect(
+                true
+            );
+
+        uint256[16] memory totals;
+
+        (
+            bool ok,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .finalizeTally,
+                    (
+                        totals,
+                        FINAL_HASH
+                    )
+                )
+            );
+
+        require(
+            !ok,
+            "FINALIZED_BEFORE_END"
+        );
+    }
+
+    function testFinalizeWithoutPinnedTranscriptRejected()
+        public
+    {
+        VoteChainDirect d =
+            _newDirect(
+                false
+            );
+
+        d.endElection();
+
+        uint256[16] memory totals;
+
+        (
+            bool ok,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .finalizeTally,
+                    (
+                        totals,
+                        FINAL_HASH
+                    )
+                )
+            );
+
+        require(
+            !ok,
+            "FINALIZED_WITHOUT_DKG_PIN"
+        );
+    }
+
+    function testBadSumRejected()
+        public
+    {
+        VoteChainDirect d =
+            _twoVotesEnded();
+
+        uint256[16] memory totals;
+
+        totals[0] =
+            1;
+
+        (
+            bool ok,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .finalizeTally,
+                    (
+                        totals,
+                        FINAL_HASH
+                    )
+                )
+            );
+
+        require(
+            !ok,
+            "BAD_RESULT_SUM_ACCEPTED"
+        );
+
+        require(
+            d.phase() ==
+                VoteChainBase
+                    .Phase
+                    .Ended,
+            "PHASE_CHANGED_BAD_SUM"
+        );
+    }
+
+    function testPaddedResultRejected()
+        public
+    {
+        VoteChainDirect d =
+            _twoVotesEnded();
+
+        uint256[16] memory totals;
+
+        totals[0] =
+            1;
+
+        totals[1] =
+            1;
+
+        totals[15] =
+            1;
+
+        (
+            bool ok,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .finalizeTally,
+                    (
+                        totals,
+                        FINAL_HASH
+                    )
+                )
+            );
+
+        require(
+            !ok,
+            "PADDED_RESULT_ACCEPTED"
+        );
+    }
+
+    function testDuplicateFinalizationRejected()
+        public
+    {
+        VoteChainDirect d =
+            _twoVotesEnded();
+
+        uint256[16] memory totals;
+
+        totals[0] =
+            2;
+
+        d.finalizeTally(
+            totals,
+            FINAL_HASH
+        );
+
+        (
+            bool ok,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .finalizeTally,
+                    (
+                        totals,
+                        FINAL_HASH
+                    )
+                )
+            );
+
+        require(
+            !ok,
+            "DOUBLE_FINALIZATION"
+        );
+    }
+
+    function testTranscriptPinFrozenAfterFirstSet()
+        public
+    {
+        WP6BMockVerifier verifier =
+            new WP6BMockVerifier();
+
+        VoteChainDirect d =
+            new VoteChainDirect(
+                address(
+                    verifier
+                )
+            );
+
+        VoteChainBase
+            .ElectionConfig
+            memory cfg;
+
+        cfg.eligibleRoot =
+            1;
+
+        cfg.electionId =
+            2;
+
+        cfg.candidateManifestHash =
+            3;
+
+        cfg.candidateCount =
+            4;
+
+        cfg.contractDomain =
+            4;
+
+        cfg.Yx =
+            5;
+
+        cfg.Yy =
+            6;
+
+        cfg.electionContextHash =
+            7;
+
+        d.configure(
+            cfg
+        );
+
+        d.setTrusteeTranscriptHash(
+            TRUSTEE_HASH
+        );
+
+        (
+            bool secondPin,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .setTrusteeTranscriptHash,
+                    (
+                        bytes32(
+                            uint256(
+                                0x9999
+                            )
+                        )
+                    )
+                )
+            );
+
+        require(
+            !secondPin,
+            "SECOND_DKG_PIN_ACCEPTED"
+        );
+
+        d.activate();
+
+        (
+            bool afterActive,
+        ) =
+            address(d).call(
+                abi.encodeCall(
+                    VoteChainBase
+                        .setTrusteeTranscriptHash,
+                    (
+                        bytes32(
+                            uint256(
+                                0xAAAA
+                            )
+                        )
+                    )
+                )
+            );
+
+        require(
+            !afterActive,
+            "DKG_PIN_CHANGED_AFTER_ACTIVE"
+        );
+    }
+}
+SOL
+
+###############################################################################
+# 5. WRITE SEPARATE-PROCESS TRUSTEE CLI
+###############################################################################
+
+echo
+echo "=== 5. WRITE TRUSTEE CLI ==="
+
+cat > "$CLI" <<'NODE'
+#!/usr/bin/env node
+
+import {
+  mkdir,
+  readFile,
+  readdir,
+  writeFile,
+} from "node:fs/promises"
+
+import {
+  dirname,
+  join,
+  resolve,
+} from "node:path"
+
+import {
+  addEncryptedBallot,
+  context,
+  encryptBit,
+  zeroTally,
+} from "../src/wp2-core-final.mjs"
+
+import {
+  WP6,
+  buildDkgTranscript,
+  canonicalSha256,
+  createDkgContribution,
+  createPartialRecord,
+  createTrusteeTransportIdentity,
+  deriveTrusteeShare,
+  openTrusteeShare,
+  randomScalar,
+  serializeCiphertext,
+  verifyDkgTranscript,
+  verifyFinalizationTranscript,
+} from "../src/wp6-threshold.mjs"
+
+function parseArgs(
+  argv,
+) {
+  const out = {}
+
+  for (
+    let i = 0;
+    i < argv.length;
+    i++
+  ) {
+    const key =
+      argv[i]
+
+    if (
+      !key.startsWith(
+        "--",
+      )
+    ) {
+      throw new Error(
+        `Unexpected argument: ${key}`,
+      )
+    }
+
+    const name =
+      key.slice(2)
+
+    const value =
+      argv[
+        i + 1
+      ]
+
+    if (
+      value === undefined ||
+      value.startsWith(
+        "--",
+      )
+    ) {
+      throw new Error(
+        `Missing value for --${name}`,
+      )
+    }
+
+    out[name] =
+      value
+
+    i++
+  }
+
+  return out
+}
+
+function required(
+  args,
+  name,
+) {
+  const value =
+    args[name]
+
+  if (
+    value === undefined ||
+    value === ""
+  ) {
+    throw new Error(
+      `Missing --${name}`,
+    )
+  }
+
+  return value
+}
+
+async function readJson(
+  file,
+) {
+  return JSON.parse(
+    await readFile(
+      resolve(file),
+      "utf8",
+    ),
+  )
+}
+
+async function writeJson(
+  file,
+  value,
+) {
+  const target =
+    resolve(file)
+
+  await mkdir(
+    dirname(
+      target,
+    ),
+    {
+      recursive: true,
+    },
+  )
+
+  await writeFile(
+    target,
+    JSON.stringify(
+      value,
+      null,
+      2,
+    ) + "\n",
+    "utf8",
+  )
+}
+
+async function passphrase(
+  file,
+) {
+  const value =
+    (
+      await readFile(
+        resolve(file),
+        "utf8",
+      )
+    ).trim()
+
+  if (
+    value.length < 16
+  ) {
+    throw new Error(
+      "passphrase file too short",
+    )
+  }
+
+  return value
+}
+
+async function orderedJsonFiles(
+  directory,
+) {
+  const root =
+    resolve(
+      directory,
+    )
+
+  const files =
+    (
+      await readdir(
+        root,
+      )
+    )
+      .filter(
+        name =>
+          name.endsWith(
+            ".json",
+          ),
+      )
+      .sort(
+        (
+          a,
+          b,
+        ) =>
+          a.localeCompare(
+            b,
+            undefined,
+            {
+              numeric: true,
+            },
+          ),
+      )
+
+  return Promise.all(
+    files.map(
+      file =>
+        readJson(
+          join(
+            root,
+            file,
+          ),
+        ),
+    ),
+  )
+}
+
+function publicKeyPoint(
+  c,
+  serialized,
+) {
+  return [
+    c.F.e(
+      BigInt(
+        serialized[0],
+      ),
+    ),
+
+    c.F.e(
+      BigInt(
+        serialized[1],
+      ),
+    ),
+  ]
+}
+
+const command =
+  process.argv[2]
+
+const args =
+  parseArgs(
+    process.argv.slice(
+      3,
+    ),
+  )
+
+const c =
+  await context()
+
+switch (
+  command
+) {
+  case "init": {
+    const trusteeId =
+      Number(
+        required(
+          args,
+          "trustee-id",
+        ),
+      )
+
+    const ceremonyId =
+      required(
+        args,
+        "ceremony-id",
+      )
+
+    const secret =
+      await passphrase(
+        required(
+          args,
+          "passphrase-file",
+        ),
+      )
+
+    const identity =
+      createTrusteeTransportIdentity({
+        trusteeId,
+        passphrase:
+          secret,
+        ceremonyId,
+      })
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      identity,
+    )
+
+    console.log(
+      `TRUSTEE_INIT_${trusteeId}=PASS`,
+    )
+
+    break
+  }
+
+  case "build-roster": {
+    const identities =
+      await orderedJsonFiles(
+        required(
+          args,
+          "identities-dir",
+        ),
+      )
+
+    const roster =
+      identities.map(
+        item =>
+          item.publicIdentity,
+      )
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      roster,
+    )
+
+    console.log(
+      `TRUSTEE_ROSTER_COUNT=${roster.length}`,
+    )
+
+    break
+  }
+
+  case "contribute": {
+    const trusteeId =
+      Number(
+        required(
+          args,
+          "trustee-id",
+        ),
+      )
+
+    const threshold =
+      Number(
+        args.threshold ??
+        WP6.threshold,
+      )
+
+    const trusteeCount =
+      Number(
+        args.trustees ??
+        WP6.trusteeCount,
+      )
+
+    const roster =
+      await readJson(
+        required(
+          args,
+          "roster",
+        ),
+      )
+
+    const bundle =
+      createDkgContribution({
+        c,
+        trusteeId,
+        threshold,
+        trusteeCount,
+        roster,
+
+        ceremonyId:
+          required(
+            args,
+            "ceremony-id",
+          ),
+      })
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      bundle,
+    )
+
+    console.log(
+      `TRUSTEE_DKG_CONTRIBUTION_${trusteeId}=PASS`,
+    )
+
+    break
+  }
+
+  case "derive-share": {
+    const trusteeId =
+      Number(
+        required(
+          args,
+          "trustee-id",
+        ),
+      )
+
+    const identity =
+      await readJson(
+        required(
+          args,
+          "identity",
+        ),
+      )
+
+    const contributions =
+      await orderedJsonFiles(
+        required(
+          args,
+          "contributions-dir",
+        ),
+      )
+
+    const derived =
+      deriveTrusteeShare({
+        c,
+        trusteeId,
+
+        threshold:
+          Number(
+            args.threshold ??
+            WP6.threshold,
+          ),
+
+        trusteeCount:
+          Number(
+            args.trustees ??
+            WP6.trusteeCount,
+          ),
+
+        ceremonyId:
+          required(
+            args,
+            "ceremony-id",
+          ),
+
+        identity,
+
+        passphrase:
+          await passphrase(
+            required(
+              args,
+              "passphrase-file",
+            ),
+          ),
+
+        contributionBundles:
+          contributions,
+      })
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      derived,
+    )
+
+    console.log(
+      `TRUSTEE_DERIVE_SHARE_${trusteeId}=PASS`,
+    )
+
+    break
+  }
+
+  case "build-transcript": {
+    const roster =
+      await readJson(
+        required(
+          args,
+          "roster",
+        ),
+      )
+
+    const contributions =
+      await orderedJsonFiles(
+        required(
+          args,
+          "contributions-dir",
+        ),
+      )
+
+    const shares =
+      await orderedJsonFiles(
+        required(
+          args,
+          "shares-dir",
+        ),
+      )
+
+    const built =
+      buildDkgTranscript({
+        c,
+
+        ceremonyId:
+          required(
+            args,
+            "ceremony-id",
+          ),
+
+        threshold:
+          Number(
+            args.threshold ??
+            WP6.threshold,
+          ),
+
+        trusteeCount:
+          Number(
+            args.trustees ??
+            WP6.trusteeCount,
+          ),
+
+        roster,
+
+        contributionBundles:
+          contributions,
+
+        derivedShares:
+          shares,
+      })
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      built,
+    )
+
+    console.log(
+      "DKG_TRANSCRIPT_BUILD=PASS",
+    )
+
+    console.log(
+      `DKG_TRANSCRIPT_HASH=${built.transcriptHash}`,
+    )
+
+    break
+  }
+
+  case "verify-dkg": {
+    const bundle =
+      await readJson(
+        required(
+          args,
+          "input",
+        ),
+      )
+
+    if (
+      canonicalSha256(
+        bundle.transcript,
+      ) !==
+        bundle.transcriptHash
+    ) {
+      throw new Error(
+        "DKG transcript hash mismatch",
+      )
+    }
+
+    if (
+      !verifyDkgTranscript(
+        c,
+        bundle.transcript,
+      )
+    ) {
+      throw new Error(
+        "DKG transcript verification failed",
+      )
+    }
+
+    console.log(
+      "DKG_TRANSCRIPT_VERIFY=PASS",
+    )
+
+    break
+  }
+
+  case "make-ballots": {
+    const bundle =
+      await readJson(
+        required(
+          args,
+          "dkg",
+        ),
+      )
+
+    verifyDkgTranscript(
+      c,
+      bundle.transcript,
+    )
+
+    const candidateCount =
+      Number(
+        required(
+          args,
+          "candidate-count",
+        ),
+      )
+
+    const selections =
+      required(
+        args,
+        "selections",
+      )
+        .split(",")
+        .map(
+          value =>
+            Number(
+              value.trim(),
+            ),
+        )
+
+    if (
+      candidateCount < 1 ||
+      candidateCount >
+        WP6.maxCandidates
+    ) {
+      throw new Error(
+        "invalid candidate count",
+      )
+    }
+
+    for (
+      const selected
+      of selections
+    ) {
+      if (
+        !Number.isInteger(
+          selected,
+        ) ||
+        selected < 0 ||
+        selected >=
+          candidateCount
+      ) {
+        throw new Error(
+          `invalid selected slot: ${selected}`,
+        )
+      }
+    }
+
+    const Y =
+      publicKeyPoint(
+        c,
+        bundle
+          .transcript
+          .publicKey,
+      )
+
+    let tally =
+      zeroTally(
+        c,
+        WP6.maxCandidates,
+      )
+
+    const ballots = []
+
+    const expectedTotals =
+      Array.from(
+        {
+          length:
+            WP6.maxCandidates,
+        },
+        () => 0,
+      )
+
+    for (
+      const selected
+      of selections
+    ) {
+      const encrypted = []
+
+      for (
+        let slot = 0;
+        slot <
+          WP6.maxCandidates;
+        slot++
+      ) {
+        encrypted.push(
+          encryptBit(
+            c,
+            Y,
+            slot ===
+              selected
+              ? 1
+              : 0,
+            randomScalar(
+              c.q,
+            ),
+          ),
+        )
+      }
+
+      expectedTotals[
+        selected
+      ]++
+
+      tally =
+        addEncryptedBallot(
+          c,
+          tally,
+          encrypted,
+        )
+
+      const serialized =
+        encrypted.map(
+          item =>
+            serializeCiphertext(
+              c,
+              item,
+            ),
+        )
+
+      ballots.push({
+        rx:
+          serialized.map(
+            item =>
+              item.R[0],
+          ),
+
+        ry:
+          serialized.map(
+            item =>
+              item.R[1],
+          ),
+
+        sx:
+          serialized.map(
+            item =>
+              item.S[0],
+          ),
+
+        sy:
+          serialized.map(
+            item =>
+              item.S[1],
+          ),
+      })
+    }
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      {
+        candidateCount,
+        selections,
+        expectedTotals,
+        ballots,
+
+        expectedAggregateCiphertexts:
+          tally.map(
+            item =>
+              serializeCiphertext(
+                c,
+                item,
+              ),
+          ),
+      },
+    )
+
+    console.log(
+      "SYNTHETIC_ENCRYPTED_BALLOTS_BUILD=PASS",
+    )
+
+    break
+  }
+
+  case "partials": {
+    const trusteeId =
+      Number(
+        required(
+          args,
+          "trustee-id",
+        ),
+      )
+
+    const dkg =
+      await readJson(
+        required(
+          args,
+          "dkg",
+        ),
+      )
+
+    verifyDkgTranscript(
+      c,
+      dkg.transcript,
+    )
+
+    const shareFile =
+      await readJson(
+        required(
+          args,
+          "share-file",
+        ),
+      )
+
+    const aggregate =
+      await readJson(
+        required(
+          args,
+          "aggregate",
+        ),
+      )
+
+    const trustee =
+      dkg
+        .transcript
+        .trustees
+        .find(
+          item =>
+            Number(
+              item.trusteeId,
+            ) ===
+              trusteeId,
+        )
+
+    if (!trustee) {
+      throw new Error(
+        "trustee absent from DKG transcript",
+      )
+    }
+
+    const share =
+      openTrusteeShare({
+        custody:
+          shareFile
+            .encryptedShareCustody,
+
+        trusteeId,
+
+        passphrase:
+          await passphrase(
+            required(
+              args,
+              "passphrase-file",
+            ),
+          ),
+
+        ceremonyId:
+          required(
+            args,
+            "ceremony-id",
+          ),
+      })
+
+    const records = []
+
+    for (
+      let slot = 0;
+      slot <
+        aggregate
+          .aggregateCiphertexts
+          .length;
+      slot++
+    ) {
+      records.push(
+        await createPartialRecord({
+          c,
+
+          electionId:
+            aggregate
+              .electionId,
+
+          trusteeId,
+          slot,
+          share,
+
+          publicShare:
+            trustee
+              .publicShare,
+
+          aggregateR:
+            aggregate
+              .aggregateCiphertexts[
+                slot
+              ].R,
+        }),
+      )
+    }
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      {
+        trusteeId,
+        records,
+      },
+    )
+
+    console.log(
+      `TRUSTEE_PARTIALS_${trusteeId}=PASS`,
+    )
+
+    break
+  }
+
+  case "build-finalization": {
+    const dkg =
+      await readJson(
+        required(
+          args,
+          "dkg",
+        ),
+      )
+
+    const aggregate =
+      await readJson(
+        required(
+          args,
+          "aggregate",
+        ),
+      )
+
+    const trusteeIds =
+      required(
+        args,
+        "trustee-ids",
+      )
+        .split(",")
+        .map(
+          value =>
+            Number(
+              value.trim(),
+            ),
+        )
+
+    const partialDir =
+      resolve(
+        required(
+          args,
+          "partials-dir",
+        ),
+      )
+
+    const partialFiles =
+      await Promise.all(
+        trusteeIds.map(
+          id =>
+            readJson(
+              join(
+                partialDir,
+                `trustee-${id}.json`,
+              ),
+            ),
+        ),
+      )
+
+    const partialsBySlot =
+      Array.from(
+        {
+          length:
+            WP6.maxCandidates,
+        },
+        () => [],
+      )
+
+    for (
+      const file
+      of partialFiles
+    ) {
+      for (
+        const record
+        of file.records
+      ) {
+        partialsBySlot[
+          Number(
+            record.slot,
+          )
+        ].push(
+          record,
+        )
+      }
+    }
+
+    const transcript = {
+      version:
+        WP6.finalizationVersion,
+
+      electionId:
+        String(
+          aggregate
+            .electionId,
+        ),
+
+      candidateCount:
+        Number(
+          aggregate
+            .candidateCount,
+        ),
+
+      acceptedBallotCount:
+        Number(
+          aggregate
+            .acceptedBallotCount,
+        ),
+
+      dkgTranscript:
+        dkg.transcript,
+
+      dkgTranscriptHash:
+        dkg.transcriptHash,
+
+      aggregateCiphertexts:
+        aggregate
+          .aggregateCiphertexts,
+
+      partialsBySlot,
+    }
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      transcript,
+    )
+
+    console.log(
+      "FINALIZATION_TRANSCRIPT_BUILD=PASS",
+    )
+
+    break
+  }
+
+  case "verify-finalization": {
+    const transcript =
+      await readJson(
+        required(
+          args,
+          "input",
+        ),
+      )
+
+    const verified =
+      await verifyFinalizationTranscript({
+        c,
+        transcript,
+      })
+
+    const result = {
+      status:
+        "PASS_WP6_FINALIZATION_TRANSCRIPT_VERIFY",
+
+      totals:
+        verified.totals,
+
+      rejectedBySlot:
+        verified
+          .rejectedBySlot,
+
+      transcriptHash:
+        verified
+          .transcriptHash,
+    }
+
+    await writeJson(
+      required(
+        args,
+        "out",
+      ),
+      result,
+    )
+
+    console.log(
+      "FINALIZATION_TRANSCRIPT_VERIFY=PASS",
+    )
+
+    console.log(
+      `FINALIZATION_TRANSCRIPT_HASH=${result.transcriptHash}`,
+    )
+
+    console.log(
+      `VERIFIED_TOTALS=${result.totals.join(",")}`,
+    )
+
+    break
+  }
+
+  default:
+    throw new Error(
+      `Unknown WP6 trustee command: ${command}`,
+    )
+}
+NODE
+
+###############################################################################
+# 6. WRITE ONCHAIN RESEARCH HARNESS
+###############################################################################
+
+echo
+echo "=== 6. WRITE ONCHAIN FINALIZATION HARNESS ==="
+
+cat > "$ONCHAIN" <<'NODE'
+import {
+  readFile,
+  writeFile,
+} from "node:fs/promises"
+
+import {
+  Contract,
+  ContractFactory,
+  JsonRpcProvider,
+  Wallet,
+} from "ethers"
+
+function hexBytecode(
+  artifact,
+) {
+  const object =
+    artifact
+      ?.bytecode
+      ?.object
+
+  if (
+    typeof object !==
+      "string" ||
+    object.length === 0
+  ) {
+    throw new Error(
+      "artifact bytecode missing",
+    )
+  }
+
+  return object.startsWith(
+    "0x",
+  )
+    ? object
+    : `0x${object}`
+}
+
+async function json(
+  file,
+) {
+  return JSON.parse(
+    await readFile(
+      file,
+      "utf8",
+    ),
+  )
+}
+
+async function save(
+  file,
+  value,
+) {
+  await writeFile(
+    file,
+    JSON.stringify(
+      value,
+      null,
+      2,
+    ) + "\n",
+    "utf8",
+  )
+}
+
+function sameCiphertext(
+  actual,
+  expected,
+) {
+  return (
+    String(
+      actual.R[0],
+    ) ===
+      String(
+        expected.R[0],
+      ) &&
+    String(
+      actual.R[1],
+    ) ===
+      String(
+        expected.R[1],
+      ) &&
+    String(
+      actual.S[0],
+    ) ===
+      String(
+        expected.S[0],
+      ) &&
+    String(
+      actual.S[1],
+    ) ===
+      String(
+        expected.S[1],
+      )
+  )
+}
+
+const [
+  ,
+  ,
+  command,
+  rpc,
+  privateKey,
+  directArtifactFile,
+  ...rest
+] = process.argv
+
+if (
+  !command ||
+  !rpc ||
+  !privateKey ||
+  !directArtifactFile
+) {
+  throw new Error(
+    "invalid WP6B onchain arguments",
+  )
+}
+
+const provider =
+  new JsonRpcProvider(
+    rpc,
+  )
+
+const wallet =
+  new Wallet(
+    privateKey,
+    provider,
+  )
+
+const directArtifact =
+  await json(
+    directArtifactFile,
+  )
+
+if (
+  command ===
+    "setup"
+) {
+  const [
+    mockArtifactFile,
+    dkgFile,
+    ballotsFile,
+    outFile,
+  ] = rest
+
+  const mockArtifact =
+    await json(
+      mockArtifactFile,
+    )
+
+  const dkg =
+    await json(
+      dkgFile,
+    )
+
+  const ballots =
+    await json(
+      ballotsFile,
+    )
+
+  const mockFactory =
+    new ContractFactory(
+      mockArtifact.abi,
+      hexBytecode(
+        mockArtifact,
+      ),
+      wallet,
+    )
+
+  const verifier =
+    await mockFactory.deploy()
+
+  await verifier
+    .waitForDeployment()
+
+  const directFactory =
+    new ContractFactory(
+      directArtifact.abi,
+      hexBytecode(
+        directArtifact,
+      ),
+      wallet,
+    )
+
+  const direct =
+    await directFactory.deploy(
+      await verifier
+        .getAddress(),
+    )
+
+  await direct
+    .waitForDeployment()
+
+  const electionId =
+    202610010006n
+
+  const publicKey =
+    dkg
+      .transcript
+      .publicKey
+
+  let tx =
+    await direct.configure({
+      eligibleRoot:
+        111111n,
+
+      electionId,
+
+      candidateManifestHash:
+        222222n,
+
+      candidateCount:
+        BigInt(
+          ballots
+            .candidateCount,
+        ),
+
+      contractDomain:
+        333333n,
+
+      Yx:
+        BigInt(
+          publicKey[0],
+        ),
+
+      Yy:
+        BigInt(
+          publicKey[1],
+        ),
+
+      electionContextHash:
+        444444n,
+    })
+
+  await tx.wait()
+
+  tx =
+    await direct
+      .setTrusteeTranscriptHash(
+        `0x${dkg.transcriptHash}`,
+      )
+
+  await tx.wait()
+
+  tx =
+    await direct.activate()
+
+  await tx.wait()
+
+  const castGas = []
+
+  for (
+    let i = 0;
+    i <
+      ballots
+        .ballots
+        .length;
+    i++
+  ) {
+    const ballot =
+      ballots
+        .ballots[i]
+
+    tx =
+      await direct.castVote(
+        [
+          0n,
+          0n,
+        ],
+        [
+          [
+            0n,
+            0n,
+          ],
+          [
+            0n,
+            0n,
+          ],
+        ],
+        [
+          0n,
+          0n,
+        ],
+        BigInt(
+          100000 +
+          i,
+        ),
+        ballot.rx,
+        ballot.ry,
+        ballot.sx,
+        ballot.sy,
+      )
+
+    const receipt =
+      await tx.wait()
+
+    castGas.push(
+      receipt
+        .gasUsed
+        .toString(),
+    )
+  }
+
+  tx =
+    await direct
+      .endElection()
+
+  await tx.wait()
+
+  const aggregateCiphertexts =
+    []
+
+  for (
+    let slot = 0;
+    slot < 16;
+    slot++
+  ) {
+    const tally =
+      await direct
+        .getTally(
+          slot,
+        )
+
+    aggregateCiphertexts.push({
+      R: [
+        tally[0]
+          .toString(),
+
+        tally[1]
+          .toString(),
+      ],
+
+      S: [
+        tally[2]
+          .toString(),
+
+        tally[3]
+          .toString(),
+      ],
+    })
+  }
+
+  for (
+    let slot = 0;
+    slot < 16;
+    slot++
+  ) {
+    if (
+      !sameCiphertext(
+        aggregateCiphertexts[
+          slot
+        ],
+        ballots
+          .expectedAggregateCiphertexts[
+            slot
+          ],
+      )
+    ) {
+      throw new Error(
+        `onchain/local encrypted aggregate mismatch at slot ${slot}`,
+      )
+    }
+  }
+
+  const result = {
+    status:
+      "PASS_WP6B_ONCHAIN_ENCRYPTED_TALLY_SETUP",
+
+    rpc,
+
+    chainId:
+      Number(
+        (
+          await provider
+            .getNetwork()
+        ).chainId,
+      ),
+
+    admin:
+      wallet.address,
+
+    verifierAddress:
+      await verifier
+        .getAddress(),
+
+    contractAddress:
+      await direct
+        .getAddress(),
+
+    verifierClassification:
+      "WP6B_RESEARCH_MOCK_ALWAYS_TRUE",
+
+    electionId:
+      electionId
+        .toString(),
+
+    candidateCount:
+      Number(
+        await direct
+          .candidateCount(),
+      ),
+
+    acceptedBallotCount:
+      Number(
+        await direct
+          .acceptedBallotCount(),
+      ),
+
+    phase:
+      Number(
+        await direct
+          .phase(),
+      ),
+
+    dkgTranscriptHash:
+      dkg.transcriptHash,
+
+    publicKey,
+
+    expectedTotals:
+      ballots
+        .expectedTotals,
+
+    aggregateCiphertexts,
+
+    localAggregateMatch:
+      true,
+
+    castGas,
+  }
+
+  if (
+    result.phase !== 2
+  ) {
+    throw new Error(
+      "contract did not reach Ended",
+    )
+  }
+
+  await save(
+    outFile,
+    result,
+  )
+
+  console.log(
+    "WP6B_ONCHAIN_SETUP=PASS",
+  )
+
+  console.log(
+    `DIRECT_ADDRESS=${result.contractAddress}`,
+  )
+
+  console.log(
+    `ACCEPTED_BALLOT_COUNT=${result.acceptedBallotCount}`,
+  )
+
+  console.log(
+    "ONCHAIN_LOCAL_ENCRYPTED_TALLY_MATCH=PASS",
+  )
+
+  process.exit(0)
+}
+
+if (
+  command ===
+    "finalize"
+) {
+  const [
+    aggregateFile,
+    dkgFile,
+    transcriptFile,
+    verifiedFile,
+    outFile,
+  ] = rest
+
+  const aggregate =
+    await json(
+      aggregateFile,
+    )
+
+  const dkg =
+    await json(
+      dkgFile,
+    )
+
+  const transcript =
+    await json(
+      transcriptFile,
+    )
+
+  const verified =
+    await json(
+      verifiedFile,
+    )
+
+  if (
+    verified.status !==
+      "PASS_WP6_FINALIZATION_TRANSCRIPT_VERIFY"
+  ) {
+    throw new Error(
+      "finalization transcript not independently verified",
+    )
+  }
+
+  if (
+    transcript.dkgTranscriptHash !==
+      dkg.transcriptHash ||
+    aggregate.dkgTranscriptHash !==
+      dkg.transcriptHash
+  ) {
+    throw new Error(
+      "DKG transcript binding mismatch",
+    )
+  }
+
+  const direct =
+    new Contract(
+      aggregate
+        .contractAddress,
+      directArtifact.abi,
+      wallet,
+    )
+
+  const phaseBefore =
+    Number(
+      await direct
+        .phase(),
+    )
+
+  if (
+    phaseBefore !== 2
+  ) {
+    throw new Error(
+      "contract is not Ended before finalization",
+    )
+  }
+
+  const contractYx =
+    (
+      await direct
+        .Yx()
+    )
+      .toString()
+
+  const contractYy =
+    (
+      await direct
+        .Yy()
+    )
+      .toString()
+
+  if (
+    contractYx !==
+      String(
+        dkg
+          .transcript
+          .publicKey[0],
+      ) ||
+    contractYy !==
+      String(
+        dkg
+          .transcript
+          .publicKey[1],
+      )
+  ) {
+    throw new Error(
+      "contract election public key does not match DKG transcript",
+    )
+  }
+
+  const pinnedDkgHash =
+    (
+      await direct
+        .trusteeTranscriptHash()
+    )
+      .toLowerCase()
+
+  if (
+    pinnedDkgHash !==
+      `0x${dkg.transcriptHash}`
+        .toLowerCase()
+  ) {
+    throw new Error(
+      "contract DKG transcript pin mismatch",
+    )
+  }
+
+  const accepted =
+    Number(
+      await direct
+        .acceptedBallotCount(),
+    )
+
+  if (
+    accepted !==
+      Number(
+        transcript
+          .acceptedBallotCount,
+      )
+  ) {
+    throw new Error(
+      "accepted ballot count mismatch",
+    )
+  }
+
+  const candidateCount =
+    Number(
+      await direct
+        .candidateCount(),
+    )
+
+  if (
+    candidateCount !==
+      Number(
+        transcript
+          .candidateCount,
+      )
+  ) {
+    throw new Error(
+      "candidate count mismatch",
+    )
+  }
+
+  const expectedTotals =
+    aggregate
+      .expectedTotals
+
+  if (
+    JSON.stringify(
+      verified
+        .totals,
+    ) !==
+      JSON.stringify(
+        expectedTotals,
+      )
+  ) {
+    throw new Error(
+      "verified threshold totals do not match synthetic truth",
+    )
+  }
+
+  const tx =
+    await direct
+      .finalizeTally(
+        verified
+          .totals
+          .map(
+            value =>
+              BigInt(
+                value,
+              ),
+          ),
+
+        `0x${verified.transcriptHash}`,
+      )
+
+  const receipt =
+    await tx.wait()
+
+  const phaseAfter =
+    Number(
+      await direct
+        .phase(),
+    )
+
+  if (
+    phaseAfter !== 3
+  ) {
+    throw new Error(
+      "contract did not reach Finalized",
+    )
+  }
+
+  const storedFinalHash =
+    (
+      await direct
+        .finalizationTranscriptHash()
+    )
+      .toLowerCase()
+
+  if (
+    storedFinalHash !==
+      `0x${verified.transcriptHash}`
+        .toLowerCase()
+  ) {
+    throw new Error(
+      "stored finalization transcript hash mismatch",
+    )
+  }
+
+  const activeResults =
+    []
+
+  for (
+    let slot = 0;
+    slot <
+      candidateCount;
+    slot++
+  ) {
+    activeResults.push(
+      Number(
+        await direct
+          .getFinalResult(
+            slot,
+          ),
+      ),
+    )
+  }
+
+  const expectedActive =
+    expectedTotals.slice(
+      0,
+      candidateCount,
+    )
+
+  if (
+    JSON.stringify(
+      activeResults,
+    ) !==
+      JSON.stringify(
+        expectedActive,
+      )
+  ) {
+    throw new Error(
+      "onchain final result mismatch",
+    )
+  }
+
+  let duplicateRejected =
+    false
+
+  try {
+    await direct
+      .finalizeTally(
+        verified
+          .totals
+          .map(
+            value =>
+              BigInt(
+                value,
+              ),
+          ),
+
+        `0x${verified.transcriptHash}`,
+      )
+  } catch {
+    duplicateRejected =
+      true
+  }
+
+  if (
+    !duplicateRejected
+  ) {
+    throw new Error(
+      "duplicate finalization was accepted",
+    )
+  }
+
+  const result = {
+    status:
+      "PASS_WP6B_ONCHAIN_FINALIZATION",
+
+    contractAddress:
+      aggregate
+        .contractAddress,
+
+    phaseBefore,
+    phaseAfter,
+
+    dkgPublicKeyMatch:
+      true,
+
+    dkgTranscriptPinMatch:
+      true,
+
+    finalizationTranscriptHash:
+      verified
+        .transcriptHash,
+
+    storedFinalizationTranscriptHash:
+      storedFinalHash,
+
+    verifiedTotals:
+      verified
+        .totals,
+
+    activeResults,
+
+    finalizeGas:
+      receipt
+        .gasUsed
+        .toString(),
+
+    duplicateFinalizationRejected:
+      true,
+  }
+
+  await save(
+    outFile,
+    result,
+  )
+
+  console.log(
+    "WP6B_ONCHAIN_FINALIZATION=PASS",
+  )
+
+  console.log(
+    "ONCHAIN_DKG_PUBLIC_KEY_MATCH=PASS",
+  )
+
+  console.log(
+    "ONCHAIN_DKG_TRANSCRIPT_PIN_MATCH=PASS",
+  )
+
+  console.log(
+    "ONCHAIN_FINAL_RESULTS_MATCH=PASS",
+  )
+
+  console.log(
+    "ONCHAIN_FINALIZATION_HASH_MATCH=PASS",
+  )
+
+  console.log(
+    "DUPLICATE_FINALIZATION_REJECTED=PASS",
+  )
+
+  console.log(
+    `FINALIZE_GAS=${result.finalizeGas}`,
+  )
+
+  process.exit(0)
+}
+
+throw new Error(
+  `unknown WP6B onchain command: ${command}`,
+)
+NODE
+
+###############################################################################
+# 7. BUILD / FULL REGRESSION
+###############################################################################
+
+echo
+echo "=== 7. FOUNDRY BUILD / REGRESSION ==="
+
+cd "$FOUNDRY"
+
+forge build \
+    > "$EVIDENCE/forge-build.log" \
+    2>&1
+
+echo "FOUNDRY_BUILD=PASS"
+
+forge test \
+    --match-path \
+    test/VoteChainWP6B.t.sol \
+    -vv \
+    | tee "$EVIDENCE/forge-wp6b-test.log"
+
+echo "WP6B_FOUNDRY_TESTS=PASS"
+
+forge test \
+    -q \
+    > "$EVIDENCE/forge-full-regression.log" \
+    2>&1
+
+echo "WP4_FULL_FOUNDRY_REGRESSION=PASS"
+
+cd "$ROOT"
+
+###############################################################################
+# 8. NODE SYNTAX
+###############################################################################
+
+echo
+echo "=== 8. NODE SYNTAX CHECK ==="
+
+node --check "$CLI"
+node --check "$ONCHAIN"
+
+echo "WP6B_NODE_SYNTAX=PASS"
+
+###############################################################################
+# 9. VERIFY RESEARCH PORT
+###############################################################################
+
+echo
+echo "=== 9. PORT PREFLIGHT ==="
+
+if curl \
+    -s \
+    --max-time 1 \
+    -H 'content-type: application/json' \
+    --data '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}' \
+    "$RPC" \
+    2>/dev/null \
+    | grep -q '"result"'
+then
+    echo "ERROR: port $PORT is already in use."
+    exit 20
+fi
+
+echo "RESEARCH_PORT_$PORT=FREE"
+
+###############################################################################
+# 10. CREATE SYNTHETIC TRUSTEE PASSPHRASES
+###############################################################################
+
+echo
+echo "=== 10. CREATE EPHEMERAL SYNTHETIC TRUSTEE PASSPHRASES ==="
+
+for id in 1 2 3 4 5
+do
+    node -e '
+const crypto=require("crypto");
+process.stdout.write(
+  crypto.randomBytes(32).toString("base64url")
+);
+' > "$PRIVATE_TMP/passphrase-$id.txt"
+
+    chmod 600 \
+        "$PRIVATE_TMP/passphrase-$id.txt" \
+        2>/dev/null || true
+done
+
+echo "SYNTHETIC_TRUSTEE_PASSPHRASES=CREATED_EPHEMERALLY"
+
+CEREMONY_ID="VoteChain-ZK/WP6B/$RUN_ID"
+
+###############################################################################
+# 11. FIVE SEPARATE TRUSTEE IDENTITY PROCESSES
+###############################################################################
+
+echo
+echo "=== 11. TRUSTEE IDENTITY INITIALIZATION — 5 PROCESSES ==="
+
+for id in 1 2 3 4 5
+do
+    (
+        cd "$CRYPTO"
+
+        node \
+            scripts/wp6-trustee-cli.mjs \
+            init \
+            --trustee-id "$id" \
+            --ceremony-id "$CEREMONY_ID" \
+            --passphrase-file "$PRIVATE_TMP/passphrase-$id.txt" \
+            --out "$CEREMONY/identities/trustee-$id.json"
+    )
+done
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        build-roster \
+        --identities-dir "$CEREMONY/identities" \
+        --out "$CEREMONY/roster.json"
+)
+
+echo "TRUSTEE_IDENTITY_PROCESSES=5"
+echo "TRUSTEE_ROSTER_BUILD=PASS"
+
+###############################################################################
+# 12. FIVE SEPARATE DKG CONTRIBUTION PROCESSES
+###############################################################################
+
+echo
+echo "=== 12. DKG CONTRIBUTIONS — 5 PROCESSES ==="
+
+for id in 1 2 3 4 5
+do
+    (
+        cd "$CRYPTO"
+
+        node \
+            scripts/wp6-trustee-cli.mjs \
+            contribute \
+            --trustee-id "$id" \
+            --ceremony-id "$CEREMONY_ID" \
+            --threshold 3 \
+            --trustees 5 \
+            --roster "$CEREMONY/roster.json" \
+            --out "$CEREMONY/contributions/trustee-$id.json"
+    )
+done
+
+echo "DKG_CONTRIBUTION_PROCESSES=5"
+
+###############################################################################
+# 13. FIVE SEPARATE SHARE-DERIVATION PROCESSES
+###############################################################################
+
+echo
+echo "=== 13. DKG SHARE DERIVATION — 5 PROCESSES ==="
+
+for id in 1 2 3 4 5
+do
+    (
+        cd "$CRYPTO"
+
+        node \
+            scripts/wp6-trustee-cli.mjs \
+            derive-share \
+            --trustee-id "$id" \
+            --ceremony-id "$CEREMONY_ID" \
+            --threshold 3 \
+            --trustees 5 \
+            --identity "$CEREMONY/identities/trustee-$id.json" \
+            --passphrase-file "$PRIVATE_TMP/passphrase-$id.txt" \
+            --contributions-dir "$CEREMONY/contributions" \
+            --out "$CEREMONY/shares/trustee-$id.json"
+    )
+done
+
+echo "DKG_SHARE_DERIVATION_PROCESSES=5"
+
+###############################################################################
+# 14. BUILD / VERIFY PUBLIC DKG TRANSCRIPT
+###############################################################################
+
+echo
+echo "=== 14. BUILD / VERIFY PUBLIC DKG TRANSCRIPT ==="
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        build-transcript \
+        --ceremony-id "$CEREMONY_ID" \
+        --threshold 3 \
+        --trustees 5 \
+        --roster "$CEREMONY/roster.json" \
+        --contributions-dir "$CEREMONY/contributions" \
+        --shares-dir "$CEREMONY/shares" \
+        --out "$CEREMONY/dkg-bundle.json"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        verify-dkg \
+        --input "$CEREMONY/dkg-bundle.json"
+)
+
+echo "PUBLIC_DKG_TRANSCRIPT=PASS"
+echo "DKG_TRANSCRIPT_VERIFIER=PASS"
+
+###############################################################################
+# 15. CREATE SYNTHETIC ENCRYPTED BALLOTS UNDER DKG PUBLIC KEY
+###############################################################################
+
+echo
+echo "=== 15. BUILD SYNTHETIC ENCRYPTED BALLOTS ==="
+
+BALLOTS="$EVIDENCE/synthetic-ballots.json"
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        make-ballots \
+        --dkg "$CEREMONY/dkg-bundle.json" \
+        --candidate-count 4 \
+        --selections "0,1,2,0,3,2,0,1" \
+        --out "$BALLOTS"
+)
+
+echo "SYNTHETIC_BALLOT_COUNT=8"
+echo "SYNTHETIC_EXPECTED_TOTALS=3,2,2,1"
+
+###############################################################################
+# 16. START ISOLATED ANVIL
+###############################################################################
+
+echo
+echo "=== 16. START ISOLATED ANVIL ==="
+
+anvil \
+    --port "$PORT" \
+    --chain-id 31337 \
+    > "$EVIDENCE/anvil.log" \
+    2>&1 &
+
+ANVIL_PID=$!
+
+RPC_READY=NO
+
+for attempt in $(seq 1 40)
+do
+    if curl \
+        -s \
+        --max-time 1 \
+        -H 'content-type: application/json' \
+        --data '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}' \
+        "$RPC" \
+        2>/dev/null \
+        | grep -q '"result"'
+    then
+        RPC_READY=YES
+        break
+    fi
+
+    sleep 0.25
+done
+
+if [ "$RPC_READY" != "YES" ]; then
+    echo "ERROR: isolated Anvil did not start."
+    tail -n 100 "$EVIDENCE/anvil.log" || true
+    exit 21
+fi
+
+echo "ANVIL_RUNTIME=PASS"
+
+###############################################################################
+# 17. DEPLOY / CAST / END WITH WP6B TEST VERIFIER
+###############################################################################
+
+echo
+echo "=== 17. ONCHAIN ENCRYPTED TALLY SETUP ==="
+
+AGGREGATE="$EVIDENCE/onchain-aggregate.json"
+
+(
+    cd "$BACK"
+
+    node \
+        scripts/wp6b-onchain-runtime.mjs \
+        setup \
+        "$RPC" \
+        "$ADMIN_PK" \
+        "$DIRECT_ARTIFACT" \
+        "$MOCK_ARTIFACT" \
+        "$CEREMONY/dkg-bundle.json" \
+        "$BALLOTS" \
+        "$AGGREGATE"
+)
+
+echo "ONCHAIN_ENCRYPTED_TALLY_SETUP=PASS"
+echo "WP6B_GROTH16_SETUP_VERIFIER=MOCKED_AND_LABELLED"
+
+###############################################################################
+# 18. THREE SEPARATE TRUSTEE PARTIAL-DECRYPTION PROCESSES
+###############################################################################
+
+echo
+echo "=== 18. TRUSTEE PARTIAL DECRYPTIONS — 3 SEPARATE PROCESSES ==="
+
+for id in 1 3 5
+do
+    (
+        cd "$CRYPTO"
+
+        node \
+            scripts/wp6-trustee-cli.mjs \
+            partials \
+            --trustee-id "$id" \
+            --ceremony-id "$CEREMONY_ID" \
+            --passphrase-file "$PRIVATE_TMP/passphrase-$id.txt" \
+            --share-file "$CEREMONY/shares/trustee-$id.json" \
+            --dkg "$CEREMONY/dkg-bundle.json" \
+            --aggregate "$AGGREGATE" \
+            --out "$PARTIALS/trustee-$id.json"
+    )
+done
+
+echo "PARTIAL_DECRYPTION_TRUSTEES=1,3,5"
+echo "UNAVAILABLE_TRUSTEES=2,4"
+echo "SEPARATE_PARTIAL_DECRYPTION_PROCESSES=3"
+
+###############################################################################
+# 19. BUILD / VERIFY PUBLIC FINALIZATION TRANSCRIPT
+###############################################################################
+
+echo
+echo "=== 19. BUILD / VERIFY FINALIZATION TRANSCRIPT ==="
+
+FINAL_TRANSCRIPT="$EVIDENCE/finalization-transcript.json"
+VERIFIED="$EVIDENCE/finalization-verified.json"
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        build-finalization \
+        --dkg "$CEREMONY/dkg-bundle.json" \
+        --aggregate "$AGGREGATE" \
+        --partials-dir "$PARTIALS" \
+        --trustee-ids "1,3,5" \
+        --out "$FINAL_TRANSCRIPT"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        verify-finalization \
+        --input "$FINAL_TRANSCRIPT" \
+        --out "$VERIFIED"
+)
+
+VERIFIED_TOTALS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  x.totals.slice(0,4).join(",")
+);
+' "$VERIFIED"
+)"
+
+if [ "$VERIFIED_TOTALS" != "3,2,2,1" ]; then
+    echo "ERROR: threshold finalization truth mismatch: $VERIFIED_TOTALS"
+    exit 22
+fi
+
+echo "FINALIZATION_TRANSCRIPT_VERIFIER=PASS"
+echo "VERIFIED_ACTIVE_TOTALS=$VERIFIED_TOTALS"
+
+###############################################################################
+# 20. SUBMIT VERIFIED FINALIZATION TO CONTRACT
+###############################################################################
+
+echo
+echo "=== 20. ONCHAIN FINALIZATION ==="
+
+ONCHAIN_FINAL="$EVIDENCE/onchain-finalization.json"
+
+(
+    cd "$BACK"
+
+    node \
+        scripts/wp6b-onchain-runtime.mjs \
+        finalize \
+        "$RPC" \
+        "$ADMIN_PK" \
+        "$DIRECT_ARTIFACT" \
+        "$AGGREGATE" \
+        "$CEREMONY/dkg-bundle.json" \
+        "$FINAL_TRANSCRIPT" \
+        "$VERIFIED" \
+        "$ONCHAIN_FINAL"
+)
+
+echo "ONCHAIN_FINALIZATION=PASS"
+
+###############################################################################
+# 21. NEGATIVE TRANSCRIPT GATES
+###############################################################################
+
+echo
+echo "=== 21. NEGATIVE TRANSCRIPT GATES ==="
+
+BAD_TWO="$EVIDENCE/finalization-two-trustees.json"
+BAD_PROOF="$EVIDENCE/finalization-tampered-proof.json"
+
+node - "$FINAL_TRANSCRIPT" "$BAD_TWO" "$BAD_PROOF" <<'NODE'
+const fs=require("fs");
+
+const source=
+  JSON.parse(
+    fs.readFileSync(
+      process.argv[2],
+      "utf8"
+    )
+  );
+
+const two=
+  structuredClone(
+    source
+  );
+
+two.partialsBySlot=
+  two.partialsBySlot.map(
+    records =>
+      records.slice(0,2)
+  );
+
+fs.writeFileSync(
+  process.argv[3],
+  JSON.stringify(
+    two,
+    null,
+    2
+  ) + "\n"
+);
+
+const bad=
+  structuredClone(
+    source
+  );
+
+bad
+  .partialsBySlot[0][0]
+  .proof
+  .response =
+    (
+      BigInt(
+        bad
+          .partialsBySlot[0][0]
+          .proof
+          .response
+      ) +
+      1n
+    ).toString();
+
+fs.writeFileSync(
+  process.argv[4],
+  JSON.stringify(
+    bad,
+    null,
+    2
+  ) + "\n"
+);
+NODE
+
+set +e
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        verify-finalization \
+        --input "$BAD_TWO" \
+        --out "$EVIDENCE/should-not-exist-two.json"
+) > "$EVIDENCE/two-trustees-negative.log" 2>&1
+
+TWO_RC=$?
+
+(
+    cd "$CRYPTO"
+
+    node \
+        scripts/wp6-trustee-cli.mjs \
+        verify-finalization \
+        --input "$BAD_PROOF" \
+        --out "$EVIDENCE/should-not-exist-bad-proof.json"
+) > "$EVIDENCE/tampered-proof-negative.log" 2>&1
+
+BAD_RC=$?
+
+set -e
+
+if [ "$TWO_RC" -eq 0 ]; then
+    echo "ERROR: fewer-than-threshold transcript was accepted."
+    exit 23
+fi
+
+if [ "$BAD_RC" -eq 0 ]; then
+    echo "ERROR: tampered DLEQ transcript was accepted."
+    exit 24
+fi
+
+echo "INSUFFICIENT_2_OF_5_TRANSCRIPT_REJECTED=PASS"
+echo "TAMPERED_DLEQ_TRANSCRIPT_REJECTED=PASS"
+
+###############################################################################
+# 22. VERIFY NO PLAINTEXT TRUSTEE SHARE IN PUBLIC ARTIFACTS
+###############################################################################
+
+echo
+echo "=== 22. PUBLIC ARTIFACT SECRET-HYGIENE CHECK ==="
+
+PUBLIC_FILES=(
+    "$CEREMONY/dkg-bundle.json"
+    "$AGGREGATE"
+    "$FINAL_TRANSCRIPT"
+    "$VERIFIED"
+    "$ONCHAIN_FINAL"
+)
+
+for file in "${PUBLIC_FILES[@]}"
+do
+    if grep -nEi \
+        '"(privateKey|secret|share|coefficients|polynomial)"[[:space:]]*:' \
+        "$file" \
+        > "$EVIDENCE/public-secret-scan.tmp"
+    then
+        echo "ERROR: forbidden plaintext private-material key in public artifact:"
+        cat "$EVIDENCE/public-secret-scan.tmp"
+        exit 25
+    fi
+done
+
+rm -f \
+    "$EVIDENCE/public-secret-scan.tmp"
+
+echo "PUBLIC_ARTIFACT_PLAINTEXT_TRUSTEE_PRIVATE_FIELDS=0"
+
+###############################################################################
+# 23. REMOVE SYNTHETIC PASSPHRASES NOW
+###############################################################################
+
+echo
+echo "=== 23. REMOVE EPHEMERAL PASSPHRASES ==="
+
+rm -rf "$PRIVATE_TMP"
+
+echo "SYNTHETIC_TRUSTEE_PASSPHRASES_RETAINED=NO"
+
+###############################################################################
+# 24. VERIFY WP6A CORE UNCHANGED
+###############################################################################
+
+echo
+echo "=== 24. VERIFY WP6A CORE UNCHANGED ==="
+
+CORE_AFTER="$(
+    sha256sum "$CORE" |
+    awk '{print $1}'
+)"
+
+PROFILE_AFTER="$(
+    sha256sum "$PROFILE" |
+    awk '{print $1}'
+)"
+
+if [ "$CORE_AFTER" != "$EXPECTED_CORE_SHA" ]; then
+    echo "ERROR: WP6A threshold core changed during WP6B."
+    exit 26
+fi
+
+if [ "$PROFILE_AFTER" != "$EXPECTED_PROFILE_SHA" ]; then
+    echo "ERROR: WP6A threshold profile changed during WP6B."
+    exit 27
+fi
+
+echo "WP6A_CORE_CHANGED_DURING_WP6B=NO"
+echo "WP6A_PROFILE_CHANGED_DURING_WP6B=NO"
+
+###############################################################################
+# 25. HASH FINAL ARTIFACTS
+###############################################################################
+
+echo
+echo "=== 25. HASH FINAL WP6B ARTIFACTS ==="
+
+HASHES="$EVIDENCE/wp6b.sha256"
+
+sha256sum \
+    "$CONTRACT" \
+    "$TESTFILE" \
+    "$CLI" \
+    "$ONCHAIN" \
+    "$CEREMONY/dkg-bundle.json" \
+    "$BALLOTS" \
+    "$AGGREGATE" \
+    "$FINAL_TRANSCRIPT" \
+    "$VERIFIED" \
+    "$ONCHAIN_FINAL" \
+    > "$HASHES"
+
+cat "$HASHES"
+
+###############################################################################
+# 26. EXTRACT FINAL VALUES
+###############################################################################
+
+DKG_HASH="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  x.transcriptHash
+);
+' "$CEREMONY/dkg-bundle.json"
+)"
+
+FINAL_HASH="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  x.transcriptHash
+);
+' "$VERIFIED"
+)"
+
+DIRECT_ADDRESS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  x.contractAddress
+);
+' "$AGGREGATE"
+)"
+
+FINALIZE_GAS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  x.finalizeGas
+);
+' "$ONCHAIN_FINAL"
+)"
+
+###############################################################################
+# 27. WRITE WP6B SUMMARY
+###############################################################################
+
+echo
+echo "=== 27. WRITE WP6B SUMMARY ==="
+
+{
+    echo "======================================================================"
+    echo "VOTECHAIN-ZK WP6B — TRUSTEE CLI / TRANSCRIPT / CONTRACT FINALIZATION"
+    echo "======================================================================"
+    echo
+    echo "STATUS=PASS_WP6B_TRUSTEE_CLI_CONTRACT_FINALIZATION"
+    echo "RUN_ID=$RUN_ID"
+    echo
+    echo "WP6A_ACCEPTED=PASS"
+    echo "WP5E_REAL_GROTH16_INTEGRATION_ACCEPTED=PASS"
+    echo
+    echo "WP6A_CRYPTO_CORE_FROZEN=PASS"
+    echo "WP6A_CORE_CHANGED_DURING_WP6B=NO"
+    echo
+    echo "DEFAULT_THRESHOLD=3_OF_5"
+    echo "TRUSTEE_IDENTITY_PROCESSES=5"
+    echo "DKG_CONTRIBUTION_PROCESSES=5"
+    echo "DKG_SHARE_DERIVATION_PROCESSES=5"
+    echo "TRUSTEE_SEPARATE_PROCESS_CLI=PASS"
+    echo
+    echo "PUBLIC_DKG_TRANSCRIPT=PASS"
+    echo "DKG_TRANSCRIPT_VERIFIER=PASS"
+    echo "DKG_TRANSCRIPT_HASH=$DKG_HASH"
+    echo
+    echo "ONCHAIN_DKG_PUBLIC_KEY_MATCH=PASS"
+    echo "ONCHAIN_DKG_TRANSCRIPT_PIN_MATCH=PASS"
+    echo "DKG_TRANSCRIPT_PINNED_DURING_REGISTRATION=PASS"
+    echo
+    echo "SYNTHETIC_ACCEPTED_BALLOTS=8"
+    echo "SYNTHETIC_EXPECTED_ACTIVE_TOTALS=3,2,2,1"
+    echo "ONCHAIN_LOCAL_ENCRYPTED_TALLY_MATCH=PASS"
+    echo
+    echo "PARTIAL_DECRYPTION_TRUSTEES=1,3,5"
+    echo "UNAVAILABLE_TRUSTEES=2,4"
+    echo "SEPARATE_PARTIAL_DECRYPTION_PROCESSES=3"
+    echo
+    echo "FINALIZATION_TRANSCRIPT_VERIFIER=PASS"
+    echo "VERIFIED_ACTIVE_TOTALS=3,2,2,1"
+    echo "FINALIZATION_TRANSCRIPT_HASH=$FINAL_HASH"
+    echo
+    echo "INSUFFICIENT_2_OF_5_TRANSCRIPT_REJECTED=PASS"
+    echo "TAMPERED_DLEQ_TRANSCRIPT_REJECTED=PASS"
+    echo
+    echo "ONCHAIN_FINALIZATION=PASS"
+    echo "ONCHAIN_FINAL_RESULTS_MATCH=PASS"
+    echo "ONCHAIN_FINALIZATION_HASH_MATCH=PASS"
+    echo "DUPLICATE_FINALIZATION_REJECTED=PASS"
+    echo "FINALIZE_GAS_SMOKE=$FINALIZE_GAS"
+    echo
+    echo "PUBLIC_ARTIFACT_PLAINTEXT_TRUSTEE_PRIVATE_FIELDS=0"
+    echo "SYNTHETIC_TRUSTEE_PASSPHRASES_RETAINED=NO"
+    echo
+    echo "DIRECT_ADDRESS=$DIRECT_ADDRESS"
+    echo
+    echo "GROTH16_VERIFIER_FOR_WP6B_TALLY_SETUP=MOCKED_TEST_VERIFIER"
+    echo "REAL_GROTH16_PATH_REPLACED=NO"
+    echo "REAL_GROTH16_BROWSER_ONCHAIN_PATH=ALREADY_ACCEPTED_WP5E"
+    echo
+    echo "WP6B_CLASSIFICATION=FUNCTIONAL_THRESHOLD_FINALIZATION_GATE"
+    echo "FINAL_BENCHMARK=NO"
+    echo "WP8_REPEATED_MEASUREMENTS=PENDING"
+    echo
+    echo "ONCHAIN_DLEQ_VERIFICATION=NO"
+    echo "DLEQ_VERIFICATION_MODEL=PUBLIC_OFFCHAIN_TRANSCRIPT_VERIFIER_PLUS_ONCHAIN_HASH_ANCHOR"
+    echo
+    echo "TRUSTEE_ADMIN_UI=PENDING_FINAL_INTEGRATION"
+    echo
+    echo "WP6_THRESHOLD_SUBSYSTEM_FUNCTIONAL_GATE=PASS"
+    echo
+    echo "EVIDENCE=$EVIDENCE"
+    echo
+    echo "NEXT_ACTION=WP7_SECURITY_AND_PRODUCT_HARDENING"
+    echo "======================================================================"
+} | tee "$SUMMARY"
+
+echo
+echo "======================================================================"
+echo "WP6B COMPLETE"
+echo "======================================================================"
+echo
+echo "Send me:"
+echo "$SUMMARY"
+echo
+echo "and the terminal output from this run."

@@ -1,0 +1,604 @@
+======================================================================
+ VOTECHAIN PRE-ELECTION-B DEPLOYMENT SNAPSHOT
+ COMPLETE SAFE NON-SECRET STATE CAPTURE
+======================================================================
+SNAPSHOT_PURPOSE=Preserve Election A deployment/lifecycle state before fresh-Anvil Election B E2E
+CREATED_LOCAL=Thu Oct 08 2026 02:17:00 GMT+0600 (Bangladesh Standard Time)
+CREATED_ISO=2026-10-07T20:17:00.600Z
+REPOSITORY_ROOT=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK
+RPC_URL=http://127.0.0.1:8545
+CHAIN_ID=31337
+LATEST_BLOCK=14
+
+======================================================================
+ 1. TOOLCHAIN
+======================================================================
+NODE_VERSION=v22.15.0
+NPM_VERSION=
+FORGE_VERSION=forge Version: 1.5.1-stable | Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2 | Build Timestamp: 2025-12-22T11:40:33.870895500Z (1766403633) | Build Profile: maxperf
+CAST_VERSION=cast Version: 1.5.1-stable | Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2 | Build Timestamp: 2025-12-22T11:40:33.870895500Z (1766403633) | Build Profile: maxperf
+ANVIL_VERSION=anvil 0.3.0 (5a8bd89 2024-12-20T08:45:46.447713600Z)
+
+======================================================================
+ 2. RPC / ANVIL NETWORK IDENTITY
+======================================================================
+WEB3_CLIENT_VERSION=anvil/v0.3.0
+NET_VERSION=31337
+CHAIN_ID_HEX=0x7a69
+CHAIN_ID_DECIMAL=31337
+LATEST_BLOCK_HEX=0xe
+LATEST_BLOCK_DECIMAL=14
+GENESIS_HASH=0x368976b44062ce1afddc13cfe69dfea03b86eb1ededf60660bb7ec2f322d9f4e
+GENESIS_TIMESTAMP=1791372585
+LATEST_HASH=0x97c2c12e501388e671b8dc140b65b23e3caf02bc3f03792cb3abe297d922a83c
+LATEST_PARENT_HASH=0x447c59d6fc89da7460efc718106512bee498f4933ef5771da60895415b35f745
+LATEST_TIMESTAMP=1791397585
+LATEST_GAS_LIMIT=30000000
+LATEST_GAS_USED=120165
+
+======================================================================
+ 3. PUBLIC RPC ACCOUNTS AND BALANCES
+======================================================================
+ACCOUNT_COUNT=10
+ACCOUNT_0=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+ACCOUNT_0_BALANCE_WEI=9999983661424305595617
+ACCOUNT_0_NONCE=15
+ACCOUNT_1=0x70997970c51812dc3a010c7d01b50e0d17dc79c8
+ACCOUNT_1_BALANCE_WEI=9999997619613094559350
+ACCOUNT_1_NONCE=1
+ACCOUNT_2=0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc
+ACCOUNT_2_BALANCE_WEI=10000000000000000000000
+ACCOUNT_2_NONCE=0
+ACCOUNT_3=0x90f79bf6eb2c4f870365e785982e1f101e93b906
+ACCOUNT_3_BALANCE_WEI=10000000000000000000000
+ACCOUNT_3_NONCE=0
+ACCOUNT_4=0x15d34aaf54267db7d7c367839aaf71a00a2c6a65
+ACCOUNT_4_BALANCE_WEI=10000000000000000000000
+ACCOUNT_4_NONCE=0
+ACCOUNT_5=0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc
+ACCOUNT_5_BALANCE_WEI=10000000000000000000000
+ACCOUNT_5_NONCE=0
+ACCOUNT_6=0x976ea74026e726554db657fa54763abd0c3a0aa9
+ACCOUNT_6_BALANCE_WEI=10000000000000000000000
+ACCOUNT_6_NONCE=0
+ACCOUNT_7=0x14dc79964da2c08b23698b3d3cc7ca32193d9955
+ACCOUNT_7_BALANCE_WEI=10000000000000000000000
+ACCOUNT_7_NONCE=0
+ACCOUNT_8=0x23618e81e3f5cdf7f54c3d65f7fbc0abf5b21e8f
+ACCOUNT_8_BALANCE_WEI=10000000000000000000000
+ACCOUNT_8_NONCE=0
+ACCOUNT_9=0xa0ee7a142d267c1f36714e4a8f75612f20a79720
+ACCOUNT_9_BALANCE_WEI=10000000000000000000000
+ACCOUNT_9_NONCE=0
+
+======================================================================
+ 4. BACKEND SAFE DEPLOYMENT CONFIG
+======================================================================
+BACKEND_ENV_KEYS=CONTRACT_ADDRESS,FINGERPRINT_SERIAL_PORT,FRONTEND_ORIGINS,FRONTEND_URL,JWT_SECRET,MIGRATION_ALLOW_RUN,MONGO_URI,PORT,RPC_URL,VOTER_SALT_SECRET_KEY,WP5_CONTRACT_ADDRESS,WP5_CREDENTIAL_SECRET_KEY,ZK_CONTRACT_DEPLOYMENT_BLOCK,ZK_CREDENTIAL_SECRET_KEY
+RPC_URL=http://127.0.0.1:8545
+CONTRACT_ADDRESS=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+ELECTION_COMMISSION_ADDRESS=NOT_SET
+CHAIN_ID=NOT_SET
+VOTECHAIN_API_BASE_URL=NOT_SET
+PORT=5000
+NODE_ENV=NOT_SET
+BACKEND_SENSITIVE_ENV_VALUES_REDACTED=YES
+
+======================================================================
+ 5. FRONTEND SAFE DEPLOYMENT CONFIG
+======================================================================
+FRONTEND_ENV_FILE=.env.local
+FRONTEND_ENV_KEYS=VITE_API_BASE_URL,VITE_CONTRACT_ADDRESS,VITE_RPC_URL,VITE_WP5_CONTRACT_ADDRESS
+.env.local:VITE_API_BASE_URL=http://localhost:5000
+.env.local:VITE_RPC_URL=http://127.0.0.1:8545
+.env.local:VITE_CONTRACT_ADDRESS=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+.env.local:VITE_WP5_CONTRACT_ADDRESS=0x5FC8d32690cc91D4c39d9d3abcBD16989F875707
+.env.local:VITE_CHAIN_ID=NOT_SET
+FRONTEND_ENV_FILE=.env
+FRONTEND_ENV_KEYS=
+.env:VITE_API_BASE_URL=NOT_SET
+.env:VITE_RPC_URL=NOT_SET
+.env:VITE_CONTRACT_ADDRESS=NOT_SET
+.env:VITE_WP5_CONTRACT_ADDRESS=NOT_SET
+.env:VITE_CHAIN_ID=NOT_SET
+FRONTEND_SENSITIVE_ENV_VALUES_REDACTED=YES
+
+======================================================================
+ 6. CONFIGURED CONTRACT BYTECODE STATE
+======================================================================
+BACKEND_REGISTRATION_ADDRESS=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+BACKEND_REGISTRATION_CODE_PRESENT=YES
+BACKEND_REGISTRATION_CODE_BYTES=7348
+BACKEND_REGISTRATION_BYTECODE_SHA256=803b4fdf1e3082bcf6fa3f9e3292e5ca947bfb8dae1142823f0fc9e0e26c22ba
+FRONTEND_REGISTRATION_ADDRESS=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+FRONTEND_REGISTRATION_CODE_PRESENT=YES
+FRONTEND_REGISTRATION_CODE_BYTES=7348
+FRONTEND_REGISTRATION_BYTECODE_SHA256=803b4fdf1e3082bcf6fa3f9e3292e5ca947bfb8dae1142823f0fc9e0e26c22ba
+FRONTEND_WP5_ADDRESS=0x5FC8d32690cc91D4c39d9d3abcBD16989F875707
+FRONTEND_WP5_CODE_PRESENT=NO
+FRONTEND_WP5_CODE_BYTES=0
+
+======================================================================
+ 7. REGISTRATION CONTRACT LIVE GETTERS
+======================================================================
+REGISTRATION_ADDRESS=0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+ELECTION_ID=224568235047225120697643590180532895951760210961633483939209784817986330150 [2.245e74]
+ELECTION_COMMISSION=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+STATE=0
+SEMAPHORE=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+GROUP_ID=0
+CANDIDATE_COUNT=2
+REGISTERED_VOTER_COUNT=2
+GROUP_ROOT=11473130615695164764805572046186758591328332094928153148395565357520048166998 [1.147e76]
+GROUP_SIZE=2
+
+======================================================================
+ 8. CURRENT BACKEND ELECTION LIFECYCLE
+======================================================================
+CURRENT_ELECTION_HTTP_STATUS=200
+CURRENT_ELECTION=FOUND
+ELECTIONID=224568235047225120697643590180532895951760210961633483939209784817986330150
+STATUS=finalized
+STARTSTAGE=active
+CHAINID=31337
+ELIGIBLEVOTERCOUNT=2
+CANDIDATECOUNT=2
+ELIGIBLEROOT=1037313189158717075106147591163307354162070818521247426327663950969951367019
+CANDIDATEMANIFESTHASH=18656823111670658323802283099482718005065264680351691733228884556799672967761
+TRUSTEETRANSCRIPTHASH=0x48fbe0a00ef66de5370b69d3c2309d3451a38a2ef83c454cd141d0e8caa909e0
+VERIFIERADDRESS=0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6
+DIRECTCONTRACTADDRESS=0x8A791620dd6260079BF849Dc5567aDC3F2FdC318
+ACCEPTEDBALLOTCOUNT=1
+FINALIZATIONTRANSCRIPTHASH=0xae287f8e0bf1c742b35dbc24f6641873c580b3b7a21809adf319acd019d61d3e
+FINALRESULTS=["0","1"]
+CREATEDAT=FIELD_NOT_RETURNED
+STARTEDAT=2026-10-07T17:35:31.105Z
+ENDEDAT=2026-10-07T17:58:07.852Z
+FINALIZEDAT=2026-10-07T18:26:25.228Z
+
+======================================================================
+ 9. CURRENT ELECTION WP6 PUBLIC ARTIFACTS
+======================================================================
+WP6_ELECTION_ROOT=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\crypto\.local\wp6-elections\224568235047225120697643590180532895951760210961633483939209784817986330150
+WP6_PUBLIC_DIR=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\crypto\.local\wp6-elections\224568235047225120697643590180532895951760210961633483939209784817986330150\public
+WP6_CUSTODY_DIR=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\crypto\.local\wp6-elections\224568235047225120697643590180532895951760210961633483939209784817986330150\custody
+PUBLIC_ENTRY_COUNT=9
+PUBLIC_ARTIFACT=dkg-finalization-input.json
+PUBLIC_ARTIFACT_BYTES=9820
+PUBLIC_ARTIFACT_SHA256=8f330f0f989ff31a8dfdd08c92baee06cd6fc367e176a4ef8db022730c584317
+PUBLIC_JSON_KEYS=transcript,transcriptHash
+PUBLIC_ARTIFACT=dkg-public-transcript.json
+PUBLIC_ARTIFACT_BYTES=9178
+PUBLIC_ARTIFACT_SHA256=d2a2de6a8e7d7b8ce55f68459553713cab06896ea9fe4e874a97e1097134f1ad
+PUBLIC_JSON_KEYS=ceremonyId,curve,deliveryHashes,generator,participantCommitments,publicKey,threshold,trusteeCount,trustees,version
+PUBLIC_ARTIFACT=dkg-summary.json
+PUBLIC_ARTIFACT_BYTES=1244
+PUBLIC_ARTIFACT_SHA256=870147bf4ab2e9b9b3d73d334d11550594626b0e1744e8ec1ed272d30116a4e6
+PUBLIC_JSON_KEYS=ceremonyId,custodyDirectory,electionId,publicKey,publicTranscript,threshold,transcriptHash,trusteeCount,trusteeTranscriptRequest
+DKG_SUMMARY_ELECTION_ID=224568235047225120697643590180532895951760210961633483939209784817986330150
+DKG_SUMMARY_CEREMONY_ID=224568235047225120697643590180532895951760210961633483939209784817986330150
+DKG_SUMMARY_THRESHOLD=3
+DKG_SUMMARY_TRUSTEE_COUNT=5
+DKG_SUMMARY_TRANSCRIPT_HASH=0x48fbe0a00ef66de5370b69d3c2309d3451a38a2ef83c454cd141d0e8caa909e0
+DKG_SUMMARY_PUBLIC_KEY=["787604705248534569094846496405212368601120777590711846845929955997052259311","19601036141821020351553547626912699640978892194022734061208089654453859358702"]
+PUBLIC_ARTIFACT=encrypted-aggregate.json
+PUBLIC_ARTIFACT_BYTES=6795
+PUBLIC_ARTIFACT_SHA256=3f26d08af7f3eeaad0d85fec40f3e8b38bebc92a90877530f0c4d63c1f85d2a3
+PUBLIC_JSON_KEYS=acceptedBallotCount,aggregateCiphertexts,candidateCount,dkgTranscriptHash,electionId
+AGGREGATE_ELECTION_ID=224568235047225120697643590180532895951760210961633483939209784817986330150
+AGGREGATE_CANDIDATE_COUNT=2
+AGGREGATE_ACCEPTED_BALLOTS=1
+AGGREGATE_DKG_HASH=48fbe0a00ef66de5370b69d3c2309d3451a38a2ef83c454cd141d0e8caa909e0
+AGGREGATE_CIPHERTEXT_SLOTS=16
+PUBLIC_DIRECTORY=finalization-partials
+PUBLIC_ARTIFACT=finalization-transcript.json
+PUBLIC_ARTIFACT_BYTES=79116
+PUBLIC_ARTIFACT_SHA256=deea70ba079240b87a6271c374ff58c82e72d3964ae50fd9c40dd1d6840faced
+PUBLIC_JSON_KEYS=acceptedBallotCount,aggregateCiphertexts,candidateCount,dkgTranscript,dkgTranscriptHash,electionId,partialsBySlot,version
+FINALIZATION_VERSION=VoteChain-ZK-WP6-Finalization-v1
+FINALIZATION_ELECTION_ID=224568235047225120697643590180532895951760210961633483939209784817986330150
+FINALIZATION_CANDIDATE_COUNT=2
+FINALIZATION_ACCEPTED_BALLOTS=1
+FINALIZATION_DKG_HASH=48fbe0a00ef66de5370b69d3c2309d3451a38a2ef83c454cd141d0e8caa909e0
+FINALIZATION_PARTIAL_SLOT_COUNT=16
+PUBLIC_ARTIFACT=finalization-verified.json
+PUBLIC_ARTIFACT_BYTES=430
+PUBLIC_ARTIFACT_SHA256=54b899894b2e59569e03df6e0a3a9263622473c210aa4926b82586f483d30c99
+PUBLIC_JSON_KEYS=rejectedBySlot,status,totals,transcriptHash
+FINALIZATION_VERIFY_STATUS=PASS_WP6_FINALIZATION_TRANSCRIPT_VERIFY
+FINALIZATION_TRANSCRIPT_HASH=ae287f8e0bf1c742b35dbc24f6641873c580b3b7a21809adf319acd019d61d3e
+FINALIZATION_TOTALS_PRESENT=YES
+PUBLIC_ARTIFACT=roster.json
+PUBLIC_ARTIFACT_BYTES=898
+PUBLIC_ARTIFACT_SHA256=789892628db14d2d1add7d33d8d5fccfbe0e7b335d154fadcec601c6bb462d18
+PUBLIC_JSON_KEYS=0,1,2,3,4
+PUBLIC_ARTIFACT=trustee-transcript-request.json
+PUBLIC_ARTIFACT_BYTES=9732
+PUBLIC_ARTIFACT_SHA256=eb6e17a16617bb397a36319eacca11d79453b2e4b51ecfbe1756c3b8eb681c97
+PUBLIC_JSON_KEYS=transcript
+
+======================================================================
+ 10. TRUSTEE CUSTODY INVENTORY - FILENAMES ONLY
+======================================================================
+CUSTODY_ENTRY_COUNT=15
+CUSTODY_FILENAME_ONLY=trustee-1-identity.json
+CUSTODY_FILE_BYTES=623
+CUSTODY_FILENAME_ONLY=trustee-1-share.json
+CUSTODY_FILE_BYTES=691
+CUSTODY_FILENAME_ONLY=trustee-1.passphrase
+CUSTODY_FILE_BYTES=65
+CUSTODY_FILENAME_ONLY=trustee-2-identity.json
+CUSTODY_FILE_BYTES=623
+CUSTODY_FILENAME_ONLY=trustee-2-share.json
+CUSTODY_FILE_BYTES=692
+CUSTODY_FILENAME_ONLY=trustee-2.passphrase
+CUSTODY_FILE_BYTES=65
+CUSTODY_FILENAME_ONLY=trustee-3-identity.json
+CUSTODY_FILE_BYTES=623
+CUSTODY_FILENAME_ONLY=trustee-3-share.json
+CUSTODY_FILE_BYTES=692
+CUSTODY_FILENAME_ONLY=trustee-3.passphrase
+CUSTODY_FILE_BYTES=65
+CUSTODY_FILENAME_ONLY=trustee-4-identity.json
+CUSTODY_FILE_BYTES=623
+CUSTODY_FILENAME_ONLY=trustee-4-share.json
+CUSTODY_FILE_BYTES=688
+CUSTODY_FILENAME_ONLY=trustee-4.passphrase
+CUSTODY_FILE_BYTES=65
+CUSTODY_FILENAME_ONLY=trustee-5-identity.json
+CUSTODY_FILE_BYTES=623
+CUSTODY_FILENAME_ONLY=trustee-5-share.json
+CUSTODY_FILE_BYTES=691
+CUSTODY_FILENAME_ONLY=trustee-5.passphrase
+CUSTODY_FILE_BYTES=65
+CUSTODY_CONTENTS_READ=NO
+
+======================================================================
+ 11. DEPLOY SCRIPT COMPLETE SOURCE
+======================================================================
+FILE=script\DeployZKLocalVoting.s.sol
+SHA256=c9c14552ddeeee531c5e78c9af72483981a8e457a587099f217687122885a5dd
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.23;
+
+import {Script} from "forge-std/Script.sol";
+import {Semaphore} from "@semaphore-protocol/contracts/Semaphore.sol";
+import {SemaphoreVerifier} from "@semaphore-protocol/contracts/base/SemaphoreVerifier.sol";
+import {ISemaphoreVerifier} from "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
+import {ZKLocalVoting} from "../src/ZKLocalVoting.sol";
+
+contract DeployZKLocalVoting is Script {
+    function run() external returns (SemaphoreVerifier verifier, Semaphore semaphore, ZKLocalVoting voting) {
+        uint256 electionId = vm.envUint("ELECTION_ID");
+        require(electionId != 0, "ELECTION_ID must be non-zero");
+        uint256 merkleTreeDuration = vm.envOr("SEMAPHORE_MERKLE_ROOT_DURATION", uint256(7 days));
+
+        vm.startBroadcast();
+        verifier = new SemaphoreVerifier();
+        semaphore = new Semaphore(ISemaphoreVerifier(address(verifier)));
+        voting = new ZKLocalVoting(semaphore, electionId, merkleTreeDuration);
+        vm.stopBroadcast();
+    }
+}
+
+
+======================================================================
+ 12. ZKLOCALVOTING COMPLETE SOURCE
+======================================================================
+FILE=src\ZKLocalVoting.sol
+SHA256=1490b94c802b6ae3736aae7df211a95c227a3c199819832a186b1078dc578f7f
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.23;
+
+import {ISemaphore} from "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
+import {ISemaphoreGroups} from "@semaphore-protocol/contracts/interfaces/ISemaphoreGroups.sol";
+
+/// @title VoteChain ZK voting contract backed by Semaphore V4.
+/// @notice The transaction sender is infrastructure only; voter uniqueness is enforced by Semaphore nullifiers.
+contract ZKLocalVoting {
+    address public immutable electionCommission;
+    uint256 public immutable electionId;
+    uint256 public immutable groupId;
+    ISemaphore public immutable semaphore;
+
+    enum ElectionState {
+        Registration,
+        Active,
+        Ended
+    }
+
+    ElectionState public state;
+
+    struct CandidateState {
+        bool exists;
+        uint256 voteCount;
+    }
+
+    mapping(uint256 => CandidateState) public candidates;
+    mapping(uint256 => bool) public registeredCommitments;
+    uint256 public candidateCount;
+    uint256 public registeredVoterCount;
+
+    event CandidateRegistered(uint256 indexed candidateId);
+    event VoterCommitmentRegistered(uint256 indexed identityCommitment);
+    event ElectionStarted(uint256 indexed electionId, uint256 indexed groupId);
+    event ElectionEnded(uint256 indexed electionId);
+    event VoteCast(uint256 indexed candidateId, uint256 indexed nullifier);
+
+    modifier onlyCommission() {
+        require(msg.sender == electionCommission, "Only Election Commission can call this function");
+        _;
+    }
+
+    modifier onlyRegistration() {
+        require(state == ElectionState.Registration, "Election is not in Registration state");
+        _;
+    }
+
+    modifier onlyActive() {
+        require(state == ElectionState.Active, "Election is not Active");
+        _;
+    }
+
+    constructor(ISemaphore semaphore_, uint256 electionId_, uint256 merkleTreeDuration_) {
+        require(address(semaphore_) != address(0), "Invalid Semaphore address");
+        require(electionId_ != 0, "Invalid election ID");
+        require(merkleTreeDuration_ != 0, "Invalid Merkle root duration");
+
+        electionCommission = msg.sender;
+        electionId = electionId_;
+        semaphore = semaphore_;
+        state = ElectionState.Registration;
+
+        // The VoteChain contract is the Semaphore group admin, so only the
+        // Election Commission path below can mutate membership before activation.
+        groupId = semaphore_.createGroup(address(this), merkleTreeDuration_);
+    }
+
+    function registerCandidate(uint256 candidateId) external onlyCommission onlyRegistration {
+        require(candidateId != 0, "Invalid candidate ID");
+        require(!candidates[candidateId].exists, "Candidate ID already registered");
+
+        candidates[candidateId] = CandidateState({exists: true, voteCount: 0});
+        unchecked {
+            candidateCount++;
+        }
+
+        emit CandidateRegistered(candidateId);
+    }
+
+    function registerVoterCommitment(uint256 identityCommitment) external onlyCommission onlyRegistration {
+        require(identityCommitment != 0, "Invalid identity commitment");
+        require(!registeredCommitments[identityCommitment], "Identity commitment already registered");
+
+        // Mark first; any downstream revert rolls this state change back atomically.
+        registeredCommitments[identityCommitment] = true;
+        semaphore.addMember(groupId, identityCommitment);
+
+        unchecked {
+            registeredVoterCount++;
+        }
+
+        emit VoterCommitmentRegistered(identityCommitment);
+    }
+
+    function startElection() external onlyCommission onlyRegistration {
+        state = ElectionState.Active;
+        emit ElectionStarted(electionId, groupId);
+    }
+
+    function castVote(uint256 candidateId, ISemaphore.SemaphoreProof calldata proof) external onlyActive {
+        require(candidates[candidateId].exists, "Invalid candidate");
+        require(proof.message == candidateId, "Proof message does not match candidate");
+        require(proof.scope == electionId, "Proof scope does not match election");
+
+        // Semaphore V4 validates membership and records the group-scoped nullifier.
+        // A reused nullifier reverts inside Semaphore before the tally is updated.
+        semaphore.validateProof(groupId, proof);
+
+        candidates[candidateId].voteCount++;
+        emit VoteCast(candidateId, proof.nullifier);
+    }
+
+    function endElection() external onlyCommission onlyActive {
+        state = ElectionState.Ended;
+        emit ElectionEnded(electionId);
+    }
+
+    function getVoteCount(uint256 candidateId) external view returns (uint256) {
+        require(candidates[candidateId].exists, "Candidate not found");
+        return candidates[candidateId].voteCount;
+    }
+
+    function getElectionState() external view returns (ElectionState) {
+        return state;
+    }
+
+    function getGroupRoot() external view returns (uint256) {
+        return ISemaphoreGroups(address(semaphore)).getMerkleTreeRoot(groupId);
+    }
+
+    function getGroupSize() external view returns (uint256) {
+        return ISemaphoreGroups(address(semaphore)).getMerkleTreeSize(groupId);
+    }
+
+    function getCommitmentIndex(uint256 identityCommitment) external view returns (uint256) {
+        require(registeredCommitments[identityCommitment], "Identity commitment not registered");
+        return ISemaphoreGroups(address(semaphore)).indexOf(groupId, identityCommitment);
+    }
+}
+
+
+======================================================================
+ 13. FOUNDRY CONFIG COMPLETE
+======================================================================
+FILE=foundry.toml
+SHA256=bd89e4a43854f5e0110512db4193004276fbbd56cba96208026ab5ebd8fde03b
+
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib", ".zk-deps/node_modules"]
+
+[rpc_endpoints]
+sepolia = "$SEPOLIA_RPC_URL"
+
+etherscan_api_key = "$ETHERSCAN_API_KEY"
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+
+======================================================================
+ 14. DEPLOYMENT SCRIPT INVENTORY
+======================================================================
+DEPLOY_SCRIPT_COUNT=2
+DEPLOY_SCRIPT=script\DeployZKLocalVoting.s.sol
+DEPLOY_SCRIPT_SHA256=c9c14552ddeeee531c5e78c9af72483981a8e457a587099f217687122885a5dd
+DEPLOY_SCRIPT=script\LocalDeployVoting.s.sol
+DEPLOY_SCRIPT_SHA256=e28c54d0ce1627f4ea317298db6717af8f6f73a338be98c917a7f66b42f423db
+
+======================================================================
+ 15. IMPORTANT SOURCE HASHES
+======================================================================
+script/DeployZKLocalVoting.s.sol_SHA256=c9c14552ddeeee531c5e78c9af72483981a8e457a587099f217687122885a5dd
+src/ZKLocalVoting.sol_SHA256=1490b94c802b6ae3736aae7df211a95c227a3c199819832a186b1078dc578f7f
+src/VoteChainDirect.sol=NOT_FOUND
+crypto/src/wp2-core-final.mjs_SHA256=304c60747424e84938357fc10f1ea4136edd89aa8d7b835757e81c34bd109c24
+crypto/src/wp6-threshold.mjs_SHA256=107ad1936884d4880c2fe992d9b1681039f5c725b0f506046cefb8bdb37ce9e1
+crypto/scripts/wp6-trustee-cli.mjs_SHA256=ac6320a0bbdcef4c5f88928d87f4bc455fb33f105e6ff11254a77e358e452e1f
+votechain-central-server/scripts/wp6-local-election-dkg.mjs_SHA256=72c6d27d1ca6042a8c883069c7f151182fc81dcc059c0007285c781e1dbf3ad8
+votechain-central-server/scripts/local-election-finalize.mjs_SHA256=11b62e9821a450cb2a61a1bfc9bda60a9333ba034f0b3814687dbc225f2f34a1
+votechain-central-server/services/elections/electionLifecycleService.js_SHA256=15fd7a2c57d6ce161b552ec19c0d6f90ff786f3ed2a764f962f7002c899ea50c
+votechain-central-server/services/elections/electionFinalizationService.js_SHA256=4176b9d7938a2cfa7b47de1de844ae64129d27f7e0d4f969c20b2d905de508c8
+votechain-central-server/services/elections/electionRuntimeService.js_SHA256=1ec41b4c224ee0723156d085a1262ce5f4685fbe45e287d8fbb265493d05aded
+votechain-frontend-ts/src/lib/api.ts=NOT_FOUND
+votechain-frontend-ts/src/components/Admin/ElectionStatus.tsx_SHA256=f1b1dd229c4ea17b9d6747225d006f9887fa2a1b8f2a453ece81d83da4e7f264
+votechain-frontend-ts/src/context/wallet-provider.tsx=NOT_FOUND
+
+======================================================================
+ 16. COMPILED ARTIFACT HASHES
+======================================================================
+COMPILED_ARTIFACT=out\Semaphore.sol\Semaphore.json
+COMPILED_ARTIFACT_SHA256=715064783e5bf90d99e5ffdecddf29ab1e214da7f8258407665743be04187b6e
+COMPILED_ARTIFACT=out\SemaphoreVerifier.sol\SemaphoreVerifier.json
+COMPILED_ARTIFACT_SHA256=d04a2117f3aa26714d24f5ae7185dc7bbc9436fc6ee9d8f64b5071bfc8f44223
+COMPILED_ARTIFACT=out\ZKLocalVoting.sol\ZKLocalVoting.json
+COMPILED_ARTIFACT_SHA256=a0a6dc7c2c3abec0130fe29e4bb1d180a48da0bd211f8737a90ce8e96fcbbfba
+
+======================================================================
+ 17. ZKLOCALVOTING BROADCAST HISTORY
+======================================================================
+BROADCAST_FILE_COUNT=14
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791101311298.json
+BROADCAST_FILE_SHA256=f2f0c9a1ec3ae67014fa4ce000210f547b00e122f321721e7a5bbc498c11a8d0
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791136390942.json
+BROADCAST_FILE_SHA256=87e232cadb2e6582c3cfbdee6e1ea60ebf1e53fea67192581c63bc5ef0b8c41d
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791181621169.json
+BROADCAST_FILE_SHA256=a6eef1d595fefe3450d172f059ca0ca045a345cba1527459ec7adc850967d00b
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791203788784.json
+BROADCAST_FILE_SHA256=2ec3985c2724ae01845aa6d2fc60b86e2ecaa14037ad8332b55681f49dbd656c
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791228753203.json
+BROADCAST_FILE_SHA256=37c538ee72a92ba7209f273497973b5f4283f4ae305202a18f546c0618e16097
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791309568108.json
+BROADCAST_FILE_SHA256=617044dfc300c19d2ef538ea5f1ecba4446cc6f362c80a9efbe6efdffb0de43b
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791314173867.json
+BROADCAST_FILE_SHA256=6f5f0081c6af0438dc489eeda9e42d0e68f62e430452c589213ab4bb8c54b1ab
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791315597854.json
+BROADCAST_FILE_SHA256=5414bfc45e3b92b9fd935c95ef942f8b151cfbac2b0abca10577e31f0275788d
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791317032682.json
+BROADCAST_FILE_SHA256=09862a1b92dfde678a8791dcb826ec1f364ca510b23e4eeeae4c99ed90acdb32
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791320078233.json
+BROADCAST_FILE_SHA256=30fdf946e5e814be846f16c058f8defef6d993afb99df6565e9edf137dad34d5
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791321072347.json
+BROADCAST_FILE_SHA256=909376bc7b1722acd23785935d4bdb8d1e51935fd1abd0cad1ec4be1a392272e
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791358743212.json
+BROADCAST_FILE_SHA256=ca89690ae67b1060ec56ed66020f9b4ecb7aaa41c7907158ba234137c9a24c9d
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-1791386045081.json
+BROADCAST_FILE_SHA256=171340f74bea31b761ead29418ee2e945bee3a3557f908e3b794678639c6c827
+BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-latest.json
+BROADCAST_FILE_SHA256=171340f74bea31b761ead29418ee2e945bee3a3557f908e3b794678639c6c827
+
+======================================================================
+ 18. LATEST BROADCAST SAFE METADATA
+======================================================================
+LATEST_BROADCAST_FILE=broadcast\DeployZKLocalVoting.s.sol\31337\run-latest.json
+LATEST_BROADCAST_SHA256=171340f74bea31b761ead29418ee2e945bee3a3557f908e3b794678639c6c827
+BROADCAST_CHAIN=31337
+BROADCAST_TIMESTAMP=1791386045081
+BROADCAST_TRANSACTION_COUNT=4
+TX_0_TYPE=CREATE2
+TX_0_CONTRACT_NAME=PoseidonT3
+TX_0_CONTRACT_ADDRESS=0xa54f77e2daaa9db802337b32c8636b8b8e3e385a
+TX_0_HASH=0x830291e07be1d4a2c1842b57a8975159401e9c7bce1d011d3e699425793d871c
+TX_0_FROM=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+TX_0_TO=0x4e59b44847b379578588920ca78fbf26c0b4956c
+TX_0_ARGUMENTS=null
+TX_1_TYPE=CREATE
+TX_1_CONTRACT_NAME=SemaphoreVerifier
+TX_1_CONTRACT_ADDRESS=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+TX_1_HASH=0x2e98cdc55dd028f9ccfe12274a02dbe7af72e631bb525fe3d181656f2f6d20bd
+TX_1_FROM=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+TX_1_TO=
+TX_1_ARGUMENTS=null
+TX_2_TYPE=CREATE
+TX_2_CONTRACT_NAME=Semaphore
+TX_2_CONTRACT_ADDRESS=0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0
+TX_2_HASH=0x62c43bc6ad316bdd1fc2a97eab10e7dc2d1f4b3922406c3e32ad5c3958cbaeed
+TX_2_FROM=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+TX_2_TO=
+TX_2_ARGUMENTS=["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"]
+TX_3_TYPE=CREATE
+TX_3_CONTRACT_NAME=ZKLocalVoting
+TX_3_CONTRACT_ADDRESS=0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9
+TX_3_HASH=0x70cf5a323ce42f17d7eee3b99c3dc753e8506e931a33fc482c3e8298b3051f38
+TX_3_FROM=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+TX_3_TO=
+TX_3_ARGUMENTS=["0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0","224568235047225120697643590180532895951760210961633483939209784817986330150","604800"]
+BROADCAST_RECEIPT_COUNT=4
+RECEIPT_0_TX_HASH=0x830291e07be1d4a2c1842b57a8975159401e9c7bce1d011d3e699425793d871c
+RECEIPT_0_BLOCK_NUMBER=0x1
+RECEIPT_0_GAS_USED=0x502071
+RECEIPT_0_STATUS=0x1
+RECEIPT_0_CONTRACT_ADDRESS=
+RECEIPT_1_TX_HASH=0x70cf5a323ce42f17d7eee3b99c3dc753e8506e931a33fc482c3e8298b3051f38
+RECEIPT_1_BLOCK_NUMBER=0x2
+RECEIPT_1_GAS_USED=0x39e8b4
+RECEIPT_1_STATUS=0x1
+RECEIPT_1_CONTRACT_ADDRESS=0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+RECEIPT_2_TX_HASH=0x62c43bc6ad316bdd1fc2a97eab10e7dc2d1f4b3922406c3e32ad5c3958cbaeed
+RECEIPT_2_BLOCK_NUMBER=0x2
+RECEIPT_2_GAS_USED=0x2b85d3
+RECEIPT_2_STATUS=0x1
+RECEIPT_2_CONTRACT_ADDRESS=0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0
+RECEIPT_3_TX_HASH=0x2e98cdc55dd028f9ccfe12274a02dbe7af72e631bb525fe3d181656f2f6d20bd
+RECEIPT_3_BLOCK_NUMBER=0x2
+RECEIPT_3_GAS_USED=0x1a517e
+RECEIPT_3_STATUS=0x1
+RECEIPT_3_CONTRACT_ADDRESS=0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9
+RAW_SIGNED_TRANSACTIONS_PRINTED=NO
+
+======================================================================
+ 19. SAFETY DECLARATION
+======================================================================
+SNAPSHOT_CREATED=YES
+BLOCKCHAIN_TRANSACTIONS_SENT=NO
+DATABASE_WRITES_PERFORMED=NO
+CONTRACTS_DEPLOYED=NO
+SOURCE_FILES_MODIFIED=NO
+BENCHMARK_FILES_MODIFIED=NO
+RESULT_FILES_MODIFIED=NO
+EVIDENCE_FILES_MODIFIED=NO
+PRIVATE_KEYS_READ_OR_PRINTED=NO
+MONGO_URI_PRINTED=NO
+MONGO_PASSWORD_PRINTED=NO
+JWT_PRINTED=NO
+TRUSTEE_PASSPHRASE_CONTENTS_READ_OR_PRINTED=NO
+TRUSTEE_SHARE_CONTENTS_READ_OR_PRINTED=NO
+BIOMETRIC_DATA_READ_OR_PRINTED=NO
+CUSTODY_FILENAMES_ONLY=YES
+
+======================================================================
+ 20. SNAPSHOT COMPLETE
+======================================================================

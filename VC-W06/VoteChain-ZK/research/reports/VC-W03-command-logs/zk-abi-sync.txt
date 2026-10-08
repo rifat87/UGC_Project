@@ -1,0 +1,17 @@
+node:fs:442
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/mnt/data/vc-w03-work/VoteChain/out/ZKLocalVoting.sol/ZKLocalVoting.json'
+    at Object.readFileSync (node:fs:442:20)
+    at file:///mnt/data/vc-w03-work/VoteChain/scripts/sync-zk-local-voting-abi.mjs:13:32
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/mnt/data/vc-w03-work/VoteChain/out/ZKLocalVoting.sol/ZKLocalVoting.json'
+}
+
+Node.js v22.16.0

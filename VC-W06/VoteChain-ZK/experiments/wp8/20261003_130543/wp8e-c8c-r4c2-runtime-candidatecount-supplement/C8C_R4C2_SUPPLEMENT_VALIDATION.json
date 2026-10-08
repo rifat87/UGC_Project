@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": {
+    "algorithm": true,
+    "runtimeLevels": true,
+    "profileCount": true,
+    "matrixRows": true,
+    "warmupRows": true,
+    "measuredRows": true,
+    "supplementNamesFreshChain": true,
+    "supplementNamesNearestRankP95": true,
+    "supplementRejectsSilentRetry": true,
+    "supplementSeparatesWp8d": true,
+    "supplementUsesExistingManifest": true
+  }
+}

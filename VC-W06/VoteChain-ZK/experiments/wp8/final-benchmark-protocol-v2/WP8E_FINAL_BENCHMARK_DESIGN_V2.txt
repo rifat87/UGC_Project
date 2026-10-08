@@ -1,0 +1,172 @@
+======================================================================
+VOTECHAIN-ZK WP8E FINAL BENCHMARK DESIGN V2
+======================================================================
+
+STATUS=PREREGISTERED_DESIGN_NOT_YET_EXECUTED
+
+SUPERSEDES_PROTOCOL=WP8E_FINAL_REPEAT_PROTOCOL_V1
+SUPERSESSION_REASON=SCALABILITY_MATRIX_ADDED_BEFORE_FINAL_ONCHAIN_CAMPAIGN
+V1_MEASUREMENT_DATA_EXISTS=NO
+ACTIVE_ARCHITECTURE=DIRECT
+
+----------------------------------------------------------------------
+A. SINGLE-VOTE REPEATABILITY MICROBENCHMARK
+----------------------------------------------------------------------
+
+PURPOSE=CONTROLLED_COST_AND_LATENCY_REPEATABILITY
+
+WARMUP_ITERATIONS=5
+MEASURED_ITERATIONS=20
+
+CHAIN_POLICY=FRESH_ANVIL_PER_ITERATION
+ACCEPTED_VOTES_PER_ITERATION=1
+
+PRIMARY_METRICS:
+- M12 verifier estimate gas
+- M14 accepted cast receipt gas
+- M15 calldata bytes
+- M16 deployment gas
+- M29 submission-to-receipt latency
+
+REPORT:
+- mean
+- median
+- min
+- max
+- sample standard deviation
+- nearest-rank p95
+
+----------------------------------------------------------------------
+B. CUMULATIVE ELECTION STATE-GROWTH SCALING
+----------------------------------------------------------------------
+
+PURPOSE=MEASURE_BEHAVIOR_AS_ACCEPTED_BALLOTS_ACCUMULATE
+
+VOTE_SCALES=25,50,75,100,150
+
+EACH_SCALE_STARTS_FROM_FRESH_ELECTION=YES
+SINGLE_SHARED_0_TO_150_CHAIN_AS_PRIMARY_EXPERIMENT=NO
+
+WARMUP_CAMPAIGNS_PER_SCALE=1
+MEASURED_CAMPAIGNS_PER_SCALE=5
+
+REPETITION_EXCEPTION=PREREGISTERED_REDUCED_COUNT_FOR_HEAVY_CUMULATIVE_CRYPTOGRAPHIC_CAMPAIGN
+
+TOTAL_WARMUP_ACCEPTED_TX=400
+TOTAL_MEASURED_ACCEPTED_TX=2000
+TOTAL_SCALING_ACCEPTED_TX=2400
+
+----------------------------------------------------------------------
+C. CONTROLLED VALID-BALLOT CORPUS
+----------------------------------------------------------------------
+
+REQUIRED_VALID_BALLOT_CORPUS_SIZE=150
+DISTINCT_ELIGIBLE_MEMBERS=150
+DISTINCT_ELECTION_SCOPED_NULLIFIERS=150
+DISTINCT_VALID_CIPHERTEXTS=150
+DISTINCT_VALID_GROTH16_PROOFS=150
+
+PROOF_CORPUS_GENERATED_BEFORE_SCALING_EXECUTION=YES
+PROOF_CORPUS_HASH_MANIFEST_REQUIRED=YES
+
+CORPUS_REUSE_ACROSS_FRESH_REPETITION_CHAINS=YES
+
+SCALE_25_CORPUS_PREFIX=1..25
+SCALE_50_CORPUS_PREFIX=1..50
+SCALE_75_CORPUS_PREFIX=1..75
+SCALE_100_CORPUS_PREFIX=1..100
+SCALE_150_CORPUS_PREFIX=1..150
+
+CANDIDATE_COUNT=4
+BALLOT_SELECTION_SCHEDULE=DETERMINISTIC_BALANCED_ROUND_ROBIN
+
+----------------------------------------------------------------------
+D. PER-TRANSACTION RAW RECORD
+----------------------------------------------------------------------
+
+FIELDS:
+- scale
+- campaign_repetition
+- warmup_or_measured
+- vote_index
+- candidate_index
+- transaction_hash
+- receipt_status
+- gas_used
+- calldata_bytes
+- submission_to_receipt_ms
+- nullifier
+- accepted_count_before
+- accepted_count_after
+- nullifier_used_before
+- nullifier_used_after
+
+EVERY_RAW_OBSERVATION_PRESERVED=YES
+SILENT_OUTLIER_DELETION=NO
+
+----------------------------------------------------------------------
+E. PER-SCALE REPORT
+----------------------------------------------------------------------
+
+FOR_EACH_SCALE_REPORT:
+- accepted transaction count
+- failed transaction count
+- total gas
+- mean gas per vote
+- median gas per vote
+- min gas
+- max gas
+- sample standard deviation
+- nearest-rank p95 gas
+- mean confirmation latency
+- median confirmation latency
+- min latency
+- max latency
+- sample standard deviation
+- nearest-rank p95 latency
+- total campaign duration
+- final acceptedBallotCount
+- consumed-nullifier count
+- encrypted-tally consistency result
+
+----------------------------------------------------------------------
+F. TALLY CORRECTNESS
+----------------------------------------------------------------------
+
+CHECKPOINT_FINAL_ACCEPTED_COUNT_EQUALS_SCALE=YES
+
+ONCHAIN_ENCRYPTED_TALLY_COMPARE_WITH_OFFCHAIN_RECOMPUTATION=YES
+
+CHECKPOINTS:
+25
+50
+75
+100
+150
+
+M17_POLICY=DO_NOT_CALL_POST_RECEIPT_RPC_READ_DURATION_TALLY_UPDATE_TIME
+M18_POLICY=DO_NOT_DERIVE_ISOLATED_TALLY_GAS_FROM_TOTAL_CAST_RECEIPT
+
+----------------------------------------------------------------------
+G. INTEGRITY / FREEZE RULES
+----------------------------------------------------------------------
+
+SOLIDITY_CHANGE_DURING_CAMPAIGN=NO
+CIRCUIT_CHANGE_DURING_CAMPAIGN=NO
+CRYPTO_CHANGE_DURING_CAMPAIGN=NO
+VERIFIER_CHANGE_DURING_CAMPAIGN=NO
+
+POST_A1B_LEGACY_SEMAPHORE_RESTORATION=YES
+SEMAPHORE_ROLE=LEGACY_REFERENCE_ONLY
+ACTIVE_DIRECT_DEPENDS_ON_SEMAPHORE=NO
+
+FINAL_CAMPAIGN_MAY_NOT_START_UNTIL:
+- 150-ballot corpus generated
+- all 150 proofs verify off-chain
+- all 150 public-input bindings validate
+- all 150 nullifiers are unique
+- fixed corpus manifest hashed
+- small multi-ballot RPC pilot passes
+- active source hashes frozen
+
+======================================================================

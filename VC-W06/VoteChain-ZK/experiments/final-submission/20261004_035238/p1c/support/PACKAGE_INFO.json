@@ -1,0 +1,13 @@
+{
+  "project": "VC-W06 VoteChain-ZK",
+  "packageRole": "FINAL_SUBMISSION",
+  "scopeFreezeRun": "20261004_035238",
+  "payloadPlanRows": 776,
+  "payloadPlanSha256": "5e05eb63b13ee46dd1060019c64617a069f33d8bcf5b4e13b9cc23b6bece08b2",
+  "sanitizedEnvironmentTemplates": 2,
+  "sanitizedLocalChainScripts": 1,
+  "rawHistoricalExperimentCorpusEmbedded": false,
+  "finalWp8ReproducibilityArchiveEmbedded": true,
+  "secretValuesIntentionallyDistributed": false,
+  "verification": "Run python VERIFY_SUBMISSION.py after extraction."
+}

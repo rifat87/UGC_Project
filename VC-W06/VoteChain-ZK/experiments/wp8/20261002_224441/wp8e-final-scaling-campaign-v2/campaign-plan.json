@@ -1,0 +1,159 @@
+{
+  "startedAt": "2026-10-02T22:44:46.106279+06:00",
+  "port": 8557,
+  "warmupAcceptedTx": 400,
+  "measuredAcceptedTx": 2000,
+  "totalAcceptedTx": 2400,
+  "plan": [
+    {
+      "kind": "warmup",
+      "round": 0,
+      "scale": 25
+    },
+    {
+      "kind": "warmup",
+      "round": 0,
+      "scale": 50
+    },
+    {
+      "kind": "warmup",
+      "round": 0,
+      "scale": 75
+    },
+    {
+      "kind": "warmup",
+      "round": 0,
+      "scale": 100
+    },
+    {
+      "kind": "warmup",
+      "round": 0,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 1,
+      "scale": 25
+    },
+    {
+      "kind": "measured",
+      "round": 1,
+      "scale": 50
+    },
+    {
+      "kind": "measured",
+      "round": 1,
+      "scale": 75
+    },
+    {
+      "kind": "measured",
+      "round": 1,
+      "scale": 100
+    },
+    {
+      "kind": "measured",
+      "round": 1,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 2,
+      "scale": 50
+    },
+    {
+      "kind": "measured",
+      "round": 2,
+      "scale": 75
+    },
+    {
+      "kind": "measured",
+      "round": 2,
+      "scale": 100
+    },
+    {
+      "kind": "measured",
+      "round": 2,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 2,
+      "scale": 25
+    },
+    {
+      "kind": "measured",
+      "round": 3,
+      "scale": 75
+    },
+    {
+      "kind": "measured",
+      "round": 3,
+      "scale": 100
+    },
+    {
+      "kind": "measured",
+      "round": 3,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 3,
+      "scale": 25
+    },
+    {
+      "kind": "measured",
+      "round": 3,
+      "scale": 50
+    },
+    {
+      "kind": "measured",
+      "round": 4,
+      "scale": 100
+    },
+    {
+      "kind": "measured",
+      "round": 4,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 4,
+      "scale": 25
+    },
+    {
+      "kind": "measured",
+      "round": 4,
+      "scale": 50
+    },
+    {
+      "kind": "measured",
+      "round": 4,
+      "scale": 75
+    },
+    {
+      "kind": "measured",
+      "round": 5,
+      "scale": 150
+    },
+    {
+      "kind": "measured",
+      "round": 5,
+      "scale": 25
+    },
+    {
+      "kind": "measured",
+      "round": 5,
+      "scale": 50
+    },
+    {
+      "kind": "measured",
+      "round": 5,
+      "scale": 75
+    },
+    {
+      "kind": "measured",
+      "round": 5,
+      "scale": 100
+    }
+  ]
+}

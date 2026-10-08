@@ -1,0 +1,404 @@
+78-  },
+79-
+80-  async exportSolidityCallData(
+81-    ...args: any[]
+82-  ) {
+83-    const api =
+84-      await loadGroth16()
+85-
+86-    return api.exportSolidityCallData(
+87-      ...args
+88-    )
+89-  },
+90-}
+91-
+92-const MAX =
+93-  Number(appProfile.maxCandidates)
+94-
+95-const DEPTH =
+96-  Number(appProfile.merkleDepth)
+97-
+98-const FIELD =
+99-  BigInt(appProfile.fieldModulus)
+100-
+101-const SUBORDER =
+102-  BigInt(
+103-    appProfile.babyjub.subOrder,
+104-  )
+105-
+106-const D_ID =
+107-  BigInt(
+108-    appProfile.domains.identity,
+109-  )
+110-
+111-const D_NULL =
+112-  BigInt(
+113-    appProfile.domains.nullifier,
+114-  )
+115-
+116-const D_CTX =
+117-  BigInt(
+118-    appProfile.domains.electionContext,
+119-  )
+120-
+121-const D_MANIFEST =
+122-  BigInt(
+123:    appProfile.domains.candidateManifest,
+124-  )
+125-
+126-let sessionKeyPair:
+127-  CryptoKeyPair | null =
+128-    null
+129-
+130-let authorizationSessionState:
+131-  "idle" |
+132-  "initializing" |
+133-  "ready" |
+134-  "consuming" =
+135-    "idle"
+136-
+137-let poseidonPromise:
+138-  Promise<any> | null =
+139-    null
+140-
+141-let babyjubPromise:
+142-  Promise<any> | null =
+143-    null
+144-
+145-function getPoseidon() {
+146-  if (!poseidonPromise) {
+147-    poseidonPromise =
+148-      buildPoseidon()
+149-  }
+150-
+151-  return poseidonPromise
+152-}
+153-
+154-function getBabyjub() {
+155-  if (!babyjubPromise) {
+156-    babyjubPromise =
+157-      buildBabyjub()
+158-  }
+159-
+160-  return babyjubPromise
+161-}
+162-
+163-function fromBase64(
+164-  value: string,
+165-) {
+166-  const raw =
+167-    atob(value)
+168-
+--
+190-  crypto.getRandomValues(
+191-    bytes,
+192-  )
+193-
+194-  let value = 0n
+195-
+196-  for (const byte of bytes) {
+197-    value =
+198-      (value << 8n) |
+199-      BigInt(byte)
+200-  }
+201-
+202-  return (
+203-    value %
+204-    (SUBORDER - 1n)
+205-  ) + 1n
+206-}
+207-
+208-async function H(
+209-  values:
+210-    Array<
+211-      string |
+212-      number |
+213-      bigint
+214-    >,
+215-) {
+216-  const poseidon =
+217-    await getPoseidon()
+218-
+219-  return BigInt(
+220-    poseidon.F.toObject(
+221-      poseidon(
+222-        values.map(
+223-          value =>
+224-            BigInt(value),
+225-        ),
+226-      ),
+227-    ),
+228-  )
+229-}
+230-
+231-async function computeManifest(
+232-  candidateIds: number[],
+233-) {
+234-  if (
+235:    candidateIds.length < 1 ||
+236:    candidateIds.length > MAX
+237-  ) {
+238-    throw new Error(
+239:      "Candidate count is outside the frozen WP5 range",
+240-    )
+241-  }
+242-
+243-  if (
+244-    appProfile
+245:      .candidateManifest
+246-      .algorithm !==
+247:    "POSEIDON_INDEXED_CHAIN_V1"
+248-  ) {
+249-    throw new Error(
+250-      "Unexpected WP5 candidate-manifest algorithm",
+251-    )
+252-  }
+253-
+254-  let state =
+255-    await H([
+256-      D_MANIFEST,
+257-      BigInt(
+258:        candidateIds.length,
+259-      ),
+260-    ])
+261-
+262-  for (
+263-    let index = 0;
+264:    index < candidateIds.length;
+265-    index += 1
+266-  ) {
+267-    state =
+268-      await H([
+269-        state,
+270-        BigInt(index),
+271-        BigInt(
+272:          candidateIds[index],
+273-        ),
+274-      ])
+275-  }
+276-
+277-  return state
+278-}
+279-
+280-async function reconstructRoot(
+281-  commitment: bigint,
+282-  siblings: string[],
+283-  pathBits: string[],
+284-) {
+285-  if (
+286-    siblings.length !== DEPTH ||
+287-    pathBits.length !== DEPTH
+288-  ) {
+289-    throw new Error(
+290-      "Invalid WP5 Merkle witness depth",
+291-    )
+292-  }
+293-
+294-  let current =
+295-    commitment
+296-
+297-  for (
+298-    let i = 0;
+299-    i < DEPTH;
+300-    i += 1
+301-  ) {
+302-    const bit =
+303-      BigInt(pathBits[i])
+304-
+305-    const sibling =
+306-      BigInt(siblings[i])
+307-
+308-    if (
+309-      bit !== 0n &&
+310-      bit !== 1n
+311-    ) {
+312-      throw new Error(
+313-        "Invalid Merkle path bit",
+314-      )
+315-    }
+316-
+317-    current =
+--
+649-    ) {
+650-      throw new Error(
+651-        "Public candidate count is inconsistent",
+652-      )
+653-    }
+654-
+655-    const candidateIndex =
+656-      publicConfig
+657-        .candidates
+658-        .findIndex(
+659-          candidate =>
+660-            candidate
+661-              .candidateId ===
+662-            candidateId,
+663-        )
+664-
+665-    if (
+666-      candidateIndex < 0 ||
+667-      candidateIndex >=
+668-        candidateCount
+669-    ) {
+670-      throw new Error(
+671-        "Selected candidate is not in the frozen manifest",
+672-      )
+673-    }
+674-
+675-    const candidateIds =
+676-      publicConfig
+677-        .candidates
+678-        .map(
+679-          candidate =>
+680-            candidate
+681-              .candidateId,
+682-        )
+683-
+684-    const manifest =
+685-      await computeManifest(
+686-        candidateIds,
+687-      )
+688-
+689-    if (
+690-      manifest !==
+691-      BigInt(
+692-        publicConfig
+693-          .config
+694:          .candidateManifestHash,
+695-      )
+696-    ) {
+697-      throw new Error(
+698-        "Candidate manifest does not match the contract",
+699-      )
+700-    }
+701-
+702-    const electionId =
+703-      BigInt(
+704-        publicConfig
+705-          .config
+706-          .electionId,
+707-      )
+708-
+709-    if (
+710-      authorization.electionId !==
+711-      electionId.toString()
+712-    ) {
+713-      throw new Error(
+714-        "Authorization belongs to another election",
+715-      )
+716-    }
+717-
+718-    if (
+719-      authorization
+720-        .membership
+721-        .eligibleRoot !==
+722-      publicConfig
+723-        .config
+724-        .eligibleRoot
+725-    ) {
+726-      throw new Error(
+727-        "Authorization Merkle root does not match election configuration",
+728-      )
+729-    }
+730-
+731-    secret =
+732-      await unwrapCredential(
+733-        authorization,
+734-      )
+735-
+736-    const commitment =
+737-      await H([
+738-        D_ID,
+739-        secret,
+--
+930-      )
+931-
+932-      Sx.push(
+933-        sPoint[0],
+934-      )
+935-
+936-      Sy.push(
+937-        sPoint[1],
+938-      )
+939-    }
+940-
+941-    const input = {
+942-      secret:
+943-        secret.toString(),
+944-
+945-      siblings:
+946-        authorization
+947-          .membership
+948-          .siblings,
+949-
+950-      pathBits:
+951-        authorization
+952-          .membership
+953-          .pathBits,
+954-
+955-      bit:
+956-        bits.map(
+957-          value =>
+958-            value.toString(),
+959-        ),
+960-
+961-      randomness:
+962-        randomness.map(
+963-          value =>
+964-            value.toString(),
+965-        ),
+966-
+967-      eligibleRoot:
+968-        publicConfig
+969-          .config
+970-          .eligibleRoot,
+971-
+972-      electionId:
+973-        electionId.toString(),
+974-
+975:      candidateManifestHash:
+976-        manifest.toString(),
+977-
+978-      candidateCount:
+979-        String(candidateCount),
+980-
+981-      contractDomain:
+982-        publicConfig
+983-          .config
+984-          .contractDomain,
+985-
+986-      Yx:
+987-        publicConfig
+988-          .config
+989-          .Yx,
+990-
+991-      Yy:
+992-        publicConfig
+993-          .config
+994-          .Yy,
+995-
+996-      electionContextHash:
+997-        context.toString(),
+998-
+999-      nullifier:
+1000-        nullifier.toString(),
+1001-
+1002-      Rx:
+1003-        Rx.map(
+1004-          value =>
+1005-            value.toString(),
+1006-        ),
+1007-
+1008-      Ry:
+1009-        Ry.map(
+1010-          value =>
+1011-            value.toString(),
+1012-        ),
+1013-
+1014-      Sx:
+1015-        Sx.map(
+1016-          value =>
+1017-            value.toString(),
+1018-        ),
+1019-
+1020-      Sy:

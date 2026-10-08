@@ -1,0 +1,17 @@
+{
+  "trusteeId": 2,
+  "publicShare": [
+    "679015423553288376083578359230622850850535553031593544715202363581351448959",
+    "11498622853985154538339064986610469467561543826402920148357148292848183118942"
+  ],
+  "encryptedShareCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "HdDCNHwEkcF0nUq3xiwXXQ==",
+    "iv": "GZyQLJOQNULVQz5k",
+    "aad": "VoteChain-ZK/WP6B/20261001_030133|final-decryption-share|2",
+    "ciphertext": "9pR1J+ktMEvgFE2rUHwp8d3+/G15xsvGz7W+h2jQ77KTFxcPDIFF69uyK9Lp+dYKNqnrCN5bPEjCdjUkTox1tXy9yDoNMZJ+dAcgPQ==",
+    "authTag": "RPwTXTn28+8GMjsoqrIHQQ=="
+  }
+}

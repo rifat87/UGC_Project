@@ -1,0 +1,21 @@
+{
+  "status": "FAIL",
+  "packageCandidates": [
+    {
+      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/circom_tester/node_modules/snarkjs/package.json",
+      "status": "PACKAGE_JSON_PARSE_ERROR",
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/package.json",
+      "status": "PACKAGE_JSON_PARSE_ERROR",
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/package.json",
+      "status": "PACKAGE_JSON_PARSE_ERROR",
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    }
+  ],
+  "validCliCandidates": []
+}

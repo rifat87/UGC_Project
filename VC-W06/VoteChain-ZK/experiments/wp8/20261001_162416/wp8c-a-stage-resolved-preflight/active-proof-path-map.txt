@@ -1,0 +1,37 @@
+----------------------------------------------------------------------
+FRONTEND
+----------------------------------------------------------------------
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:108:          "Biometric verification passed. Preparing the encrypted ballot locally...",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:119:         * Parent performs local encryption/proving and
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:355:              : "There was an error preparing or submitting the encrypted ballot.",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:483:                was submitted as an encrypted ballot.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:547:                the wallet submits the encrypted transaction.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:661:                Accepted encrypted ballots:{" "}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:435:            "Invalid encrypted ballot shape",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:54:    "wasmUrl": "/zk/wp5/direct/VoteChainVoteDirect.wasm",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:55:    "zkeyUrl": "/zk/wp5/direct/VoteChainVoteDirect_final.zkey",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:56:    "verificationKeyUrl": "/zk/wp5/direct/verification_key.json",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:58:      "wasm": "02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5-application-profile.json:59:      "zkey": "867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:54:  return snarkjs.groth16
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:57:const groth16: any = {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:58:  async fullProve(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:64:    return api.fullProve(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:602:  const randomness:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:884:      randomness[slot] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:961:      randomness:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:962:        randomness.map(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1031:      await groth16.fullProve(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1035:          .wasmUrl,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1038:          .zkeyUrl,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1138:      await groth16.verify(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1151:      await groth16
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1248:    randomness.fill(
+
+----------------------------------------------------------------------
+WP5E RUNTIME
+----------------------------------------------------------------------
+443:    credential.encryptedCredential,
+1248:      "Candidate plaintext field entered encrypted ballot object",
+1888:    "Integrated encrypted vote was not mined successfully",
+1952:        "Integrated encrypted tally mismatch",

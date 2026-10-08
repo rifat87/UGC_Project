@@ -1,0 +1,108 @@
+
+======================================================================
+PACKAGE=@remix-run/router
+======================================================================
+npm error No dependencies found matching @remix-run/router
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_53_52_925Z-debug-0.log
+
+======================================================================
+PACKAGE=bfj
+======================================================================
+npm error No dependencies found matching bfj
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_53_56_073Z-debug-0.log
+
+======================================================================
+PACKAGE=brace-expansion
+======================================================================
+npm error No dependencies found matching brace-expansion
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_53_57_859Z-debug-0.log
+
+======================================================================
+PACKAGE=defu
+======================================================================
+npm error No dependencies found matching defu
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_53_59_630Z-debug-0.log
+
+======================================================================
+PACKAGE=glob
+======================================================================
+npm error No dependencies found matching glob
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_01_389Z-debug-0.log
+
+======================================================================
+PACKAGE=h3
+======================================================================
+npm error No dependencies found matching h3
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_03_134Z-debug-0.log
+
+======================================================================
+PACKAGE=jsonpath
+======================================================================
+npm error No dependencies found matching jsonpath
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_04_930Z-debug-0.log
+
+======================================================================
+PACKAGE=minimatch
+======================================================================
+npm error No dependencies found matching minimatch
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_06_661Z-debug-0.log
+
+======================================================================
+PACKAGE=nanoid
+======================================================================
+npm error No dependencies found matching nanoid
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_08_460Z-debug-0.log
+
+======================================================================
+PACKAGE=picomatch
+======================================================================
+npm error No dependencies found matching picomatch
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_10_215Z-debug-0.log
+
+======================================================================
+PACKAGE=postcss
+======================================================================
+npm error No dependencies found matching postcss
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_11_984Z-debug-0.log
+
+======================================================================
+PACKAGE=preact
+======================================================================
+npm error No dependencies found matching preact
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_13_741Z-debug-0.log
+
+======================================================================
+PACKAGE=react-router
+======================================================================
+npm error No dependencies found matching react-router
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_15_538Z-debug-0.log
+
+======================================================================
+PACKAGE=react-router-dom
+======================================================================
+npm error No dependencies found matching react-router-dom
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_17_312Z-debug-0.log
+
+======================================================================
+PACKAGE=sha.js
+======================================================================
+npm error No dependencies found matching sha.js
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_19_076Z-debug-0.log
+
+======================================================================
+PACKAGE=socket.io-parser
+======================================================================
+npm error No dependencies found matching socket.io-parser
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_20_839Z-debug-0.log
+
+======================================================================
+PACKAGE=underscore
+======================================================================
+npm error No dependencies found matching underscore
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_22_618Z-debug-0.log
+
+======================================================================
+PACKAGE=ws
+======================================================================
+npm error No dependencies found matching ws
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_24_355Z-debug-0.log

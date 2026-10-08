@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "artifactIdentityBasis": "FROZEN_SHA256_PLUS_CANONICAL_CIRCOM_BUILD_PAIR",
+  "selectionRule": {
+    "r1cs": "unique exact-hash R1CS below circuits/build/",
+    "wasm": "exact-hash VoteChainVoteDirect.wasm in the VoteChainVoteDirect_js directory paired with the selected canonical R1CS build directory"
+  },
+  "selectedR1cs": "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs",
+  "selectedWasm": "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm",
+  "r1csExactHashCopyCount": 2,
+  "wasmExactHashCopyCount": 5,
+  "wasmCopyClasses": {
+    "canonicalCircomBuildPair": 1,
+    "frozenExperimentSnapshot": 2,
+    "applicationDistributionCopy": 2,
+    "other": 0
+  },
+  "r3aClassificationCorrection": {
+    "experimentsWp7IsExperimentSnapshot": true,
+    "frontendPublicAndDistAreDistributionCopies": true,
+    "canonicalBuildOutputDistinguishedFromRuntimeCopies": true
+  },
+  "adapterExecuted": false,
+  "fixtureGenerationStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "benchmarkTimingStarted": false,
+  "onchainExecutionStarted": false
+}

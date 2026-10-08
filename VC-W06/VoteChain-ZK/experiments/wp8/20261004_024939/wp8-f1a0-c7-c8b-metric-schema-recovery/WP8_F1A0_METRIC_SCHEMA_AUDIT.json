@@ -1,0 +1,230 @@
+{
+  "status": "PASS",
+  "classification": "READ_ONLY_C7_C8B_METRIC_SCHEMA_RECOVERY",
+  "c7": {
+    "topLevelKeys": [
+      "allRawRows",
+      "warmupRowsExcludedFromStatistics",
+      "measuredRowsIncluded",
+      "measuredIndependentElections",
+      "silentOutlierDeletion",
+      "calldataBytesPerVote",
+      "gas",
+      "latencyMs",
+      "postvalidationTrailingDiagnosticReceipts"
+    ],
+    "metricCandidates": [
+      {
+        "path": "gas",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sample_sd",
+          "p95_nearest_rank"
+        ],
+        "object": {
+          "n": 2000,
+          "mean": 1314307.1225,
+          "median": 1307355.0,
+          "min": 1306506,
+          "max": 1866414,
+          "sample_sd": 62133.00923845558,
+          "p95_nearest_rank": 1307783
+        }
+      },
+      {
+        "path": "latencyMs",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sample_sd",
+          "p95_nearest_rank"
+        ],
+        "object": {
+          "n": 2000,
+          "mean": 760.6399339,
+          "median": 755.11115,
+          "min": 669.9123,
+          "max": 1026.0968,
+          "sample_sd": 54.87022636917149,
+          "p95_nearest_rank": 845.6926
+        }
+      }
+    ],
+    "gasCandidatePaths": [
+      "gas"
+    ],
+    "latencyCandidatePaths": [
+      "latencyMs"
+    ],
+    "percentileLikeKeys": [
+      {
+        "path": "gas.p95_nearest_rank",
+        "key": "p95_nearest_rank",
+        "value": 1307783
+      },
+      {
+        "path": "latencyMs.p95_nearest_rank",
+        "key": "p95_nearest_rank",
+        "value": 845.6926
+      }
+    ]
+  },
+  "c8b": {
+    "topLevelKeys": [
+      "status",
+      "classification",
+      "finalCampaignRun",
+      "rawRows",
+      "warmupRows",
+      "measuredRows",
+      "warmupsIncludedInFinalStatistics",
+      "pilotIncludedInFinalStatistics",
+      "abortedCampaignIncludedInFinalStatistics",
+      "silentOutlierDeletion",
+      "latencyReconstruction",
+      "p95Method",
+      "standardDeviation",
+      "freshChainPerIteration",
+      "ballotId",
+      "candidateIndex",
+      "calldataBytes",
+      "timedInterval",
+      "setupInsideTimedInterval",
+      "postReceiptChecksInsideTimedInterval",
+      "measuredGasDeterministic",
+      "warmupSummary",
+      "measuredSummary",
+      "diagnosticsFromFinalPostvalidation"
+    ],
+    "metricCandidates": [
+      {
+        "path": "warmupSummary.gas",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sampleSd",
+          "nearestRankP95"
+        ],
+        "object": {
+          "n": 5,
+          "mean": 1866414,
+          "median": 1866414,
+          "min": 1866414,
+          "max": 1866414,
+          "sampleSd": 0.0,
+          "nearestRankP95": 1866414
+        }
+      },
+      {
+        "path": "warmupSummary.latencyMs",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sampleSd",
+          "nearestRankP95"
+        ],
+        "object": {
+          "n": 5,
+          "mean": 735.08568,
+          "median": 740.5749,
+          "min": 714.0196,
+          "max": 749.324,
+          "sampleSd": 15.083523245482125,
+          "nearestRankP95": 749.324
+        }
+      },
+      {
+        "path": "measuredSummary.gas",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sampleSd",
+          "nearestRankP95"
+        ],
+        "object": {
+          "n": 20,
+          "mean": 1866414,
+          "median": 1866414.0,
+          "min": 1866414,
+          "max": 1866414,
+          "sampleSd": 0.0,
+          "nearestRankP95": 1866414
+        }
+      },
+      {
+        "path": "measuredSummary.latencyMs",
+        "keys": [
+          "n",
+          "mean",
+          "median",
+          "min",
+          "max",
+          "sampleSd",
+          "nearestRankP95"
+        ],
+        "object": {
+          "n": 20,
+          "mean": 724.03026,
+          "median": 723.3014499999999,
+          "min": 707.3267,
+          "max": 741.5839,
+          "sampleSd": 10.000788152593408,
+          "nearestRankP95": 741.1692
+        }
+      }
+    ],
+    "gasCandidatePaths": [
+      "warmupSummary.gas",
+      "measuredSummary.gas"
+    ],
+    "latencyCandidatePaths": [
+      "warmupSummary.latencyMs",
+      "measuredSummary.latencyMs"
+    ],
+    "percentileLikeKeys": [
+      {
+        "path": "p95Method",
+        "key": "p95Method",
+        "value": "nearest-rank"
+      },
+      {
+        "path": "warmupSummary.gas.nearestRankP95",
+        "key": "nearestRankP95",
+        "value": 1866414
+      },
+      {
+        "path": "warmupSummary.latencyMs.nearestRankP95",
+        "key": "nearestRankP95",
+        "value": 749.324
+      },
+      {
+        "path": "measuredSummary.gas.nearestRankP95",
+        "key": "nearestRankP95",
+        "value": 1866414
+      },
+      {
+        "path": "measuredSummary.latencyMs.nearestRankP95",
+        "key": "nearestRankP95",
+        "value": 741.1692
+      }
+    ]
+  },
+  "publicationSynthesisRebuilt": false,
+  "benchmarkExecutionStarted": false
+}

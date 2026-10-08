@@ -1,0 +1,101 @@
+======================================================================
+WORKSPACE=BACKEND
+ROOT_PACKAGE=votechain-central-server
+ROOT_VERSION=1.0.0
+======================================================================
+
+----------------------------------------------------------------------
+PACKAGE=express
+SEVERITY=high
+DIRECT=true
+VULNERABLE_RANGE=4.0.0-rc1 - 4.22.2 || 5.0.0-alpha.1 - 5.0.1
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/express
+INSTALLED_VERSION=4.21.2
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express-rate-limit@6.11.2 -> node_modules/express@4.21.2
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express@4.21.2
+
+----------------------------------------------------------------------
+PACKAGE=ip-address
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=<=10.7.0
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/ip-address
+INSTALLED_VERSION=9.0.5
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/mongoose@7.8.6 -> node_modules/mongodb@5.9.2 -> node_modules/socks@2.8.4 -> node_modules/ip-address@9.0.5
+
+----------------------------------------------------------------------
+PACKAGE=jws
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=<3.2.3
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/jws
+INSTALLED_VERSION=3.2.2
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/jsonwebtoken@9.0.2 -> node_modules/jws@3.2.2
+
+----------------------------------------------------------------------
+PACKAGE=lodash
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=<=4.17.23
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/lodash
+INSTALLED_VERSION=4.17.21
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express-validator@7.2.1 -> node_modules/lodash@4.17.21
+
+----------------------------------------------------------------------
+PACKAGE=mongoose
+SEVERITY=high
+DIRECT=true
+VULNERABLE_RANGE=7.0.0 - 7.8.9
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/mongoose
+INSTALLED_VERSION=7.8.6
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/mongoose@7.8.6
+
+----------------------------------------------------------------------
+PACKAGE=path-to-regexp
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=<0.1.13
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=1
+NODE=node_modules/path-to-regexp
+INSTALLED_VERSION=0.1.12
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express-rate-limit@6.11.2 -> node_modules/express@4.21.2 -> node_modules/path-to-regexp@0.1.12
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express@4.21.2 -> node_modules/path-to-regexp@0.1.12
+
+----------------------------------------------------------------------
+PACKAGE=validator
+SEVERITY=high
+DIRECT=true
+VULNERABLE_RANGE=<=13.15.20
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=2
+NODE=node_modules/express-validator/node_modules/validator
+INSTALLED_VERSION=13.12.0
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/express-validator@7.2.1 -> validator@13.12.0
+NODE=node_modules/validator
+INSTALLED_VERSION=13.15.0
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/validator@13.15.0
+
+----------------------------------------------------------------------
+PACKAGE=ws
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=8.0.0 - 8.20.1
+FIX_AVAILABLE=true
+AUDIT_NODE_COUNT=2
+NODE=node_modules/@ethersproject/providers/node_modules/ws
+INSTALLED_VERSION=8.18.0
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/circomlibjs@0.1.7 -> ethers@5.8.0 -> node_modules/@ethersproject/providers@5.8.0 -> ws@8.18.0
+NODE=node_modules/ws
+INSTALLED_VERSION=8.17.1
+ANCESTRY=votechain-central-server@1.0.0 -> node_modules/ethers@6.15.0 -> node_modules/ws@8.17.1

@@ -1,0 +1,45 @@
+import express from "express"
+
+import electionController from "../controllers/electionController.js"
+
+import {
+  requireWp5AdminMutation,
+} from "../middleware/adminRequestSecurity.js"
+
+const router =
+  express.Router()
+
+router.get(
+  "/",
+  (_req, res) => {
+    res.json({
+      message:
+        "Election routes working",
+    })
+  },
+)
+
+router.post(
+  "/",
+  requireWp5AdminMutation,
+  electionController.createElection,
+)
+
+router.post(
+  "/:electionId/trustee-transcript",
+  requireWp5AdminMutation,
+  electionController.setTrusteeTranscript,
+)
+
+router.post(
+  "/:electionId/start",
+  requireWp5AdminMutation,
+  electionController.startElection,
+)
+
+router.get(
+  "/public/election-data",
+  electionController.getElectionData,
+)
+
+export default router

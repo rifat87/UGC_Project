@@ -1,0 +1,28 @@
+212-  membership: Wp5MembershipWitness
+213-  credentialEnvelope: Wp5CredentialEnvelope
+214-}
+215-
+216-export async function getWp5PublicConfig() {
+217-  return request<Wp5PublicConfig>(
+218-    "/api/wp5/config",
+219-  )
+220-}
+221-
+222:export async function authorizeWp5(
+223-  path: "/api/wp5/authorize/face" |
+224-        "/api/wp5/authorize/fingerprint",
+225-  credentialPublicKey: JsonWebKey,
+226-) {
+227-  return request<Wp5Authorization>(
+228-    path,
+229-    {
+230-      method: "POST",
+231-      headers: {
+232-        "Content-Type": "application/json",
+233-      },
+234-      body: JSON.stringify({
+235-        credentialPublicKey,
+236-      }),
+237-    },
+238-  )
+239-}

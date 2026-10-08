@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "completedObservations": 100,
+  "plannedObservations": 100,
+  "automaticRetry": false,
+  "onchainExecution": false
+}

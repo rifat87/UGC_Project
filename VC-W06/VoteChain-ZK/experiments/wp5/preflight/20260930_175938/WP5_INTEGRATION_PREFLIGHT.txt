@@ -1,0 +1,585 @@
+======================================================================
+VOTECHAIN-ZK WP5 INTEGRATION PREFLIGHT
+======================================================================
+
+STATUS=PASS_PREFLIGHT
+RUN_ID=20260930_175938
+
+WP4_RUN=20260930_174305
+ACTIVE_CIPHERTEXT_BINDING=DIRECT
+ACTIVE_CURVE=BABYJUBJUB
+MAX_CANDIDATES=16
+MERKLE_DEPTH=17
+
+FRONTEND=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts
+BACKEND=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server
+
+APPLICATION_CODE_CHANGED=NO
+BIOMETRIC_CODE_CHANGED=NO
+REAL_BIOMETRIC_DATABASE_ACCESSED=NO
+
+--- top-level project directories ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.vscode
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/backend
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/biometric
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/src
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/test
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/architecture
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/baseline
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/biometric
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/docs/crypto
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp3
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp4
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/frontend
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/images
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/research
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/research/gas
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/research/reports
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/research/zkp
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/script
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/scripts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/src
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/test
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/trustee-tools
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/config
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-face-recognition
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-face-recognition/.idea
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-face-recognition/data2
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-face-recognition/dataset
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-face-recognition/dataset_backup
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-fingerprint
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-gas-report
+
+--- package manifests ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/package.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/package.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/lib/forge-std/package.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/package.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package.json
+
+--- known legacy/application vote-path files ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/src/LocalVoting.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts
+
+--- candidate-aware legacy flow references ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/README.md:69:    ├── VotePage.tsx or VoterDashboard.tsx → POST /api/vote/cast → voteController.js → (castVote → blockchain.vote(NID))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/README.md:84:    │   ├── voteController.js      → verifyFace, verifyFingerprint, castVote (to blockchain)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:48:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:53:        "name": "voterHash",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:57:    "name": "castVote",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:99:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:137:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/LocalVoting.json:150:        "name": "voterHash",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:29:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:87:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:141:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:182:    "name": "castVote",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:282:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/abi/ZKLocalVoting.json:314:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:55:    let candidateId: number | null = null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:60:      candidateId = candidate.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:63:        await registerCandidate(candidate.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:67:          await updateCandidateRegistrationStatus(candidate.candidateId, "failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:74:      await updateCandidateRegistrationStatus(candidate.candidateId, "registered")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:75:      toast({ title: "Success", description: `Candidate #${candidate.candidateId} registered on-chain successfully.` })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:79:      const message = chainRegistered && candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:80:        ? `Candidate #${candidateId} exists on-chain, but the database status could not be synchronized. Reconciliation is required.`
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:10:  candidateId: number | null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:15:export function VerificationModal({ open, candidateId, onClose, onVerified }: VerificationModalProps) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:21:    if (!candidateId) return
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:25:      const preparation = await prepareZkVote(path, candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:48:          <Button disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/votes/verify-face", "Face")} className="w-full flex items-center gap-2">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:51:          <Button variant="outline" disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/biometric/fingerprint/detect", "Fingerprint")} className="w-full flex items-center gap-2">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:8:  onVote?: (candidateId: number) => void
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:24:          <Card key={candidate.candidateId}>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:28:                Candidate #{candidate.candidateId} · {candidate.party} · {candidate.location}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:42:                    onClick={() => onVote(candidate.candidateId)}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:16:  const { isInitialized, isAdmin, castVote, isLoading: contractLoading, error: contractError } = useContract()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:21:  const [selectedCandidate, setSelectedCandidate] = useState<number | null>(null)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:44:  const handleVote = (candidateId: number) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:57:    setPendingCandidate(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:63:    const candidateId = pendingCandidate
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:64:    const candidate = data.candidates.find((item) => item.candidateId === candidateId) || null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:68:      setSelectedCandidate(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:69:      if (preparation.candidateId !== candidateId) throw new Error("Prepared proof candidate does not match selected candidate")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:70:      const receipt = await castVote(candidateId, preparation.proof)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:73:      toast({ title: "Vote Cast Successfully", description: `Vote for ${candidate?.name || `candidate #${candidateId}`} was recorded on-chain.` })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:80:      setSelectedCandidate(null)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:87:    <VerificationModal open={isModalOpen} candidateId={pendingCandidate} onClose={() => { setIsModalOpen(false); setPendingCandidate(null) }} onVerified={handleVerified} />
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:120:              const isCurrentlyVoting = isVoting && selectedCandidate === candidate.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:122:                <Card key={candidate.candidateId} className="transition-all hover:shadow-md">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:127:                        <div className="text-sm text-muted-foreground">Candidate #{candidate.candidateId} · {candidate.party}</div>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:135:                    <Button onClick={() => handleVote(candidate.candidateId)} disabled={!votingEnabled || isVoting} className="w-full" size="lg">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:68:  const registerCandidate = useCallback(async (candidateId: number) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:70:    const tx = await instance.registerCandidate(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:85:  const castVote = useCallback(async (candidateId: number, proof: SemaphoreProofPayload) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:86:    if (!Number.isSafeInteger(candidateId) || candidateId <= 0) throw new Error("Invalid candidate ID")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:87:    if (BigInt(proof.message) !== BigInt(candidateId)) throw new Error("Proof is not bound to selected candidate")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:91:    const tx = await instance.castVote(candidateId, proof)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:114:  const getVoteCount = useCallback(async (candidateId: number) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:116:    return Number(await instance.getVoteCount(candidateId))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:127:    castVote,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:6:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:56:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:73:  candidateId: number,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:76:  return request<{ candidateId: number; registrationStatus: string }>(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:77:    `/api/candidates/${candidateId}/registration-status`,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:107:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:141:export async function prepareZkVote(path: string, candidateId: number) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:145:    body: JSON.stringify({ candidateId }),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:48:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:53:        "name": "voterHash",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:57:    "name": "castVote",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:99:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:137:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/LocalVoting.json:150:        "name": "voterHash",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:29:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:87:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:141:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:182:    "name": "castVote",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:282:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/abi/ZKLocalVoting.json:314:        "name": "candidateId",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:7:    const candidateRecords = await Candidate.find({ candidateId: { $exists: true } }).sort({ candidateId: 1 }).lean()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:96:  const candidateId = Number(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:97:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:98:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:111:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:12:function parseCandidateId(value) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:13:  const candidateId = Number(value)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:14:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) return null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:15:  return candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:19:  const candidateId = parseCandidateId(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:20:  if (!candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:21:    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:62:        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:6:  candidateId: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:65:  { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:67:    name: 'candidateId_unique_valid',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:69:    partialFilterExpression: { candidateId: { $type: 'number', $gte: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:78:  voterHash: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:94:  { voterHash: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:96:    name: 'legacy_voterHash_unique_when_present',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:98:    partialFilterExpression: { voterHash: { $type: 'string' } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:53:router.patch('/:candidateId/registration-status', [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:54:  param('candidateId').isInt({ min: 1 }).withMessage('candidateId must be a positive integer'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:59:      Number(req.params.candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:66:        candidateId: candidate.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/markLegacyVotersForZkMigration.js:19:  // Semaphore identity from civil identity or voterHash. They must be re-enrolled
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:5:import { migrateCandidateIdsWithModels } from '../services/candidateMigration.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:9:async function migrateCandidateIds() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:20:  const result = await migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:26:  console.log(`Candidate ID index: ${result.indexName}; highest pre-existing candidateId: ${result.highestExistingCandidateId}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:29:migrateCandidateIds()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:1:export const CANDIDATE_COUNTER_ID = 'candidateId'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:3:export async function allocateCandidateIdWithModel(CounterModel) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:10:  const candidateId = Number(counter.seq)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:11:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:14:  return candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:36:  const candidateId = await allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:39:    candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:46:export async function setCandidateRegistrationStatusWithModel(candidateId, registrationStatus, CandidateModel) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:52:    { candidateId: Number(candidateId) },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:2:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:6:export const CANDIDATE_ID_INDEX_NAME = 'candidateId_unique_valid'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:8:  candidateId: { $type: 'number', $gte: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:11:function isCandidateIdOnlyIndex(index) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:12:  return index?.key?.candidateId === 1 && Object.keys(index.key).length === 1
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:15:function isSafeCandidateIdIndex(index) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:16:  const filter = index?.partialFilterExpression?.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:17:  return isCandidateIdOnlyIndex(index)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:23:async function inspectExistingCandidateIds(candidateCollection) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:25:    { candidateId: { $exists: true, $ne: null } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:26:    { projection: { _id: 1, candidateId: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:33:    const candidateId = Number(record.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:34:    if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:35:      throw new Error(`Existing candidate record ${record._id} has an invalid candidateId`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:37:    if (seen.has(candidateId)) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:38:      throw new Error(`Duplicate existing candidateId ${candidateId}; migration stopped before index changes`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:40:    seen.add(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:41:    highest = Math.max(highest, candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:47:export async function ensureSafeCandidateIdIndex(candidateCollection) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:48:  const inspection = await inspectExistingCandidateIds(candidateCollection)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:50:  const candidateIndexes = indexes.filter(isCandidateIdOnlyIndex)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:51:  const safeExisting = candidateIndexes.find(isSafeCandidateIdIndex)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:57:  // Replace only indexes whose entire key is candidateId. This removes the
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:64:    { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:75:export async function migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:81:  const indexResult = await ensureSafeCandidateIdIndex(candidateCollection)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:90:        { candidateId: { $exists: false } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:91:        { candidateId: null },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:101:    const candidateId = await allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:106:          { candidateId: { $exists: false } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:107:          { candidateId: null },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:110:      { $set: { candidateId, registrationStatus: 'pending' } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:115:      logger.info(`Migrated candidate record ${candidate._id} -> candidateId ${candidateId}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:118:      logger.info(`Skipped candidate record ${candidate._id}; candidateId was already assigned`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:126:    highestExistingCandidateId: indexResult.highest,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:4:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:13:export async function allocateCandidateId({ CounterModel = Counter } = {}) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:14:  return allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:24:export async function setCandidateRegistrationStatus(candidateId, registrationStatus, {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:27:  return setCandidateRegistrationStatusWithModel(candidateId, registrationStatus, CandidateModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:8:    if (!Number.isSafeInteger(Number(candidate.candidateId)) || Number(candidate.candidateId) <= 0) continue
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:10:    const chainCandidate = await contract.candidates(candidate.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:16:      candidateId: Number(candidate.candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/privacyProjection.js:4:    candidateId: candidate.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:9:  candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:22:  return proofGenerator(voter, candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:4:function validateCandidateId(candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:5:  const value = Number(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:6:  if (!Number.isSafeInteger(value) || value <= 0) throw new Error('A positive candidateId is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:10:export async function generateBoundSemaphoreProof({ runtime, voter, candidateId, electionId, group, chainRegistered, secret, snarkArtifacts }) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:15:  const selectedCandidateId = validateCandidateId(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:27:    BigInt(selectedCandidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:34:  if (BigInt(normalized.message) !== BigInt(selectedCandidateId)) throw new Error('Generated proof message does not match candidateId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:42:    candidateId: selectedCandidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:7:export async function generateVoteProofForVoter(voter, candidateId, options = {}) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:10:  const normalizedCandidateId = Number(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:12:  if (!Number.isSafeInteger(normalizedCandidateId) || normalizedCandidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:13:    throw new Error('A positive candidateId is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:24:    contract.candidates(BigInt(normalizedCandidateId)),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:38:    candidateId: normalizedCandidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/voterHash.js:60:export function generateVoterHash(nationalId, salt) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/abiCompatibility.test.js:17:  assert.equal(signature('castVote'), 'castVote(uint256,bytes32)')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/abiCompatibility.test.js:28:  assert.equal(functions.some((entry) => entry.name === 'castVote' && entry.inputs[0]?.type === 'string'), false)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:5:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:33:  const first = await allocateCandidateIdWithModel(FakeCounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:34:  const second = await allocateCandidateIdWithModel(FakeCounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:41:test('client supplied candidateId cannot override backend allocation', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:44:    candidateId: 999,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:53:  assert.equal(candidate.candidateId, 1)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:67:test('Candidate schema keeps candidateId immutable and uses a partial unique index for valid IDs', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:69:  assert.match(source, /candidateId:\s*\{[\s\S]*?immutable:\s*true[\s\S]*?min:\s*\[1,/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:70:  assert.match(source, /name:\s*'candidateId_unique_valid'/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:72:  assert.match(source, /partialFilterExpression:\s*\{\s*candidateId:\s*\{\s*\$type:\s*'number',\s*\$gte:\s*1/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:7:    { candidateId: 1, nationalId: '1234567890', name: 'Alice Example', party: 'Example Party', location: 'Dhaka', registrationStatus: 'pending' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:8:    { candidateId: 2, nationalId: '9876543210', name: 'Bob Example', party: 'Other Party', location: 'Chattogram', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:12:    async candidates(candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:13:      if (candidateId === 1) return { exists: true, voteCount: 7n }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:21:  assert.deepEqual(data.candidates, [{ candidateId: 1, name: 'Alice Example', party: 'Example Party', location: 'Dhaka', voteCount: 7 }])
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:23:  assert.equal('voterHash' in data.candidates[0], false)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:5:  migrateCandidateIdsWithModels,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:9:  return record.candidateId === undefined || record.candidateId === null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:37:      { name: 'candidateId_1', key: { candidateId: 1 }, unique: true },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:47:    } else if (filter.candidateId?.$exists === true) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:99:    { _id: 'a', candidateId: 2, nationalId: '1111111111', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:101:    { _id: 'c', candidateId: null, nationalId: '3333333333', registrationStatus: 'failed' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:102:    { _id: 'd', candidateId: 5, nationalId: '4444444444', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:108:  const result = await migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:116:  assert.equal(byId.get('a').candidateId, 2)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:117:  assert.equal(byId.get('d').candidateId, 5)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:118:  assert.equal(byId.get('b').candidateId, 6)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:119:  assert.equal(byId.get('c').candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:124:  assert.equal(result.highestExistingCandidateId, 5)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:126:  assert.deepEqual(collection.droppedIndexes, ['candidateId_1'])
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:129:    key: { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:132:    partialFilterExpression: { candidateId: { $type: 'number', $gte: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:140:    { _id: 'a', candidateId: 4 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:141:    { _id: 'b', candidateId: 4 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:148:    () => migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:153:    /Duplicate existing candidateId 4/,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:12:  'voterHash',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:35:    candidateId: 9,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:46:    candidateId: 9,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:56:test('voter document projection omits NID, voterHash, encrypted salt, and DOB', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:60:    voterHash: `0x${'11'.repeat(32)}`,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:82:    voterHash: 'legacy-hash',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:14:test('ZK ABI exposes candidateId/commitment/proof lifecycle', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:17:  assert.equal(signature('castVote'), 'castVote(uint256,tuple)')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:26:test('ZK ABI has no active voterHash or civil identity transaction input', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:29:  for (const forbidden of ['voterHash', 'nationalId', 'dateOfBirth', 'birthDate', 'encryptedSalt', 'biometric']) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:33:  const castVote = byName.get('castVote')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:34:  assert.equal(castVote.inputs[0].name, 'candidateId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:35:  assert.equal(castVote.inputs[1].type, 'tuple')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:36:  assert.equal(castVote.inputs[1].components.length, 6)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:37:  assert.deepEqual(castVote.inputs[1].components.map((component) => component.name), [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:21:test('active biometric and blockchain ZK path does not use voterHash or encryptedSalt', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:24:    assert.doesNotMatch(source, /voterHash|encryptedSalt/, `legacy identity primitive remains active in ${relative}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:28:test('active voter flow sends candidateId plus Semaphore proof and keeps wallet identity separate', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:30:  assert.match(hook, /castVote\(candidateId,\s*proof\)/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:43:  assert.match(proofService, /contract\.candidates\(BigInt\(normalizedCandidateId\)\)/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:11:    candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:12:    proofGenerator: async (receivedVoter, candidateId) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:15:      assert.equal(candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:30:      candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:42:test('biometric-authorized proof core binds candidateId as message and electionId as scope', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:46:    candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:53:  assert.equal(result.candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:60:  assert.equal('voterHash' in result, false)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:68:      candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:85:      candidateId: 7,
+
+--- biometric integration references ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:5565:        "keyvaluestorage-interface": "^1.0.0",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:5625:        "keyvaluestorage-interface": "^1.0.0"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:8825:    "node_modules/keyvaluestorage-interface": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:8827:      "resolved": "https://registry.npmjs.org/keyvaluestorage-interface/-/keyvaluestorage-interface-1.0.0.tgz",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:10521:        "ts-interface-checker": "^0.1.9"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:10765:    "node_modules/ts-interface-checker": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/package-lock.json:10767:      "resolved": "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/README.md:84:    │   ├── voteController.js      → verifyFace, verifyFingerprint, castVote (to blockchain)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:17:interface FormData {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:10:import { FaceCapture } from "@/components/Biometric/face-recognition/FaceCapture"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:11:import { FingerprintCapture } from "@/components/Biometric/fingerprint/FingerprintCapture"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:21:interface FormData {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:42:  const [biometricStatus, setBiometricStatus] = useState({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:43:    faceCaptured: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:44:    fingerprintCaptured: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:45:    faceTrainingProgress: 0,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:55:  const handleTrainFace = async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:56:    if (!formData.nationalId.trim() || !biometricStatus.faceCaptured) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:57:      toast({ title: "Error", description: "Enter the National ID and capture face images first", variant: "destructive" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:61:    setBiometricStatus((previous) => ({ ...previous, isTraining: true, faceTrainingProgress: 0 }))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:63:      const response = await fetch(apiUrl(`/api/voters/train-face/${formData.nationalId}`), {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:68:      if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to train face model")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:69:      setBiometricStatus((previous) => ({ ...previous, faceTrainingProgress: 100, isTraining: false }))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:70:      toast({ title: "Success", description: "Face training completed successfully" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:72:      setBiometricStatus((previous) => ({ ...previous, isTraining: false, faceTrainingProgress: 0 }))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:73:      toast({ title: "Error", description: trainingError instanceof Error ? trainingError.message : "Failed to train face model", variant: "destructive" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:85:    if (!biometricStatus.faceCaptured) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:86:      toast({ title: "Error", description: "Please capture face biometric data", variant: "destructive" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:164:            <FaceCapture nid={formData.nationalId} onCaptureComplete={(success) => setBiometricStatus((previous) => ({ ...previous, faceCaptured: success }))} />
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:165:            {biometricStatus.faceCaptured && (
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:166:              <Button type="button" variant="outline" onClick={handleTrainFace} disabled={biometricStatus.isTraining}>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:167:                {biometricStatus.isTraining ? "Training Face..." : biometricStatus.faceTrainingProgress === 100 ? "Face Trained" : "Train Face"}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:170:            <FingerprintCapture
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:172:              isCaptured={biometricStatus.fingerprintCaptured}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:173:              onCapture={() => setBiometricStatus((previous) => ({ ...previous, fingerprintCaptured: true }))}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:174:              onRetake={() => setBiometricStatus((previous) => ({ ...previous, fingerprintCaptured: false }))}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:9:interface FaceCaptureProps {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:14:export function FaceCapture({ nid, onCaptureComplete }: FaceCaptureProps) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:36:      const response = await fetch(apiUrl("/api/biometric/capture-face"), {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:46:        throw new Error(errorData.message || "Failed to capture face images")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:66:        throw new Error(data.message || "Face capture failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:119:            ? "Face capture completed successfully"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:7:interface FingerprintCaptureProps {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:14:export function FingerprintCapture({ nid, onCapture, onRetake, isCaptured }: FingerprintCaptureProps) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:18:  const handleFingerprintCapture = async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:20:      setError("NID is required before capturing fingerprint")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:28:      const response = await fetch(apiUrl("/api/biometric/fingerprint/enroll"), {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:36:        throw new Error(data.message || "Fingerprint enrollment failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:41:      console.error("Fingerprint error:", err)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:42:      setError(err instanceof Error ? err.message : "Fingerprint capture failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:51:        <CardTitle>Fingerprint Capture</CardTitle>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:58:                <p className="text-muted-foreground">Fingerprint captured successfully</p>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:64:              <p className="text-blue-600 animate-pulse">Waiting for fingerprint...</p>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:71:            <Button onClick={handleFingerprintCapture} className="w-full" disabled={isEnrolling || !nid.trim()}>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:72:              {isEnrolling ? "Capturing..." : "Capture Fingerprint"}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:4:import { Loader2, ScanFace, Fingerprint } from "lucide-react"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:8:interface VerificationModalProps {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:15:export function VerificationModal({ open, candidateId, onClose, onVerified }: VerificationModalProps) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:40:          <DialogTitle>Biometric Verification</DialogTitle>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:48:          <Button disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/votes/verify-face", "Face")} className="w-full flex items-center gap-2">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:49:            {isVerifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <ScanFace className="h-4 w-4" />}Verify with Face
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:51:          <Button variant="outline" disabled={isVerifying || !candidateId} onClick={() => runVerification("/api/biometric/fingerprint/detect", "Fingerprint")} className="w-full flex items-center gap-2">
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx:52:            {isVerifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Fingerprint className="h-4 w-4" />}Verify with Fingerprint
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:6:interface CandidateListProps {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Layout/AdminNavigation.tsx:18:interface NavItem {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Layout/Layout.tsx:5:interface LayoutProps {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Layout/Navigation.tsx:16:interface NavItem {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/badge.tsx:26:export interface BadgeProps
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/button.tsx:37:export interface ButtonProps
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/error-boundary.tsx:4:interface Props {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/error-boundary.tsx:8:interface State {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/use-toast.ts:52:interface State {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:5:interface WalletState {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:14:interface WalletContextType extends WalletState {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:11:import { VerificationModal } from "@/components/Biometric/VerificationModal"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:87:    <VerificationModal open={isModalOpen} candidateId={pendingCandidate} onClose={() => { setIsModalOpen(false); setPendingCandidate(null) }} onVerified={handleVerified} />
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:111:          <CardContent><Alert><AlertDescription>{votingEnabled ? "Select a candidate. Biometric verification gates backend proof generation; the blockchain receives a Semaphore membership proof without exposing a persistent voter identifier." : "Voting is disabled unless the election is Active and a non-admin vote-submission wallet is connected."}</AlertDescription></Alert></CardContent>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/use-toast.ts:55:interface State {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:5:export interface PublicCandidate {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:13:export interface PublicElectionData {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:19:interface ApiEnvelope<T> {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:46:export interface CandidateMetadataInput {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:54:export interface CandidateAdminRecord {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:86:export interface CreateVoterInput {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:93:export interface VoterCreationResult {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:97:export interface SemaphoreProofPayload {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:106:export interface ZkVotePreparation {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:148:  if (!response.ok || !payload.success) throw new Error(payload.message || "Biometric verification or proof generation failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/vite-env.d.ts:3:interface EthereumProvider {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/vite-env.d.ts:12:interface Window {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/.env.example:20:FINGERPRINT_SERIAL_PORT=COM3
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:5:import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:10:const serialPortPath = process.env.FINGERPRINT_SERIAL_PORT || 'COM3'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:65:const captureFingerprint = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:66:  console.log("[API] /api/fingerprint/enroll called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:79:        message: "Fingerprint enrollment successful"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:94:const detectFingerprint = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:95:  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:108:        return res.status(404).json({ success: false, message: "Fingerprint matched, but voter is not enrolled" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:111:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:114:        message: "Fingerprint match successful; anonymous eligibility proof prepared",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:121:    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:127:const formatFingerprintDatabase = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:128:  console.log("[API] /api/fingerprint/format called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:134:      return res.status(200).json({ success: true, message: "Fingerprint database cleared" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:145:  captureFingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:146:  detectFingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:147:  formatFingerprintDatabase,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:2:import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:18:export const verifyFace = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:25:    console.log('[VoteController] Starting biometric-gated ZK proof preparation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:26:    const faceRecPath = path.join(__dirname, '../../votechain-face-recognition', 'face_rec_demo.py')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:27:    const faceRecDir = path.dirname(faceRecPath)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:29:    if (!fs.existsSync(faceRecPath)) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:30:      return res.status(500).json({ success: false, message: 'Face recognition script not found' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:33:    const pythonProcess = spawn('python', [faceRecPath], { cwd: faceRecDir })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:40:      console.error('[VoteController] face-recognition process reported an error')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:46:          return res.status(500).json({ success: false, message: 'Face recognition process failed' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:50:        const isSuccess = outputLower.includes('face recognition successful') || outputLower.includes('result = success')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:51:        if (!isSuccess) return res.json({ success: false, message: 'Face not recognised' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:56:          return res.status(422).json({ success: false, message: 'Face verification did not return a usable voter identity' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:62:        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:65:          message: 'Face verification successful; anonymous eligibility proof prepared',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:75:      console.error('[VoteController] Failed to start face recognition:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:76:      return res.status(500).json({ success: false, message: 'Failed to launch face recognition' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:79:    console.error('[VoteController] verifyFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:14:const handleTrainFace = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:17:    console.log('[Train Face] Starting face training for submitted voter record')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:19:    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:20:    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:25:        message: 'Face images not found. Please capture face images first.',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:33:        message: 'No face images found. Please capture face images first.',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:37:    console.log(`[Train Face] Found ${imageFiles.length} face images for training`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:39:    const trainScript = path.join(faceRecognitionPath, 'train_faces.py')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:41:      cwd: faceRecognitionPath,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:49:      console.log(`[Train Face] Training process finished with code: ${code}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:54:          message: 'Face training failed',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:61:        message: 'Face training completed successfully',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:66:      console.error('[Train Face] Failed to start training process')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:73:    console.error('[Train Face] Unexpected training endpoint error')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:76:      message: 'Failed to train face model',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:261:  handleTrainFace,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:1001:        "@serialport/bindings-interface": "^1.2.1",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:1038:        "@serialport/bindings-interface": "1.2.2",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:1101:    "node_modules/@serialport/bindings-interface": {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:1103:      "resolved": "https://registry.npmjs.org/@serialport/bindings-interface/-/bindings-interface-1.2.2.tgz",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json:1236:        "@serialport/bindings-interface": "1.2.2",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:5:import fingerprintController from '../controllers/fingerprintController.js';
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:13:    res.json({ message: 'Biometric routes working' });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:16:// Face capture
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:17:router.post('/capture-face', async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:27:        const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:29:            cwd: faceRecognitionPath,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:35:            console.log('Face capture process produced output');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:40:            console.error('Face capture process reported an error');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:50:                        message: 'Face captured successfully'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:55:                        message: 'Face capture failed'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:67:                    message: 'Failed to start face capture process',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:75:        console.error('Error in face capture:', error);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:79:                message: 'Failed to start face capture process',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:87:// Fingerprint routes (JSON-based)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:88:router.post('/fingerprint/enroll', fingerprintController.captureFingerprint);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:89:router.post('/fingerprint/detect', fingerprintController.detectFingerprint);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:90:router.post('/fingerprint/format', fingerprintController.formatFingerprintDatabase);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:108:router.post('/train-face/:nid', async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:111:    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:112:    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:115:      return res.status(404).json({ success: false, message: 'Face images not found. Please capture face images first.' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:120:      return res.status(404).json({ success: false, message: 'No face images found. Please capture face images first.' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:124:    const trainScript = path.join(faceRecognitionPath, 'train_faces.py')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:125:    const trainProcess = spawn('python', [trainScript], { cwd: faceRecognitionPath, stdio: ['pipe', 'pipe', 'pipe'] })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:130:        return res.status(500).json({ success: false, message: 'Face training failed', code })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:132:      return res.json({ success: true, message: 'Face training completed successfully' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:136:    return res.status(500).json({ success: false, message: 'Failed to train face model' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:2:import { verifyFace } from '../controllers/voteController.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:6:// Successful face verification gates backend-only Semaphore credential use and proof generation.
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:7:router.post('/verify-face', verifyFace)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:17:// // Helper function to generate face ID from captured images
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:18:// function generateFaceId(nid) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:19://     const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:20://     const datasetPath = path.join(faceRecognitionPath, 'dataset', nid);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:29://         // Read all face images and create a hash
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:34://             console.error(`No face images found in directory: ${datasetPath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:38://         console.log(`Found ${imageFiles.length} face images in ${datasetPath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:48://         const faceId = createHash('sha256').update(imageData).digest('hex');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:49://         console.log(`Generated face ID: ${faceId}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:50://         return faceId;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:52://         console.error('Error generating face ID:', error);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:74:// Get face hash by national ID
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:75:// router.get('/face-hash/:nid', voterController.getFaceHash);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:77:// Train face by national ID
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:78:router.post('/train-face/:nid', voterController.handleTrainFace);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:80:// DEMO: Face verification - will be deleted later
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:81:// router.post('/verify-face-demo', voterController.handleVerifyFaceDemo);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:83:// router.get('/by-fingerprint/:fingerId', voterController.getVoterByFingerprint);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:10:import biometricRoutes from './routes/biometricRoutes.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:53:app.use('/api/biometric', biometricRoutes)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:3: * The caller injects the backend proof generator only after a successful biometric match,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:6:export async function prepareProofAfterBiometricAuthentication({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:7:  biometricAccepted,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:12:  if (biometricAccepted !== true) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:13:    throw new Error('Biometric authentication is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:16:    throw new Error('Biometrically verified voter record is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/groupService.js:16:    throw new Error('ZK contract event-query interface is required for deterministic group reconstruction')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/abiCompatibility.test.js:14:test('ABI contains the accepted VC-W01 interface', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:17:  'biometric',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:18:  'biometricData',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:29:  for (const forbidden of ['voterHash', 'nationalId', 'dateOfBirth', 'birthDate', 'encryptedSalt', 'biometric']) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:7:  '../controllers/fingerprintController.js',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:15:  '../../votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:21:test('active biometric and blockchain ZK path does not use voterHash or encryptedSalt', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:3:import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:5:test('successful biometric authentication may cross the proof-generation gate', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:8:  const result = await prepareProofAfterBiometricAuthentication({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:9:    biometricAccepted: true,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:24:test('failed biometric authentication cannot reach proof generation', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:27:    prepareProofAfterBiometricAuthentication({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:28:      biometricAccepted: false,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:36:    /Biometric authentication is required/i,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:42:test('biometric-authorized proof core binds candidateId as message and electionId as scope', async () => {
+
+--- current ZK/WP4 integration artifacts ---
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/verification_key.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/poseidon/verification_key.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/verification_key.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp4-architecture-freeze.json
+
+--- git status ---
+fatal: not a git repository (or any of the parent directories): .git
+
+NEXT_ACTION=WP5_IMPLEMENT_LOCAL_PRIVACY_WORKER_AND_PRIVACY_SAFE_APPLICATION_PATH

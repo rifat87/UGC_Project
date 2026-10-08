@@ -1,0 +1,202 @@
+======================================================================
+FILE=votechain-central-server/routes/biometricRoutes.js
+13-    res.json({ message: 'Biometric routes working' });
+14-});
+15-
+16-// Face capture
+17:router.post('/capture-face', async (req, res) => {
+18-    const { nid } = req.body;
+19-
+20-    if (!nid) {
+21-        return res.status(400).json({ success: false, message: 'NID is required' });
+22-    }
+23-
+--
+84-    }
+85-});
+86-
+87-// Fingerprint routes (JSON-based)
+88:router.post('/fingerprint/enroll', fingerprintController.captureFingerprint);
+89:router.post('/fingerprint/detect', (_req, res) => {
+90-    return res.status(410).json({
+91-        success: false,
+92:        message: 'Legacy candidate-aware fingerprint vote preparation is disabled. Use /api/wp5/authorize/fingerprint.'
+93-    });
+94-});
+95:router.post('/fingerprint/format', fingerprintController.formatFingerprintDatabase);
+96-
+97-export default router;
+======================================================================
+FILE=votechain-central-server/routes/blockchainRoutes.js
+======================================================================
+FILE=votechain-central-server/routes/candidateRoutes.js
+1-import express from 'express'
+2-import { body, param } from 'express-validator'
+3:import validate from '../middleware/validate.js'
+4-import Candidate from '../models/Candidate.js'
+5-import path from 'path'
+6-import { fileURLToPath } from 'url'
+7-import fs from 'fs'
+8-import {
+9-  createCandidate,
+--
+22-  body('location').isString().trim().isLength({ min: 2, max: 100 }).matches(/^[A-Za-z ,.-]+$/),
+23-  body('age').isInt({ min: 18, max: 120 }),
+24-]
+25-
+26:router.post('/register', candidateMetadataValidation, validate, async (req, res) => {
+27-  try {
+28-    const candidate = await createCandidate(req.body)
+29-
+30-    res.status(201).json({
+31-      success: true,
+32-      message: 'Candidate metadata created; blockchain registration is pending',
+--
+49-    return res.status(500).json({ success: false, message: 'Failed to create candidate metadata' })
+50-  }
+51-})
+52-
+53:router.patch('/:candidateId/registration-status', [
+54-  param('candidateId').isInt({ min: 1 }).withMessage('candidateId must be a positive integer'),
+55-  body('registrationStatus').isIn(['pending', 'registered', 'failed']),
+56-], validate, async (req, res) => {
+57-  try {
+58-    const candidate = await setCandidateRegistrationStatus(
+59-      Number(req.params.candidateId),
+--
+74-    return res.status(400).json({ success: false, message: error.message })
+75-  }
+76-})
+77-
+78:router.put('/:id', [
+79-  param('id').isMongoId().withMessage('Invalid candidate ID'),
+80-  body('name').optional().trim().notEmpty(),
+81-  body('party').optional().trim().notEmpty(),
+82-  body('nationalId').optional().matches(/^\d{10}$/),
+83-  body('age').optional().isInt({ min: 18, max: 120 }),
+84-  body('location').optional().trim().notEmpty(),
+--
+94-  }
+95-})
+96-
+97-
+98:router.delete('/:id', [param('id').isMongoId().withMessage('Invalid candidate ID')], validate, async (req, res) => {
+99-  try {
+100-    const candidate = await Candidate.findByIdAndDelete(req.params.id)
+101-    if (!candidate) return res.status(404).json({ success: false, message: 'Candidate not found' })
+102-    return res.json({ success: true, message: 'Candidate deleted successfully' })
+103-  } catch (error) {
+104-    return res.status(500).json({ success: false, message: 'Failed to delete candidate' })
+105-  }
+106-})
+107-
+108:router.post('/train-face/:nid', async (req, res) => {
+109-  try {
+110-    const { nid } = req.params
+111-    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+112-    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+113-
+114-    if (!fs.existsSync(datasetPath)) {
+======================================================================
+FILE=votechain-central-server/routes/electionRoutes.js
+======================================================================
+FILE=votechain-central-server/routes/voteRoutes.js
+6- * The inherited candidate-aware Semaphore vote-preparation endpoint
+7- * is retained only as source/reference and is no longer an active API.
+8- *
+9- * Active private voting uses:
+10: *   POST /api/wp5/authorize/face
+11- */
+12:router.post('/verify-face', (_req, res) => {
+13-  return res.status(410).json({
+14-    success: false,
+15-    message:
+16-      'Legacy candidate-aware vote preparation is disabled. Use the VoteChain-ZK WP5 authorization path.',
+17-  })
+18-})
+======================================================================
+FILE=votechain-central-server/routes/voterRoutes.js
+3-import {
+4-  createVoterValidation,
+5-  updateVoterValidation,
+6-  deleteVoterValidation
+7:} from '../middleware/validators/voterValidator.js';
+8:import validate from '../middleware/validate.js';
+9-import path from 'path';
+10-import { fileURLToPath } from 'url';
+11-
+12-
+13-const router = express.Router();
+14-const __filename = fileURLToPath(import.meta.url);
+--
+54-//     }
+55-// }
+56-
+57-// Create a new voter (root endpoint)
+58:router.post(
+59-  '/',
+60-  createVoterValidation,
+61-  validate,
+62-  voterController.createVoter
+63-);
+64-
+65-// Create a new voter (register endpoint)
+66:router.post('/register', createVoterValidation, validate, voterController.createVoter);
+67-
+68:// Reconcile the public identity commitment after the admin wallet transaction.
+69:router.patch('/zk-registration-status', voterController.updateZkRegistrationStatus);
+70-
+71:// Get voter profile by wallet address
+72-// router.get('/profile', getVoterByWalletValidation, validate, voterController.getVoterProfile);
+73-
+74-// Get face hash by national ID
+75-// router.get('/face-hash/:nid', voterController.getFaceHash);
+76-
+77-// Train face by national ID
+78:router.post('/train-face/:nid', voterController.handleTrainFace);
+79-
+80-// DEMO: Face verification - will be deleted later
+81:// router.post('/verify-face-demo', voterController.handleVerifyFaceDemo);
+82-
+83-// router.get('/by-fingerprint/:fingerId', voterController.getVoterByFingerprint);
+84-
+85-
+86-// Update voter
+87:router.put('/voter', updateVoterValidation, validate, voterController.updateVoter);
+88-
+89-// Delete voter
+90:router.delete('/voter', deleteVoterValidation, validate, voterController.deleteVoter);
+91-
+92-export default router; 
+======================================================================
+FILE=votechain-central-server/routes/wp5Routes.js
+2-import rateLimit from 'express-rate-limit'
+3-import {
+4-  requireWp5AllowedOrigin,
+5-  validateWp5AuthorizationRequest,
+6:} from '../middleware/wp5AuthorizationSecurity.js'
+7-import {
+8:  authorizeFace,
+9-  getConfig,
+10-} from '../controllers/wp5Controller.js'
+11-import fingerprintController from '../controllers/fingerprintController.js'
+12-
+13-const router = express.Router()
+14-
+--
+45- * Candidate plaintext is forbidden on both authorization endpoints.
+46- * The request contains only an ephemeral public key used to envelope
+47- * the custom voter credential after biometric success.
+48- */
+49:router.post(
+50:  '/authorize/face',
+51-  ...wp5AuthorizationGuards,
+52:  authorizeFace,
+53-)
+54:router.post(
+55:  '/authorize/fingerprint',
+56-  ...wp5AuthorizationGuards,
+57-  fingerprintController.detectWp5Fingerprint,
+58-)
+59-
+60-export default router

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_220939\wp8e-c6b-final-runner-freeze\runner\wp8e-final-scaling-runner.py", line 1678, in <module>
+    main()
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_220939\wp8e-c6b-final-runner-freeze\runner\wp8e-final-scaling-runner.py", line 1669, in main
+    execute_campaign(
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_220939\wp8e-c6b-final-runner-freeze\runner\wp8e-final-scaling-runner.py", line 1386, in execute_campaign
+    ) = receipt_info(
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_220939\wp8e-c6b-final-runner-freeze\runner\wp8e-final-scaling-runner.py", line 171, in receipt_info
+    obj = json.loads(text)
+  File "C:\Users\88018\AppData\Local\Programs\Python\Python310\lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "C:\Users\88018\AppData\Local\Programs\Python\Python310\lib\json\decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 2 column 1 (char 1634)

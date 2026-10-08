@@ -1,0 +1,17 @@
+WP8E C8B-R0B TARGETED DESIGN RESOLUTION
+=======================================
+
+FINAL_PROTOCOL_V2_SHA256=6d2e3e2566fb00c364c8b0896eb2118c69b81cddac8a53d7e413c03c270fee00
+RUNNER_V2_SHA256=0b3c77a0581f83cf4cee0215aabb444ddbc739cc6865067f9cde28b8d78f2ed0
+
+MICROBENCHMARK_FIXTURE=fixtures/ballot-001.json
+MICROBENCHMARK_CALLDATA_BYTES=2340
+CONFIG_SOURCE=experiments/wp8/20261002_175126/wp8e-c2-150-ballot-input-corpus/corpus/corpus-config.json
+
+IMPORTANT:
+- fixture selection must use exact fixture-index ballotId 001
+- substring filename matching must not select the fixture
+- bundle contains no config JSON
+- C2 config must be explicitly provenance-gated
+- Runner V2 parser behavior is the reference parser behavior
+- final microbenchmark has not started

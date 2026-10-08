@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_LOCAL_CHAIN_SCRIPT_SANITIZATION_VALIDATION",
+  "changedLines": [
+    18
+  ],
+  "replacementEnvironmentVariable": "VOTECHAIN_LOCAL_PRIVATE_KEY",
+  "privateKeyContextPreserved": true,
+  "remainingQuoted32ByteHexSecretLikeLiterals": 0,
+  "sourceModified": false,
+  "secretLiteralCopied": false,
+  "secretLiteralPrinted": false
+}

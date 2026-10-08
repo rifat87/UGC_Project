@@ -1,0 +1,39 @@
+relative_path	line	rule	classification
+README.md	216	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+README.md	217	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+README.md	220	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+WP5_final_dependency_capture.txt	602	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+WP5_final_dependency_capture.txt	610	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+crypto/vectors/wp3/20260930_165820/direct/wrong-secret.json		SECRET_OR_KEYSTORE_FILENAME	REVIEW_BEFORE_SUBMISSION
+crypto/vectors/wp3/20260930_170346/digest/wrong-secret.json		SECRET_OR_KEYSTORE_FILENAME	REVIEW_BEFORE_SUBMISSION
+crypto/vectors/wp3/20260930_170346/direct/wrong-secret.json		SECRET_OR_KEYSTORE_FILENAME	REVIEW_BEFORE_SUBMISSION
+crypto/vectors/wp3/20260930_170614/digest/wrong-secret.json		SECRET_OR_KEYSTORE_FILENAME	REVIEW_BEFORE_SUBMISSION
+crypto/vectors/wp3/20260930_170614/direct/wrong-secret.json		SECRET_OR_KEYSTORE_FILENAME	REVIEW_BEFORE_SUBMISSION
+docs/baseline/logs/dynamic_config_raw_matches.txt	2	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	218	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	340	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	469	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	473	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	50	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+docs/baseline/logs/dynamic_config_raw_matches.txt	6	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp5/20260930_191454/backup/votechain-central-server/.env.example		REAL_ENV_FILE	TEMPLATE_REVIEW
+experiments/wp5/20260930_191454/backup/votechain-central-server/.env.example	10	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp5/20260930_191454/backup/votechain-central-server/.env.example	2	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp5/20260930_192740/backup/votechain-central-server/.env.example		REAL_ENV_FILE	TEMPLATE_REVIEW
+experiments/wp5/20260930_192740/backup/votechain-central-server/.env.example	10	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp5/20260930_192740/backup/votechain-central-server/.env.example	2	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp5/20260930_201827/wp5c-local-worker/backup/votechain-frontend-ts/.env.example		REAL_ENV_FILE	TEMPLATE_REVIEW
+experiments/wp6/20261001_023603/preflight/profile-threshold-scan.txt	614	MNEMONIC_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp6/20261001_023603/preflight/profile-threshold-scan.txt	716	MNEMONIC_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp8/20261002_220939/wp8e-c6b-final-runner-freeze/runner/wp8e-final-scaling-runner.py	87	PRIVATE_KEY_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp8/20261002_223739/wp8e-c6c-r2-runner-v2-freeze/runner-v2/wp8e-final-scaling-runner-v2.py	87	PRIVATE_KEY_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp8/20261003_014132/wp8e-c8b-r3f2-deploy-parser-amendment/runner-v3/wp8e-final-scaling-runner-v3.py	87	PRIVATE_KEY_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+experiments/wp8/20261003_182331/wp8e-c8c-r7b2-corrected-runner-static-freeze/runner/c8c-r7b2-observation-runner.py	15	PRIVATE_KEY_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+lib/forge-std/test/StdCheats.t.sol	231	MNEMONIC_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+research/reports/VC-W02_Final_Report.md	251	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+research/reports/VC-W03_Final_Report.md	960	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+research/zkp/README.md	70	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+votechain-central-server/.env.example		REAL_ENV_FILE	TEMPLATE_REVIEW
+votechain-central-server/.env.example	10	APPLICATION_SECRET_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+votechain-central-server/.env.example	2	DATABASE_CREDENTIAL_ASSIGNMENT	REVIEW_VALUE_NOT_PRINTED
+votechain-frontend-ts/.env.example		REAL_ENV_FILE	TEMPLATE_REVIEW

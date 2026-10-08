@@ -1,0 +1,172 @@
+     1	======================================================================
+     2	VOTECHAIN-ZK WP8E FINAL BENCHMARK DESIGN V2
+     3	======================================================================
+     4	
+     5	STATUS=PREREGISTERED_DESIGN_NOT_YET_EXECUTED
+     6	
+     7	SUPERSEDES_PROTOCOL=WP8E_FINAL_REPEAT_PROTOCOL_V1
+     8	SUPERSESSION_REASON=SCALABILITY_MATRIX_ADDED_BEFORE_FINAL_ONCHAIN_CAMPAIGN
+     9	V1_MEASUREMENT_DATA_EXISTS=NO
+    10	ACTIVE_ARCHITECTURE=DIRECT
+    11	
+    12	----------------------------------------------------------------------
+    13	A. SINGLE-VOTE REPEATABILITY MICROBENCHMARK
+    14	----------------------------------------------------------------------
+    15	
+    16	PURPOSE=CONTROLLED_COST_AND_LATENCY_REPEATABILITY
+    17	
+    18	WARMUP_ITERATIONS=5
+    19	MEASURED_ITERATIONS=20
+    20	
+    21	CHAIN_POLICY=FRESH_ANVIL_PER_ITERATION
+    22	ACCEPTED_VOTES_PER_ITERATION=1
+    23	
+    24	PRIMARY_METRICS:
+    25	- M12 verifier estimate gas
+    26	- M14 accepted cast receipt gas
+    27	- M15 calldata bytes
+    28	- M16 deployment gas
+    29	- M29 submission-to-receipt latency
+    30	
+    31	REPORT:
+    32	- mean
+    33	- median
+    34	- min
+    35	- max
+    36	- sample standard deviation
+    37	- nearest-rank p95
+    38	
+    39	----------------------------------------------------------------------
+    40	B. CUMULATIVE ELECTION STATE-GROWTH SCALING
+    41	----------------------------------------------------------------------
+    42	
+    43	PURPOSE=MEASURE_BEHAVIOR_AS_ACCEPTED_BALLOTS_ACCUMULATE
+    44	
+    45	VOTE_SCALES=25,50,75,100,150
+    46	
+    47	EACH_SCALE_STARTS_FROM_FRESH_ELECTION=YES
+    48	SINGLE_SHARED_0_TO_150_CHAIN_AS_PRIMARY_EXPERIMENT=NO
+    49	
+    50	WARMUP_CAMPAIGNS_PER_SCALE=1
+    51	MEASURED_CAMPAIGNS_PER_SCALE=5
+    52	
+    53	REPETITION_EXCEPTION=PREREGISTERED_REDUCED_COUNT_FOR_HEAVY_CUMULATIVE_CRYPTOGRAPHIC_CAMPAIGN
+    54	
+    55	TOTAL_WARMUP_ACCEPTED_TX=400
+    56	TOTAL_MEASURED_ACCEPTED_TX=2000
+    57	TOTAL_SCALING_ACCEPTED_TX=2400
+    58	
+    59	----------------------------------------------------------------------
+    60	C. CONTROLLED VALID-BALLOT CORPUS
+    61	----------------------------------------------------------------------
+    62	
+    63	REQUIRED_VALID_BALLOT_CORPUS_SIZE=150
+    64	DISTINCT_ELIGIBLE_MEMBERS=150
+    65	DISTINCT_ELECTION_SCOPED_NULLIFIERS=150
+    66	DISTINCT_VALID_CIPHERTEXTS=150
+    67	DISTINCT_VALID_GROTH16_PROOFS=150
+    68	
+    69	PROOF_CORPUS_GENERATED_BEFORE_SCALING_EXECUTION=YES
+    70	PROOF_CORPUS_HASH_MANIFEST_REQUIRED=YES
+    71	
+    72	CORPUS_REUSE_ACROSS_FRESH_REPETITION_CHAINS=YES
+    73	
+    74	SCALE_25_CORPUS_PREFIX=1..25
+    75	SCALE_50_CORPUS_PREFIX=1..50
+    76	SCALE_75_CORPUS_PREFIX=1..75
+    77	SCALE_100_CORPUS_PREFIX=1..100
+    78	SCALE_150_CORPUS_PREFIX=1..150
+    79	
+    80	CANDIDATE_COUNT=4
+    81	BALLOT_SELECTION_SCHEDULE=DETERMINISTIC_BALANCED_ROUND_ROBIN
+    82	
+    83	----------------------------------------------------------------------
+    84	D. PER-TRANSACTION RAW RECORD
+    85	----------------------------------------------------------------------
+    86	
+    87	FIELDS:
+    88	- scale
+    89	- campaign_repetition
+    90	- warmup_or_measured
+    91	- vote_index
+    92	- candidate_index
+    93	- transaction_hash
+    94	- receipt_status
+    95	- gas_used
+    96	- calldata_bytes
+    97	- submission_to_receipt_ms
+    98	- nullifier
+    99	- accepted_count_before
+   100	- accepted_count_after
+   101	- nullifier_used_before
+   102	- nullifier_used_after
+   103	
+   104	EVERY_RAW_OBSERVATION_PRESERVED=YES
+   105	SILENT_OUTLIER_DELETION=NO
+   106	
+   107	----------------------------------------------------------------------
+   108	E. PER-SCALE REPORT
+   109	----------------------------------------------------------------------
+   110	
+   111	FOR_EACH_SCALE_REPORT:
+   112	- accepted transaction count
+   113	- failed transaction count
+   114	- total gas
+   115	- mean gas per vote
+   116	- median gas per vote
+   117	- min gas
+   118	- max gas
+   119	- sample standard deviation
+   120	- nearest-rank p95 gas
+   121	- mean confirmation latency
+   122	- median confirmation latency
+   123	- min latency
+   124	- max latency
+   125	- sample standard deviation
+   126	- nearest-rank p95 latency
+   127	- total campaign duration
+   128	- final acceptedBallotCount
+   129	- consumed-nullifier count
+   130	- encrypted-tally consistency result
+   131	
+   132	----------------------------------------------------------------------
+   133	F. TALLY CORRECTNESS
+   134	----------------------------------------------------------------------
+   135	
+   136	CHECKPOINT_FINAL_ACCEPTED_COUNT_EQUALS_SCALE=YES
+   137	
+   138	ONCHAIN_ENCRYPTED_TALLY_COMPARE_WITH_OFFCHAIN_RECOMPUTATION=YES
+   139	
+   140	CHECKPOINTS:
+   141	25
+   142	50
+   143	75
+   144	100
+   145	150
+   146	
+   147	M17_POLICY=DO_NOT_CALL_POST_RECEIPT_RPC_READ_DURATION_TALLY_UPDATE_TIME
+   148	M18_POLICY=DO_NOT_DERIVE_ISOLATED_TALLY_GAS_FROM_TOTAL_CAST_RECEIPT
+   149	
+   150	----------------------------------------------------------------------
+   151	G. INTEGRITY / FREEZE RULES
+   152	----------------------------------------------------------------------
+   153	
+   154	SOLIDITY_CHANGE_DURING_CAMPAIGN=NO
+   155	CIRCUIT_CHANGE_DURING_CAMPAIGN=NO
+   156	CRYPTO_CHANGE_DURING_CAMPAIGN=NO
+   157	VERIFIER_CHANGE_DURING_CAMPAIGN=NO
+   158	
+   159	POST_A1B_LEGACY_SEMAPHORE_RESTORATION=YES
+   160	SEMAPHORE_ROLE=LEGACY_REFERENCE_ONLY
+   161	ACTIVE_DIRECT_DEPENDS_ON_SEMAPHORE=NO
+   162	
+   163	FINAL_CAMPAIGN_MAY_NOT_START_UNTIL:
+   164	- 150-ballot corpus generated
+   165	- all 150 proofs verify off-chain
+   166	- all 150 public-input bindings validate
+   167	- all 150 nullifiers are unique
+   168	- fixed corpus manifest hashed
+   169	- small multi-ballot RPC pilot passes
+   170	- active source hashes frozen
+   171	
+   172	======================================================================

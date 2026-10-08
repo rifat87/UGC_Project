@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_FINAL_SUBMISSION_ARCHIVE_VALIDATION",
+  "manifestRows": 778,
+  "archiveFileEntries": 779,
+  "uniqueArchiveFileEntries": 779,
+  "exactArchiveMemberSet": true,
+  "allArchiveTimestampsFixed": true,
+  "allManifestMemberHashesVerified": true,
+  "archivedManifestBytesMatch": true,
+  "sanitizedEnvironmentTemplatesVerified": 2,
+  "sanitizedLocalChainScriptVerified": true,
+  "rawHistoricalExperimentCorpusIncluded": false,
+  "archiveSha256": "afd8484c2ec70c2b01198cd6431e0ec328b7c45e7d6cc702312ea2dbfd802db2",
+  "archiveSizeBytes": 61433938
+}

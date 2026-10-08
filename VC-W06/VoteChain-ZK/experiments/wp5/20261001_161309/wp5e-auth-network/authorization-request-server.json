@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "path": "/api/wp5/authorize/face",
+  "body": {
+    "credentialPublicKey": {
+      "crv": "P-256",
+      "ext": true,
+      "key_ops": [],
+      "kty": "EC",
+      "x": "jU5ZwG_QXXH51CfWkkeP4ZSY4cZ5ZDt26qQwGgAduaU",
+      "y": "953aMmmnVvm4gcMAmNnbvqLSTGwwo8VF0ntT-qNdjOU"
+    }
+  }
+}

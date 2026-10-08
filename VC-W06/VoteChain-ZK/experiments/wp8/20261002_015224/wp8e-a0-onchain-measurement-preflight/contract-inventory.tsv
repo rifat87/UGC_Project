@@ -1,0 +1,15 @@
+38	BabyJubAffine	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	BabyJubTallyHarness	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	IVerifierDigest	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	IVerifierDirect	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	Vm	test\VoteChainWP4.t.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	VoteChainBase	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	VoteChainDirect	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	VoteChainPoseidon	src\VoteChainWP4.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	VoteChainWP4Test	test\VoteChainWP4.t.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	VoteChainWP6BTest	test\VoteChainWP6B.t.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+38	WP6BMockVerifier	test\VoteChainWP6B.t.sol	castVote,nullifier,acceptedBallotCount,verifyProof,candidateManifest,eligibleRoot,electionContext,BabyJub
+15	WP4Fixture	test\WP4Fixture.sol	nullifier,candidateManifest,eligibleRoot,electionContext
+5	VoteChainVoteDigestVerifier	src\verifiers\VoteChainVoteDigestVerifier.sol	verifyProof
+5	VoteChainVoteDirectVerifier	src\verifiers\VoteChainVoteDirectVerifier.sol	verifyProof
+0	WP4Profile	src\WP4Profile.sol	

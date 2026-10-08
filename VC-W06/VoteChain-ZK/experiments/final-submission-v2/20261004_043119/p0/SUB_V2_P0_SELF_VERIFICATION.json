@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "classification": "PACKAGED_SUBMISSION_V2_SELF_VERIFICATION",
+  "shortPathExtractionUsed": true,
+  "archiveEntriesExtracted": 824,
+  "manifestRowsVerified": 823,
+  "verifierReturnCode": 0,
+  "verificationDirectoryRemovedAfterSuccess": true
+}

@@ -1,0 +1,8 @@
+TOOL_node=PASS:/d/Software/node
+TOOL_npm=PASS:/d/Software/npm
+TOOL_python=PASS:/c/Users/88018/AppData/Local/Programs/Python/Python310/python
+TOOL_forge=PASS:/c/Users/88018/.foundry/bin/forge
+TOOL_cast=PASS:/c/Users/88018/.foundry/bin/cast
+TOOL_anvil=PASS:/c/Users/88018/.foundry/bin/anvil
+CIRCOM_TOOL=PASS:circom
+BROWSER_TOOL=PASS:/c/Program Files/Google/Chrome/Application/chrome.exe

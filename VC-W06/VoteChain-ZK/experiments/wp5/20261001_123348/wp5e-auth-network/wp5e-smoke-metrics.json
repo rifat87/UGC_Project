@@ -1,0 +1,10 @@
+{
+  "classification": "FUNCTIONAL_SMOKE_ONLY_NOT_FINAL_BENCHMARK",
+  "samples": 1,
+  "backendAuthorizationMs": 34,
+  "localPrivacyMs": 5172.399999976158,
+  "browserOverallMs": 5291.200000047684,
+  "castGas": "1866414",
+  "calldataBytes": 2340,
+  "transactionLatencyMs": 688.4782
+}

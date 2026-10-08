@@ -1,0 +1,11 @@
+variant,test,result
+DIRECT,tampered-ciphertext-binding,PASS_REJECTED
+DIRECT,different-candidate-manifest,PASS_REJECTED
+DIRECT,different-election-public-key,PASS_REJECTED
+DIRECT,malformed-public-signal-length,PASS_REJECTED
+DIRECT,corrupted-proof,PASS_REJECTED
+POSEIDON,tampered-ciphertext-binding,PASS_REJECTED
+POSEIDON,different-candidate-manifest,PASS_REJECTED
+POSEIDON,different-election-public-key,PASS_REJECTED
+POSEIDON,malformed-public-signal-length,PASS_REJECTED
+POSEIDON,corrupted-proof,PASS_REJECTED

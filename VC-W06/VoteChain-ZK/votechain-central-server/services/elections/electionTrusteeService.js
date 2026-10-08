@@ -1,0 +1,265 @@
+import {
+  getAddress,
+} from "ethers"
+
+import Election from "../../models/Election.js"
+
+import {
+  getRuntimeElection,
+} from "./electionRuntimeService.js"
+
+import {
+  context,
+} from "../../../crypto/src/wp2-core-final.mjs"
+
+import {
+  canonicalSha256,
+  verifyDkgTranscript,
+} from "../../../crypto/src/wp6-threshold.mjs"
+
+function lifecycleError(
+  code,
+  message,
+) {
+  const error =
+    new Error(
+      message,
+    )
+
+  error.code =
+    code
+
+  return error
+}
+
+function normalizeBytes32(
+  value,
+) {
+  const text =
+    String(
+      value,
+    )
+      .trim()
+      .replace(
+        /^0x/i,
+        "",
+      )
+
+  if (
+    !/^[0-9a-fA-F]{64}$/
+      .test(
+        text,
+      )
+  ) {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      "DKG transcript hash is not a 32-byte SHA-256 value",
+    )
+  }
+
+  return (
+    "0x" +
+    text.toLowerCase()
+  )
+}
+
+export async function validateElectionDkgTranscript(
+  transcript,
+) {
+  if (
+    !transcript ||
+    typeof transcript !==
+      "object" ||
+    Array.isArray(
+      transcript,
+    )
+  ) {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      "A public WP6 DKG transcript object is required",
+    )
+  }
+
+  let verified
+
+  try {
+    const c =
+      await context()
+
+    verified =
+      verifyDkgTranscript(
+        c,
+        transcript,
+      )
+  } catch (error) {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      `WP6 DKG transcript verification failed: ${error.message}`,
+    )
+  }
+
+  if (
+    verified === false
+  ) {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      "WP6 DKG transcript verification returned false",
+    )
+  }
+
+  if (
+    !Array.isArray(
+      transcript.publicKey,
+    ) ||
+    transcript.publicKey.length !==
+      2
+  ) {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      "Verified DKG transcript does not contain a two-coordinate public key",
+    )
+  }
+
+  let Yx
+  let Yy
+
+  try {
+    Yx =
+      BigInt(
+        transcript
+          .publicKey[0],
+      )
+        .toString()
+
+    Yy =
+      BigInt(
+        transcript
+          .publicKey[1],
+      )
+        .toString()
+  } catch {
+    throw lifecycleError(
+      "INVALID_DKG_TRANSCRIPT",
+      "DKG public key coordinates are invalid",
+    )
+  }
+
+  const transcriptHash =
+    normalizeBytes32(
+      canonicalSha256(
+        transcript,
+      ),
+    )
+
+  return {
+    transcriptHash,
+    Yx,
+    Yy,
+  }
+}
+
+export async function storeElectionTrusteeTranscript({
+  electionId,
+  transcript,
+  adminAddress,
+}) {
+  const election =
+    await getRuntimeElection({
+      electionId,
+
+      statuses: [
+        "registration",
+      ],
+    })
+
+  if (!election) {
+    throw lifecycleError(
+      "ELECTION_NOT_FOUND",
+      "Current election was not found",
+    )
+  }
+
+  if (
+    election.status !==
+      "registration"
+  ) {
+    throw lifecycleError(
+      "ELECTION_NOT_IN_REGISTRATION",
+      "Trustee transcript can only be set while registration is open",
+    )
+  }
+
+  if (
+    election.adminAddress &&
+    getAddress(
+      election.adminAddress,
+    ) !==
+      getAddress(
+        adminAddress,
+      )
+  ) {
+    throw lifecycleError(
+      "ELECTION_ADMIN_MISMATCH",
+      "Authenticated administrator does not own this election",
+    )
+  }
+
+  const {
+    transcriptHash,
+    Yx,
+    Yy,
+  } =
+    await validateElectionDkgTranscript(
+      transcript,
+    )
+
+  const ceremonyId =
+    transcript.ceremonyId ??
+    transcript
+      .context
+      ?.ceremonyId
+
+  if (
+    ceremonyId !==
+      undefined &&
+    String(
+      ceremonyId,
+    ) !==
+      String(
+        election.electionId,
+      )
+  ) {
+    throw lifecycleError(
+      "DKG_CEREMONY_MISMATCH",
+      "The DKG ceremony identifier does not match this electionId",
+    )
+  }
+
+  election.trusteeTranscript =
+    transcript
+
+  election.trusteeTranscriptHash =
+    transcriptHash
+
+  election.Yx =
+    Yx
+
+  election.Yy =
+    Yy
+
+  election.trusteeTranscriptVerifiedAt =
+    new Date()
+
+  election.markModified(
+    "trusteeTranscript",
+  )
+
+  await election.save()
+
+  return {
+    election,
+    transcriptHash,
+    Yx,
+    Yy,
+  }
+}

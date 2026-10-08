@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "sourceInput": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261002_175126/wp8e-c2-150-ballot-input-corpus/corpus/inputs/direct-001.json",
+  "allowedChangedFields": [
+    "candidateCount",
+    "candidateManifestHash",
+    "electionContextHash"
+  ],
+  "fixtureCount": 4,
+  "fixtures": [
+    {
+      "candidateCount": 2,
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k2-input.json",
+      "sha256": "67a1892afb663db03aa48c8bccf51c1054e721f84391f0629a6f6589ac78ea40",
+      "changedFieldsFromC2": [
+        "candidateCount",
+        "candidateManifestHash",
+        "electionContextHash"
+      ],
+      "candidateManifestHash": "9489999120659268928742573107750798166505353386037332172180567100945254651504",
+      "electionContextHash": "20381128715815925610561507609377370936270058380089084180456932877139562034325",
+      "nullifierUnchanged": true,
+      "ciphertextUnchanged": true,
+      "privateBasisUnchanged": true
+    },
+    {
+      "candidateCount": 4,
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k4-input.json",
+      "sha256": "429cb7cac43fe6c72c46f32e5e54b444a853bf05349e114df01da5e8b6bef78d",
+      "changedFieldsFromC2": [
+        "candidateManifestHash",
+        "electionContextHash"
+      ],
+      "candidateManifestHash": "366025876440818857840768213586785963363428078228844434671500172059520633217",
+      "electionContextHash": "7820917684337449225013908656372115481748351850217116454809560117918719279265",
+      "nullifierUnchanged": true,
+      "ciphertextUnchanged": true,
+      "privateBasisUnchanged": true
+    },
+    {
+      "candidateCount": 8,
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k8-input.json",
+      "sha256": "8d2c0ac48167fc651d832270871dd0bcf0ca57ba4951b159d29fd5e5b5dc0576",
+      "changedFieldsFromC2": [
+        "candidateCount",
+        "candidateManifestHash",
+        "electionContextHash"
+      ],
+      "candidateManifestHash": "15864759929576685334845723125914152996543637264633085790871876594358067380228",
+      "electionContextHash": "4971948632245750986268082244120057577738631010336892471569044470081133701127",
+      "nullifierUnchanged": true,
+      "ciphertextUnchanged": true,
+      "privateBasisUnchanged": true
+    },
+    {
+      "candidateCount": 16,
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k16-input.json",
+      "sha256": "4c22f77bdd5e7d001d25b904bd01501166516d124c9c209214eaa0830be65e43",
+      "changedFieldsFromC2": [
+        "candidateCount",
+        "candidateManifestHash",
+        "electionContextHash"
+      ],
+      "candidateManifestHash": "8725646181372109278719673995639063952864499962493037230511085907915024360632",
+      "electionContextHash": "13946203472920583934344800911739016661462502789742498625879376802704367305792",
+      "nullifierUnchanged": true,
+      "ciphertextUnchanged": true,
+      "privateBasisUnchanged": true
+    }
+  ]
+}

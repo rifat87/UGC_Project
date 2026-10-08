@@ -1,0 +1,17 @@
+{
+  "trusteeId": 2,
+  "publicShare": [
+    "19301806122186879664120982792531130084854879982954769872754128363016724883115",
+    "17553414435456756045026958280835064702786816788785214970495115441553347584713"
+  ],
+  "encryptedShareCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "8D/LkODeIMxZHZf1cekWmw==",
+    "iv": "Z2lyDjQbu1yg+g99",
+    "aad": "15786533177717101073643042000645206797721030203528221512980381505658448079189|final-decryption-share|2",
+    "ciphertext": "QDoRE18G50osKRKmYVemtrB5X6AKyDHY26hGlw9JHi61zRf0AwV3KAaAqXencuZ2zwQnbb2HWddym1SJhPIapkXOxgzG1nwj+WxwZw==",
+    "authTag": "uQqad2qcL9c/B+fT5gdeCA=="
+  }
+}

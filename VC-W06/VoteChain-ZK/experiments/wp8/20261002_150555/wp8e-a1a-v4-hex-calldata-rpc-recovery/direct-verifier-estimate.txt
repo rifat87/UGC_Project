@@ -1,0 +1,7 @@
+error: unexpected argument '--data' found
+
+  tip: to pass '--data' as a value, use '-- --data'
+
+Usage: cast.exe estimate <TO> [SIG] [ARGS]...
+
+For more information, try '--help'.

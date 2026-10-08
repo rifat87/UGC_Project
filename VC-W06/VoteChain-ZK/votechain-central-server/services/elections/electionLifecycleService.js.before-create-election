@@ -1,0 +1,39 @@
+import Election from "../../models/Election.js"
+
+const CURRENT_STATUSES = [
+  "registration",
+  "starting",
+  "active",
+  "ended",
+]
+
+export async function getCurrentElection() {
+  return Election
+    .findOne({
+      status: {
+        $in: CURRENT_STATUSES,
+      },
+    })
+    .sort({
+      createdAt: -1,
+    })
+}
+
+export async function getRegistrationState() {
+  const election =
+    await getCurrentElection()
+
+  if (!election) {
+    return {
+      open: true,
+      election: null,
+    }
+  }
+
+  return {
+    open:
+      election.status ===
+      "registration",
+    election,
+  }
+}

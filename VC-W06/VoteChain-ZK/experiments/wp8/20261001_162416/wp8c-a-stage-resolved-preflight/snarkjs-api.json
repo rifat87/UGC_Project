@@ -1,0 +1,27 @@
+{
+  "snarkjsKeys": [
+    "curves",
+    "fflonk",
+    "groth16",
+    "plonk",
+    "powersOfTau",
+    "r1cs",
+    "wtns",
+    "zKey"
+  ],
+  "wtnsKeys": [
+    "calculate",
+    "check",
+    "debug",
+    "exportJson"
+  ],
+  "groth16Keys": [
+    "exportSolidityCallData",
+    "fullProve",
+    "prove",
+    "verify"
+  ],
+  "hasWtnsCalculate": true,
+  "hasGroth16Prove": true,
+  "hasGroth16Verify": true
+}

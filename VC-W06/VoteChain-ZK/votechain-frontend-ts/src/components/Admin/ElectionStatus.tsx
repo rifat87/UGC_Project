@@ -1,0 +1,1366 @@
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+
+import {
+  AlertCircle,
+  Loader2,
+  RefreshCw,
+} from "lucide-react"
+
+import {
+  Badge,
+} from "@/components/ui/badge"
+
+import {
+  Button,
+} from "@/components/ui/button"
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+import {
+  Alert,
+  AlertDescription,
+} from "@/components/ui/alert"
+
+import {
+  useToast,
+} from "@/components/ui/use-toast"
+
+import {
+  useContract,
+} from "@/hooks/useContract"
+
+import {
+  useWallet,
+} from "@/components/ui/wallet-provider"
+
+import {
+  createElection,
+  endCurrentElection,
+  finalizeCurrentElection,
+  getCurrentElectionLifecycle,
+  getElectionResults,
+  getPublicElectionData,
+  setTrusteeTranscript,
+  startCurrentElection,
+  type CurrentElectionLifecycle,
+  type FinalizedElectionResults,
+  type PublicElectionData,
+} from "@/services/api"
+
+
+function lifecycleLabel(
+  status:
+    CurrentElectionLifecycle["status"],
+) {
+  switch (status) {
+    case "registration":
+      return "Registration"
+
+    case "starting":
+      return "Starting"
+
+    case "active":
+      return "Active"
+
+    case "ended":
+      return "Ended"
+
+    case "finalized":
+      return "Finalized"
+
+    case "orphaned":
+      return "Orphaned"
+
+    default:
+      return "Failed"
+  }
+}
+
+
+function isTerminalLifecycleStatus(
+  status:
+    CurrentElectionLifecycle["status"],
+) {
+  return [
+    "finalized",
+    "failed",
+    "orphaned",
+  ].includes(
+    status,
+  )
+}
+
+
+type LifecycleAction =
+  | "create"
+  | "transcript"
+  | "start"
+  | "end"
+  | "finalize"
+  | null
+
+
+export default function ElectionStatus() {
+  const {
+    toast,
+  } =
+    useToast()
+
+  /*
+   * useContract supplies wallet/admin-role state only.
+   *
+   * Start / End / Finalize are server-authorized lifecycle
+   * operations against the fresh VoteChainDirect election.
+   */
+  const {
+    isAdmin,
+    isInitialized,
+    isLoading:
+      contractLoading,
+  } =
+    useContract()
+
+  const {
+    isConnected,
+  } =
+    useWallet()
+
+  const [
+    election,
+    setElection,
+  ] =
+    useState<
+      CurrentElectionLifecycle |
+      null
+    >(null)
+
+  const [
+    publicData,
+    setPublicData,
+  ] =
+    useState<
+      PublicElectionData |
+      null
+    >(null)
+
+  const [
+    finalized,
+    setFinalized,
+  ] =
+    useState<
+      FinalizedElectionResults |
+      null
+    >(null)
+
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(
+      true,
+    )
+
+  const [
+    action,
+    setAction,
+  ] =
+    useState<
+      LifecycleAction
+    >(null)
+
+  const [
+    error,
+    setError,
+  ] =
+    useState<
+      string |
+      null
+    >(null)
+
+
+  const transcriptInputRef =
+    useRef<HTMLInputElement | null>(
+      null,
+    )
+
+  const refresh =
+    useCallback(
+      async () => {
+        setLoading(
+          true,
+        )
+
+        setError(
+          null,
+        )
+
+        try {
+          const lifecycle =
+            await getCurrentElectionLifecycle()
+
+          setElection(
+            lifecycle,
+          )
+
+          if (!lifecycle) {
+            setPublicData(
+              null,
+            )
+
+            setFinalized(
+              null,
+            )
+
+            return
+          }
+
+          if (
+            lifecycle.status ===
+              "finalized"
+          ) {
+            setFinalized(
+              await getElectionResults(
+                lifecycle.electionId,
+              ),
+            )
+
+            setPublicData(
+              null,
+            )
+
+            return
+          }
+
+          setFinalized(
+            null,
+          )
+
+          if (
+            [
+              "registration",
+              "starting",
+              "active",
+            ].includes(
+              lifecycle.status,
+            )
+          ) {
+            try {
+              setPublicData(
+                await getPublicElectionData(),
+              )
+            } catch {
+              setPublicData(
+                null,
+              )
+            }
+          } else {
+            setPublicData(
+              null,
+            )
+          }
+        } catch (
+          refreshError
+        ) {
+          setError(
+            refreshError
+              instanceof Error
+              ? refreshError.message
+              : "Failed to fetch election status",
+          )
+        } finally {
+          setLoading(
+            false,
+          )
+        }
+      },
+      [],
+    )
+
+
+  useEffect(
+    () => {
+      void refresh()
+    },
+    [
+      refresh,
+    ],
+  )
+
+
+  const runCreate =
+    async () => {
+      if (
+        election &&
+        !isTerminalLifecycleStatus(
+          election.status,
+        )
+      ) {
+        return
+      }
+
+      if (!isConnected) {
+        toast({
+          title:
+            "Admin wallet required",
+
+          description:
+            "Connect the Election Commission wallet before creating an election.",
+
+          variant:
+            "destructive",
+        })
+
+        return
+      }
+
+      const confirmed =
+        window.confirm(
+          "Create a new election in Registration state?",
+        )
+
+      if (!confirmed) {
+        return
+      }
+
+      setAction(
+        "create",
+      )
+
+      try {
+        const created =
+          await createElection()
+
+        toast({
+          title:
+            "Election Created",
+
+          description:
+            "Election " +
+            created.electionId +
+            " is now in Registration state.",
+        })
+
+        await refresh()
+      } catch (
+        actionError
+      ) {
+        toast({
+          title:
+            "Create Election failed",
+
+          description:
+            actionError
+              instanceof Error
+              ? actionError.message
+              : "Could not create a new election",
+
+          variant:
+            "destructive",
+        })
+      } finally {
+        setAction(
+          null,
+        )
+      }
+    }
+
+
+  const runImportTrusteeTranscript =
+    async (
+      file?: File,
+    ) => {
+      if (
+        !file ||
+        !election ||
+        election.status !==
+          "registration"
+      ) {
+        return
+      }
+
+      if (!isAdmin) {
+        toast({
+          title:
+            "Admin wallet required",
+
+          description:
+            "Connect the Election Commission admin wallet before importing the trustee transcript.",
+
+          variant:
+            "destructive",
+        })
+
+        return
+      }
+
+      if (
+        !file.name
+          .toLowerCase()
+          .endsWith(".json")
+      ) {
+        toast({
+          title:
+            "Invalid transcript file",
+
+          description:
+            "Select the public trustee-transcript-request.json file generated by the WP6 ceremony.",
+
+          variant:
+            "destructive",
+        })
+
+        return
+      }
+
+      setAction(
+        "transcript",
+      )
+
+      try {
+        const parsed =
+          JSON.parse(
+            await file.text(),
+          ) as {
+            transcript?: unknown
+          }
+
+        if (
+          !parsed ||
+          typeof parsed !==
+            "object" ||
+          !parsed.transcript ||
+          typeof parsed.transcript !==
+            "object"
+        ) {
+          throw new Error(
+            "This is not a WP6 public trustee transcript request file.",
+          )
+        }
+
+        const stored =
+          await setTrusteeTranscript(
+            election.electionId,
+            parsed.transcript,
+          )
+
+        toast({
+          title:
+            "Trustee Transcript Ready",
+
+          description:
+            "The WP6 public trustee transcript was verified and stored. Hash: " +
+            stored.trusteeTranscriptHash,
+        })
+
+        await refresh()
+      } catch (
+        actionError
+      ) {
+        toast({
+          title:
+            "Trustee transcript import failed",
+
+          description:
+            actionError
+              instanceof Error
+              ? actionError.message
+              : "Could not verify and store the WP6 public trustee transcript",
+
+          variant:
+            "destructive",
+        })
+      } finally {
+        setAction(
+          null,
+        )
+
+        if (
+          transcriptInputRef.current
+        ) {
+          transcriptInputRef.current.value =
+            ""
+        }
+      }
+    }
+
+  const runStart =
+    async () => {
+      if (!election) {
+        return
+      }
+
+      if (
+        election.status !==
+          "registration"
+      ) {
+        toast({
+          title:
+            "Start unavailable",
+
+          description:
+            `Election status is ${lifecycleLabel(election.status)}.`,
+
+          variant:
+            "destructive",
+        })
+
+        return
+      }
+
+      if (
+        !election
+          .trusteeTranscriptHash
+      ) {
+        toast({
+          title:
+            "WP6 trustee transcript required",
+
+          description:
+            "Generate and verify the election-specific DKG transcript before starting the election.",
+
+          variant:
+            "destructive",
+        })
+
+        return
+      }
+
+      setAction(
+        "start",
+      )
+
+      try {
+        await startCurrentElection(
+          election.electionId,
+        )
+
+        toast({
+          title:
+            "Election Activated",
+
+          description:
+            "Snapshot, fresh VoteChainDirect deployment, configuration, trustee pinning and activation completed.",
+        })
+
+        await refresh()
+      } catch (
+        actionError
+      ) {
+        toast({
+          title:
+            "Start Election failed",
+
+          description:
+            actionError
+              instanceof Error
+              ? actionError.message
+              : "Election lifecycle failed",
+
+          variant:
+            "destructive",
+        })
+      } finally {
+        setAction(
+          null,
+        )
+      }
+    }
+
+
+  const runEnd =
+    async () => {
+      if (
+        !election ||
+        election.status !==
+          "active"
+      ) {
+        return
+      }
+
+      const confirmed =
+        window.confirm(
+          "End this election? No additional encrypted ballots can be accepted after this transaction.",
+        )
+
+      if (!confirmed) {
+        return
+      }
+
+      setAction(
+        "end",
+      )
+
+      try {
+        const result =
+          await endCurrentElection(
+            election.electionId,
+          )
+
+        toast({
+          title:
+            "Election Ended",
+
+          description:
+            `Encrypted aggregate frozen with ${result.acceptedBallotCount} accepted ballot(s).`,
+        })
+
+        await refresh()
+      } catch (
+        actionError
+      ) {
+        toast({
+          title:
+            "End Election failed",
+
+          description:
+            actionError
+              instanceof Error
+              ? actionError.message
+              : "Could not end the VoteChainDirect election",
+
+          variant:
+            "destructive",
+        })
+      } finally {
+        setAction(
+          null,
+        )
+      }
+    }
+
+
+  const runFinalize =
+    async () => {
+      if (
+        !election ||
+        election.status !==
+          "ended"
+      ) {
+        return
+      }
+
+      const confirmed =
+        window.confirm(
+          "Verify the prepared public WP6 threshold transcript and finalize this election on-chain?",
+        )
+
+      if (!confirmed) {
+        return
+      }
+
+      setAction(
+        "finalize",
+      )
+
+      try {
+        await finalizeCurrentElection(
+          election.electionId,
+        )
+
+        toast({
+          title:
+            "Election Finalized",
+
+          description:
+            "The threshold transcript was independently verified and the final tally was anchored on-chain.",
+        })
+
+        await refresh()
+      } catch (
+        actionError
+      ) {
+        toast({
+          title:
+            "Finalize Election failed",
+
+          description:
+            actionError
+              instanceof Error
+              ? actionError.message
+              : "Threshold finalization failed",
+
+          variant:
+            "destructive",
+        })
+      } finally {
+        setAction(
+          null,
+        )
+      }
+    }
+
+
+  if (
+    !isInitialized ||
+    loading ||
+    contractLoading
+  ) {
+    return (
+      <div className="max-w-3xl mx-auto py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Election Status
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+
+  if (error) {
+    return (
+      <div className="max-w-3xl mx-auto py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Election Status
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="text-center py-12">
+            <AlertCircle className="h-8 w-8 mx-auto text-destructive" />
+
+            <p className="text-destructive mt-3">
+              {error}
+            </p>
+
+            <Button
+              onClick={
+                refresh
+              }
+              variant="outline"
+              className="mt-4"
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+
+  if (!election) {
+    return (
+      <div className="max-w-3xl mx-auto py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Election Lifecycle
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              No election record is available. Create the next election to open Registration.
+            </p>
+
+            {!isConnected && (
+              <Alert>
+                <AlertDescription>
+                  Connect the Election Commission wallet to create an election.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <Button
+              className="w-full"
+              onClick={
+                runCreate
+              }
+              disabled={
+                !isConnected ||
+                action ===
+                  "create"
+              }
+            >
+              {
+                action ===
+                  "create"
+                  ? "Creating Election..."
+                  : "Create Election"
+              }
+            </Button>
+
+            <p className="text-xs text-muted-foreground">
+              The backend verifies the connected administrator wallet before creating the election.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+
+  const transcriptReady =
+    Boolean(
+      election
+        .trusteeTranscriptHash,
+    )
+
+  const startAllowed =
+    isAdmin &&
+    election.status ===
+      "registration" &&
+    transcriptReady
+
+  const actionLoading =
+    action !==
+      null
+
+
+  return (
+    <div className="max-w-3xl mx-auto py-8 space-y-6">
+
+      {
+        isTerminalLifecycleStatus(
+          election.status,
+        ) &&
+        (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                Start the Next Election
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                The completed election remains preserved as historical election data. The next election will be created from the currently configured ZKLocalVoting deployment.
+              </p>
+
+              {!isConnected && (
+                <Alert>
+                  <AlertDescription>
+                    Connect the Election Commission wallet before creating the next election.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <Button
+                className="w-full"
+                onClick={
+                  runCreate
+                }
+                disabled={
+                  !isConnected ||
+                  action ===
+                    "create"
+                }
+              >
+                {
+                  action ===
+                    "create"
+                    ? "Creating Election..."
+                    : "Create New Election"
+                }
+              </Button>
+
+              <p className="text-xs text-muted-foreground">
+                VoteChain reads the new election identifier and Election Commission address directly from the deployed registration contract.
+              </p>
+            </CardContent>
+          </Card>
+        )
+      }
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Election Lifecycle
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="font-medium">
+              Current state:
+            </span>
+
+            <Badge
+              variant={
+                election.status ===
+                  "active"
+                  ? "default"
+                  : "secondary"
+              }
+            >
+              {
+                lifecycleLabel(
+                  election.status,
+                )
+              }
+            </Badge>
+          </div>
+
+          <div className="text-sm space-y-2">
+            <p>
+              Election ID:{" "}
+              <span className="font-mono break-all">
+                {election.electionId}
+              </span>
+            </p>
+
+            <p>
+              WP6 trustee transcript:{" "}
+              {
+                transcriptReady
+                  ? "Ready"
+                  : "Not ready"
+              }
+            </p>
+
+
+            {
+              election.status ===
+                "registration" &&
+              !transcriptReady &&
+              (
+                <div className="rounded-lg border p-4 space-y-3">
+                  <div>
+                    <p className="font-medium">
+                      WP6 Trustee Ceremony
+                    </p>
+
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Import the public transcript request produced by the completed WP6 DKG ceremony. VoteChain will verify the transcript before enabling Start Election.
+                    </p>
+                  </div>
+
+                  <Alert>
+                    <AlertDescription>
+                      Public transcript only. Never upload trustee secret shares, private keys, passphrases, or any file from the custody directory.
+                    </AlertDescription>
+                  </Alert>
+
+                  <input
+                    ref={
+                      transcriptInputRef
+                    }
+                    type="file"
+                    accept=".json,application/json"
+                    className="hidden"
+                    onChange={
+                      (event) => {
+                        const file =
+                          event.target
+                            .files?.[0]
+
+                        void runImportTrusteeTranscript(
+                          file,
+                        )
+                      }
+                    }
+                  />
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    disabled={
+                      !isAdmin ||
+                      actionLoading
+                    }
+                    onClick={
+                      () =>
+                        transcriptInputRef.current?.click()
+                    }
+                  >
+                    {
+                      action ===
+                        "transcript"
+                        ? "Verifying Trustee Transcript..."
+                        : "Import & Verify Public Trustee Transcript"
+                    }
+                  </Button>
+                </div>
+              )
+            }
+
+            {
+              transcriptReady &&
+              (
+                <p className="text-xs text-muted-foreground break-all">
+                  Trustee transcript hash:{" "}
+                  {election.trusteeTranscriptHash}
+                </p>
+              )
+            }
+            {
+              election
+                .eligibleVoterCount !==
+                  null &&
+              (
+                <p>
+                  Frozen eligible voters:{" "}
+                  {
+                    election
+                      .eligibleVoterCount
+                  }
+                </p>
+              )
+            }
+
+            {
+              election
+                .candidateCount !==
+                  null &&
+              (
+                <p>
+                  Frozen candidates:{" "}
+                  {
+                    election
+                      .candidateCount
+                  }
+                </p>
+              )
+            }
+
+            {
+              election.status !==
+                "registration" &&
+              (
+                <p>
+                  Accepted encrypted ballots:{" "}
+                  {
+                    election
+                      .acceptedBallotCount
+                  }
+                </p>
+              )
+            }
+
+            {
+              election
+                .directContractAddress &&
+              (
+                <p>
+                  VoteChainDirect:{" "}
+                  <span className="font-mono break-all">
+                    {
+                      election
+                        .directContractAddress
+                    }
+                  </span>
+                </p>
+              )
+            }
+
+            {
+              election
+                .finalizationTranscriptHash &&
+              (
+                <p>
+                  Finalization transcript hash:{" "}
+                  <span className="font-mono break-all">
+                    {
+                      election
+                        .finalizationTranscriptHash
+                    }
+                  </span>
+                </p>
+              )
+            }
+          </div>
+
+          {
+            election.status ===
+              "registration" &&
+            !isInitialized &&
+            (
+              <Alert>
+                <AlertDescription>
+                  The registration contract is not initialized at the configured address yet. Deploy and synchronize the election-scoped registration contract before registering candidates or voters.
+                </AlertDescription>
+              </Alert>
+            )
+          }
+
+          {
+            election.status ===
+              "registration" &&
+            !transcriptReady &&
+            (
+              <Alert>
+                <AlertDescription>
+                  Start Election is locked until the election-specific WP6 DKG trustee transcript is generated and verified.
+                </AlertDescription>
+              </Alert>
+            )
+          }
+
+          {
+            isAdmin &&
+            election.status ===
+              "registration" &&
+            (
+              <Button
+                className="w-full"
+                onClick={
+                  runStart
+                }
+                disabled={
+                  actionLoading ||
+                  !startAllowed
+                }
+              >
+                {
+                  action ===
+                    "start"
+                    ? "Freezing & Activating..."
+                    : transcriptReady
+                      ? "Start Election"
+                      : "Start Election — DKG Required"
+                }
+              </Button>
+            )
+          }
+
+          {
+            election.status ===
+              "starting" &&
+            (
+              <Alert>
+                <AlertDescription>
+                  Election activation is in progress. Registration is frozen.
+                </AlertDescription>
+              </Alert>
+            )
+          }
+
+          {
+            election.status ===
+              "active" &&
+            (
+              <>
+                <Alert>
+                  <AlertDescription>
+                    VoteChainDirect is Active. Registration is frozen and the candidate tally remains encrypted.
+                  </AlertDescription>
+                </Alert>
+
+                {
+                  isAdmin &&
+                  (
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      onClick={
+                        runEnd
+                      }
+                      disabled={
+                        actionLoading
+                      }
+                    >
+                      {
+                        action ===
+                          "end"
+                          ? "Ending Election..."
+                          : "End Election"
+                      }
+                    </Button>
+                  )
+                }
+              </>
+            )
+          }
+
+          {
+            election.status ===
+              "ended" &&
+            (
+              <>
+                <Alert>
+                  <AlertDescription>
+                    Voting is closed. The encrypted aggregate is frozen.
+                    Trustees must independently produce the threshold partial decryptions
+                    and public WP6 finalization transcript before finalization.
+                  </AlertDescription>
+                </Alert>
+
+                {
+                  isAdmin &&
+                  (
+                    <Button
+                      className="w-full"
+                      onClick={
+                        runFinalize
+                      }
+                      disabled={
+                        actionLoading
+                      }
+                    >
+                      {
+                        action ===
+                          "finalize"
+                          ? "Verifying & Finalizing..."
+                          : "Verify WP6 Transcript & Finalize"
+                      }
+                    </Button>
+                  )
+                }
+              </>
+            )
+          }
+
+          {
+            election.status ===
+              "finalized" &&
+            (
+              <Alert>
+                <AlertDescription>
+                  Election finalized. The plaintext aggregate is now public and anchored to the independently verified WP6 finalization transcript.
+                </AlertDescription>
+              </Alert>
+            )
+          }
+        </CardContent>
+      </Card>
+
+      {
+        publicData &&
+        election.status !==
+          "finalized" &&
+        (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                Frozen Candidate Set
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-3">
+              {
+                publicData
+                  .candidates
+                  .map(
+                    candidate => (
+                      <div
+                        key={
+                          candidate.candidateId
+                        }
+                        className="rounded-md border p-3"
+                      >
+                        <p className="font-medium">
+                          {
+                            candidate.name
+                          }
+                        </p>
+
+                        <p className="text-sm text-muted-foreground">
+                          Candidate #
+                          {
+                            candidate.candidateId
+                          }
+                          {" · "}
+                          {
+                            candidate.party
+                          }
+                          {" · "}
+                          {
+                            candidate.location
+                          }
+                        </p>
+                      </div>
+                    ),
+                  )
+              }
+
+              <p className="text-xs text-muted-foreground">
+                Plaintext vote totals are not displayed before threshold finalization.
+              </p>
+            </CardContent>
+          </Card>
+        )
+      }
+
+      {
+        finalized &&
+        (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                Final Threshold-Verified Results
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              {
+                finalized
+                  .results
+                  .map(
+                    result => (
+                      <div
+                        key={
+                          result.slot
+                        }
+                        className="rounded-md border p-4 flex items-center justify-between gap-4"
+                      >
+                        <div>
+                          <p className="font-medium">
+                            {
+                              result.name
+                            }
+                          </p>
+
+                          <p className="text-sm text-muted-foreground">
+                            Candidate #
+                            {
+                              result.candidateId
+                            }
+                            {" · "}
+                            {
+                              result.party
+                            }
+                          </p>
+                        </div>
+
+                        <Badge variant="secondary">
+                          {
+                            result.votes
+                          }{" "}
+                          vote
+                          {
+                            result.votes ===
+                              "1"
+                              ? ""
+                              : "s"
+                          }
+                        </Badge>
+                      </div>
+                    ),
+                  )
+              }
+
+              <p className="text-xs text-muted-foreground">
+                WP6 transcript anchor:{" "}
+                <span className="font-mono break-all">
+                  {
+                    finalized
+                      .finalizationTranscriptHash
+                  }
+                </span>
+              </p>
+            </CardContent>
+          </Card>
+        )
+      }
+    </div>
+  )
+}

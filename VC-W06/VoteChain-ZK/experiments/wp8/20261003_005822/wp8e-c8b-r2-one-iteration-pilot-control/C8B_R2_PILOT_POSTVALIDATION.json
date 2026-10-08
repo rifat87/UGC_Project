@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "classification": "PILOT_ONLY_NOT_FINAL_BENCHMARK",
+  "rawRows": 1,
+  "receiptFiles": 1,
+  "iterationSummaries": 1,
+  "failureFiles": 0,
+  "freshChain": true,
+  "ballotId": "001",
+  "candidateIndex": 0,
+  "receiptStatus": 1,
+  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+  "gasUsed": 1866414,
+  "calldataBytes": 2340,
+  "latencyMs": 711.9691,
+  "acceptedBallotCount": 1,
+  "usedNullifier": true,
+  "phase": 1,
+  "tallySlotsChecked": 16,
+  "encryptedTallyMatch": true,
+  "receiptTrailingTextPresent": false,
+  "eligibleForFinalStatistics": false
+}

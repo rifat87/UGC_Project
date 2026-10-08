@@ -1,0 +1,20 @@
+{
+  "classification": "WP8D_B1_COMPATIBILITY_PILOT_ONLY",
+  "maxCandidates": 2,
+  "merkleDepth": 4,
+  "capacity": 16,
+  "candidateCount": 2,
+  "candidateSlot": 0,
+  "syntheticLeafIndex": 2,
+  "eligibleRoot": "10853397253315784390154867339463056463558168490883669898051657740612160313243",
+  "nullifier": "12038415776700636237757816434089708664398631440510754207941284637299025389849",
+  "witnessBytes": 355852,
+  "witnessSha256": "13ea70812ff3968851c6d9989ab181c9ec3ed669d124fd3ef30d65aa49e819ef",
+  "publicSignalCount": 17,
+  "proofCoordinateCount": 8,
+  "proofCoordinatePayloadBytes": 256,
+  "verified": true,
+  "privateInputPersisted": false,
+  "witnessPersisted": false,
+  "result": "PASS"
+}

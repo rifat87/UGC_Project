@@ -1,0 +1,54 @@
+[
+  {
+    "test": "Poseidon bootstrap reference",
+    "status": "PASS"
+  },
+  {
+    "test": "identity commitment determinism",
+    "status": "PASS"
+  },
+  {
+    "test": "election nullifier separation",
+    "status": "PASS"
+  },
+  {
+    "test": "Merkle valid membership",
+    "status": "PASS"
+  },
+  {
+    "test": "Merkle wrong leaf rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "Merkle wrong root rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "DKG commitments and no combined private key",
+    "status": "PASS"
+  },
+  {
+    "test": "ElGamal Enc(0)/Enc(1)",
+    "status": "PASS"
+  },
+  {
+    "test": "fresh randomness separation",
+    "status": "PASS"
+  },
+  {
+    "test": "homomorphic tally",
+    "status": "PASS"
+  },
+  {
+    "test": "insufficient threshold rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "valid partial decryption proof",
+    "status": "PASS"
+  },
+  {
+    "test": "tampered partial proof rejected",
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,81 @@
+========================================================================
+PACKAGE=snarkjs
+INSTALLED=YES
+VERSION=0.7.6
+MAIN=./build/main.cjs
+MODULE=./main.js
+BROWSER=null
+EXPORTS={".": {"browser": "./build/browser.esm.js", "node": {"import": "./main.js", "require": "./build/main.cjs"}, "umd": "./build/snarkjs.min.js"}}
+DEPENDENCIES={"@iden3/binfileutils": "0.0.12", "@noble/hashes": "^1.7.1", "bfj": "^7.0.2", "circom_runtime": "0.1.28", "ejs": "^3.1.6", "fastfile": "0.0.20", "ffjavascript": "0.3.1", "logplease": "^1.2.15", "r1csfile": "0.0.48"}
+========================================================================
+PACKAGE=bfj
+INSTALLED=YES
+VERSION=7.1.0
+MAIN=./src
+MODULE=None
+BROWSER=null
+EXPORTS=null
+DEPENDENCIES={"bluebird": "^3.7.2", "check-types": "^11.2.3", "hoopy": "^0.1.4", "jsonpath": "^1.1.1", "tryer": "^1.0.1"}
+========================================================================
+PACKAGE=jsonpath
+INSTALLED=YES
+VERSION=1.3.0
+MAIN=None
+MODULE=None
+BROWSER="./jsonpath.js"
+EXPORTS=null
+DEPENDENCIES={"esprima": "1.2.5", "static-eval": "2.1.1", "underscore": "1.13.6"}
+========================================================================
+PACKAGE=underscore
+INSTALLED=YES
+VERSION=1.13.6
+MAIN=underscore-umd.js
+MODULE=modules/index-all.js
+BROWSER=null
+EXPORTS={".": {"default": "./underscore-umd.js", "import": {"browser": {"default": "./underscore-esm.js", "production": "./underscore-esm-min.js"}, "default": "./underscore-esm.js", "module": "./modules/index-all.js", "node": "./underscore-node.mjs"}, "require": {"browser": {"default": "./underscore-umd.js", "production": "./underscore-umd-min.js"}, "default": "./underscore-umd.js", "module": "./modules/index-all.js", "node": "./underscore-node.cjs"}}, "./amd/*": "./amd/*", "./cjs/*": "./cjs/*", "./modules/*": {"default": "./modules/*", "require": "./cjs/*"}, "./package.json": "./package.json", "./underscore*": "./underscore*"}
+DEPENDENCIES={}
+========================================================================
+PACKAGE=ws
+INSTALLED=YES
+VERSION=8.18.0
+MAIN=index.js
+MODULE=None
+BROWSER="browser.js"
+EXPORTS={".": {"browser": "./browser.js", "import": "./wrapper.mjs", "require": "./index.js"}, "./package.json": "./package.json"}
+DEPENDENCIES={}
+========================================================================
+PACKAGE=circomlibjs
+INSTALLED=YES
+VERSION=0.1.7
+MAIN=./build/main.cjs
+MODULE=./main.js
+BROWSER=null
+EXPORTS={"import": "./main.js", "require": "./build/main.cjs"}
+DEPENDENCIES={"blake-hash": "^2.0.0", "blake2b": "^2.1.3", "ethers": "^5.5.1", "ffjavascript": "^0.2.45"}
+========================================================================
+PACKAGE=ethers
+INSTALLED=YES
+VERSION=6.17.0
+MAIN=./lib.commonjs/index.js
+MODULE=./lib.esm/index.js
+BROWSER={"./lib.esm/crypto/crypto.js": "./lib.esm/crypto/crypto-browser.js", "./lib.esm/providers/provider-ipcsocket.js": "./lib.esm/providers/provider-ipcsocket-browser.js", "./lib.esm/providers/ws.js": "./lib.esm/providers/ws-browser.js", "./lib.esm/utils/base64.js": "./lib.esm/utils/base64-browser.js", "./lib.esm/utils/geturl.js": "./lib.esm/utils/geturl-browser.js", "./lib.esm/wordlists/wordlists.js": "./lib.esm/wordlists/wordlists-browser.js"}
+EXPORTS={".": {"default": "./lib.commonjs/index.js", "import": "./lib.esm/index.js"}, "./abi": {"default": "./lib.commonjs/abi/index.js", "import": "./lib.esm/abi/index.js"}, "./address": {"default": "./lib.commonjs/address/index.js", "import": "./lib.esm/address/index.js"}, "./constants": {"default": "./lib.commonjs/constants/index.js", "import": "./lib.esm/constants/index.js"}, "./contract": {"default": "./lib.commonjs/contract/index.js", "import": "./lib.esm/contract/index.js"}, "./crypto": {"default": "./lib.commonjs/crypto/index.js", "import": "./lib.esm/crypto/index.js"}, "./hash": {"default": "./lib.commonjs/hash/index.js", "import": "./lib.esm/hash/index.js"}, "./providers": {"default": "./lib.commonjs/providers/index.js", "import": "./lib.esm/providers/index.js"}, "./transaction": {"default": "./lib.commonjs/transaction/index.js", "import": "./lib.esm/transaction/index.js"}, "./utils": {"default": "./lib.commonjs/utils/index.js", "import": "./lib.esm/utils/index.js"}, "./wallet": {"default": "./lib.commonjs/wallet/index.js", "import": "./lib.esm/wallet/index.js"}, "./wordlists": {"default": "./lib.commonjs/wordlists/index.js", "import": "./lib.esm/wordlists/index.js"}}
+DEPENDENCIES={"@adraffy/ens-normalize": "1.11.1", "@noble/curves": "1.2.0", "@noble/hashes": "1.3.2", "@types/node": "22.7.5", "aes-js": "4.0.0-beta.5", "tslib": "2.7.0", "ws": "8.21.0"}
+========================================================================
+PACKAGE=viem
+INSTALLED=YES
+VERSION=2.57.2
+MAIN=./_cjs/index.js
+MODULE=./_esm/index.js
+BROWSER=null
+EXPORTS={".": {"default": "./_cjs/index.js", "import": "./_esm/index.js", "types": "./_types/index.d.ts"}, "./account-abstraction": {"default": "./_cjs/account-abstraction/index.js", "import": "./_esm/account-abstraction/index.js", "types": "./_types/account-abstraction/index.d.ts"}, "./accounts": {"default": "./_cjs/accounts/index.js", "import": "./_esm/accounts/index.js", "types": "./_types/accounts/index.d.ts"}, "./actions": {"default": "./_cjs/actions/index.js", "import": "./_esm/actions/index.js", "types": "./_types/actions/index.d.ts"}, "./celo": {"default": "./_cjs/celo/index.js", "import": "./_esm/celo/index.js", "types": "./_types/celo/index.d.ts"}, "./chains": {"default": "./_cjs/chains/index.js", "import": "./_esm/chains/index.js", "types": "./_types/chains/index.d.ts"}, "./chains/utils": {"default": "./_cjs/chains/utils.js", "import": "./_esm/chains/utils.js", "types": "./_types/chains/utils.d.ts"}, "./ens": {"default": "./_cjs/ens/index.js", "import": "./_esm/ens/index.js", "types": "./_types/ens/index.d.ts"}, "./experimental": {"default": "./_cjs/experimental/index.js", "import": "./_esm/experimental/index.js", "types": "./_types/experimental/index.d.ts"}, "./experimental/erc7739": {"default": "./_cjs/experimental/erc7739/index.js", "import": "./_esm/experimental/erc7739/index.js", "types": "./_types/experimental/erc7739/index.d.ts"}, "./experimental/erc7811": {"default": "./_cjs/experimental/erc7811/index.js", "import": "./_esm/experimental/erc7811/index.js", "types": "./_types/experimental/erc7811/index.d.ts"}, "./experimental/erc7821": {"default": "./_cjs/experimental/erc7821/index.js", "import": "./_esm/experimental/erc7821/index.js", "types": "./_types/experimental/erc7821/index.d.ts"}, "./experimental/erc7846": {"default": "./_cjs/experimental/erc7846/index.js", "import": "./_esm/experimental/erc7846/index.js", "types": "./_types/experimental/erc7846/index.d.ts"}, "./experimental/erc7895": {"default": "./_cjs/experimental/erc7895/index.js", "import": "./_esm/experimental/erc7895/index.js", "types": "./_types/experimental/erc7895/index.d.ts"}, "./linea": {"default": "./_cjs/linea/index.js", "import": "./_esm/linea/index.js", "types": "./_types/linea/index.d.ts"}, "./node": {"default": "./_cjs/node/index.js", "import": "./_esm/node/index.js", "types": "./_types/node/index.d.ts"}, "./nonce": {"default": "./_cjs/nonce/index.js", "import": "./_esm/nonce/index.js", "types": "./_types/nonce/index.d.ts"}, "./op-stack": {"default": "./_cjs/op-stack/index.js", "import": "./_esm/op-stack/index.js", "types": "./_types/op-stack/index.d.ts"}, "./package.json": "./package.json", "./siwe": {"default": "./_cjs/siwe/index.js", "import": "./_esm/siwe/index.js", "types": "./_types/siwe/index.d.ts"}, "./tempo": {"default": "./_cjs/tempo/index.js", "import": "./_esm/tempo/index.js", "types": "./_types/tempo/index.d.ts"}, "./tempo/actions": {"default": "./_cjs/tempo/actions/index.js", "import": "./_esm/tempo/actions/index.js", "types": "./_types/tempo/actions/index.d.ts"}, "./tempo/chains": {"default": "./_cjs/tempo/chains/index.js", "import": "./_esm/tempo/chains/index.js", "types": "./_types/tempo/chains/index.d.ts"}, "./tokens": {"default": "./_cjs/tokens/index.js", "import": "./_esm/tokens/index.js", "types": "./_types/tokens/index.d.ts"}, "./utils": {"default": "./_cjs/utils/index.js", "import": "./_esm/utils/index.js", "types": "./_types/utils/index.d.ts"}, "./window": {"default": "./_cjs/window/index.js", "import": "./_esm/window/index.js", "types": "./_types/window/index.d.ts"}, "./zksync": {"default": "./_cjs/zksync/index.js", "import": "./_esm/zksync/index.js", "types": "./_types/zksync/index.d.ts"}}
+DEPENDENCIES={"@noble/curves": "1.9.1", "@noble/hashes": "1.8.0", "@scure/bip32": "1.7.0", "@scure/bip39": "1.6.0", "abitype": "1.2.3", "isows": "1.0.7", "ox": "0.14.45", "ws": "8.21.0"}
+========================================================================
+PACKAGE=wagmi
+INSTALLED=YES
+VERSION=2.19.5
+MAIN=./dist/esm/exports/index.js
+MODULE=None
+BROWSER=null
+EXPORTS={".": {"default": "./dist/esm/exports/index.js", "types": "./dist/types/exports/index.d.ts"}, "./actions": {"default": "./dist/esm/exports/actions.js", "types": "./dist/types/exports/actions.d.ts"}, "./actions/experimental": {"default": "./dist/esm/exports/actions/experimental.js", "types": "./dist/types/exports/actions/experimental.d.ts"}, "./chains": {"default": "./dist/esm/exports/chains.js", "types": "./dist/types/exports/chains.d.ts"}, "./codegen": {"default": "./dist/esm/exports/codegen.js", "types": "./dist/types/exports/codegen.d.ts"}, "./connectors": {"default": "./dist/esm/exports/connectors.js", "types": "./dist/types/exports/connectors.d.ts"}, "./experimental": {"default": "./dist/esm/exports/experimental.js", "types": "./dist/types/exports/experimental.d.ts"}, "./internal": {"default": "./dist/esm/exports/internal.js", "types": "./dist/types/exports/internal.d.ts"}, "./package.json": "./package.json", "./query": {"default": "./dist/esm/exports/query.js", "types": "./dist/types/exports/query.d.ts"}}
+DEPENDENCIES={"@wagmi/connectors": "6.2.0", "@wagmi/core": "2.22.1", "use-sync-external-store": "1.4.0"}

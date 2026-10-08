@@ -1,0 +1,27 @@
+{
+  "abortedRawRows": 457,
+  "abortedReceiptFiles": 458,
+  "v2ParsedReceiptFiles": 458,
+  "v2SuccessfulReceipts": 458,
+  "receiptFilesWithTrailingText": 1,
+  "pollutedReceipts": [
+    {
+      "path": "receipts/measured-r1-n50-e07/ballot-033.json",
+      "trailingBytes": 184,
+      "trailingPreview": "'\\n\\x1b[2m2026-10-02T16:21:40.335332Z\\x1b[0m \\x1b[31mERROR\\x1b[0m \\x1b[2malloy_rpc_client::poller\\x1b[0m\\x1b[2m:\\x1b[0m failed to poll \\x1b[3merr\\x1b[0m\\x1b[2m=\\x1b[0merror sending request for url (http://127.0.0.1:8557/)\\n'"
+    }
+  ],
+  "targetBallot033": {
+    "ok": true,
+    "txHash": "0x0eb6cf9e69ff6ee02f5fa50207c699c69e84247f4e0ed877b91af8027c280b32",
+    "gasUsed": 1307742,
+    "receiptStatus": "0x1",
+    "rawSha256": "7ee3da1259fac3efd7dd8b3ed7e874475f32a7d6274e286e78ed6cf44e88ae3b",
+    "trailingPresent": true
+  },
+  "abortedAcceptedVoteTransactions": 458,
+  "missingCommittedMeasurementRows": 1,
+  "missingMeasurementIdentity": "measured-r1-n50-e07 + ballot-033",
+  "missingLatencyReconstructed": false,
+  "abortedRunEligibleForFinalStats": false
+}

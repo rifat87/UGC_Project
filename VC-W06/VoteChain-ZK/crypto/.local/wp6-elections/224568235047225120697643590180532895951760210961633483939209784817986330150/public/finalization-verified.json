@@ -1,0 +1,40 @@
+{
+  "status": "PASS_WP6_FINALIZATION_TRANSCRIPT_VERIFY",
+  "totals": [
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "rejectedBySlot": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "transcriptHash": "ae287f8e0bf1c742b35dbc24f6641873c580b3b7a21809adf319acd019d61d3e"
+}

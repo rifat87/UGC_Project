@@ -1,0 +1,743 @@
+========================================================================
+KIND=manifest
+SYMBOL=D_MANIFEST
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp5-application-profile.json
+NUMBERS=0,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,253,36030358979909402780800718157159386076813972158567259200215660948447373040,8725646181372109278719673995639063952864499962493037230511085907915024360632
+36030358979909402780800718157159386076813972158567259200215660948447373040",
+    "scalarBits": 253,
+    "circuitPointRepresentation": "AFFINE_XY_CANONICAL_FIELD_ELEMENTS",
+    "evmSerialization": "DEFERRED_WP4_GAS_GATE"
+  },
+  "candidateManifest": {
+    "algorithm": "POSEIDON_INDEXED_CHAIN_V1",
+    "historicalWp3Wp4SyntheticAlgorithm": "POSEIDON_DOMAIN_PLUS_IDS_V1",
+    "oneShotK16Supported": false,
+    "oneShotK16Error": "Invalid poseidon size",
+    "indexBase": 0,
+    "lengthBound": "Poseidon(D_MANIFEST,candidateCount)",
+    "candidateIds16": [
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "107",
+      "108",
+      "109",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116"
+    ],
+    "manifest16": "8725646181372109278719673995639063952864499962493037230511085907915024360632"
+  },
+  "directArtifacts": {
+    "wp3Run": "20260930_170614",
+    "trustedSetup": "DEV_ONLY",
+    "wasmUrl": "/zk/wp5/direct/VoteChainVoteDirect.wa
+========================================================================
+KIND=manifest
+SYMBOL=D_MANIFEST
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs
+NUMBERS=0,1
+
+    await buildBabyjub();
+
+const poseidon =
+    await buildPoseidon();
+
+const PF =
+    poseidon.F;
+
+const BF =
+    babyjub.F;
+
+const MAX =
+    profile.maxCandidates;
+
+const DEPTH =
+    profile.merkleDepth;
+
+const D_ID =
+    BigInt(
+        profile.domains.identity
+    );
+
+const D_NULL =
+    BigInt(
+        profile.domains.nullifier
+    );
+
+const D_CTX =
+    BigInt(
+        profile.domains.electionContext
+    );
+
+const D_BIND =
+    BigInt(
+        profile.domains.ciphertextBinding
+    );
+
+const D_MANIFEST =
+    BigInt(
+        profile.domains.candidateManifest
+    );
+
+const SUBORDER =
+    BigInt(
+        profile.babyjub.subOrder
+    );
+
+function h(values) {
+    return PF.toObject(
+        poseidon(
+            values.map(
+                v => BigInt(v)
+            )
+        )
+    );
+}
+
+function pointBig(P) {
+    return [
+        BF.toObject(P[0]),
+        BF.toObject(P[1])
+    ];
+}
+
+function pointString(P) {
+    const p =
+        pointBig(P);
+
+    return [
+        p[0].toString(),
+        p[1].t
+========================================================================
+KIND=manifest
+SYMBOL=D_MANIFEST
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-build-vectors.mjs
+NUMBERS=0,1,2,4,101,102,103,104,1001,202609300001,42424242424242
+               : value,
+            2
+        ) + "\n"
+    );
+}
+
+function clone(x) {
+    return structuredClone(x);
+}
+
+function plusOne(x) {
+    return (
+        BigInt(x) + 1n
+    ).toString();
+}
+
+const secret =
+    42424242424242n;
+
+const electionId =
+    202609300001n;
+
+const candidateCount =
+    4n;
+
+const contractDomain =
+    BigInt(
+        profile.testContractDomain
+    );
+
+const candidateIds = [
+    101n,
+    102n,
+    103n,
+    104n
+];
+
+const manifestHash =
+    h(
+        [
+            D_MANIFEST,
+            ...candidateIds
+        ]
+    );
+
+const bits =
+    Array.from(
+        {
+            length: MAX
+        },
+        (
+            _,
+            i
+        ) =>
+            i === 1
+                ? 1n
+                : 0n
+    );
+
+const randomness =
+    Array.from(
+        {
+            length: MAX
+        },
+        (
+            _,
+            i
+        ) =>
+            1001n +
+            BigInt(i)
+    );
+
+const identityCommitment =
+    h(
+        [
+            D_ID,
+            
+========================================================================
+KIND=electionContext
+SYMBOL=DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs
+NUMBERS=0,2
+ = `pragma circom 2.2.0;
+
+/*
+ * AUTO-GENERATED FROM:
+ *   crypto/config/wp3-build-profile.json
+ *
+ * VoteChain-ZK WP3 authoritative compile-time registry.
+ *
+ * Domain constants are:
+ *   SHA256(UTF8(label)) mod BN254_Fr
+ */
+
+function VC_MAX_CANDIDATES() {
+    return ${profile.maxCandidates};
+}
+
+function VC_MERKLE_DEPTH() {
+    return ${profile.merkleDepth};
+}
+
+function VC_DOMAIN_IDENTITY() {
+    return ${d.identity};
+}
+
+function VC_DOMAIN_NULLIFIER() {
+    return ${d.nullifier};
+}
+
+function VC_DOMAIN_ELECTION_CONTEXT() {
+    return ${d.electionContext};
+}
+
+function VC_DOMAIN_CIPHERTEXT_BINDING() {
+    return ${d.ciphertextBinding};
+}
+
+function VC_DOMAIN_CANDIDATE_MANIFEST() {
+    return ${d.candidateManifest};
+}
+
+function VC_BABYJUB_BASE8_X() {
+    return ${b.base8X};
+}
+
+function VC_BABYJUB_BASE8_Y() {
+    return ${b.base8Y};
+}
+
+function VC_BABYJUB_SUBORDER() {
+    return ${b.subOrder};
+}
+
+function VC_BABYJUB_SUBORDER_MINUS_ONE() {
+    return ${b.subOrderMinusOne};
+}
+`;
+
+fs.writeFileSync(
+    circomPath,
+  
+========================================================================
+KIND=electionContext
+SYMBOL=VC_DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs
+NUMBERS=0,2
+com = `pragma circom 2.2.0;
+
+/*
+ * AUTO-GENERATED FROM:
+ *   crypto/config/wp3-build-profile.json
+ *
+ * VoteChain-ZK WP3 authoritative compile-time registry.
+ *
+ * Domain constants are:
+ *   SHA256(UTF8(label)) mod BN254_Fr
+ */
+
+function VC_MAX_CANDIDATES() {
+    return ${profile.maxCandidates};
+}
+
+function VC_MERKLE_DEPTH() {
+    return ${profile.merkleDepth};
+}
+
+function VC_DOMAIN_IDENTITY() {
+    return ${d.identity};
+}
+
+function VC_DOMAIN_NULLIFIER() {
+    return ${d.nullifier};
+}
+
+function VC_DOMAIN_ELECTION_CONTEXT() {
+    return ${d.electionContext};
+}
+
+function VC_DOMAIN_CIPHERTEXT_BINDING() {
+    return ${d.ciphertextBinding};
+}
+
+function VC_DOMAIN_CANDIDATE_MANIFEST() {
+    return ${d.candidateManifest};
+}
+
+function VC_BABYJUB_BASE8_X() {
+    return ${b.base8X};
+}
+
+function VC_BABYJUB_BASE8_Y() {
+    return ${b.base8Y};
+}
+
+function VC_BABYJUB_SUBORDER() {
+    return ${b.subOrder};
+}
+
+function VC_BABYJUB_SUBORDER_MINUS_ONE() {
+    return ${b.subOrderMinusOne};
+}
+`;
+
+fs.writeFileSync(
+    circomPath,
+  
+========================================================================
+KIND=manifest
+SYMBOL=D_MANIFEST
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs
+NUMBERS=0,1,16,17
+buildPoseidon();
+
+const BF = babyjub.F;
+const PF = poseidon.F;
+
+const MAX =
+    profile.maxCandidates;
+
+const DEPTH =
+    profile.merkleDepth;
+
+if (MAX !== 16 || DEPTH !== 17) {
+    throw new Error(
+        "WP4 expects frozen WP3 profile K=16/depth=17"
+    );
+}
+
+const D_ID =
+    BigInt(profile.domains.identity);
+
+const D_NULL =
+    BigInt(profile.domains.nullifier);
+
+const D_CTX =
+    BigInt(profile.domains.electionContext);
+
+const D_BIND =
+    BigInt(profile.domains.ciphertextBinding);
+
+const D_MANIFEST =
+    BigInt(profile.domains.candidateManifest);
+
+function H(values) {
+    return PF.toObject(
+        poseidon(
+            values.map(BigInt)
+        )
+    );
+}
+
+function pointBig(P) {
+    return [
+        BF.toObject(P[0]),
+        BF.toObject(P[1])
+    ];
+}
+
+function writeJson(file, value) {
+    fs.mkdirSync(
+        path.dirname(file),
+        { recursive: true }
+    );
+
+    fs.writeFileSync(
+        file,
+        JSON.stringify(
+            value,
+            (_, x) =>
+                typ
+========================================================================
+KIND=manifest
+SYMBOL=D_MANIFEST
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs
+NUMBERS=0,1,4,101,102,103,104,123456789,202609300001
+
+if (
+    recomputeRoot(
+        idA,
+        siblingsA,
+        pathA
+    ) !== sharedRoot
+) {
+    throw new Error(
+        "voter A Merkle path mismatch"
+    );
+}
+
+if (
+    recomputeRoot(
+        idB,
+        siblingsB,
+        pathB
+    ) !== sharedRoot
+) {
+    throw new Error(
+        "voter B Merkle path mismatch"
+    );
+}
+
+const electionId =
+    202609300001n;
+
+const candidateCount =
+    4n;
+
+const candidateIds =
+    [101n, 102n, 103n, 104n];
+
+const candidateManifestHash =
+    H([
+        D_MANIFEST,
+        ...candidateIds
+    ]);
+
+const contractDomain =
+    BigInt(
+        profile.testContractDomain
+    );
+
+const electionSecretKey =
+    123456789n;
+
+const Y =
+    babyjub.mulPointEscalar(
+        babyjub.Base8,
+        electionSecretKey
+    );
+
+const Yxy =
+    pointBig(Y);
+
+const electionContextHash =
+    H([
+        D_CTX,
+        electionId,
+        candidateManifestHash,
+        candidateCount,
+        contractDomain,
+        Yxy[0],
+        Yxy[1]
+    ]);
+
+const identityPoint = [
+    
+========================================================================
+KIND=electionContext
+SYMBOL=DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom
+NUMBERS=16,17,4784106652413558587724286788315853598751113888294269658302998980512237578693,5299619240641551281634865583518297030282874472190772894086521144482721001553,10304592805145852052914897443128100987694469729912842507111180023223117126083,10453404237957698720657045535443762146790887818934613735227294786620760799811,14324722980020043862268597353745221880876054874966425232640820492390099498617,19125745417040834467958581383394473365054202296533443463458738476729992215493
+file.json
+ *
+ * VoteChain-ZK WP3 authoritative compile-time registry.
+ *
+ * Domain constants are:
+ *   SHA256(UTF8(label)) mod BN254_Fr
+ */
+
+function VC_MAX_CANDIDATES() {
+    return 16;
+}
+
+function VC_MERKLE_DEPTH() {
+    return 17;
+}
+
+function VC_DOMAIN_IDENTITY() {
+    return 10304592805145852052914897443128100987694469729912842507111180023223117126083;
+}
+
+function VC_DOMAIN_NULLIFIER() {
+    return 10453404237957698720657045535443762146790887818934613735227294786620760799811;
+}
+
+function VC_DOMAIN_ELECTION_CONTEXT() {
+    return 14324722980020043862268597353745221880876054874966425232640820492390099498617;
+}
+
+function VC_DOMAIN_CIPHERTEXT_BINDING() {
+    return 19125745417040834467958581383394473365054202296533443463458738476729992215493;
+}
+
+function VC_DOMAIN_CANDIDATE_MANIFEST() {
+    return 4784106652413558587724286788315853598751113888294269658302998980512237578693;
+}
+
+function VC_BABYJUB_BASE8_X() {
+    return 5299619240641551281634865583518297030282874472190772894086521144482721001553;
+}
+
+function 
+========================================================================
+KIND=electionContext
+SYMBOL=VC_DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom
+NUMBERS=16,17,4784106652413558587724286788315853598751113888294269658302998980512237578693,5299619240641551281634865583518297030282874472190772894086521144482721001553,10304592805145852052914897443128100987694469729912842507111180023223117126083,10453404237957698720657045535443762146790887818934613735227294786620760799811,14324722980020043862268597353745221880876054874966425232640820492390099498617,19125745417040834467958581383394473365054202296533443463458738476729992215493
+profile.json
+ *
+ * VoteChain-ZK WP3 authoritative compile-time registry.
+ *
+ * Domain constants are:
+ *   SHA256(UTF8(label)) mod BN254_Fr
+ */
+
+function VC_MAX_CANDIDATES() {
+    return 16;
+}
+
+function VC_MERKLE_DEPTH() {
+    return 17;
+}
+
+function VC_DOMAIN_IDENTITY() {
+    return 10304592805145852052914897443128100987694469729912842507111180023223117126083;
+}
+
+function VC_DOMAIN_NULLIFIER() {
+    return 10453404237957698720657045535443762146790887818934613735227294786620760799811;
+}
+
+function VC_DOMAIN_ELECTION_CONTEXT() {
+    return 14324722980020043862268597353745221880876054874966425232640820492390099498617;
+}
+
+function VC_DOMAIN_CIPHERTEXT_BINDING() {
+    return 19125745417040834467958581383394473365054202296533443463458738476729992215493;
+}
+
+function VC_DOMAIN_CANDIDATE_MANIFEST() {
+    return 4784106652413558587724286788315853598751113888294269658302998980512237578693;
+}
+
+function VC_BABYJUB_BASE8_X() {
+    return 5299619240641551281634865583518297030282874472190772894086521144482721001553;
+}
+
+function 
+========================================================================
+KIND=electionContext
+SYMBOL=DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+NUMBERS=0,1,2,3,4,7
+     eligibleRoot;
+
+    /*
+     * Election-scoped nullifier =
+     * Poseidon(
+     *   DOMAIN_NULLIFIER,
+     *   secret,
+     *   electionId
+     * )
+     */
+    component nullifierHash =
+        Poseidon(3);
+
+    nullifierHash.inputs[0] <==
+        VC_DOMAIN_NULLIFIER();
+
+    nullifierHash.inputs[1] <==
+        secret;
+
+    nullifierHash.inputs[2] <==
+        electionId;
+
+    nullifierHash.out ===
+        nullifier;
+
+    /*
+     * Bind election configuration:
+     *
+     * Poseidon(
+     *   DOMAIN_ELECTION_CONTEXT,
+     *   electionId,
+     *   candidateManifestHash,
+     *   candidateCount,
+     *   contractDomain,
+     *   Yx,
+     *   Yy
+     * )
+     */
+    component electionContext =
+        Poseidon(7);
+
+    electionContext.inputs[0] <==
+        VC_DOMAIN_ELECTION_CONTEXT();
+
+    electionContext.inputs[1] <==
+        electionId;
+
+    electionContext.inputs[2] <==
+        candidateManifestHash;
+
+    electionContext.inputs[3] <==
+        candidateCount;
+
+    electionContext.inputs[4] <==
+        cont
+========================================================================
+KIND=electionContext
+SYMBOL=DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+NUMBERS=0,1,2,3,4,5,6,7,16
+ER();
+
+    nullifierHash.inputs[1] <==
+        secret;
+
+    nullifierHash.inputs[2] <==
+        electionId;
+
+    nullifierHash.out ===
+        nullifier;
+
+    /*
+     * Bind election configuration:
+     *
+     * Poseidon(
+     *   DOMAIN_ELECTION_CONTEXT,
+     *   electionId,
+     *   candidateManifestHash,
+     *   candidateCount,
+     *   contractDomain,
+     *   Yx,
+     *   Yy
+     * )
+     */
+    component electionContext =
+        Poseidon(7);
+
+    electionContext.inputs[0] <==
+        VC_DOMAIN_ELECTION_CONTEXT();
+
+    electionContext.inputs[1] <==
+        electionId;
+
+    electionContext.inputs[2] <==
+        candidateManifestHash;
+
+    electionContext.inputs[3] <==
+        candidateCount;
+
+    electionContext.inputs[4] <==
+        contractDomain;
+
+    electionContext.inputs[5] <==
+        Yx;
+
+    electionContext.inputs[6] <==
+        Yy;
+
+    electionContext.out ===
+        electionContextHash;
+
+    /*
+     * candidateCount:
+     *   1 <= candidateCount <= 16
+     */
+    component candidateCountBit
+========================================================================
+KIND=electionContext
+SYMBOL=VC_DOMAIN_ELECTION_CONTEXT
+FILE=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+NUMBERS=0,1,2,3,4,5,6,7,16
+IFIER();
+
+    nullifierHash.inputs[1] <==
+        secret;
+
+    nullifierHash.inputs[2] <==
+        electionId;
+
+    nullifierHash.out ===
+        nullifier;
+
+    /*
+     * Bind election configuration:
+     *
+     * Poseidon(
+     *   DOMAIN_ELECTION_CONTEXT,
+     *   electionId,
+     *   candidateManifestHash,
+     *   candidateCount,
+     *   contractDomain,
+     *   Yx,
+     *   Yy
+     * )
+     */
+    component electionContext =
+        Poseidon(7);
+
+    electionContext.inputs[0] <==
+        VC_DOMAIN_ELECTION_CONTEXT();
+
+    electionContext.inputs[1] <==
+        electionId;
+
+    electionContext.inputs[2] <==
+        candidateManifestHash;
+
+    electionContext.inputs[3] <==
+        candidateCount;
+
+    electionContext.inputs[4] <==
+        contractDomain;
+
+    electionContext.inputs[5] <==
+        Yx;
+
+    electionContext.inputs[6] <==
+        Yy;
+
+    electionContext.out ===
+        electionContextHash;
+
+    /*
+     * candidateCount:
+     *   1 <= candidateCount <= 16
+     */
+    component candidateCountBit

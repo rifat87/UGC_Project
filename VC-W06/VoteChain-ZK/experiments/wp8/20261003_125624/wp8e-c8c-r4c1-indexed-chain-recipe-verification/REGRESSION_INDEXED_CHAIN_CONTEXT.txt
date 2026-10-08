@@ -1,0 +1,518 @@
+57-    .digest("hex")
+58-}
+59-
+60-function jsonWrite(file, value) {
+61-  fs.mkdirSync(
+62-    path.dirname(file),
+63-    { recursive: true },
+64-  )
+65-
+66-  fs.writeFileSync(
+67-    file,
+68-    JSON.stringify(
+69-      value,
+70-      (_key, item) =>
+71-        typeof item === "bigint"
+72-          ? item.toString()
+73-          : item,
+74-      2,
+75-    ) + "\n",
+76-  )
+77-}
+78-
+79-const profile =
+80-  readJson(profilePath)
+81-
+82-const poseidon =
+83-  await buildPoseidon()
+84-
+85-const PF =
+86-  poseidon.F
+87-
+88-function H(values) {
+89-  return BigInt(
+90-    PF.toObject(
+91-      poseidon(
+92-        values.map(
+93-          (value) => BigInt(value),
+94-        ),
+95-      ),
+96-    ),
+97-  )
+98-}
+99-
+100-const D_MANIFEST =
+101-  BigInt(
+102:    profile.domains.candidateManifest,
+103-  )
+104-
+105-const D_CTX =
+106-  BigInt(
+107-    profile.domains.electionContext,
+108-  )
+109-
+110-const candidateIds4 = [
+111-  101n,
+112-  102n,
+113-  103n,
+114-  104n,
+115-]
+116-
+117:const candidateIds16 =
+118-  Array.from(
+119-    { length: 16 },
+120-    (_value, index) =>
+121-      101n + BigInt(index),
+122-  )
+123-
+124-/*
+125- * First establish that the historical WP3/WP4
+126- * four-candidate vector really uses:
+127- *
+128- * Poseidon(
+129- *   D_MANIFEST,
+130- *   candidateId[0],
+131- *   ...
+132- * )
+133- */
+134-const vectorRoot =
+135-  path.join(
+136-    root,
+137-    "crypto",
+138-    "vectors",
+139-    "wp3",
+140-  )
+141-
+142-const vectorRuns =
+143-  fs.readdirSync(vectorRoot)
+144-    .filter((name) =>
+145-      fs.existsSync(
+146-        path.join(
+147-          vectorRoot,
+148-          name,
+149-          "direct",
+150-          "valid.json",
+151-        ),
+152-      ),
+153-    )
+154-    .sort()
+155-
+156-if (vectorRuns.length === 0) {
+157-  throw new Error(
+158-    "No WP3 DIRECT valid vector found",
+159-  )
+160-}
+161-
+162-const vectorRun =
+163-  vectorRuns[vectorRuns.length - 1]
+164-
+165-const baseVectorPath =
+166-  path.join(
+167-    vectorRoot,
+168-    vectorRun,
+169-    "direct",
+170-    "valid.json",
+171-  )
+172-
+173-const base =
+174-  readJson(baseVectorPath)
+175-
+176-const historicalManifest4 =
+177-  H([
+178-    D_MANIFEST,
+179-    ...candidateIds4,
+180-  ])
+181-
+182-if (
+183-  historicalManifest4.toString() !==
+184:  String(base.candidateManifestHash)
+185-) {
+186-  throw new Error(
+187-    "WP3 known-answer manifest formula mismatch",
+188-  )
+189-}
+190-
+191-console.log(
+192-  "WP3_FOUR_CANDIDATE_MANIFEST_KAT=PASS",
+193-)
+194-
+195-/*
+196- * Test whether the same one-shot construction
+197- * is representable at the declared K=16.
+198- *
+199- * Domain + 16 candidate IDs = 17 inputs.
+200- */
+201-let oneShotK16Supported = false
+202-let oneShotK16Error = null
+203-let oneShotK16Value = null
+204-
+205-try {
+206-  oneShotK16Value =
+207-    H([
+208-      D_MANIFEST,
+209:      ...candidateIds16,
+210-    ])
+211-
+212-  oneShotK16Supported = true
+213-} catch (error) {
+214-  oneShotK16Error =
+215-    error instanceof Error
+216-      ? error.message
+217-      : String(error)
+218-}
+219-
+220-console.log(
+221-  `ONE_SHOT_K16_SUPPORTED=${
+222-    oneShotK16Supported ? "YES" : "NO"
+223-  }`,
+224-)
+225-
+226-/*
+227- * Freeze the closest compatible algorithm:
+228- *
+229- * A. If one-shot supports K=16, retain the exact
+230- *    WP3/WP4 construction.
+231- *
+232- * B. Otherwise use one indexed Poseidon chain:
+233- *
+234- *    state0 = Poseidon(D_MANIFEST, candidateCount)
+235- *    state(i+1) = Poseidon(state(i), i, candidateId[i])
+236- *
+237- * This remains an opaque public manifest hash to the
+238- * already-frozen circuit/verifier. No circuit constraints
+239- * or trusted setup change.
+240- */
+241-const manifestAlgorithm =
+242-  oneShotK16Supported
+243-    ? "POSEIDON_DOMAIN_PLUS_IDS_V1"
+244:    : "POSEIDON_INDEXED_CHAIN_V1"
+245-
+246-async function canonicalManifest(candidateIds) {
+247-  const ids =
+248-    candidateIds.map(
+249-      (value) => BigInt(value),
+250-    )
+251-
+252-  if (
+253-    ids.length < 1 ||
+254-    ids.length >
+255-      Number(profile.maxCandidates)
+256-  ) {
+257-    throw new Error(
+258-      "Candidate manifest length out of range",
+259-    )
+260-  }
+261-
+262-  if (
+263-    manifestAlgorithm ===
+264-    "POSEIDON_DOMAIN_PLUS_IDS_V1"
+265-  ) {
+266-    return H([
+267-      D_MANIFEST,
+268-      ...ids,
+269-    ])
+270-  }
+271-
+272-  let state =
+273-    H([
+274-      D_MANIFEST,
+275-      BigInt(ids.length),
+276-    ])
+277-
+278-  for (
+279-    let index = 0;
+280-    index < ids.length;
+281-    index += 1
+282-  ) {
+283-    state =
+284-      H([
+285-        state,
+286-        BigInt(index),
+287-        ids[index],
+288-      ])
+289-  }
+290-
+291-  return state
+292-}
+293-
+294:const manifest16 =
+295-  await canonicalManifest(
+296:    candidateIds16,
+297-  )
+298-
+299-const input16 =
+300-  structuredClone(base)
+301-
+302-input16.candidateCount =
+303-  "16"
+304-
+305:input16.candidateManifestHash =
+306:  manifest16.toString()
+307-
+308-input16.electionContextHash =
+309-  H([
+310-    D_CTX,
+311-    BigInt(input16.electionId),
+312:    manifest16,
+313-    16n,
+314-    BigInt(input16.contractDomain),
+315-    BigInt(input16.Yx),
+316-    BigInt(input16.Yy),
+317-  ]).toString()
+318-
+319-const proofStart =
+320-  performance.now()
+321-
+322-const {
+323-  proof,
+324-  publicSignals,
+325-} =
+326-  await groth16.fullProve(
+327-    input16,
+328-    wasmPath,
+329-    zkeyPath,
+330-  )
+331-
+332-const proofMs =
+333-  performance.now() -
+334-  proofStart
+335-
+336-const vkey =
+337-  readJson(vkeyPath)
+338-
+339-const verified =
+340-  await groth16.verify(
+341-    vkey,
+342-    publicSignals,
+343-    proof,
+344-  )
+345-
+346-if (!verified) {
+347-  throw new Error(
+348-    "K16 WP5 compatibility proof did not verify",
+349-  )
+350-}
+351-
+352-if (
+353-  !Array.isArray(publicSignals) ||
+354-  publicSignals.length !== 73
+355-) {
+356-  throw new Error(
+357-    `Expected 73 DIRECT public signals, got ${
+358-      publicSignals?.length
+359-    }`,
+360-  )
+361-}
+362-
+363-const expectedFixed = [
+364-  input16.eligibleRoot,
+365-  input16.electionId,
+366:  input16.candidateManifestHash,
+367-  input16.candidateCount,
+368-  input16.contractDomain,
+369-  input16.Yx,
+370-  input16.Yy,
+371-  input16.electionContextHash,
+372-  input16.nullifier,
+373-].map(String)
+374-
+375-for (
+376-  let index = 0;
+377-  index < expectedFixed.length;
+378-  index += 1
+379-) {
+380-  if (
+381-    String(publicSignals[index]) !==
+382-    expectedFixed[index]
+383-  ) {
+384-    throw new Error(
+385-      `DIRECT public signal mismatch at ${index}`,
+386-    )
+387-  }
+388-}
+389-
+390-console.log(
+391-  "WP5_K16_DIRECT_REAL_GROTH16=PASS",
+392-)
+393-
+394-console.log(
+395-  "WP5_K16_DIRECT_PUBLIC_SIGNALS=73",
+396-)
+397-
+398-const artifactHashes = {
+399-  wasm: sha256(wasmPath),
+400-  zkey: sha256(zkeyPath),
+401-  vkey: sha256(vkeyPath),
+402-  verifier: sha256(verifierPath),
+403-}
+404-
+405-const appProfile = {
+406-  profile:
+407-    "VoteChain-ZK-WP5-Application-v1",
+408-
+409-  inheritedWp3Profile:
+410-    profile.profile,
+411-
+412-  maxCandidates:
+413-    Number(profile.maxCandidates),
+414-
+415-  merkleDepth:
+416-    Number(profile.merkleDepth),
+417-
+418-  eligibleCapacity:
+419-    Number(profile.eligibleCapacity),
+420-
+421-  fieldModulus:
+422-    String(profile.fieldModulus),
+423-
+424-  domains:
+425-    profile.domains,
+426-
+427-  babyjub:
+428-    profile.babyjub,
+429-
+430:  candidateManifest: {
+431-    algorithm:
+432-      manifestAlgorithm,
+433-
+434-    historicalWp3Wp4SyntheticAlgorithm:
+435-      "POSEIDON_DOMAIN_PLUS_IDS_V1",
+436-
+437-    oneShotK16Supported,
+438-
+439-    oneShotK16Error,
+440-
+441-    indexBase:
+442-      manifestAlgorithm ===
+443:      "POSEIDON_INDEXED_CHAIN_V1"
+444-        ? 0
+445-        : null,
+446-
+447-    lengthBound:
+448-      manifestAlgorithm ===
+449:      "POSEIDON_INDEXED_CHAIN_V1"
+450-        ? "Poseidon(D_MANIFEST,candidateCount)"
+451-        : "Implicit in Poseidon input vector",
+452-
+453:    candidateIds16:
+454:      candidateIds16.map(String),
+455-
+456:    manifest16:
+457:      manifest16.toString(),
+458-  },
+459-
+460-  directArtifacts: {
+461-    wp3Run:
+462-      "20260930_170614",
+463-
+464-    trustedSetup:
+465-      "DEV_ONLY",
+466-
+467-    wasmUrl:
+468-      "/zk/wp5/direct/VoteChainVoteDirect.wasm",
+469-
+470-    zkeyUrl:
+471-      "/zk/wp5/direct/VoteChainVoteDirect_final.zkey",
+472-
+473-    verificationKeyUrl:
+474-      "/zk/wp5/direct/verification_key.json",
+475-
+476-    sha256:
+477-      artifactHashes,
+478-  },
+479-}
+480-
+481-const appProfilePath =
+482-  path.join(
+483-    root,
+484-    "crypto",
+485-    "config",
+486-    "wp5-application-profile.json",
+487-  )
+488-
+489-jsonWrite(
+490-  appProfilePath,
+491-  appProfile,
+492-)
+493-
+494-jsonWrite(
+495-  path.join(
+496-    evidenceDir,
+497-    "wp5b-k16-input.json",
+498-  ),
+499-  input16,
+500-)
+501-
+502-jsonWrite(
+503-  path.join(
+504-    evidenceDir,
+505-    "wp5b-k16-proof.json",
+506-  ),
+507-  proof,
+508-)
+509-
+510-jsonWrite(
+511-  path.join(
+512-    evidenceDir,
+513-    "wp5b-k16-public.json",
+514-  ),
+515-  publicSignals,
+516-)
+517-
+518-const report = {
+519-  status:
+520-    "PASS",
+521-
+522-  vectorRun,
+523-
+524-  baseVectorPath,
+525-
+526-  wp3FourCandidateManifestKat:
+527-    true,
+528-
+529-  oneShotK16Supported,
+530-
+531-  oneShotK16Error,
+532-
+533-  oneShotK16Value,
+534-
+535-  manifestAlgorithm,
+536-
+537-  canonicalManifest16:
+538:    manifest16,
+539-
+540-  k16Groth16Verify:
+541-    verified,
+542-
+543-  k16PublicSignalCount:
+544-    publicSignals.length,
+545-
+546-  k16ProofMs:
+547-    proofMs,
+548-
+549-  artifactHashes,
+550-
+551-  trustedSetup:
+552-    "DEV_ONLY",
+553-}
+554-
+555-jsonWrite(
+556-  path.join(
+557-    evidenceDir,
+558-    "wp5b-compatibility-report.json",
+559-  ),
+560-  report,
+561-)
+562-
+563-console.log(
+564-  `WP5_MANIFEST_ALGORITHM=${manifestAlgorithm}`,
+565-)
+566-
+567-console.log(
+568-  `WP5_COMPATIBILITY_REPORT=${
+569-    path.join(
+570-      evidenceDir,
+571-      "wp5b-compatibility-report.json",
+572-    )
+573-  }`,
+574-)

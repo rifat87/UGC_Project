@@ -1,0 +1,32 @@
+WP8E C8C-R7A3 DEPLOYMENT JSON PARSER POLICY
+===========================================
+
+Observed C8B deployment artifacts may contain:
+
+1. one valid leading JSON object emitted by forge create;
+2. optional trailing non-JSON diagnostic text.
+
+Therefore deployment output MUST be parsed as:
+
+JSONDecoder.raw_decode(first top-level JSON object)
+
+and the remaining trailing bytes MUST be preserved separately as diagnostic
+evidence.
+
+Required deployment fields are read only from the first JSON object:
+
+deployer
+deployedTo
+transactionHash
+
+The parser MUST NOT:
+
+- discard the deployment JSON because trailing diagnostics exist;
+- concatenate diagnostics into JSON;
+- infer an address from free-form diagnostic text;
+- silently rewrite the original artifact.
+
+Receipt files remain strict JSON and are parsed with ordinary json.loads.
+
+This is a harness parsing rule only. It does not alter Solidity, verifier,
+circuit, proof, benchmark semantics, transaction semantics, or measurements.

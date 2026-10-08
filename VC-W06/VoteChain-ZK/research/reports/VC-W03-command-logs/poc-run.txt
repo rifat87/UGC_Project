@@ -1,0 +1,9 @@
+file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:15
+    throw new Error(
+          ^
+
+Error: Semaphore V4 runtime is not installed. Run "npm run setup:zk" first. Original error: Cannot find module '/mnt/data/vc-w03-work/VoteChain/.zk-deps/node_modules/@semaphore-protocol/core/src/index.js' imported from /mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs
+    at loadRuntime (file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:15:11)
+    at async file:///mnt/data/vc-w03-work/VoteChain/research/zkp/poc/semaphore-poc.mjs:32:17
+
+Node.js v22.16.0

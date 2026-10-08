@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "checks": {
+    "recipePass": true,
+    "profileCount4": true,
+    "profileLevelsExact": true,
+    "depth17All": true,
+    "capacity131072All": true,
+    "selectedIndex0All": true,
+    "pathLength17All": true,
+    "candidateCount16All": true,
+    "fixturesNotGenerated": true,
+    "controlledContractPass": true,
+    "variableInputFieldsExact": true,
+    "measurementReportsNAndDepth": true,
+    "noOnchainScope": true,
+    "pilotRequired": true
+  },
+  "fixtureGenerationStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "benchmarkTimingStarted": false,
+  "onchainExecutionStarted": false
+}

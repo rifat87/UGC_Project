@@ -1,0 +1,144 @@
+WP8E C6C INSTRUMENTATION AMENDMENT V2
+=====================================
+
+CLASSIFICATION
+--------------
+Prospective measurement-harness correction after an aborted final campaign.
+
+This amendment does NOT change:
+  - VoteChain Solidity,
+  - generated verifier,
+  - Circom circuit,
+  - R1CS/WASM/zkey/vkey,
+  - C2 inputs,
+  - C4 proofs,
+  - RPC fixtures,
+  - tally checkpoints,
+  - scale matrix,
+  - repetition counts,
+  - campaign ordering,
+  - measured metrics,
+  - warm-up policy,
+  - outlier policy,
+  - correctness gates.
+
+ABORTED CAMPAIGN
+----------------
+Run:
+  20261002_221508
+
+The campaign is permanently classified as:
+  ABORTED_INSTRUMENTATION_RUN_NOT_FINAL_BENCHMARK_DATA
+
+It must not be resumed and must not be pooled into the final benchmark.
+
+FORENSIC FACTS
+--------------
+The aborted run preserved:
+  457 rows in raw-transactions.tsv
+  458 vote receipt files
+
+Failure occurred at:
+  repetition = measured-r1-n50-e07
+  ballot = 033
+
+The ballot-033 receipt file contains:
+  - one valid top-level JSON receipt object,
+  - receipt status 0x1,
+  - a successful transaction hash,
+  - gasUsed 0x13f45e,
+  - then non-JSON ANSI/logging text emitted after the JSON object.
+
+The appended text was an alloy_rpc_client::poller ERROR line.
+
+Therefore the transaction itself succeeded, but the V1 measurement runner
+failed while parsing cast stdout with json.loads(), because json.loads()
+requires the entire text to contain exactly one JSON document.
+
+The failing ballot's wall-clock latency was measured in process memory before
+parsing, but was never committed to raw-transactions.tsv.
+
+That latency MUST NOT be reconstructed, estimated, imputed, or inferred.
+
+The aborted campaign remains excluded in full from final statistics.
+
+TRANSACTION COUNT INTERPRETATION
+--------------------------------
+The aborted campaign produced 458 preserved successful vote receipts.
+
+Only 457 corresponding measurement rows were committed.
+
+The missing measurement row is ballot 033 of measured-r1-n50-e07.
+
+Transaction hashes are not used as globally unique cross-election observation
+identifiers because each repetition starts from a fresh deterministic local
+chain and identical transaction sequences can recur.
+
+The campaign observation identity is:
+  repetition_id + ballot_id
+
+ROOT CAUSE
+----------
+The V1 runner assumed:
+
+  cast send --json stdout == exactly one JSON document
+
+That assumption was false for one observed successful transaction because
+valid receipt JSON was followed by a non-JSON diagnostic/log line on stdout.
+
+VERSIONED CORRECTION
+--------------------
+Create a NEW runner V2.
+
+Do not modify the frozen V1 runner in place.
+
+The only executable-code amendment is receipt parsing:
+
+V1:
+  json.loads(full_stdout)
+
+V2:
+  JSONDecoder.raw_decode() on the first JSON value after leading whitespace.
+
+V2 requirements:
+  - the first parsed value MUST be a JSON object,
+  - receipt status validation remains mandatory,
+  - transaction hash extraction remains mandatory in normal execution,
+  - gasUsed extraction remains unchanged,
+  - cast process return code validation remains unchanged,
+  - full raw cast stdout remains preserved in the receipt artifact,
+  - any trailing diagnostic text therefore remains auditable,
+  - campaign metric definitions remain unchanged.
+
+A second top-level JSON object is not expected and must not be silently treated
+as an additional receipt.
+
+RATIONALE
+---------
+This is an instrumentation/parser robustness correction only.
+
+It does not alter the system under test or any experimental treatment.
+
+RESTART POLICY
+--------------
+The corrected final benchmark must begin as a completely NEW campaign from
+election 1.
+
+No observation from the aborted campaign may be reused as a final observation.
+
+The final campaign retains:
+  5 warm-up elections
+  25 measured elections
+  30 total independent elections
+  400 warm-up accepted transactions
+  2000 measured accepted transactions
+  2400 total accepted transactions
+
+OUTLIER / RAW DATA POLICY
+-------------------------
+No silent outlier deletion.
+
+All observations from the new successful campaign are preserved.
+
+The aborted campaign remains separately preserved as instrumentation-failure
+evidence and is not post-hoc filtered into or out of a partially reused sample.

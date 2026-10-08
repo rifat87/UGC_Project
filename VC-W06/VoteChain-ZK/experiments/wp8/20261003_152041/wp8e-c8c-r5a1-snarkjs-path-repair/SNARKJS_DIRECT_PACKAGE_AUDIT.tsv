@@ -1,0 +1,4 @@
+package_json	exists	version	bin_relative	cli_path	cli_exists
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/circom_tester/node_modules/snarkjs/package.json	YES	0.5.0	build/cli.cjs	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/circom_tester/node_modules/snarkjs/build/cli.cjs	YES
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/package.json	YES	0.7.5	build/cli.cjs	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/build/cli.cjs	YES
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/package.json	YES	0.7.6	build/cli.cjs	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs	YES

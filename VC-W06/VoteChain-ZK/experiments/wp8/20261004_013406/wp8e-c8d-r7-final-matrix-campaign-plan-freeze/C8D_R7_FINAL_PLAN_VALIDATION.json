@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "checks": {
+    "totalRows100": true,
+    "observationIdsUnique": true,
+    "warmupRows20": true,
+    "measuredRows80": true,
+    "warmupsBeforeMeasured": true,
+    "warmup5PerN": true,
+    "measured20PerN": true,
+    "total25PerN": true,
+    "measuredPositionBalanceExact": true,
+    "positionsInRange1To4": true,
+    "observationIdSchemaPass": true,
+    "warmupRoundsValid": true,
+    "measuredRoundsValid": true
+  },
+  "failedChecks": [],
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "warmupPerN": {
+    "10": 5,
+    "100": 5,
+    "1000": 5,
+    "10000": 5
+  },
+  "measuredPerN": {
+    "10": 20,
+    "100": 20,
+    "1000": 20,
+    "10000": 20
+  },
+  "totalPerN": {
+    "10": 25,
+    "100": 25,
+    "1000": 25,
+    "10000": 25
+  },
+  "measuredPositionCounts": {
+    "10": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "100": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "1000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "10000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    }
+  },
+  "pilotIncluded": false,
+  "finalCampaignExecuted": false
+}

@@ -1,0 +1,34 @@
+WP8E C8C-R4A INTERPRETATION BOUNDARY
+====================================
+
+The failed C8C-R4 run is preserved and excluded as a completed freeze.
+
+Its HOLD was caused by Node package resolution for an inline stdin module.
+
+The repaired Poseidon test is a feasibility probe only.
+
+For each candidateCount K, it tests whether the currently installed
+circomlibjs implementation accepts a direct WP4-style Poseidon input vector
+of length K+1:
+
+    [D_MANIFEST, candidateId_0, ..., candidateId_(K-1)]
+
+A result of ARITY_SUPPORTED=NO is not a system failure.
+
+It means that this literal extension of the count-4 manifest construction
+must not be assumed for that K.
+
+In particular, no alternate hashing tree, fold, chained commitment,
+multi-stage Poseidon construction, or candidate-ID convention may be invented
+during this diagnostic.
+
+Any final K={2,4,8,16} runtime candidate-manifest recipe must come from:
+
+1. an already-existing source convention recovered from WP3/WP8D; or
+2. a clearly labeled pre-execution C8C protocol supplement frozen before
+   proof generation.
+
+The active K16 circuit, R1CS, WASM, zkey, vkey, verifier, Solidity, and
+architecture remain unchanged.
+
+No proof generation and no candidate-matrix transaction occurs in R4A.

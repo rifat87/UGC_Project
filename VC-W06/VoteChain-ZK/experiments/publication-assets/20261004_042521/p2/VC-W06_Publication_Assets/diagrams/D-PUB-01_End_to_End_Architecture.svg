@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800">
+<title>VoteChain-ZK end-to-end architecture</title>
+<metadata>{&quot;architectureChanged&quot;: false, &quot;diagramId&quot;: &quot;D-PUB-01&quot;}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800" y="52" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" fill="#111">VoteChain-ZK end-to-end architecture</text>
+<rect x="55" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="165.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Voter / terminal</text>
+<text x="165.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Vote request</text>
+<rect x="305" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="415.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Biometric authentication</text>
+<text x="415.0" y="205" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Existing face / fingerprint</text>
+<text x="415.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">subsystem</text>
+<rect x="555" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="665.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">3-of-5 authorization</text>
+<text x="665.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Distributed biometric agreement</text>
+<rect x="805" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="915.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Merkle preparation</text>
+<text x="915.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Eligible-set membership witness</text>
+<rect x="1055" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1165.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Private ballot witness</text>
+<text x="1165.0" y="205" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">One-hot ballot + election</text>
+<text x="1165.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">nullifier</text>
+<rect x="1305" y="125" width="220" height="150" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1415.0" y="163" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Groth16 prover</text>
+<text x="1415.0" y="227" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Circom DIRECT circuit</text>
+<line x1="275" y1="200" x2="305" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="293.3792505067069" y1="207.80757204347984" x2="305" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="293.3792505067069" y1="192.19242795652016" x2="305" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="525" y1="200" x2="555" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="207.80757204347984" x2="555" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="192.19242795652016" x2="555" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="775" y1="200" x2="805" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="793.3792505067069" y1="207.80757204347984" x2="805" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="793.3792505067069" y1="192.19242795652016" x2="805" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1025" y1="200" x2="1055" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1043.379250506707" y1="207.80757204347984" x2="1055" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1043.379250506707" y1="192.19242795652016" x2="1055" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1275" y1="200" x2="1305" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1293.379250506707" y1="207.80757204347984" x2="1305" y2="200" stroke="#111" stroke-width="3"/>
+<line x1="1293.379250506707" y1="192.19242795652016" x2="1305" y2="200" stroke="#111" stroke-width="3"/>
+<rect x="1150" y="440" width="220" height="155" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1260.0" y="478" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">VoteChain smart contract</text>
+<text x="1260.0" y="525" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Verify proof + nullifier</text>
+<text x="1260.0" y="547" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">uniqueness</text>
+<rect x="900" y="440" width="220" height="155" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1010.0" y="478" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Encrypted ballot storage</text>
+<text x="1010.0" y="547" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Accepted BabyJub ElGamal slots</text>
+<rect x="650" y="440" width="220" height="155" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="760.0" y="478" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Homomorphic tally</text>
+<text x="760.0" y="525" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Component-wise encrypted</text>
+<text x="760.0" y="547" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">aggregation</text>
+<rect x="400" y="440" width="220" height="155" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="510.0" y="478" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Threshold decryption</text>
+<text x="510.0" y="525" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Trustee-assisted final</text>
+<text x="510.0" y="547" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">decryption</text>
+<rect x="150" y="440" width="220" height="155" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="260.0" y="478" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Public result /</text>
+<text x="260.0" y="506" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">verification</text>
+<text x="260.0" y="525" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Candidate totals and audit</text>
+<text x="260.0" y="547" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">evidence</text>
+<line x1="1415" y1="275" x2="1260" y2="440" stroke="#111" stroke-width="3"/>
+<line x1="1262.2659081925776" y1="426.1845861421813" x2="1260" y2="440" stroke="#111" stroke-width="3"/>
+<line x1="1273.6469758558278" y1="436.87589212887104" x2="1260" y2="440" stroke="#111" stroke-width="3"/>
+<text x="1337.5" y="345.5" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="normal" text-anchor="middle" fill="#111">castVote</text>
+<line x1="1150" y1="517" x2="1120" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="1131.620749493293" y1="509.19242795652013" x2="1120" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="1131.620749493293" y1="524.8075720434798" x2="1120" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="900" y1="517" x2="870" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="881.6207494932931" y1="509.19242795652013" x2="870" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="881.6207494932931" y1="524.8075720434798" x2="870" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="650" y1="517" x2="620" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="631.6207494932931" y1="509.19242795652013" x2="620" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="631.6207494932931" y1="524.8075720434798" x2="620" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="400" y1="517" x2="370" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="381.6207494932931" y1="509.19242795652013" x2="370" y2="517" stroke="#111" stroke-width="3"/>
+<line x1="381.6207494932931" y1="524.8075720434798" x2="370" y2="517" stroke="#111" stroke-width="3"/>
+<text x="800" y="735" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#111">Biometric authorization and ZK vote privacy remain distinct subsystems.</text>
+</svg>

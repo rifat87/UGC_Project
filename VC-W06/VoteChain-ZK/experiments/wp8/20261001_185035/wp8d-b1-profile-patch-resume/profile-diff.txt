@@ -1,0 +1,16 @@
+--- ACTIVE_K16_D17
++++ EXPERIMENT_K2_D4
+@@ -11,11 +11,11 @@
+  */
+ 
+ function VC_MAX_CANDIDATES() {
+-    return 16;
++    return 2;
+ }
+ 
+ function VC_MERKLE_DEPTH() {
+-    return 17;
++    return 4;
+ }
+ 
+ function VC_DOMAIN_IDENTITY() {

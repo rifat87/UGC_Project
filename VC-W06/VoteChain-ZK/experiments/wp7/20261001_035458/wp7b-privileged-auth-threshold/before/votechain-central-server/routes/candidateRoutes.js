@@ -1,0 +1,140 @@
+import express from 'express'
+import { body, param } from 'express-validator'
+import validate from '../middleware/validate.js'
+import Candidate from '../models/Candidate.js'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
+import {
+  createCandidate,
+  setCandidateRegistrationStatus,
+} from '../services/candidateService.js'
+import { toCandidateWorkflowResponse } from '../services/privacyProjection.js'
+
+const router = express.Router()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const candidateMetadataValidation = [
+  body('nationalId').isString().matches(/^\d{10}$/).withMessage('National ID must be exactly 10 digits'),
+  body('name').isString().trim().isLength({ min: 3, max: 50 }).matches(/^[A-Za-z ]+$/),
+  body('party').isString().trim().isLength({ min: 2, max: 40 }).matches(/^[A-Za-z ]+$/),
+  body('location').isString().trim().isLength({ min: 2, max: 100 }).matches(/^[A-Za-z ,.-]+$/),
+  body('age').isInt({ min: 18, max: 120 }),
+]
+
+router.post('/register', candidateMetadataValidation, validate, async (req, res) => {
+  try {
+    const candidate = await createCandidate(req.body)
+
+    res.status(201).json({
+      success: true,
+      message: 'Candidate metadata created; blockchain registration is pending',
+      data: toCandidateWorkflowResponse(candidate),
+    })
+  } catch (error) {
+    if (error.code === 'DUPLICATE_NID' || error.code === 11000) {
+      return res.status(409).json({ success: false, message: 'A candidate with this National ID already exists' })
+    }
+
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: Object.values(error.errors).map((validationError) => validationError.message),
+      })
+    }
+
+    console.error('Candidate creation failed:', error.message)
+    return res.status(500).json({ success: false, message: 'Failed to create candidate metadata' })
+  }
+})
+
+router.patch('/:candidateId/registration-status', [
+  param('candidateId').isInt({ min: 1 }).withMessage('candidateId must be a positive integer'),
+  body('registrationStatus').isIn(['pending', 'registered', 'failed']),
+], validate, async (req, res) => {
+  try {
+    const candidate = await setCandidateRegistrationStatus(
+      Number(req.params.candidateId),
+      req.body.registrationStatus,
+    )
+
+    return res.json({
+      success: true,
+      data: {
+        candidateId: candidate.candidateId,
+        registrationStatus: candidate.registrationStatus,
+      },
+    })
+  } catch (error) {
+    if (error.code === 'NOT_FOUND') {
+      return res.status(404).json({ success: false, message: 'Candidate not found' })
+    }
+    return res.status(400).json({ success: false, message: error.message })
+  }
+})
+
+router.put('/:id', [
+  param('id').isMongoId().withMessage('Invalid candidate ID'),
+  body('name').optional().trim().notEmpty(),
+  body('party').optional().trim().notEmpty(),
+  body('nationalId').optional().matches(/^\d{10}$/),
+  body('age').optional().isInt({ min: 18, max: 120 }),
+  body('location').optional().trim().notEmpty(),
+], validate, async (req, res) => {
+  try {
+    const allowed = ['name', 'party', 'nationalId', 'age', 'location']
+    const update = Object.fromEntries(Object.entries(req.body).filter(([key]) => allowed.includes(key)))
+    const candidate = await Candidate.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true })
+    if (!candidate) return res.status(404).json({ success: false, message: 'Candidate not found' })
+    return res.json({ success: true, data: toCandidateWorkflowResponse(candidate) })
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+})
+
+
+router.delete('/:id', [param('id').isMongoId().withMessage('Invalid candidate ID')], validate, async (req, res) => {
+  try {
+    const candidate = await Candidate.findByIdAndDelete(req.params.id)
+    if (!candidate) return res.status(404).json({ success: false, message: 'Candidate not found' })
+    return res.json({ success: true, message: 'Candidate deleted successfully' })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Failed to delete candidate' })
+  }
+})
+
+router.post('/train-face/:nid', async (req, res) => {
+  try {
+    const { nid } = req.params
+    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+
+    if (!fs.existsSync(datasetPath)) {
+      return res.status(404).json({ success: false, message: 'Face images not found. Please capture face images first.' })
+    }
+
+    const imageFiles = fs.readdirSync(datasetPath).filter((file) => file.endsWith('.jpg'))
+    if (imageFiles.length === 0) {
+      return res.status(404).json({ success: false, message: 'No face images found. Please capture face images first.' })
+    }
+
+    const { spawn } = await import('child_process')
+    const trainScript = path.join(faceRecognitionPath, 'train_faces.py')
+    const trainProcess = spawn('python', [trainScript], { cwd: faceRecognitionPath, stdio: ['pipe', 'pipe', 'pipe'] })
+    trainProcess.stdout.on('data', () => {})
+    trainProcess.stderr.on('data', () => {})
+    trainProcess.on('close', (code) => {
+      if (code !== 0) {
+        return res.status(500).json({ success: false, message: 'Face training failed', code })
+      }
+      return res.json({ success: true, message: 'Face training completed successfully' })
+    })
+    trainProcess.on('error', () => res.status(500).json({ success: false, message: 'Failed to start training process' }))
+  } catch (_error) {
+    return res.status(500).json({ success: false, message: 'Failed to train face model' })
+  }
+})
+
+export default router

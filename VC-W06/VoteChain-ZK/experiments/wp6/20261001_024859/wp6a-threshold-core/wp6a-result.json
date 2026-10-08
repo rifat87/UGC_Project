@@ -1,0 +1,130 @@
+{
+  "status": "PASS_WP6A_THRESHOLD_CORE_CUSTODY",
+  "runId": "20261001_024859",
+  "classification": "FUNCTIONAL_SMOKE_ONLY_NOT_FINAL_BENCHMARK",
+  "threshold": 3,
+  "trusteeCount": 5,
+  "activeTrustees": [
+    1,
+    3,
+    5
+  ],
+  "unavailableTrustees": [
+    2,
+    4
+  ],
+  "candidateCount": 4,
+  "maxCandidates": 16,
+  "acceptedBallotCount": 8,
+  "expectedTotals": [
+    3,
+    2,
+    2,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "verifiedTotals": [
+    3,
+    2,
+    2,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "dkgTranscriptHash": "54e7fab221861629ca15a6306f4696b7f22314011e96b668ef04f8f39919b23c",
+  "finalizationTranscriptHash": "f18ab340f06adbd828aaf08d167abf1f2b6661ddabc9fc954fcdcd3751274b42",
+  "publicKey": [
+    "8646028391299492759456446225710599103284054205426308988671400319489552855196",
+    "10042236370121324079533254481530865096987743695882137662581710364899394227014"
+  ],
+  "metrics": {
+    "samples": 1,
+    "dkgMs": 2478.7806,
+    "partialGenerationMs": 4649.3518,
+    "finalizationVerifyMs": 10207.7184
+  },
+  "architecture": {
+    "combinedPrivateKeyMaterialized": false,
+    "plaintextTrusteeSharePersisted": false,
+    "encryptedCustody": "scrypt + AES-256-GCM",
+    "encryptedShareTransport": "ECDH-P256 + HKDF-SHA256 + AES-256-GCM",
+    "shareProof": "context-bound DLEQ/Chaum-Pedersen",
+    "decode": "bounded baby-step/giant-step"
+  },
+  "testResults": [
+    {
+      "test": "public DKG transcript verifies",
+      "status": "PASS"
+    },
+    {
+      "test": "public DKG transcript hash deterministic",
+      "status": "PASS"
+    },
+    {
+      "test": "combined private election key not present in transcript",
+      "status": "PASS"
+    },
+    {
+      "test": "3-of-5 valid trustee finalization",
+      "status": "PASS"
+    },
+    {
+      "test": "two unavailable trustees tolerated",
+      "status": "PASS"
+    },
+    {
+      "test": "fewer than threshold rejected",
+      "status": "PASS"
+    },
+    {
+      "test": "tampered DLEQ proof rejected",
+      "status": "PASS"
+    },
+    {
+      "test": "wrong election context rejected",
+      "status": "PASS"
+    },
+    {
+      "test": "duplicate trustee record rejected",
+      "status": "PASS"
+    },
+    {
+      "test": "bounded BSGS rejects outside accepted ballot bound",
+      "status": "PASS"
+    },
+    {
+      "test": "padded candidate slots decode to zero",
+      "status": "PASS"
+    },
+    {
+      "test": "verified totals sum to accepted ballot count",
+      "status": "PASS"
+    },
+    {
+      "test": "finalization transcript hash changes on mutation",
+      "status": "PASS"
+    }
+  ],
+  "next": "WP6B_TRUSTEE_CLI_AND_CONTRACT_FINALIZATION"
+}

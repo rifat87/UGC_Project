@@ -1,0 +1,123 @@
+{
+  "publicContribution": {
+    "trusteeId": 4,
+    "commitments": [
+      [
+        "16797259484931048391168380013290931004455842471655049784855784774638347136943",
+        "19380383751360694525988205554658282723313342580271308987515637189760888981591"
+      ],
+      [
+        "3415436697778572821333135446967577266223453677804755566620146691136220236349",
+        "13740295133150341032928178137278666914721439545624492849310290410157229038250"
+      ],
+      [
+        "8713276280391819412057796479999111145691481001408816519180923710684132856326",
+        "21449323196949146360940399641131958656830260862898484144778765134428417101469"
+      ]
+    ],
+    "deliveryHashes": [
+      {
+        "recipientId": 1,
+        "sha256": "fb5ac443e417cda890f0d4b9f25bd9967e649d7d16f981a2ec6c216f76fa3288"
+      },
+      {
+        "recipientId": 2,
+        "sha256": "a3a7ceaf2a89b3342ce1b6acc23fc85b45264d495260d0c73368475f00988c13"
+      },
+      {
+        "recipientId": 3,
+        "sha256": "3b6e58d1fe6f1f4dc24e0a83ffc99f567fb0002cef73a4e02da149eb6a2944d4"
+      },
+      {
+        "recipientId": 4,
+        "sha256": "29e62fc15551cfe855d5e25e390635e680f38932d21b92ade3366cef0c02f2a3"
+      },
+      {
+        "recipientId": 5,
+        "sha256": "c83576eff0cbaf8cc7d9d872a86f108e5491e6974e6982ff9156c09708066a98"
+      }
+    ]
+  },
+  "deliveries": [
+    {
+      "senderId": 4,
+      "recipientId": 1,
+      "envelope": {
+        "version": 1,
+        "keyAgreement": "ECDH-P256",
+        "kdf": "HKDF-SHA256",
+        "contentEncryption": "AES-256-GCM",
+        "ephemeralPublicKey": "BIz8x60LtfIW+08+3sVy6XmpcKLFcqKFZw3sSAPIY3ZQkWqj4E3DTza1YLOTgg+36OgwtJUZRi84/kJDICBsanE=",
+        "salt": "Ui+LGCWkNed0Xq4G1Xjvh0ctzRNz+Z2xw4PQV30Nuz8=",
+        "iv": "JhA1D8+xSjQYJ21n",
+        "aad": "VoteChain-ZK/WP6B/20261001_030133|share|4|1",
+        "ciphertext": "pYfVRJf5hQdrQSiecpAB0zP2knRxwI34gi2ZmIlEQRivHR37jX986Y/DmL9GRgnWGZKFiwEHuD4PrMQ1yBKk9AWtASZv0zDWJBFK/Q==",
+        "authTag": "RuBH5uSupxTumfRcvzBg+A=="
+      }
+    },
+    {
+      "senderId": 4,
+      "recipientId": 2,
+      "envelope": {
+        "version": 1,
+        "keyAgreement": "ECDH-P256",
+        "kdf": "HKDF-SHA256",
+        "contentEncryption": "AES-256-GCM",
+        "ephemeralPublicKey": "BLDTpbVAFWqfD6XWRzrPh6hjlC2B4eo/Jle4hXCkGN6cxvZCF4RsEQD620YPvTuOTsRMDdtIMliFEE1lzld5SI0=",
+        "salt": "dI7uX5NEL8HiPEXBUZqEkQcIyetx4TS2Q8+zU6G7Fj0=",
+        "iv": "2CNPyQA49ZXYIZOp",
+        "aad": "VoteChain-ZK/WP6B/20261001_030133|share|4|2",
+        "ciphertext": "4XSIf174Fi6rAEzhbbrcCLCe4S0mdb9TvIyDnYpBZ//op1VWKvXw/aDJjZZX7gfGAbzx3zmslF71t06YakGr7bsLmUy0S9STeo0UXw==",
+        "authTag": "eAi+rO1z5wQA8P2r1HiyHA=="
+      }
+    },
+    {
+      "senderId": 4,
+      "recipientId": 3,
+      "envelope": {
+        "version": 1,
+        "keyAgreement": "ECDH-P256",
+        "kdf": "HKDF-SHA256",
+        "contentEncryption": "AES-256-GCM",
+        "ephemeralPublicKey": "BDo3yQ7qv9l2cX/aHXcJynBqQTU7QXzQ5zFAe9jLUc6e40EWleQijtRXGDLRKFNicpySTUXsoYNC15uRInQm3lc=",
+        "salt": "vdDf8UvAF2xSl/EB7k7MvZTOscx33thkBa7/AxxFTOA=",
+        "iv": "ocbVo31CtjDwId8M",
+        "aad": "VoteChain-ZK/WP6B/20261001_030133|share|4|3",
+        "ciphertext": "aFCfvLtLuId01JWDA8eM9TcL90sWjqPKSTLhvIA4vvpZpyJfyqzcQTO3UjU/VfvT54gi9i2UbzdjXacNe3fUnoMSgRMoWm3yARPn",
+        "authTag": "Ko6re8XXbNKEMSDJYflFUA=="
+      }
+    },
+    {
+      "senderId": 4,
+      "recipientId": 4,
+      "envelope": {
+        "version": 1,
+        "keyAgreement": "ECDH-P256",
+        "kdf": "HKDF-SHA256",
+        "contentEncryption": "AES-256-GCM",
+        "ephemeralPublicKey": "BLzi0JedMDwU5QHEhddtzTUoRhxfFBveQDo7A3FY583x3L6YjoRlZmpDU2aQPGSsx7q/2LPUHvsBFOGIWR8OW8k=",
+        "salt": "Ydd/SpOrYMIGlmPp0Fjw4SmOMJRJ05SDG7Qxj4cx8o0=",
+        "iv": "61q/Ss1tyP3G+h6D",
+        "aad": "VoteChain-ZK/WP6B/20261001_030133|share|4|4",
+        "ciphertext": "2EwBddzfYFCgAUTBzf+k6G0TbrDg/7EbdKso/i3aws15v6vJgTprkUKN71jBq0UgbDgTJWudJgkPkkkTOVHBZREeIw9+Ln+2gR/BQw==",
+        "authTag": "XQjmcPeRzoMjtMi9ivkeYQ=="
+      }
+    },
+    {
+      "senderId": 4,
+      "recipientId": 5,
+      "envelope": {
+        "version": 1,
+        "keyAgreement": "ECDH-P256",
+        "kdf": "HKDF-SHA256",
+        "contentEncryption": "AES-256-GCM",
+        "ephemeralPublicKey": "BDkYIBsIJMM/w0NdQ1bl5xAOUXT2+NP+704MZ08lx2IEUvUpT1A3lsGSqq4rwqNSXU7WwZR1zONLJFMsnDWwwXA=",
+        "salt": "QbTUkNecXFcJ0A5c4xN1Ko6KlCaw5Z2q/zOFPoPqVdA=",
+        "iv": "S7FRjOSEW5enn3H9",
+        "aad": "VoteChain-ZK/WP6B/20261001_030133|share|4|5",
+        "ciphertext": "CZGROESyb/9kWhd9KTeiy9NqIXm7AMZnU4j2HTdHj3o+IFD5A1o4ysNZgd/+FD6rLMWR//pxbm20PFXfCzwLrYUbFKanZT37sTxkvg==",
+        "authTag": "IJBGEn3U8nmuKS35S0kWQw=="
+      }
+    }
+  ]
+}

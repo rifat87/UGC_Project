@@ -1,0 +1,20 @@
+{
+  "status": "STARTED",
+  "classification": "ELIGIBLE_SET_SCALING_OFFCHAIN_CRYPTO_CAMPAIGN",
+  "planSha256": "9a4f1a30b858fd6ec11d3e98c464be1ed89ae33d9763bc1f99f0dfe627c6edc1",
+  "observationCount": 4,
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "activeBackendSha256": "386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7",
+  "artifactHashes": {
+    "r1cs": "11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0",
+    "wasm": "02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a",
+    "zkey": "867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50",
+    "vkey": "90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1",
+    "snarkjsCli": "092c70dbf8bef02b666456db7429127aa51c5dbfce91cef038638d7da3bfdcea"
+  },
+  "automaticRetry": false,
+  "onchainExecution": false
+}

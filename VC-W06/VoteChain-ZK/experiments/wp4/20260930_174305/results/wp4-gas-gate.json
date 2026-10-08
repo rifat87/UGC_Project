@@ -1,0 +1,19 @@
+{
+  "classification": "WP4_ENGINEERING_GAS_GATE_NOT_FINAL_WP8_BENCHMARK",
+  "directVerifierGasProxy": 673666,
+  "poseidonVerifierGasProxy": 252883,
+  "poseidonBindingGasProxy": 1594550,
+  "directCastExecutionGasProxy": 1875973,
+  "poseidonCastExecutionGasProxy": 3013897,
+  "directCalldataBytes": 2340,
+  "poseidonCalldataBytes": 2340,
+  "directCalldataIntrinsicGas": 37272,
+  "poseidonCalldataIntrinsicGas": 37308,
+  "babyJubTallyUpdateGasProxy": 1099826,
+  "directExecutionPlusCalldataProxy": 1913245,
+  "poseidonExecutionPlusCalldataProxy": 3051205,
+  "measuredLowerCompositeProxy": "DIRECT",
+  "relativeDeltaPercent": 59.47800725991706,
+  "finalBindingDecision": "REVIEW_REQUIRED_AFTER_WP4_GATE",
+  "finalPaperBenchmark": "DEFERRED_WP8"
+}

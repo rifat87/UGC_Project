@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_SUBMISSION_FULL_SECURITY_PRIVACY_AUDIT",
+  "packagePlanFiles": 776,
+  "sanitizedEnvironmentReplacementFiles": 2,
+  "sanitizedScriptReplacementFiles": 1,
+  "rawHistoricalExperimentCorpusIncluded": false,
+  "unresolvedSecretLikeLiteralHits": [],
+  "securityPrivacyErrors": [],
+  "secretValuesPrinted": false
+}

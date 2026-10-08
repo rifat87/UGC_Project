@@ -1,0 +1,128 @@
+54-
+55-const D_ID =
+56-    BigInt(profile.domains.identity);
+57-
+58-const D_NULL =
+59-    BigInt(profile.domains.nullifier);
+60-
+61-const D_CTX =
+62:    BigInt(profile.domains.electionContext);
+63-
+64-const D_BIND =
+65-    BigInt(profile.domains.ciphertextBinding);
+66-
+67-const D_MANIFEST =
+68:    BigInt(profile.domains.candidateManifest);
+69-
+70-function H(values) {
+71-    return PF.toObject(
+72-        poseidon(
+73-            values.map(BigInt)
+74-        )
+75-    );
+76-}
+--
+206-    throw new Error(
+207-        "voter B Merkle path mismatch"
+208-    );
+209-}
+210-
+211-const electionId =
+212-    202609300001n;
+213-
+214:const candidateCount =
+215-    4n;
+216-
+217:const candidateIds =
+218:    [101n, 102n, 103n, 104n];
+219-
+220:const candidateManifestHash =
+221-    H([
+222-        D_MANIFEST,
+223:        ...candidateIds
+224-    ]);
+225-
+226-const contractDomain =
+227-    BigInt(
+228-        profile.testContractDomain
+229-    );
+230-
+231-const electionSecretKey =
+--
+235-    babyjub.mulPointEscalar(
+236-        babyjub.Base8,
+237-        electionSecretKey
+238-    );
+239-
+240-const Yxy =
+241-    pointBig(Y);
+242-
+243:const electionContextHash =
+244-    H([
+245-        D_CTX,
+246-        electionId,
+247:        candidateManifestHash,
+248:        candidateCount,
+249-        contractDomain,
+250-        Yxy[0],
+251-        Yxy[1]
+252-    ]);
+253-
+254-const identityPoint = [
+255-    BF.e(0),
+256-    BF.e(1)
+--
+373-            ballot.bits,
+374-        randomness:
+375-            ballot.randomness,
+376-
+377-        eligibleRoot:
+378-            sharedRoot,
+379-
+380-        electionId,
+381:        candidateManifestHash,
+382:        candidateCount,
+383-        contractDomain,
+384-
+385-        Yx:
+386-            Yxy[0],
+387-        Yy:
+388-            Yxy[1],
+389-
+390:        electionContextHash,
+391-        nullifier
+392-    };
+393-
+394-    return {
+395-        direct: {
+396-            ...common,
+397-
+398-            Rx:
+--
+546-        profile:
+547-            profile.profile,
+548-
+549-        config: {
+550-            eligibleRoot:
+551-                sharedRoot,
+552-
+553-            electionId,
+554:            candidateManifestHash,
+555:            candidateCount,
+556-            contractDomain,
+557-
+558-            Yx:
+559-                Yxy[0],
+560-
+561-            Yy:
+562-                Yxy[1],
+563-
+564:            electionContextHash
+565-        },
+566-
+567-        bindingDomain:
+568-            D_BIND,
+569-
+570-        voterA: {
+571-            nullifier:
+572-                voterA.nullifier,

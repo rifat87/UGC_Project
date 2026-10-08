@@ -1,0 +1,46 @@
+{
+  "profile": "VoteChain-ZK-WP6-Threshold-v1",
+  "curve": "BabyJubJub",
+  "generator": "Base8",
+  "threshold": {
+    "architecture": "CONFIGURABLE_T_OF_N",
+    "defaultThreshold": 3,
+    "defaultTrustees": 5,
+    "prototypePolicy": "3_OF_5",
+    "dkg": "MULTI_PARTY_FELDMAN_STYLE_POLYNOMIAL_CONTRIBUTIONS",
+    "combinedPrivateKeyMaterialized": false
+  },
+  "shareTransport": {
+    "keyAgreement": "ECDH-P256",
+    "kdf": "HKDF-SHA256",
+    "contentEncryption": "AES-256-GCM"
+  },
+  "custody": {
+    "kdf": "SCRYPT",
+    "contentEncryption": "AES-256-GCM",
+    "plaintextSharePersisted": false
+  },
+  "shareProof": {
+    "type": "DLEQ_CHAUM_PEDERSEN",
+    "challenge": "POSEIDON_CHAIN_CONTEXT_BOUND",
+    "domain": "VoteChain-ZK/WP6/DLEQ/v1",
+    "binds": [
+      "electionId",
+      "trusteeId",
+      "candidateSlot",
+      "publicShare",
+      "aggregateR",
+      "partialDecryption",
+      "commitments"
+    ]
+  },
+  "decode": {
+    "algorithm": "BOUNDED_BABY_STEP_GIANT_STEP",
+    "bound": "acceptedBallotCount"
+  },
+  "publicTranscript": {
+    "version": "VoteChain-ZK-WP6-DKG-Transcript-v1",
+    "hash": "SHA-256-CANONICAL-JSON"
+  },
+  "contractFinalization": "DEFERRED_WP6B"
+}

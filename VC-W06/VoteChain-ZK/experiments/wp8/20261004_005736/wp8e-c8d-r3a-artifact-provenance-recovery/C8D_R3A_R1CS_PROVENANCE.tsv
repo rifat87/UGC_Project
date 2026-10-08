@@ -1,0 +1,3 @@
+classification	path	referenced_by_r5b	referenced_by_r6	sha256
+NON_EXPERIMENT_ARTIFACT	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs	NO	NO	11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0
+FROZEN_EXPERIMENT_SNAPSHOT	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_190442/wp8d-b2a-24-profile-compile/profiles/direct-k16-d17/build/VoteChainVoteDirect.r1cs	NO	NO	11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0

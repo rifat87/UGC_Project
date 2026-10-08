@@ -1,0 +1,53 @@
+WP8E C8C-R4C1A VERIFIED EXISTING WP5 MANIFEST RECIPE
+=====================================================
+
+Algorithm:
+
+POSEIDON_INDEXED_CHAIN_V1
+
+This recipe is recovered from the existing VoteChain WP5 implementation.
+It is not newly invented by WP8E.
+
+For candidate IDs c[0..K-1]:
+
+state_0 =
+    Poseidon(
+        D_MANIFEST,
+        K
+    )
+
+For i = 0..K-1:
+
+state_(i+1) =
+    Poseidon(
+        state_i,
+        i,
+        c[i]
+    )
+
+candidateManifestHash =
+    state_K
+
+Index base = 0.
+
+For the frozen synthetic candidate universe:
+
+101,102,103,104,105,106,107,108,
+109,110,111,112,113,114,115,116
+
+the runtime K={2,4,8,16} profiles use the first K candidate IDs.
+
+The K16 known-answer test must reproduce:
+
+8725646181372109278719673995639063952864499962493037230511085907915024360632
+
+The failed R4B padded-Poseidon16 proposal is abandoned and is not canonical.
+
+The failed R4C1 run is preserved. Its HOLD resulted from an overly syntactic
+static checker and not from a cryptographic mismatch.
+
+No active circuit, Solidity, verifier, proving key, or architecture changes.
+
+No proof generation.
+
+No candidate-matrix transaction.

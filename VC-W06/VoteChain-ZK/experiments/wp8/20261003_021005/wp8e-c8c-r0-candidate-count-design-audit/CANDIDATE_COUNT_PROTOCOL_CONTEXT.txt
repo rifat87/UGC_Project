@@ -1,0 +1,50 @@
+0001: ======================================================================
+0002: VOTECHAIN-ZK WP8E FINAL BENCHMARK DESIGN V2
+0003: ======================================================================
+0004: 
+0005: STATUS=PREREGISTERED_DESIGN_NOT_YET_EXECUTED
+0006: 
+0007: SUPERSEDES_PROTOCOL=WP8E_FINAL_REPEAT_PROTOCOL_V1
+0008: SUPERSESSION_REASON=SCALABILITY_MATRIX_ADDED_BEFORE_FINAL_ONCHAIN_CAMPAIGN
+0009: V1_MEASUREMENT_DATA_EXISTS=NO
+0010: ACTIVE_ARCHITECTURE=DIRECT
+0011: 
+0012: ----------------------------------------------------------------------
+0013: A. SINGLE-VOTE REPEATABILITY MICROBENCHMARK
+0014: ----------------------------------------------------------------------
+0015: 
+0016: PURPOSE=CONTROLLED_COST_AND_LATENCY_REPEATABILITY
+0017: 
+0018: WARMUP_ITERATIONS=5
+
+------------------------------------------------------------------------
+0073: 
+0074: SCALE_25_CORPUS_PREFIX=1..25
+0075: SCALE_50_CORPUS_PREFIX=1..50
+0076: SCALE_75_CORPUS_PREFIX=1..75
+0077: SCALE_100_CORPUS_PREFIX=1..100
+0078: SCALE_150_CORPUS_PREFIX=1..150
+0079: 
+0080: CANDIDATE_COUNT=4
+0081: BALLOT_SELECTION_SCHEDULE=DETERMINISTIC_BALANCED_ROUND_ROBIN
+0082: 
+0083: ----------------------------------------------------------------------
+0084: D. PER-TRANSACTION RAW RECORD
+0085: ----------------------------------------------------------------------
+0086: 
+0087: FIELDS:
+0088: - scale
+0089: - campaign_repetition
+0090: - warmup_or_measured
+0091: - vote_index
+0092: - candidate_index
+0093: - transaction_hash
+0094: - receipt_status
+0095: - gas_used
+0096: - calldata_bytes
+0097: - submission_to_receipt_ms
+0098: - nullifier
+0099: - accepted_count_before
+0100: - accepted_count_after
+0101: - nullifier_used_before
+0102: - nullifier_used_after

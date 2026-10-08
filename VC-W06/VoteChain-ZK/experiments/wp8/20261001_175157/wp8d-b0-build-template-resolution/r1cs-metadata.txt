@@ -1,0 +1,209 @@
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs
+SHA256=11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0
+BYTES=15226624
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 61176
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 61206
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 67
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 73
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 321513
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 0
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/poseidon/VoteChainVoteDigest.r1cs
+SHA256=a2ab1c1881f1dcf8e7f4804f3668a6a6d9f88a4cf85034053a49dd659fe0eb43
+BYTES=19986856
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 66309
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 66339
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 67
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 10
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 343099
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 0
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/build/PoseidonReference.r1cs
+SHA256=4e1eeb2202738b107b0fda640cd06c18a09ec6a2c5fc074e3cf3734dbe099c11
+BYTES=83668
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 609
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 605
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 3
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 939
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/build-core-finalmetrics/BitElGamalValidityFinal.r1cs
+SHA256=1f7b3d54d43aa13627dcfe7b003056dc17ffe6b586c01a7b6c00cacef7d51101
+BYTES=758192
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 3350
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 3349
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 6
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 18535
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 0
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_030403/build/candidate-direct-K2/CandidateDirect_K2.r1cs
+SHA256=085c8aaae9775358b02f84c692c93e048f6b76032e4c007df34d97d2095122ba
+BYTES=1515700
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 6693
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 6694
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 4
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 37063
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 8
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_030707/build/candidate-direct-K2/CandidateDirect_K2.r1cs
+SHA256=085c8aaae9775358b02f84c692c93e048f6b76032e4c007df34d97d2095122ba
+BYTES=1515700
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 6693
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 6694
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 4
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 37063
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 8
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-digest-K16/CandidateDigest_K16.r1cs
+SHA256=f04877a326bf991dff82d298084a52a65ca79ba6f4ba2ba8a526f29ab02482df
+BYTES=16883172
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 58642
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 58657
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 32
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 318077
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-digest-K2/CandidateDigest_K2.r1cs
+SHA256=e348ba5ffffbd12906827d0290bf8ddc8612d7d3ff2eaa8995742d65acdab996
+BYTES=2109700
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 7332
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 7333
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 4
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 39771
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-digest-K4/CandidateDigest_K4.r1cs
+SHA256=2693e7439ef066ca2f29149ecbc4443314a189e039ae0b4abd113398993f132a
+BYTES=4220196
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 14662
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 14665
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 8
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 79529
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-digest-K8/CandidateDigest_K8.r1cs
+SHA256=44c6bdcb2a2c2f98f408cba610535f8c94331eb24ff9fe0289babe3b62175f92
+BYTES=8441188
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 29322
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 29329
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 16
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 159045
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-direct-K16/CandidateDirect_K16.r1cs
+SHA256=e6855c297d1d6e3f0208920abc3e51f5c4f701b4a9046e4c276bc5cda4b19836
+BYTES=12122940
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 53509
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 53524
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 32
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 296427
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 64
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-direct-K2/CandidateDirect_K2.r1cs
+SHA256=085c8aaae9775358b02f84c692c93e048f6b76032e4c007df34d97d2095122ba
+BYTES=1515700
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 6693
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 6694
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 4
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 37063
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 8
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-direct-K4/CandidateDirect_K4.r1cs
+SHA256=84a14c8389294ef76b71327dfa50a2a7f6d9c0be35ca1d66cd442cf442d791ba
+BYTES=3031020
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 13381
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 13384
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 8
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 74115
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 16
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/candidate-direct-K8/CandidateDirect_K8.r1cs
+SHA256=8d76cd122c51baf4f380b5116aa81d2b02bbe7ce67439aff813d58320f3085ae
+BYTES=6061660
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 26757
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 26764
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 16
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 2
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 148219
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 32
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/merkle-N100000-D17/Merkle_D17.r1cs
+SHA256=b53fa60ab83c6a2b6b5a47c0fdbe106033cf6053a8923a0dfde30c9d57dae203
+BYTES=1951320
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 4150
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 4131
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 35
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 13128
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/merkle-N10000-D14/Merkle_D14.r1cs
+SHA256=2488d33e3d9000138d51192c7434cfeac73c5f5f8e1223875d546c804dc66115
+BYTES=1606992
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 3418
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 3402
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 29
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 10812
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/merkle-N1000-D10/Merkle_D10.r1cs
+SHA256=06a9511e17e5657de0c213c56fb7d8f2ee72aa6bf2f2262222ef128b9a8f4495
+BYTES=1147888
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 2442
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 2430
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 21
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 7724
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/merkle-N100-D7/Merkle_D7.r1cs
+SHA256=c1a0001f36a4d532c2aaff96c44ec592d84ca62adfafff932cb00878c54c5a6d
+BYTES=803560
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 1710
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 1701
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 15
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 5408
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp2/phase-b/20260930_031323/build/merkle-N10-D4/Merkle_D4.r1cs
+SHA256=28372edcf1d2df5d3ab0e885f4eb1c5d772a5157e7958cf3146599d82e8620fd
+BYTES=459232
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Wires: 978
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Constraints: 972
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Private Inputs: 9
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Public Inputs: 0
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Labels: 3092
+[32;22m[INFO]  [39;1msnarkJS[0m: # of Outputs: 1
+

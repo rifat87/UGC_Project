@@ -1,0 +1,6 @@
+PACKAGE=ws
+SEVERITY=high
+DIRECT=False
+RANGE=8.0.0 - 8.20.1
+FIX_AVAILABLE={"isSemVerMajor": true, "name": "circomlibjs", "version": "0.0.8"}
+NODES=node_modules/ws

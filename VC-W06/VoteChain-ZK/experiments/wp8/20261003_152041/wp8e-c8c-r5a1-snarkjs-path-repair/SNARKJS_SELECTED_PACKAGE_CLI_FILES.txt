@@ -1,0 +1,4 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/build/cli.cjs
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/build/snarkjs.js
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/build/snarkjs.min.js
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/cli.js

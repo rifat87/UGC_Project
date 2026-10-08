@@ -1,0 +1,6 @@
+========================================================================================
+KIND=verifier
+PATH=D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/verifier-deploy.json
+========================================================================================
+[2m2026-10-02T19:54:08.497002Z[0m [31mERROR[0m [2malloy_provider::blocks[0m[2m:[0m failed to fetch block [3mnumber[0m[2m=[0m0 [3merr[0m[2m=[0merror sending request for url (http://127.0.0.1:8558/)
+

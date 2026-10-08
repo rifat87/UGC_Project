@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720">
+<title>Accepted-ballot local cast receipt latency</title>
+<metadata>{&quot;render&quot;: &quot;range-marker-summary&quot;, &quot;source&quot;: &quot;T01_ACCEPTED_BALLOT_OVERALL.tsv&quot;, &quot;statisticsRecomputed&quot;: false}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800.0" y="62" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" fill="#111">Accepted-ballot local cast receipt latency</text>
+<text x="800.0" y="104" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" fill="#111">n=2000 measured observations</text>
+<line x1="150" y1="370" x2="1450" y2="370" stroke="#111" stroke-width="4"/>
+<line x1="150.0" y1="358" x2="150.0" y2="382" stroke="#111" stroke-width="2"/>
+<text x="150.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">669.912</text>
+<line x1="409.9999999999999" y1="358" x2="409.9999999999999" y2="382" stroke="#111" stroke-width="2"/>
+<text x="409.9999999999999" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">741.149</text>
+<line x1="669.9999999999998" y1="358" x2="669.9999999999998" y2="382" stroke="#111" stroke-width="2"/>
+<text x="669.9999999999998" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">812.386</text>
+<line x1="930.0000000000001" y1="358" x2="930.0000000000001" y2="382" stroke="#111" stroke-width="2"/>
+<text x="930.0000000000001" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">883.623</text>
+<line x1="1190.0" y1="358" x2="1190.0" y2="382" stroke="#111" stroke-width="2"/>
+<text x="1190.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">954.860</text>
+<line x1="1450.0" y1="358" x2="1450.0" y2="382" stroke="#111" stroke-width="2"/>
+<text x="1450.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,026.097</text>
+<line x1="150.0" y1="305" x2="150.0" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="150.0" cy="370" r="8" fill="#111111"/>
+<text x="150.0" y="225" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Min: 669.912</text>
+<line x1="460.95823933944337" y1="305" x2="460.95823933944337" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="460.95823933944337" cy="370" r="8" fill="#111111"/>
+<text x="460.95823933944337" y="180" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Median: 755.111</text>
+<line x1="481.1371612184137" y1="305" x2="481.1371612184137" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="481.1371612184137" cy="370" r="8" fill="#111111"/>
+<text x="481.1371612184137" y="135" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Mean: 760.640</text>
+<line x1="791.5618590926892" y1="305" x2="791.5618590926892" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="791.5618590926892" cy="370" r="8" fill="#111111"/>
+<text x="791.5618590926892" y="510" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">P95: 845.693</text>
+<line x1="1450.0" y1="305" x2="1450.0" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="1450.0" cy="370" r="8" fill="#111111"/>
+<text x="1450.0" y="555" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Max: 1,026.097</text>
+<text x="800.0" y="660" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Milliseconds | Frozen source: T01_ACCEPTED_BALLOT_OVERALL.tsv</text>
+</svg>

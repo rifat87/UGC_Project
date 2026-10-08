@@ -1,0 +1,50 @@
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_154147/wp8a-protocol-environment-freeze/WP8_MEASUREMENT_MATRIX.csv
+======================================================================
+SHA256=e54323f718247678d9144f29147bd315a8ff45c2ee1220371f2269357aa11bba
+1:cellId,variant,candidateCount,depth,capacity,candidateSlotRole,candidateSlot,warmups,measuredTrials,classification
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_154147/wp8a-protocol-environment-freeze/WP8_METRIC_REGISTRY.csv
+======================================================================
+SHA256=75114e4e7a295a962286e299be39f27a8f39fc626851f1783b4c1a56220d3b54
+4:M03,witnessGeneration,ms,proof
+5:M04,groth16Prove,ms,proof
+6:M05,groth16LocalVerify,ms,proof
+7:M06,proofSize,bytes,artifact
+13:M12,groth16VerifierGas,gas,contract
+14:M13,ciphertextBindingGas,gas,contract
+15:M14,successfulCastGas,gas,contract
+17:M16,deploymentGas,gas,contract
+19:M18,encryptedTallyUpdateGas,gas,contract
+22:M21,shareProofGeneration,ms,threshold
+23:M22,shareProofVerification,ms,threshold
+26:M25,candidateCount,count,scale
+27:M26,eligibleSetDepthCapacity,count,scale
+30:M29,transactionLatency,ms,system
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_154147/wp8a-protocol-environment-freeze/WP8_PROTOCOL_FROZEN.json
+======================================================================
+SHA256=a1ab8f594e8970df0ea15444a0722bde16d36cb9549ae610c417a3a45a79fb9b
+3:    "activeMerkleCapacity": 131072,
+4:    "activeMerkleDepth": 17,
+8:    "maxCandidates": 16,
+10:    "proofSystem": "Groth16",
+18:    "doNotReuseOld10To15SecondTimingAsZKE2E": true,
+25:    "primaryCostMetric": "gas",
+27:    "recordTransactionLatencySeparately": true
+29:  "candidateCounts": [
+35:  "candidateSlotPolicy": {
+63:    "benchmarkGeneratedProfilesMustLiveUnderExperiments": true,
+71:  "merkleProfiles": [
+74:      "depth": 4
+78:      "depth": 7
+82:      "depth": 10
+86:      "depth": 14
+90:      "depth": 17
+106:    "varyMerkleLeafPositionPerTrial": true
+135:      "DLEQ_verification",
+158:      "matrix": "ALL_CANDIDATE_COUNTS_X_ALL_DEPTHS",
+162:      "matrix": "ALL_CANDIDATE_COUNTS_AT_DEPTH_17",

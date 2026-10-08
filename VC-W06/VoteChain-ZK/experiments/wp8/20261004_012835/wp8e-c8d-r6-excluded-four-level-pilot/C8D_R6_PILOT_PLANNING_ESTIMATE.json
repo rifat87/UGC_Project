@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "classification": "NON_STATISTICAL_POST_PILOT_PLANNING_ESTIMATE",
+  "pilotObservationCount": 4,
+  "pilotExcludedFromFinalStatistics": true,
+  "pilotTimedStageTotalMs": 21167.706299999998,
+  "maxSinglePilotObservationTimedTotalMs": 6079.7889,
+  "maxPilotGroth16ProveMs": 3482.3495,
+  "defaultMatrixCandidate": {
+    "warmupPerN": 5,
+    "measuredPerN": 20,
+    "totalPerN": 25,
+    "totalObservations": 100
+  },
+  "roughProjectionMethod": "25 * sum of the four one-per-N pilot timed totals",
+  "roughProjectedTimedStageTotalMs": 529192.6575,
+  "roughProjectedTimedStageTotalSeconds": 529.1926575,
+  "warning": "Planning estimate only from one excluded pilot observation per N; not an estimator for publication and not part of final statistics.",
+  "finalRepetitionMatrixFrozen": false
+}

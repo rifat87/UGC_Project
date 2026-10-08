@@ -1,0 +1,89 @@
+{
+  "classification": "WP8C_B_PILOT_ONLY_NOT_FINAL_BENCHMARK",
+  "fixturePolicy": "FIXED_VALIDATED_SYNTHETIC_INPUT",
+  "measuredCount": 3,
+  "statistics": {
+    "proofCompactJsonBytes": {
+      "max": 723.0,
+      "mean": 721.6666666666666,
+      "median": 722.0,
+      "min": 720.0,
+      "n": 3,
+      "nearestRankP95": 723.0,
+      "sampleStandardDeviation": 1.5275252316519468
+    },
+    "proofCoordinatePayloadBytes": {
+      "max": 256.0,
+      "mean": 256.0,
+      "median": 256.0,
+      "min": 256.0,
+      "n": 3,
+      "nearestRankP95": 256.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "proveMs": {
+      "max": 2258.4051,
+      "mean": 2182.4320666666667,
+      "median": 2183.6094,
+      "min": 2105.2817,
+      "n": 3,
+      "nearestRankP95": 2258.4051,
+      "sampleStandardDeviation": 76.56848889865418
+    },
+    "publicCompactJsonBytes": {
+      "max": 5665.0,
+      "mean": 5665.0,
+      "median": 5665.0,
+      "min": 5665.0,
+      "n": 3,
+      "nearestRankP95": 5665.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "rssSampleHighWaterBytes": {
+      "max": 919941120.0,
+      "mean": 904119637.3333334,
+      "median": 907546624.0,
+      "min": 884871168.0,
+      "n": 3,
+      "nearestRankP95": 919941120.0,
+      "sampleStandardDeviation": 17784362.837355442
+    },
+    "totalStageMs": {
+      "max": 2815.0203,
+      "mean": 2737.2192,
+      "median": 2739.8133,
+      "min": 2656.824,
+      "n": 3,
+      "nearestRankP95": 2815.0203,
+      "sampleStandardDeviation": 79.1300470714507
+    },
+    "verifyMs": {
+      "max": 14.5725,
+      "mean": 14.158033333333334,
+      "median": 14.5228,
+      "min": 13.3788,
+      "n": 3,
+      "nearestRankP95": 14.5725,
+      "sampleStandardDeviation": 0.6752932424756917
+    },
+    "witnessBytes": {
+      "max": 1957708.0,
+      "mean": 1957708.0,
+      "median": 1957708.0,
+      "min": 1957708.0,
+      "n": 3,
+      "nearestRankP95": 1957708.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "witnessMs": {
+      "max": 542.8251,
+      "mean": 540.6291,
+      "median": 542.0427,
+      "min": 537.0195,
+      "n": 3,
+      "nearestRankP95": 542.8251,
+      "sampleStandardDeviation": 3.150388318921974
+    }
+  },
+  "warmupCount": 1
+}

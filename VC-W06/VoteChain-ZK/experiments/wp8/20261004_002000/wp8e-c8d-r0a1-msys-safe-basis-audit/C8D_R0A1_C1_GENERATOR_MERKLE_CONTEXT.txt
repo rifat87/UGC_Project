@@ -1,0 +1,281 @@
+37-const poseidon =
+38-    await buildPoseidon();
+39-
+40-const BF = babyjub.F;
+41-const PF = poseidon.F;
+42-
+43-const MAX =
+44:    profile.maxCandidates;
+45-
+46:const DEPTH =
+47:    profile.merkleDepth;
+48-
+49:if (MAX !== 16 || DEPTH !== 17) {
+50-    throw new Error(
+51:        "WP4 expects frozen WP3 profile K=16/depth=17"
+52-    );
+53-}
+54-
+55:const D_ID =
+56-    BigInt(profile.domains.identity);
+57-
+58-const D_NULL =
+59-    BigInt(profile.domains.nullifier);
+60-
+61-const D_CTX =
+62-    BigInt(profile.domains.electionContext);
+63-
+64-const D_BIND =
+65-    BigInt(profile.domains.ciphertextBinding);
+66-
+67-const D_MANIFEST =
+68:    BigInt(profile.domains.candidateManifest);
+69-
+70-function H(values) {
+71-    return PF.toObject(
+72-        poseidon(
+73-            values.map(BigInt)
+74-        )
+75-    );
+--
+97-                    ? x.toString()
+98-                    : x,
+99-            2
+100-        ) + "\n"
+101-    );
+102-}
+103-
+104:const secretA =
+105-    42424242424242n;
+106-
+107:const secretB =
+108-    98765432123456n;
+109-
+110:const idA =
+111:    H([D_ID, secretA]);
+112-
+113:const idB =
+114:    H([D_ID, secretB]);
+115-
+116-/*
+117- * Sparse binary tree with voters at leaf index 0 and 1.
+118- *
+119: * zero[level] is root of an empty subtree of 2^level leaves.
+120- */
+121:const zero = [0n];
+122-
+123:for (let level = 0; level < DEPTH; level++) {
+124:    zero.push(
+125-        H([
+126:            zero[level],
+127:            zero[level]
+128-        ])
+129-    );
+130-}
+131-
+132:const pairRoot =
+133:    H([idA, idB]);
+134-
+135:let sharedRoot =
+136:    pairRoot;
+137-
+138:for (let level = 1; level < DEPTH; level++) {
+139:    sharedRoot =
+140-        H([
+141:            sharedRoot,
+142:            zero[level]
+143-        ]);
+144-}
+145-
+146:const siblingsA = [
+147:    idB,
+148-    ...Array.from(
+149:        { length: DEPTH - 1 },
+150:        (_, i) => zero[i + 1]
+151-    )
+152-];
+153-
+154:const siblingsB = [
+155:    idA,
+156-    ...Array.from(
+157:        { length: DEPTH - 1 },
+158:        (_, i) => zero[i + 1]
+159-    )
+160-];
+161-
+162:const pathA =
+163:    Array(DEPTH).fill(0n);
+164-
+165:const pathB =
+166:    Array(DEPTH).fill(0n);
+167-
+168:pathB[0] = 1n;
+169-
+170:function recomputeRoot(
+171-    leaf,
+172-    siblings,
+173:    pathBits
+174-) {
+175-    let x = leaf;
+176-
+177:    for (let i = 0; i < DEPTH; i++) {
+178-        x =
+179:            pathBits[i] === 0n
+180-                ? H([x, siblings[i]])
+181-                : H([siblings[i], x]);
+182-    }
+183-
+184-    return x;
+185-}
+186-
+187-if (
+188:    recomputeRoot(
+189:        idA,
+190:        siblingsA,
+191:        pathA
+192:    ) !== sharedRoot
+193-) {
+194-    throw new Error(
+195-        "voter A Merkle path mismatch"
+196-    );
+197-}
+198-
+199-if (
+200:    recomputeRoot(
+201:        idB,
+202:        siblingsB,
+203:        pathB
+204:    ) !== sharedRoot
+205-) {
+206-    throw new Error(
+207-        "voter B Merkle path mismatch"
+208-    );
+209-}
+210-
+211-const electionId =
+212-    202609300001n;
+213-
+214:const candidateCount =
+215-    4n;
+216-
+217:const candidateIds =
+218-    [101n, 102n, 103n, 104n];
+219-
+220:const candidateManifestHash =
+221-    H([
+222-        D_MANIFEST,
+223:        ...candidateIds
+224-    ]);
+225-
+226-const contractDomain =
+227-    BigInt(
+228-        profile.testContractDomain
+229-    );
+230-
+--
+240-const Yxy =
+241-    pointBig(Y);
+242-
+243-const electionContextHash =
+244-    H([
+245-        D_CTX,
+246-        electionId,
+247:        candidateManifestHash,
+248:        candidateCount,
+249-        contractDomain,
+250-        Yxy[0],
+251-        Yxy[1]
+252-    ]);
+253-
+254-const identityPoint = [
+255-    BF.e(0),
+--
+339-        states
+340-    };
+341-}
+342-
+343-function makeVoter(
+344-    secret,
+345-    siblings,
+346:    pathBits,
+347-    selectedIndex,
+348-    randomnessBase
+349-) {
+350-    const nullifier =
+351-        H([
+352-            D_NULL,
+353-            secret,
+--
+364-        bindCiphertexts(
+365-            ballot.ciphertexts
+366-        );
+367-
+368-    const common = {
+369-        secret,
+370-        siblings,
+371:        pathBits,
+372-        bit:
+373-            ballot.bits,
+374-        randomness:
+375-            ballot.randomness,
+376-
+377-        eligibleRoot:
+378:            sharedRoot,
+379-
+380-        electionId,
+381:        candidateManifestHash,
+382:        candidateCount,
+383-        contractDomain,
+384-
+385-        Yx:
+386-            Yxy[0],
+387-        Yy:
+388-            Yxy[1],
+389-
+--
+427-            ballot.ciphertexts,
+428-        binding
+429-    };
+430-}
+431-
+432-const voterA =
+433-    makeVoter(
+434:        secretA,
+435:        siblingsA,
+436:        pathA,
+437-        1,
+438-        5001n
+439-    );
+440-
+441-const voterB =
+442-    makeVoter(
+443:        secretB,
+444:        siblingsB,
+445:        pathB,
+446-        2,
+447-        7001n
+448-    );
+449-
+450-if (
+451-    voterA.nullifier ===
+452-    voterB.nullifier
+--
+544-    ),
+545-    {
+546-        profile:
+547-            profile.profile,
+548-
+549-        config: {
+550-            eligibleRoot:
+551:                sharedRoot,
+552-
+553-            electionId,
+554:            candidateManifestHash,
+555:            candidateCount,
+556-            contractDomain,
+557-
+558-            Yx:
+559-                Yxy[0],
+560-
+561-            Yy:
+562-                Yxy[1],

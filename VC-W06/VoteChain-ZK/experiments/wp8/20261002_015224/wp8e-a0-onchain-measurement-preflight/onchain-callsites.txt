@@ -1,0 +1,93 @@
+### castVote
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:919:    function castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1113:    function castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:208:        d.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:247:        d.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:286:        p.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:325:        p.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1218:        d.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1236:        p.castVote(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:137:        d.castVote(
+
+### encrypted tally
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:289:    uint256 public acceptedBallotCount;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:310:    uint256[16] internal tallyRx;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:311:    uint256[16] internal tallyRy;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:312:    uint256[16] internal tallySx;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:313:    uint256[16] internal tallySy;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:336:        uint256 acceptedBallotCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:342:        uint256 acceptedBallotCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:360:            tallyRy[i] = 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:361:            tallySy[i] = 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:542:     *   - enforces sum(totals) == acceptedBallotCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:583:                        acceptedBallotCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:602:                acceptedBallotCount,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:614:            acceptedBallotCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:659:            tallyRx[slot],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:660:            tallyRy[slot],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:661:            tallySx[slot],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:662:            tallySy[slot]
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:705:                    tallyRx[i],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:706:                    tallyRy[i]
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:717:                    tallySx[i],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:718:                    tallySy[i]
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:739:            tallyRx[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:742:            tallyRy[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:745:            tallySx[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:748:            tallySy[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:786:        acceptedBallotCount +=
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:799:            acceptedBallotCount
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1205:    uint256[16] internal tallyRx;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1206:    uint256[16] internal tallyRy;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1207:    uint256[16] internal tallySx;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1208:    uint256[16] internal tallySy;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1216:            tallyRy[i] = 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1217:            tallySy[i] = 1;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1237:                        tallyRx[i],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1238:                        tallyRy[i]
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1249:                        tallySx[i],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1250:                        tallySy[i]
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1258:            tallyRx[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1261:            tallyRy[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1264:            tallySx[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1267:            tallySy[i] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:450:            d.acceptedBallotCount() ==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:475:            p.acceptedBallotCount() ==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:579:            d.acceptedBallotCount() ==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:644:            d.acceptedBallotCount() ==
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:171:            d.acceptedBallotCount() ==
+
+### verifyProof
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/verifiers/VoteChainVoteDigestVerifier.sol:86:    function verifyProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[10] calldata _pubSignals) public view returns (bool) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol:275:    function verifyProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[73] calldata _pubSignals) public view returns (bool) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:7:    function verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:19:    function verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:960:            verifier.verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol:1185:            verifier.verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1148:            dv.verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1168:            pv.verifyProof(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:9:    function verifyProof(
+
+### gas instrumentation already present
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1023:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1030:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1033:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1040:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1051:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1060:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1066:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1075:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1078:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1088:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1145:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1157:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1165:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1177:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1192:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1204:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1216:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1231:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1234:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1249:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1291:            gasleft();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1302:            gasleft();

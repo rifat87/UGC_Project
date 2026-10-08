@@ -1,0 +1,1788 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$PWD"
+
+if [ "$(basename "$ROOT")" != "VoteChain-ZK" ]; then
+    echo "ERROR: run from VoteChain-ZK root."
+    exit 2
+fi
+
+BACK="$ROOT/votechain-central-server"
+FRONT="$ROOT/votechain-frontend-ts"
+FOUNDRY="$ROOT/contracts/wp4-foundry"
+CRYPTO="$ROOT/crypto"
+
+OUTROOT="../VoteChain_VC-W03_FinalZK/Output/VC-W07"
+
+PREFLIGHT="$OUTROOT/VC-W07_WP7_SECURITY_PREFLIGHT_SUMMARY.txt"
+TARGET_SUMMARY="$OUTROOT/VC-W07_WP7A_TARGETED_SECURITY_SOURCE_CAPTURE_SUMMARY.txt"
+
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+EVIDENCE="$ROOT/experiments/wp7/$RUN_ID/wp7a-targeted-hardening"
+BACKUP="$EVIDENCE/before"
+
+SUMMARY="$OUTROOT/VC-W07_WP7A_TARGETED_HARDENING_SUMMARY.txt"
+
+mkdir -p \
+    "$EVIDENCE" \
+    "$BACKUP" \
+    "$BACK/middleware" \
+    "$BACK/services/zk" \
+    "$BACK/scripts" \
+    "$OUTROOT"
+
+echo
+echo "======================================================================"
+echo "VOTECHAIN-ZK WP7A — TARGETED HARDENING / NEGATIVE TESTS"
+echo "======================================================================"
+echo "RUN_ID=$RUN_ID"
+echo
+echo "SOURCE_MODIFICATION=YES"
+echo "DATABASE_ACCESS=NO"
+echo "BIOMETRIC_EXECUTION=NO"
+echo "REAL_CREDENTIALS_READ=NO"
+echo "FINAL_WP8_BENCHMARK=NO"
+echo
+
+###############################################################################
+# 1. REQUIRE ACCEPTED DISCOVERY GATES
+###############################################################################
+
+echo "=== 1. REQUIRE WP7 PREFLIGHT / TARGETED CAPTURE ==="
+
+grep -q \
+    '^STATUS=PASS_WP7_SECURITY_PREFLIGHT$' \
+    "$PREFLIGHT"
+
+grep -q \
+    '^STATUS=PASS_WP7A_TARGETED_SOURCE_CAPTURE$' \
+    "$TARGET_SUMMARY"
+
+echo "WP7_SECURITY_PREFLIGHT=PASS"
+echo "WP7A_TARGETED_SOURCE_CAPTURE=PASS"
+
+###############################################################################
+# 2. PROTECTED SOURCE BASELINE
+###############################################################################
+
+echo
+echo "=== 2. PROTECTED SOURCE BASELINE ==="
+
+WP6_CORE="$CRYPTO/src/wp6-threshold.mjs"
+WP6_PROFILE="$CRYPTO/config/wp6-threshold-profile.json"
+CONTRACT="$FOUNDRY/src/VoteChainWP4.sol"
+
+WP6_CORE_BEFORE="$(sha256sum "$WP6_CORE" | awk '{print $1}')"
+WP6_PROFILE_BEFORE="$(sha256sum "$WP6_PROFILE" | awk '{print $1}')"
+CONTRACT_BEFORE="$(sha256sum "$CONTRACT" | awk '{print $1}')"
+
+echo "WP6_CORE_BEFORE=$WP6_CORE_BEFORE"
+echo "WP6_PROFILE_BEFORE=$WP6_PROFILE_BEFORE"
+echo "CONTRACT_BEFORE=$CONTRACT_BEFORE"
+
+###############################################################################
+# 3. BACKUP FILES TO BE MODIFIED
+###############################################################################
+
+echo
+echo "=== 3. BACKUP TARGET FILES ==="
+
+FILES=(
+    "$BACK/server.js"
+    "$BACK/routes/wp5Routes.js"
+    "$BACK/models/Voter.js"
+    "$BACK/controllers/voterController.js"
+    "$FRONT/src/privacy/wp5Privacy.worker.ts"
+)
+
+for file in "${FILES[@]}"
+do
+    relative="${file#$ROOT/}"
+    mkdir -p "$BACKUP/$(dirname "$relative")"
+    cp "$file" "$BACKUP/$relative"
+done
+
+echo "WP7A_BACKUP=PASS"
+
+###############################################################################
+# 4. WRITE WP5 AUTHORIZATION SECURITY MIDDLEWARE
+###############################################################################
+
+echo
+echo "=== 4. WRITE WP5 AUTHORIZATION SECURITY MIDDLEWARE ==="
+
+cat > "$BACK/middleware/wp5AuthorizationSecurity.js" <<'JS'
+const COORDINATE =
+  /^[A-Za-z0-9_-]{43}$/
+
+function configuredOrigins(
+  env = process.env,
+) {
+  return new Set(
+    String(
+      env.FRONTEND_ORIGINS ||
+      '',
+    )
+      .split(',')
+      .map(
+        value =>
+          value.trim(),
+      )
+      .filter(Boolean),
+  )
+}
+
+function isRecord(
+  value,
+) {
+  return Boolean(
+    value &&
+    typeof value === 'object' &&
+    !Array.isArray(value),
+  )
+}
+
+/*
+ * Validate the browser-generated public half of the ephemeral
+ * P-256 credential-release key before any biometric operation.
+ *
+ * In particular:
+ *   - private JWK material is forbidden;
+ *   - P-256 coordinates must be canonical 32-byte base64url values;
+ *   - unexpected JWK fields are rejected.
+ */
+export function validateWp5PublicJwk(
+  value,
+) {
+  if (!isRecord(value)) {
+    throw new Error(
+      'credentialPublicKey must be a public P-256 JWK',
+    )
+  }
+
+  const allowed =
+    new Set([
+      'kty',
+      'crv',
+      'x',
+      'y',
+      'ext',
+      'key_ops',
+      'alg',
+      'use',
+    ])
+
+  for (
+    const key
+    of Object.keys(value)
+  ) {
+    if (!allowed.has(key)) {
+      throw new Error(
+        'credentialPublicKey contains an unexpected field',
+      )
+    }
+  }
+
+  if (
+    value.kty !== 'EC' ||
+    value.crv !== 'P-256' ||
+    typeof value.x !== 'string' ||
+    typeof value.y !== 'string' ||
+    !COORDINATE.test(value.x) ||
+    !COORDINATE.test(value.y) ||
+    Object.prototype.hasOwnProperty.call(
+      value,
+      'd',
+    )
+  ) {
+    throw new Error(
+      'credentialPublicKey must be a public P-256 JWK',
+    )
+  }
+
+  if (
+    value.key_ops !== undefined &&
+    (
+      !Array.isArray(value.key_ops) ||
+      !value.key_ops.every(
+        item =>
+          typeof item === 'string',
+      )
+    )
+  ) {
+    throw new Error(
+      'credentialPublicKey key_ops is invalid',
+    )
+  }
+
+  return value
+}
+
+/*
+ * Browser requests carry Origin. Non-browser/internal research clients
+ * may omit it, but if Origin is present it MUST be an explicitly
+ * configured frontend origin.
+ */
+export function requireWp5AllowedOrigin(
+  req,
+  res,
+  next,
+) {
+  const origin =
+    req.get('origin')
+
+  if (!origin) {
+    return next()
+  }
+
+  const allowed =
+    configuredOrigins()
+
+  if (
+    allowed.size === 0 ||
+    !allowed.has(origin)
+  ) {
+    return res.status(403).json({
+      success: false,
+      message:
+        'Request origin is not authorized for private-voting authorization',
+    })
+  }
+
+  return next()
+}
+
+/*
+ * Candidate-blind authorization has exactly one request-body property.
+ * This deliberately rejects candidateId, selectedCandidate, or any
+ * accidental future plaintext vote field instead of silently ignoring it.
+ */
+export function validateWp5AuthorizationRequest(
+  req,
+  res,
+  next,
+) {
+  if (!req.is('application/json')) {
+    return res.status(415).json({
+      success: false,
+      message:
+        'Private-voting authorization requires application/json',
+    })
+  }
+
+  if (!isRecord(req.body)) {
+    return res.status(400).json({
+      success: false,
+      message:
+        'Invalid private-voting authorization request',
+    })
+  }
+
+  const keys =
+    Object.keys(req.body)
+
+  if (
+    keys.length !== 1 ||
+    keys[0] !==
+      'credentialPublicKey'
+  ) {
+    return res.status(400).json({
+      success: false,
+      message:
+        'Authorization request must contain only credentialPublicKey',
+    })
+  }
+
+  try {
+    validateWp5PublicJwk(
+      req.body
+        .credentialPublicKey,
+    )
+  } catch {
+    return res.status(400).json({
+      success: false,
+      message:
+        'Invalid credentialPublicKey',
+    })
+  }
+
+  return next()
+}
+JS
+
+echo "WP5_AUTH_SECURITY_MIDDLEWARE=WRITTEN"
+
+###############################################################################
+# 5. WRITE CONCURRENCY-SAFE REGISTRATION RETRY CORE
+###############################################################################
+
+echo
+echo "=== 5. WRITE REGISTRATION RETRY CORE ==="
+
+cat > "$BACK/services/zk/wp5RegistrationCore.js" <<'JS'
+export function isWp5GroupIndexDuplicate(
+  error,
+) {
+  return Boolean(
+    error &&
+    Number(error.code) ===
+      11000 &&
+    error.keyPattern &&
+    Object.prototype
+      .hasOwnProperty
+      .call(
+        error.keyPattern,
+        'wp5GroupIndex',
+      ),
+  )
+}
+
+/*
+ * Allocation itself is intentionally side-effect free.
+ *
+ * The database unique index is the serialization point. If two concurrent
+ * requests observe the same next index, one insert wins and the loser
+ * retries from the newly committed maximum. Failed inserts therefore do
+ * not reserve an index and cannot create Merkle gaps.
+ */
+export async function saveVoterWithWp5IndexRetry({
+  allocateIndex,
+  saveAtIndex,
+  maxAttempts = 32,
+}) {
+  if (
+    typeof allocateIndex !==
+      'function' ||
+    typeof saveAtIndex !==
+      'function'
+  ) {
+    throw new Error(
+      'WP5 registration retry callbacks are required',
+    )
+  }
+
+  if (
+    !Number.isSafeInteger(
+      maxAttempts,
+    ) ||
+    maxAttempts < 1 ||
+    maxAttempts > 128
+  ) {
+    throw new Error(
+      'Invalid WP5 registration retry limit',
+    )
+  }
+
+  for (
+    let attempt = 1;
+    attempt <= maxAttempts;
+    attempt += 1
+  ) {
+    const index =
+      await allocateIndex()
+
+    try {
+      return await saveAtIndex(
+        index,
+      )
+    } catch (error) {
+      if (
+        !isWp5GroupIndexDuplicate(
+          error,
+        )
+      ) {
+        throw error
+      }
+
+      if (
+        attempt ===
+        maxAttempts
+      ) {
+        throw new Error(
+          'WP5 registration index allocation remained contended',
+        )
+      }
+    }
+  }
+
+  throw new Error(
+    'WP5 registration index allocation failed',
+  )
+}
+JS
+
+echo "WP5_REGISTRATION_RETRY_CORE=WRITTEN"
+
+###############################################################################
+# 6. PATCH SERVER / ROUTES / MODEL / REGISTRATION / WORKER
+###############################################################################
+
+echo
+echo "=== 6. APPLY TARGETED SOURCE PATCHES ==="
+
+PATCHER="$EVIDENCE/wp7a-patcher.py"
+
+cat > "$PATCHER" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+root = Path(sys.argv[1])
+
+server = root / "votechain-central-server/server.js"
+routes = root / "votechain-central-server/routes/wp5Routes.js"
+model = root / "votechain-central-server/models/Voter.js"
+voter = root / "votechain-central-server/controllers/voterController.js"
+worker = root / "votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts"
+
+
+def replace_once(path, old, new, label, marker=None):
+    text = path.read_text(encoding="utf-8")
+
+    if marker and marker in text:
+        print(f"{label}=ALREADY_PATCHED")
+        return
+
+    if old not in text:
+        raise RuntimeError(
+            f"{label}: expected source anchor not found in {path}"
+        )
+
+    text = text.replace(old, new, 1)
+    path.write_text(text, encoding="utf-8")
+    print(f"{label}=PATCHED")
+
+
+# ------------------------------------------------------------------
+# Express request-size hardening.
+# ------------------------------------------------------------------
+
+replace_once(
+    server,
+    """app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+""",
+    """app.use(express.json({
+  limit: '16kb',
+  strict: true,
+}))
+app.use(express.urlencoded({
+  extended: true,
+  limit: '16kb',
+  parameterLimit: 50,
+}))
+""",
+    "SERVER_BODY_LIMIT",
+    marker="limit: '16kb'",
+)
+
+
+# ------------------------------------------------------------------
+# WP5 route guards / endpoint-specific throttling.
+# ------------------------------------------------------------------
+
+text = routes.read_text(encoding="utf-8")
+
+if "WP5_AUTHORIZATION_RATE_LIMIT" not in text:
+    text = text.replace(
+        "import express from 'express'\n",
+        """import express from 'express'
+import rateLimit from 'express-rate-limit'
+import {
+  requireWp5AllowedOrigin,
+  validateWp5AuthorizationRequest,
+} from '../middleware/wp5AuthorizationSecurity.js'
+""",
+        1,
+    )
+
+    anchor = "const router = express.Router()\n"
+
+    if anchor not in text:
+        raise RuntimeError(
+            "wp5Routes router anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        """const router = express.Router()
+
+/*
+ * WP5_AUTHORIZATION_RATE_LIMIT
+ *
+ * Biometric authorization is intentionally more expensive than ordinary
+ * public reads, so it receives a tighter endpoint-specific limiter in
+ * addition to the application-wide limiter.
+ */
+const wp5AuthorizationLimiter =
+  rateLimit({
+    windowMs:
+      60 * 1000,
+    max: 12,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+      success: false,
+      message:
+        'Too many private-voting authorization attempts; retry shortly',
+    },
+  })
+
+const wp5AuthorizationGuards = [
+  requireWp5AllowedOrigin,
+  wp5AuthorizationLimiter,
+  validateWp5AuthorizationRequest,
+]
+""",
+        1,
+    )
+
+    old = """router.post('/authorize/face', authorizeFace)
+router.post(
+  '/authorize/fingerprint',
+  fingerprintController.detectWp5Fingerprint,
+)
+"""
+
+    new = """router.post(
+  '/authorize/face',
+  ...wp5AuthorizationGuards,
+  authorizeFace,
+)
+router.post(
+  '/authorize/fingerprint',
+  ...wp5AuthorizationGuards,
+  fingerprintController.detectWp5Fingerprint,
+)
+"""
+
+    if old not in text:
+        raise RuntimeError(
+            "WP5 authorization route block missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    routes.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("WP5_AUTH_ROUTE_GUARDS=PATCHED")
+else:
+    print("WP5_AUTH_ROUTE_GUARDS=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# Preserve Mongo duplicate-key metadata through the schema hook.
+# The concurrency retry layer needs keyPattern.wp5GroupIndex.
+# ------------------------------------------------------------------
+
+replace_once(
+    model,
+    """voterSchema.post('save', function duplicateKeyError(error, _doc, next) {
+  if ((error.name === 'MongoError' || error.name === 'MongoServerError') && error.code === 11000) {
+    next(new Error('A voter with this National ID or ZK identity commitment already exists'))
+  } else {
+    next(error)
+  }
+})
+""",
+    """voterSchema.post('save', function duplicateKeyError(error, _doc, next) {
+  if (
+    (error.name === 'MongoError' ||
+      error.name === 'MongoServerError') &&
+    error.code === 11000
+  ) {
+    const duplicate =
+      new Error(
+        'A voter with duplicate identity or registration-index data already exists',
+      )
+
+    duplicate.name =
+      error.name
+    duplicate.code =
+      error.code
+    duplicate.keyPattern =
+      error.keyPattern
+    duplicate.keyValue =
+      error.keyValue
+
+    next(duplicate)
+  } else {
+    next(error)
+  }
+})
+""",
+    "VOTER_DUPLICATE_METADATA",
+    marker="duplicate.keyPattern",
+)
+
+
+# ------------------------------------------------------------------
+# Registration concurrency retry.
+# ------------------------------------------------------------------
+
+text = voter.read_text(
+    encoding="utf-8",
+)
+
+if "saveVoterWithWp5IndexRetry" not in text:
+    anchor = """import { createWp5Credential, allocateWp5GroupIndex } from '../services/zk/wp5PrivacyService.js'
+"""
+
+    replacement = """import { createWp5Credential, allocateWp5GroupIndex } from '../services/zk/wp5PrivacyService.js'
+import { saveVoterWithWp5IndexRetry } from '../services/zk/wp5RegistrationCore.js'
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "voterController import anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    old = """    const { identityCommitment, encryptedCredential } = await createEncryptedSemaphoreIdentity()
+    const wp5 = await createWp5Credential()
+    const wp5GroupIndex = await allocateWp5GroupIndex()
+    const voter = new Voter({
+      nationalId,
+      name,
+      dateOfBirth,
+      location,
+      zkIdentityCommitment: identityCommitment,
+      zkCredential: encryptedCredential,
+      zkRegistrationStatus: 'pending',
+      wp5IdentityCommitment: wp5.identityCommitment,
+      wp5Credential: wp5.encryptedCredential,
+      wp5RegistrationStatus: 'registered',
+      wp5GroupIndex,
+    })
+
+    await voter.save()
+"""
+
+    new = """    const { identityCommitment, encryptedCredential } = await createEncryptedSemaphoreIdentity()
+    const wp5 = await createWp5Credential()
+
+    const voter =
+      await saveVoterWithWp5IndexRetry({
+        allocateIndex:
+          allocateWp5GroupIndex,
+
+        saveAtIndex:
+          async (
+            wp5GroupIndex,
+          ) => {
+            const candidate =
+              new Voter({
+                nationalId,
+                name,
+                dateOfBirth,
+                location,
+                zkIdentityCommitment:
+                  identityCommitment,
+                zkCredential:
+                  encryptedCredential,
+                zkRegistrationStatus:
+                  'pending',
+                wp5IdentityCommitment:
+                  wp5.identityCommitment,
+                wp5Credential:
+                  wp5.encryptedCredential,
+                wp5RegistrationStatus:
+                  'registered',
+                wp5GroupIndex,
+              })
+
+            await candidate.save()
+
+            return candidate
+          },
+      })
+"""
+
+    if old not in text:
+        raise RuntimeError(
+            "voterController registration block missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    voter.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("WP5_REGISTRATION_RETRY=PATCHED")
+else:
+    print("WP5_REGISTRATION_RETRY=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# Prevent deletion of an active WP5 member. Removing an interior member
+# would violate the contiguous-index Merkle representation.
+# ------------------------------------------------------------------
+
+replace_once(
+    voter,
+    """    if (voter.zkRegistrationStatus === 'registered') {
+      return res.status(409).json({
+        message: 'A voter with an on-chain ZK commitment cannot be deleted from the active election record',
+      })
+    }
+""",
+    """    if (
+      voter.zkRegistrationStatus === 'registered' ||
+      voter.wp5RegistrationStatus === 'registered'
+    ) {
+      return res.status(409).json({
+        message:
+          'A voter with an active election credential cannot be deleted from the election record',
+      })
+    }
+""",
+    "WP5_REGISTERED_DELETE_GUARD",
+    marker="voter.wp5RegistrationStatus === 'registered'",
+)
+
+
+# ------------------------------------------------------------------
+# Browser worker single-use authorization state.
+# ------------------------------------------------------------------
+
+text = worker.read_text(
+    encoding="utf-8",
+)
+
+if "authorizationSessionState:" not in text:
+    anchor = """let sessionKeyPair:
+  CryptoKeyPair | null =
+    null
+"""
+
+    addition = """let sessionKeyPair:
+  CryptoKeyPair | null =
+    null
+
+let authorizationSessionState:
+  "idle" |
+  "initializing" |
+  "ready" |
+  "consuming" =
+    "idle"
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "worker session-key anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        addition,
+        1,
+    )
+
+    begin_pattern = re.compile(
+        r'async function beginAuthorization\(\) \{.*?\n\}\n\nasync function unwrapCredential',
+        re.S,
+    )
+
+    begin_match = begin_pattern.search(
+        text,
+    )
+
+    if not begin_match:
+        raise RuntimeError(
+            "worker beginAuthorization block missing"
+        )
+
+    begin_replacement = """async function beginAuthorization() {
+  if (
+    authorizationSessionState !==
+      "idle" ||
+    sessionKeyPair
+  ) {
+    throw new Error(
+      "A WP5 authorization session is already active",
+    )
+  }
+
+  authorizationSessionState =
+    "initializing"
+
+  try {
+    sessionKeyPair =
+      await crypto.subtle.generateKey(
+        {
+          name: "ECDH",
+          namedCurve: "P-256",
+        },
+        true,
+        ["deriveBits"],
+      )
+
+    const publicKey =
+      await crypto.subtle.exportKey(
+        "jwk",
+        sessionKeyPair.publicKey,
+      )
+
+    authorizationSessionState =
+      "ready"
+
+    return {
+      credentialPublicKey:
+        publicKey,
+    }
+  } catch (error) {
+    sessionKeyPair =
+      null
+
+    authorizationSessionState =
+      "idle"
+
+    throw error
+  }
+}
+
+async function unwrapCredential"""
+
+    text = (
+        text[:begin_match.start()] +
+        begin_replacement +
+        text[begin_match.end():]
+    )
+
+    prepare_index = text.index(
+        "async function prepareBallot(",
+    )
+
+    opening = text.index(
+        ") {\n  let secret = 0n",
+        prepare_index,
+    )
+
+    old_opening = """) {
+  let secret = 0n"""
+
+    new_opening = """) {
+  if (
+    authorizationSessionState !==
+      "ready" ||
+    !sessionKeyPair
+  ) {
+    throw new Error(
+      "WP5 authorization session is not available for ballot preparation",
+    )
+  }
+
+  /*
+   * Transition synchronously before the first await so a second
+   * PREPARE_BALLOT message cannot consume the same credential session.
+   */
+  authorizationSessionState =
+    "consuming"
+
+  let secret = 0n"""
+
+    segment = text[
+        prepare_index:
+    ]
+
+    if old_opening not in segment:
+        raise RuntimeError(
+            "worker prepareBallot opening missing"
+        )
+
+    segment = segment.replace(
+        old_opening,
+        new_opening,
+        1,
+    )
+
+    text = (
+        text[:prepare_index] +
+        segment
+    )
+
+    request_index = text.index(
+        "type RequestMessage",
+        prepare_index,
+    )
+
+    prepare_segment = text[
+        prepare_index:
+        request_index
+    ]
+
+    cleanup_old = """    sessionKeyPair =
+      null
+  }
+}
+"""
+
+    cleanup_new = """    sessionKeyPair =
+      null
+
+    authorizationSessionState =
+      "idle"
+  }
+}
+"""
+
+    if cleanup_old not in prepare_segment:
+        raise RuntimeError(
+            "worker prepareBallot cleanup missing"
+        )
+
+    prepare_segment = prepare_segment.replace(
+        cleanup_old,
+        cleanup_new,
+        1,
+    )
+
+    text = (
+        text[:prepare_index] +
+        prepare_segment +
+        text[request_index:]
+    )
+
+    clear_old = """        sessionKeyPair =
+          null
+
+        result = {
+          cleared: true,
+        }
+"""
+
+    clear_new = """        sessionKeyPair =
+          null
+
+        authorizationSessionState =
+          "idle"
+
+        result = {
+          cleared: true,
+        }
+"""
+
+    if clear_old not in text:
+        raise RuntimeError(
+            "worker CLEAR block missing"
+        )
+
+    text = text.replace(
+        clear_old,
+        clear_new,
+        1,
+    )
+
+    /*
+     * Cleanup is owned by beginAuthorization() and prepareBallot().
+     * A second concurrent PREPARE must not clear the first request's
+     * key merely because the second request was rejected.
+     */
+    catch_old = """    } catch (error) {
+      sessionKeyPair =
+        null
+
+      self.postMessage({
+"""
+
+    catch_new = """    } catch (error) {
+      self.postMessage({
+"""
+
+    if catch_old not in text:
+        raise RuntimeError(
+            "worker dispatch catch block missing"
+        )
+
+    text = text.replace(
+        catch_old,
+        catch_new,
+        1,
+    )
+
+    worker.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("WP5_WORKER_SINGLE_USE_SESSION=PATCHED")
+else:
+    print("WP5_WORKER_SINGLE_USE_SESSION=ALREADY_PATCHED")
+PY
+
+python "$PATCHER" "$ROOT"
+
+###############################################################################
+# 7. WRITE NEGATIVE / CONCURRENCY TESTS
+###############################################################################
+
+echo
+echo "=== 7. WRITE WP7A NEGATIVE TESTS ==="
+
+cat > "$BACK/scripts/wp7a-security-negative-tests.mjs" <<'NODE'
+import assert from 'node:assert/strict'
+import express from 'express'
+import request from 'supertest'
+
+import {
+  requireWp5AllowedOrigin,
+  validateWp5AuthorizationRequest,
+} from '../middleware/wp5AuthorizationSecurity.js'
+
+import {
+  saveVoterWithWp5IndexRetry,
+} from '../services/zk/wp5RegistrationCore.js'
+
+import voteRoutes from '../routes/voteRoutes.js'
+import biometricRoutes from '../routes/biometricRoutes.js'
+import wp5Routes from '../routes/wp5Routes.js'
+
+const pass =
+  label =>
+    console.log(
+      `[PASS] ${label}`,
+    )
+
+const validJwk = {
+  kty: 'EC',
+  crv: 'P-256',
+  x: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+  y: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
+  ext: true,
+  key_ops: [],
+}
+
+process.env.FRONTEND_ORIGINS =
+  'http://127.0.0.1:4173'
+
+/*
+ * Pure guard harness. No biometric controller is reached here.
+ */
+{
+  const app =
+    express()
+
+  app.use(
+    express.json({
+      limit: '16kb',
+      strict: true,
+    }),
+  )
+
+  app.post(
+    '/guard',
+    requireWp5AllowedOrigin,
+    validateWp5AuthorizationRequest,
+    (_req, res) =>
+      res.status(204).end(),
+  )
+
+  await request(app)
+    .post('/guard')
+    .set(
+      'Content-Type',
+      'application/json',
+    )
+    .send({
+      credentialPublicKey:
+        validJwk,
+    })
+    .expect(204)
+
+  pass(
+    'valid candidate-blind authorization body accepted',
+  )
+
+  await request(app)
+    .post('/guard')
+    .set(
+      'Origin',
+      'http://evil.example',
+    )
+    .send({
+      credentialPublicKey:
+        validJwk,
+    })
+    .expect(403)
+
+  pass(
+    'unapproved browser origin rejected',
+  )
+
+  await request(app)
+    .post('/guard')
+    .send({
+      credentialPublicKey:
+        validJwk,
+      candidateId: 1,
+    })
+    .expect(400)
+
+  pass(
+    'candidateId injection rejected',
+  )
+
+  await request(app)
+    .post('/guard')
+    .send({
+      credentialPublicKey:
+        validJwk,
+      selectedCandidate: 1,
+    })
+    .expect(400)
+
+  pass(
+    'selectedCandidate injection rejected',
+  )
+
+  await request(app)
+    .post('/guard')
+    .send({
+      credentialPublicKey: {
+        ...validJwk,
+        d:
+          'PRIVATE_MATERIAL_FORBIDDEN',
+      },
+    })
+    .expect(400)
+
+  pass(
+    'private JWK material rejected',
+  )
+
+  await request(app)
+    .post('/guard')
+    .send({
+      credentialPublicKey: {
+        ...validJwk,
+        x: 'short',
+      },
+    })
+    .expect(400)
+
+  pass(
+    'malformed P-256 coordinate rejected',
+  )
+
+  await request(app)
+    .post('/guard')
+    .set(
+      'Content-Type',
+      'text/plain',
+    )
+    .send('credentialPublicKey')
+    .expect(415)
+
+  pass(
+    'non-JSON authorization request rejected',
+  )
+}
+
+/*
+ * Verify the actual WP5 router rejects candidate leakage BEFORE
+ * either face Python or fingerprint hardware can execute.
+ */
+{
+  const app =
+    express()
+
+  app.use(
+    express.json({
+      limit: '16kb',
+      strict: true,
+    }),
+  )
+
+  app.use(
+    '/api/wp5',
+    wp5Routes,
+  )
+
+  await request(app)
+    .post('/api/wp5/authorize/face')
+    .send({
+      credentialPublicKey:
+        validJwk,
+      candidateId: 2,
+    })
+    .expect(400)
+
+  pass(
+    'face WP5 route rejects candidate field before biometric execution',
+  )
+
+  await request(app)
+    .post('/api/wp5/authorize/fingerprint')
+    .send({
+      credentialPublicKey:
+        validJwk,
+      candidateId: 2,
+    })
+    .expect(400)
+
+  pass(
+    'fingerprint WP5 route rejects candidate field before hardware execution',
+  )
+}
+
+/*
+ * Legacy candidate-aware APIs must stay unreachable.
+ */
+{
+  const app =
+    express()
+
+  app.use(
+    express.json({
+      limit: '16kb',
+      strict: true,
+    }),
+  )
+
+  app.use(
+    '/api/votes',
+    voteRoutes,
+  )
+
+  app.use(
+    '/api/biometric',
+    biometricRoutes,
+  )
+
+  await request(app)
+    .post('/api/votes/verify-face')
+    .send({
+      candidateId: 1,
+    })
+    .expect(410)
+
+  pass(
+    'legacy candidate-aware face route remains disabled',
+  )
+
+  await request(app)
+    .post('/api/biometric/fingerprint/detect')
+    .send({
+      candidateId: 1,
+    })
+    .expect(410)
+
+  pass(
+    'legacy candidate-aware fingerprint route remains disabled',
+  )
+}
+
+/*
+ * Request-body size gate.
+ */
+{
+  const app =
+    express()
+
+  app.use(
+    express.json({
+      limit: '16kb',
+      strict: true,
+    }),
+  )
+
+  app.post(
+    '/body',
+    (_req, res) =>
+      res.json({
+        ok: true,
+      }),
+  )
+
+  await request(app)
+    .post('/body')
+    .set(
+      'Content-Type',
+      'application/json',
+    )
+    .send(
+      JSON.stringify({
+        payload:
+          'x'.repeat(
+            20 * 1024,
+          ),
+      }),
+    )
+    .expect(413)
+
+  pass(
+    'oversized JSON body rejected',
+  )
+}
+
+/*
+ * Deterministic concurrency simulation.
+ *
+ * All calls initially observe the same free index. The simulated unique
+ * database index chooses one winner; losers retry until indices 0..19
+ * are committed without duplicates or gaps.
+ */
+{
+  const used =
+    new Set()
+
+  let collisionCount =
+    0
+
+  const allocateIndex =
+    async () => {
+      if (
+        used.size === 0
+      ) {
+        return 0
+      }
+
+      return (
+        Math.max(
+          ...used,
+        ) + 1
+      )
+    }
+
+  const saveAtIndex =
+    async index => {
+      /*
+       * Yield so concurrent requests can observe the same candidate index
+       * before any simulated insert commits.
+       */
+      await Promise.resolve()
+
+      if (
+        used.has(index)
+      ) {
+        collisionCount += 1
+
+        const error =
+          new Error(
+            'duplicate wp5GroupIndex',
+          )
+
+        error.code =
+          11000
+
+        error.keyPattern = {
+          wp5GroupIndex: 1,
+        }
+
+        throw error
+      }
+
+      used.add(index)
+
+      return {
+        index,
+      }
+    }
+
+  await Promise.all(
+    Array.from(
+      {
+        length: 20,
+      },
+      () =>
+        saveVoterWithWp5IndexRetry({
+          allocateIndex,
+          saveAtIndex,
+        }),
+    ),
+  )
+
+  const ordered =
+    [...used]
+      .sort(
+        (a, b) =>
+          a - b,
+      )
+
+  assert.deepEqual(
+    ordered,
+    Array.from(
+      {
+        length: 20,
+      },
+      (_unused, index) =>
+        index,
+    ),
+  )
+
+  assert.ok(
+    collisionCount > 0,
+    'simulation did not exercise duplicate-index retry',
+  )
+
+  pass(
+    'concurrent WP5 registration resolves duplicate-index races without gaps',
+  )
+}
+
+/*
+ * Do not retry unrelated unique-key failures.
+ */
+{
+  let attempts = 0
+
+  await assert.rejects(
+    () =>
+      saveVoterWithWp5IndexRetry({
+        allocateIndex:
+          async () => 0,
+
+        saveAtIndex:
+          async () => {
+            attempts += 1
+
+            const error =
+              new Error(
+                'duplicate nationalId',
+              )
+
+            error.code =
+              11000
+
+            error.keyPattern = {
+              nationalId: 1,
+            }
+
+            throw error
+          },
+      }),
+  )
+
+  assert.equal(
+    attempts,
+    1,
+  )
+
+  pass(
+    'unrelated unique-key failure is not retried as an index race',
+  )
+}
+
+console.log()
+console.log(
+  'STATUS=PASS_WP7A_SECURITY_NEGATIVE_TESTS',
+)
+NODE
+
+###############################################################################
+# 8. NODE SYNTAX
+###############################################################################
+
+echo
+echo "=== 8. NODE SYNTAX CHECK ==="
+
+node --check \
+    "$BACK/middleware/wp5AuthorizationSecurity.js"
+
+node --check \
+    "$BACK/services/zk/wp5RegistrationCore.js"
+
+node --check \
+    "$BACK/controllers/voterController.js"
+
+node --check \
+    "$BACK/routes/wp5Routes.js"
+
+node --check \
+    "$BACK/models/Voter.js"
+
+node --check \
+    "$BACK/scripts/wp7a-security-negative-tests.mjs"
+
+echo "WP7A_NODE_SYNTAX=PASS"
+
+###############################################################################
+# 9. STATIC HARDENING ASSERTIONS
+###############################################################################
+
+echo
+echo "=== 9. STATIC HARDENING ASSERTIONS ==="
+
+grep -q \
+    "limit: '16kb'" \
+    "$BACK/server.js"
+
+grep -q \
+    'WP5_AUTHORIZATION_RATE_LIMIT' \
+    "$BACK/routes/wp5Routes.js"
+
+grep -q \
+    'validateWp5AuthorizationRequest' \
+    "$BACK/routes/wp5Routes.js"
+
+grep -q \
+    'requireWp5AllowedOrigin' \
+    "$BACK/routes/wp5Routes.js"
+
+grep -q \
+    'saveVoterWithWp5IndexRetry' \
+    "$BACK/controllers/voterController.js"
+
+grep -q \
+    'duplicate.keyPattern' \
+    "$BACK/models/Voter.js"
+
+grep -q \
+    "voter.wp5RegistrationStatus === 'registered'" \
+    "$BACK/controllers/voterController.js"
+
+grep -q \
+    'authorizationSessionState' \
+    "$FRONT/src/privacy/wp5Privacy.worker.ts"
+
+grep -q \
+    '"consuming"' \
+    "$FRONT/src/privacy/wp5Privacy.worker.ts"
+
+echo "WP7A_STATIC_HARDENING=PASS"
+
+###############################################################################
+# 10. RUN NEGATIVE TEST MATRIX
+###############################################################################
+
+echo
+echo "=== 10. RUN WP7A NEGATIVE TEST MATRIX ==="
+
+cd "$BACK"
+
+node \
+    scripts/wp7a-security-negative-tests.mjs \
+    | tee "$EVIDENCE/security-negative-tests.log"
+
+cd "$ROOT"
+
+grep -q \
+    '^STATUS=PASS_WP7A_SECURITY_NEGATIVE_TESTS$' \
+    "$EVIDENCE/security-negative-tests.log"
+
+echo "WP7A_NEGATIVE_MATRIX=PASS"
+
+###############################################################################
+# 11. FRONTEND BUILD — WORKER COMPILE GATE
+###############################################################################
+
+echo
+echo "=== 11. FRONTEND BUILD ==="
+
+cd "$FRONT"
+
+npm run build \
+    > "$EVIDENCE/frontend-build.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FRONTEND_BUILD=PASS"
+
+###############################################################################
+# 12. FOUNDRY REGRESSION
+###############################################################################
+
+echo
+echo "=== 12. FOUNDRY FULL REGRESSION ==="
+
+cd "$FOUNDRY"
+
+forge test \
+    -q \
+    > "$EVIDENCE/foundry-regression.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FOUNDRY_FULL_REGRESSION=PASS"
+
+###############################################################################
+# 13. VERIFY PROTECTED WP6 / CONTRACT SOURCE UNCHANGED
+###############################################################################
+
+echo
+echo "=== 13. VERIFY PROTECTED SOURCES ==="
+
+WP6_CORE_AFTER="$(sha256sum "$WP6_CORE" | awk '{print $1}')"
+WP6_PROFILE_AFTER="$(sha256sum "$WP6_PROFILE" | awk '{print $1}')"
+CONTRACT_AFTER="$(sha256sum "$CONTRACT" | awk '{print $1}')"
+
+if [ "$WP6_CORE_BEFORE" != "$WP6_CORE_AFTER" ]; then
+    echo "ERROR: WP6 threshold core changed."
+    exit 30
+fi
+
+if [ "$WP6_PROFILE_BEFORE" != "$WP6_PROFILE_AFTER" ]; then
+    echo "ERROR: WP6 threshold profile changed."
+    exit 31
+fi
+
+if [ "$CONTRACT_BEFORE" != "$CONTRACT_AFTER" ]; then
+    echo "ERROR: voting/finalization contract changed."
+    exit 32
+fi
+
+echo "WP6_THRESHOLD_CORE_CHANGED=NO"
+echo "WP6_THRESHOLD_PROFILE_CHANGED=NO"
+echo "VOTING_CONTRACT_CHANGED=NO"
+
+###############################################################################
+# 14. PRIVACY / LEGACY STATIC GATES
+###############################################################################
+
+echo
+echo "=== 14. PRIVACY / LEGACY STATIC GATES ==="
+
+if ! grep -q \
+    "status(410)" \
+    "$BACK/routes/voteRoutes.js"
+then
+    echo "ERROR: legacy face route is not disabled."
+    exit 40
+fi
+
+if ! grep -q \
+    "status(410)" \
+    "$BACK/routes/biometricRoutes.js"
+then
+    echo "ERROR: legacy fingerprint route is not disabled."
+    exit 41
+fi
+
+if grep -n \
+    'candidateId' \
+    "$BACK/routes/wp5Routes.js" \
+    > "$EVIDENCE/wp5-route-candidate-scan.txt"
+then
+    echo "ERROR: candidateId appeared in active WP5 authorization route."
+    cat "$EVIDENCE/wp5-route-candidate-scan.txt"
+    exit 42
+fi
+
+echo "LEGACY_FACE_VOTE_ROUTE_410=PASS"
+echo "LEGACY_FINGERPRINT_VOTE_ROUTE_410=PASS"
+echo "ACTIVE_WP5_ROUTE_CANDIDATE_FIELD=NO"
+
+###############################################################################
+# 15. HASH HARDENED ARTIFACTS
+###############################################################################
+
+echo
+echo "=== 15. HASH HARDENED ARTIFACTS ==="
+
+HASHES="$EVIDENCE/wp7a-hardened.sha256"
+
+sha256sum \
+    "$BACK/server.js" \
+    "$BACK/routes/wp5Routes.js" \
+    "$BACK/middleware/wp5AuthorizationSecurity.js" \
+    "$BACK/services/zk/wp5RegistrationCore.js" \
+    "$BACK/models/Voter.js" \
+    "$BACK/controllers/voterController.js" \
+    "$BACK/scripts/wp7a-security-negative-tests.mjs" \
+    "$FRONT/src/privacy/wp5Privacy.worker.ts" \
+    > "$HASHES"
+
+cat "$HASHES"
+
+###############################################################################
+# 16. WRITE SUMMARY
+###############################################################################
+
+echo
+echo "=== 16. WRITE WP7A SUMMARY ==="
+
+{
+    echo "======================================================================"
+    echo "VOTECHAIN-ZK WP7A — TARGETED HARDENING / NEGATIVE TESTS"
+    echo "======================================================================"
+    echo
+    echo "STATUS=PASS_WP7A_TARGETED_HARDENING"
+    echo "RUN_ID=$RUN_ID"
+    echo
+    echo "WP7_SECURITY_PREFLIGHT=PASS"
+    echo "WP7A_TARGETED_SOURCE_CAPTURE=PASS"
+    echo
+    echo "AUTH_REQUEST_EXACT_BODY_SHAPE=PASS"
+    echo "CANDIDATE_ID_INJECTION_REJECTED=PASS"
+    echo "SELECTED_CANDIDATE_INJECTION_REJECTED=PASS"
+    echo "PRIVATE_JWK_MATERIAL_REJECTED=PASS"
+    echo "MALFORMED_P256_KEY_REJECTED=PASS"
+    echo "AUTH_REQUEST_CONTENT_TYPE_ENFORCED=PASS"
+    echo "WP5_BROWSER_ORIGIN_ALLOWLIST=PASS"
+    echo "WP5_ROUTE_SPECIFIC_RATE_LIMIT=PASS"
+    echo "GLOBAL_JSON_BODY_LIMIT_16KB=PASS"
+    echo
+    echo "FACE_INVALID_REQUEST_REJECTED_BEFORE_BIOMETRIC=PASS"
+    echo "FINGERPRINT_INVALID_REQUEST_REJECTED_BEFORE_HARDWARE=PASS"
+    echo
+    echo "WP5_WORKER_AUTHORIZATION_SESSION_EXPLICITLY_SINGLE_USE=PASS"
+    echo "WP5_WORKER_CONCURRENT_PREPARE_STATE_GUARD=PASS"
+    echo "WP5_WORKER_SESSION_CLEARED_AFTER_PREPARE=PASS"
+    echo
+    echo "WP5_GROUP_INDEX_DUPLICATE_RETRY=PASS"
+    echo "WP5_GROUP_INDEX_CONCURRENCY_SIMULATION=PASS"
+    echo "WP5_GROUP_INDEX_NO_GAPS_IN_SIMULATION=PASS"
+    echo "UNRELATED_DUPLICATE_KEY_NOT_RETRIED=PASS"
+    echo "WP5_REGISTERED_VOTER_DELETE_GUARD=PASS"
+    echo
+    echo "LEGACY_FACE_VOTE_ROUTE_410=PASS"
+    echo "LEGACY_FINGERPRINT_VOTE_ROUTE_410=PASS"
+    echo "ACTIVE_WP5_ROUTE_CANDIDATE_FIELD=NO"
+    echo
+    echo "WP7A_NEGATIVE_MATRIX=PASS"
+    echo "FRONTEND_BUILD=PASS"
+    echo "FOUNDRY_FULL_REGRESSION=PASS"
+    echo
+    echo "DATABASE_ACCESSED=NO"
+    echo "BIOMETRIC_EXECUTION=NO"
+    echo "REAL_CREDENTIALS_READ=NO"
+    echo
+    echo "WP6_THRESHOLD_CORE_CHANGED=NO"
+    echo "WP6_THRESHOLD_PROFILE_CHANGED=NO"
+    echo "VOTING_CONTRACT_CHANGED=NO"
+    echo
+    echo "POST_HARDENING_BROWSER_HTTP_ONCHAIN_RUNTIME=NOT_YET"
+    echo "ADMIN_MUTATION_AUTHORIZATION=NOT_YET_WP7B"
+    echo "BIOMETRIC_DESTRUCTIVE_ROUTE_AUTHORIZATION=NOT_YET_WP7B"
+    echo "THRESHOLD_ARTIFACT_NEGATIVE_MATRIX=NOT_YET_WP7B"
+    echo "DEPENDENCY_AUDIT=NOT_YET"
+    echo
+    echo "FINAL_SECURITY_VERDICT=NOT_YET"
+    echo "CRITICAL_HIGH_DEFECT_GATE=NOT_YET"
+    echo
+    echo "EVIDENCE=$EVIDENCE"
+    echo
+    echo "NEXT_ACTION=WP7B_PRIVILEGED_ROUTE_AND_THRESHOLD_ARTIFACT_HARDENING"
+    echo "======================================================================"
+} | tee "$SUMMARY"
+
+echo
+echo "======================================================================"
+echo "WP7A TARGETED HARDENING COMPLETE"
+echo "======================================================================"
+echo
+echo "Send me:"
+echo "$SUMMARY"
+echo
+echo "and the terminal output."

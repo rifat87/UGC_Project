@@ -1,0 +1,4000 @@
+
+======================================================================
+FILE: votechain-central-server/controllers/voterController.js
+======================================================================
+     1	import Voter from '../models/Voter.js'
+     2	import { validationResult } from 'express-validator'
+     3	import path from 'path'
+     4	import { fileURLToPath } from 'url'
+     5	import fs from 'fs'
+     6	import { spawn } from 'child_process'
+     7	import { toSafeVoterResponse, toZkVoterEnrollmentResponse } from '../services/privacyProjection.js'
+     8	import { createEncryptedSemaphoreIdentity } from '../services/zk/identityService.js'
+     9	import { getContract } from '../utils/contract.js'
+    10	
+    11	const __filename = fileURLToPath(import.meta.url)
+    12	const __dirname = path.dirname(__filename)
+    13	
+    14	const handleTrainFace = async (req, res) => {
+    15	  try {
+    16	    const { nid } = req.params
+    17	    console.log('[Train Face] Starting face training for submitted voter record')
+    18	
+    19	    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+    20	    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+    21	
+    22	    if (!fs.existsSync(datasetPath)) {
+    23	      return res.status(404).json({
+    24	        success: false,
+    25	        message: 'Face images not found. Please capture face images first.',
+    26	      })
+    27	    }
+    28	
+    29	    const imageFiles = fs.readdirSync(datasetPath).filter((file) => file.endsWith('.jpg'))
+    30	    if (imageFiles.length === 0) {
+    31	      return res.status(404).json({
+    32	        success: false,
+    33	        message: 'No face images found. Please capture face images first.',
+    34	      })
+    35	    }
+    36	
+    37	    console.log(`[Train Face] Found ${imageFiles.length} face images for training`)
+    38	
+    39	    const trainScript = path.join(faceRecognitionPath, 'train_faces.py')
+    40	    const trainProcess = spawn('python', [trainScript], {
+    41	      cwd: faceRecognitionPath,
+    42	      stdio: ['pipe', 'pipe', 'pipe'],
+    43	    })
+    44	
+    45	    trainProcess.stdout.on('data', () => {})
+    46	    trainProcess.stderr.on('data', () => {})
+    47	
+    48	    trainProcess.on('close', (code) => {
+    49	      console.log(`[Train Face] Training process finished with code: ${code}`)
+    50	
+    51	      if (code !== 0) {
+    52	        return res.status(500).json({
+    53	          success: false,
+    54	          message: 'Face training failed',
+    55	          code,
+    56	        })
+    57	      }
+    58	
+    59	      return res.json({
+    60	        success: true,
+    61	        message: 'Face training completed successfully',
+    62	      })
+    63	    })
+    64	
+    65	    trainProcess.on('error', () => {
+    66	      console.error('[Train Face] Failed to start training process')
+    67	      return res.status(500).json({
+    68	        success: false,
+    69	        message: 'Failed to start training process',
+    70	      })
+    71	    })
+    72	  } catch (_error) {
+    73	    console.error('[Train Face] Unexpected training endpoint error')
+    74	    return res.status(500).json({
+    75	      success: false,
+    76	      message: 'Failed to train face model',
+    77	    })
+    78	  }
+    79	}
+    80	
+    81	const createVoter = async (req, res) => {
+    82	  try {
+    83	    const errors = validationResult(req)
+    84	    if (!errors.isEmpty()) {
+    85	      return res.status(400).json({
+    86	        success: false,
+    87	        message: 'Validation failed',
+    88	        errors: errors.array().map((err) => err.msg),
+    89	      })
+    90	    }
+    91	
+    92	    const { nationalId, name, dateOfBirth, location } = req.body
+    93	
+    94	    // Do not create fresh election credentials after the chain has left Registration.
+    95	    // The contract remains the lifecycle authority; this backend check prevents orphaned
+    96	    // post-activation credentials from being created unnecessarily.
+    97	    const electionState = Number(await getContract().getElectionState())
+    98	    if (electionState !== 0) {
+    99	      return res.status(409).json({
+   100	        success: false,
+   101	        message: 'Voter ZK enrollment is only available during Registration',
+   102	      })
+   103	    }
+   104	
+   105	    const existingVoter = await Voter.findOne({ nationalId })
+   106	    if (existingVoter) {
+   107	      return res.status(400).json({
+   108	        success: false,
+   109	        message: 'A voter with this National ID already exists',
+   110	      })
+   111	    }
+   112	
+   113	    const { identityCommitment, encryptedCredential } = await createEncryptedSemaphoreIdentity()
+   114	    const voter = new Voter({
+   115	      nationalId,
+   116	      name,
+   117	      dateOfBirth,
+   118	      location,
+   119	      zkIdentityCommitment: identityCommitment,
+   120	      zkCredential: encryptedCredential,
+   121	      zkRegistrationStatus: 'pending',
+   122	    })
+   123	
+   124	    await voter.save()
+   125	
+   126	    // The browser receives only the public commitment needed by the Election
+   127	    // Commission wallet. The private Semaphore identity remains encrypted server-side.
+   128	    const enrollment = toZkVoterEnrollmentResponse(voter)
+   129	    return res.status(201).json({
+   130	      success: true,
+   131	      message: 'Voter ZK identity created; on-chain commitment registration is pending',
+   132	      data: enrollment,
+   133	    })
+   134	  } catch (error) {
+   135	    console.error('Voter ZK enrollment failed:', error.message)
+   136	
+   137	    if (error.name === 'ValidationError') {
+   138	      return res.status(400).json({
+   139	        success: false,
+   140	        message: 'Validation failed',
+   141	        errors: Object.values(error.errors).map((err) => err.message),
+   142	      })
+   143	    }
+   144	
+   145	    if (error.code === 11000) {
+   146	      return res.status(400).json({
+   147	        success: false,
+   148	        message: 'A voter with this National ID or ZK identity commitment already exists',
+   149	      })
+   150	    }
+   151	
+   152	    return res.status(500).json({
+   153	      success: false,
+   154	      message: 'Error creating voter ZK enrollment',
+   155	    })
+   156	  }
+   157	}
+   158	
+   159	const updateZkRegistrationStatus = async (req, res) => {
+   160	  try {
+   161	    const { identityCommitment, registrationStatus, transactionHash } = req.body
+   162	    if (!/^\d+$/.test(String(identityCommitment || ''))) {
+   163	      return res.status(400).json({ success: false, message: 'Valid identityCommitment is required' })
+   164	    }
+   165	    if (!['registered', 'failed'].includes(registrationStatus)) {
+   166	      return res.status(400).json({ success: false, message: 'registrationStatus must be registered or failed' })
+   167	    }
+   168	
+   169	    const voter = await Voter.findOne({ zkIdentityCommitment: String(identityCommitment) })
+   170	    if (!voter) return res.status(404).json({ success: false, message: 'Voter enrollment not found' })
+   171	
+   172	    const contract = getContract()
+   173	    const onChain = await contract.registeredCommitments(BigInt(identityCommitment))
+   174	
+   175	    if (registrationStatus === 'registered') {
+   176	      if (!onChain) {
+   177	        return res.status(409).json({ success: false, message: 'Commitment is not registered in the active ZK contract' })
+   178	      }
+   179	      const groupIndex = Number(await contract.getCommitmentIndex(BigInt(identityCommitment)))
+   180	      voter.zkRegistrationStatus = 'registered'
+   181	      voter.zkGroupIndex = groupIndex
+   182	      if (transactionHash) voter.zkRegistrationTxHash = String(transactionHash)
+   183	    } else {
+   184	      // Never let an API caller downgrade a commitment that the blockchain already
+   185	      // confirms as a member. Blockchain membership is the authority boundary.
+   186	      if (onChain) {
+   187	        return res.status(409).json({ success: false, message: 'Commitment is already registered on-chain and cannot be marked failed' })
+   188	      }
+   189	      voter.zkRegistrationStatus = 'failed'
+   190	      voter.zkGroupIndex = undefined
+   191	      if (transactionHash) voter.zkRegistrationTxHash = String(transactionHash)
+   192	    }
+   193	
+   194	    await voter.save()
+   195	    return res.json({
+   196	      success: true,
+   197	      data: {
+   198	        identityCommitment: voter.zkIdentityCommitment,
+   199	        registrationStatus: voter.zkRegistrationStatus,
+   200	        groupIndex: voter.zkGroupIndex ?? null,
+   201	      },
+   202	    })
+   203	  } catch (error) {
+   204	    console.error('Voter ZK registration reconciliation failed:', error.message)
+   205	    return res.status(500).json({ success: false, message: 'Failed to reconcile voter commitment registration' })
+   206	  }
+   207	}
+   208	
+   209	const updateVoter = async (req, res) => {
+   210	  try {
+   211	    const voter = await Voter.findById(req.query.id)
+   212	    if (!voter) {
+   213	      return res.status(404).json({ message: 'Voter not found' })
+   214	    }
+   215	
+   216	    const { nationalId, name, dateOfBirth, location } = req.body
+   217	
+   218	    voter.nationalId = nationalId || voter.nationalId
+   219	    voter.name = name || voter.name
+   220	    voter.dateOfBirth = dateOfBirth || voter.dateOfBirth
+   221	    voter.location = location || voter.location
+   222	
+   223	    await voter.save()
+   224	
+   225	    return res.json({
+   226	      message: 'Voter updated successfully',
+   227	      voter: toSafeVoterResponse(voter),
+   228	    })
+   229	  } catch (error) {
+   230	    console.error('Voter update failed:', error.message)
+   231	    return res.status(500).json({ message: 'Error updating voter' })
+   232	  }
+   233	}
+   234	
+   235	const deleteVoter = async (req, res) => {
+   236	  try {
+   237	    const voter = await Voter.findById(req.query.id)
+   238	    if (!voter) {
+   239	      return res.status(404).json({ message: 'Voter not found' })
+   240	    }
+   241	
+   242	    if (voter.zkRegistrationStatus === 'registered') {
+   243	      return res.status(409).json({
+   244	        message: 'A voter with an on-chain ZK commitment cannot be deleted from the active election record',
+   245	      })
+   246	    }
+   247	
+   248	    await voter.deleteOne()
+   249	    return res.json({ message: 'Voter deleted successfully' })
+   250	  } catch (error) {
+   251	    console.error('Voter deletion failed:', error.message)
+   252	    return res.status(500).json({ message: 'Error deleting voter' })
+   253	  }
+   254	}
+   255	
+   256	export default {
+   257	  createVoter,
+   258	  updateZkRegistrationStatus,
+   259	  updateVoter,
+   260	  deleteVoter,
+   261	  handleTrainFace,
+   262	}
+
+======================================================================
+FILE: votechain-central-server/services/zk/credentialCrypto.js
+======================================================================
+     1	import crypto from 'node:crypto'
+     2	
+     3	const ALGORITHM = 'aes-256-gcm'
+     4	const IV_BYTES = 12
+     5	const CREDENTIAL_VERSION = 1
+     6	
+     7	function getCredentialKey(secret = process.env.ZK_CREDENTIAL_SECRET_KEY) {
+     8	  if (!secret) throw new Error('ZK_CREDENTIAL_SECRET_KEY is missing from environment')
+     9	  if (Buffer.byteLength(secret, 'utf8') !== 32) {
+    10	    throw new Error('ZK_CREDENTIAL_SECRET_KEY must be exactly 32 bytes for AES-256-GCM')
+    11	  }
+    12	  return Buffer.from(secret, 'utf8')
+    13	}
+    14	
+    15	export function encryptZkCredential(credential, identityCommitment, secret) {
+    16	  if (typeof credential !== 'string' || credential.length === 0) throw new Error('Semaphore credential is required')
+    17	  if (!identityCommitment) throw new Error('Identity commitment is required for credential binding')
+    18	
+    19	  const key = getCredentialKey(secret)
+    20	  const iv = crypto.randomBytes(IV_BYTES)
+    21	  const cipher = crypto.createCipheriv(ALGORITHM, key, iv)
+    22	  cipher.setAAD(Buffer.from(String(identityCommitment), 'utf8'))
+    23	
+    24	  const ciphertext = Buffer.concat([cipher.update(credential, 'utf8'), cipher.final()])
+    25	  const authTag = cipher.getAuthTag()
+    26	
+    27	  return {
+    28	    version: CREDENTIAL_VERSION,
+    29	    iv: iv.toString('hex'),
+    30	    ciphertext: ciphertext.toString('hex'),
+    31	    authTag: authTag.toString('hex'),
+    32	  }
+    33	}
+    34	
+    35	export function decryptZkCredential(encryptedCredential, identityCommitment, secret) {
+    36	  if (!encryptedCredential || encryptedCredential.version !== CREDENTIAL_VERSION) {
+    37	    throw new Error('Unsupported or missing ZK credential version')
+    38	  }
+    39	  if (!identityCommitment) throw new Error('Identity commitment is required for credential binding')
+    40	
+    41	  const key = getCredentialKey(secret)
+    42	  const decipher = crypto.createDecipheriv(ALGORITHM, key, Buffer.from(encryptedCredential.iv, 'hex'))
+    43	  decipher.setAAD(Buffer.from(String(identityCommitment), 'utf8'))
+    44	  decipher.setAuthTag(Buffer.from(encryptedCredential.authTag, 'hex'))
+    45	
+    46	  const plaintext = Buffer.concat([
+    47	    decipher.update(Buffer.from(encryptedCredential.ciphertext, 'hex')),
+    48	    decipher.final(),
+    49	  ])
+    50	  return plaintext.toString('utf8')
+    51	}
+
+======================================================================
+FILE: votechain-central-server/services/zk/semaphoreRuntime.js
+======================================================================
+     1	let runtimePromise
+     2	
+     3	export async function loadSemaphoreRuntime() {
+     4	  if (!runtimePromise) {
+     5	    const moduleUrl = new URL('../../../.zk-deps/node_modules/@semaphore-protocol/core/src/index.js', import.meta.url)
+     6	    runtimePromise = import(moduleUrl.href).catch((error) => {
+     7	      runtimePromise = undefined
+     8	      const wrapped = new Error(
+     9	        'Semaphore V4 runtime is not installed. Run `npm run setup:zk` from the VoteChain project root before starting the ZK application.',
+    10	      )
+    11	      wrapped.cause = error
+    12	      throw wrapped
+    13	    })
+    14	  }
+    15	
+    16	  return runtimePromise
+    17	}
+
+======================================================================
+FILE: votechain-central-server/services/zk/snarkArtifacts.js
+======================================================================
+     1	export function getConfiguredSnarkArtifacts(env = process.env) {
+     2	  const wasm = env.ZK_SNARK_WASM?.trim()
+     3	  const zkey = env.ZK_SNARK_ZKEY?.trim()
+     4	  if (!wasm && !zkey) return undefined
+     5	  if (!wasm || !zkey) throw new Error('ZK_SNARK_WASM and ZK_SNARK_ZKEY must be configured together')
+     6	  return { wasm, zkey }
+     7	}
+
+======================================================================
+FILE: votechain-central-server/utils/contract.js
+======================================================================
+     1	import { readFileSync } from 'node:fs'
+     2	import { Contract, JsonRpcProvider } from 'ethers'
+     3	import { getBlockchainConfig } from '../config/env.js'
+     4	
+     5	const artifactUrl = new URL('../abi/ZKLocalVoting.json', import.meta.url)
+     6	const contractABI = JSON.parse(readFileSync(artifactUrl, 'utf8'))
+     7	
+     8	export function getProvider() {
+     9	  const { rpcUrl } = getBlockchainConfig()
+    10	  return new JsonRpcProvider(rpcUrl)
+    11	}
+    12	
+    13	export function getContract() {
+    14	  const { contractAddress } = getBlockchainConfig()
+    15	  return new Contract(contractAddress, contractABI, getProvider())
+    16	}
+    17	
+    18	export function getContractAbi() {
+    19	  return contractABI
+    20	}
+
+======================================================================
+FILE: votechain-central-server/config/env.js
+======================================================================
+     1	import dotenv from 'dotenv'
+     2	
+     3	dotenv.config()
+     4	
+     5	function requireEnv(name) {
+     6	  const value = process.env[name]?.trim()
+     7	  if (!value) {
+     8	    throw new Error(`Missing required environment variable: ${name}`)
+     9	  }
+    10	  return value
+    11	}
+    12	
+    13	export function getBlockchainConfig() {
+    14	  return {
+    15	    rpcUrl: requireEnv('RPC_URL'),
+    16	    contractAddress: requireEnv('CONTRACT_ADDRESS'),
+    17	  }
+    18	}
+    19	
+    20	export function getServerConfig() {
+    21	  return {
+    22	    port: Number(process.env.PORT || 5000),
+    23	    mongoUri: requireEnv('MONGO_URI'),
+    24	    frontendOrigins: (process.env.FRONTEND_ORIGINS || '')
+    25	      .split(',')
+    26	      .map((value) => value.trim())
+    27	      .filter(Boolean),
+    28	  }
+    29	}
+
+======================================================================
+FILE: votechain-central-server/routes/voterRoutes.js
+======================================================================
+     1	import express from 'express';
+     2	import voterController from '../controllers/voterController.js';
+     3	import {
+     4	  createVoterValidation,
+     5	  updateVoterValidation,
+     6	  deleteVoterValidation
+     7	} from '../middleware/validators/voterValidator.js';
+     8	import validate from '../middleware/validate.js';
+     9	import path from 'path';
+    10	import { fileURLToPath } from 'url';
+    11	
+    12	
+    13	const router = express.Router();
+    14	const __filename = fileURLToPath(import.meta.url);
+    15	const __dirname = path.dirname(__filename);
+    16	
+    17	// // Helper function to generate face ID from captured images
+    18	// function generateFaceId(nid) {
+    19	//     const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+    20	//     const datasetPath = path.join(faceRecognitionPath, 'dataset', nid);
+    21	    
+    22	//     try {
+    23	//         // Check if directory exists
+    24	//         if (!fs.existsSync(datasetPath)) {
+    25	//             console.error(`Dataset directory not found: ${datasetPath}`);
+    26	//             return null;
+    27	//         }
+    28	
+    29	//         // Read all face images and create a hash
+    30	//         const files = fs.readdirSync(datasetPath);
+    31	//         const imageFiles = files.filter(file => file.endsWith('.jpg'));
+    32	        
+    33	//         if (imageFiles.length === 0) {
+    34	//             console.error(`No face images found in directory: ${datasetPath}`);
+    35	//             return null;
+    36	//         }
+    37	
+    38	//         console.log(`Found ${imageFiles.length} face images in ${datasetPath}`);
+    39	        
+    40	//         const imageData = imageFiles
+    41	//             .map(file => {
+    42	//                 const filePath = path.join(datasetPath, file);
+    43	//                 console.log(`Reading image: ${filePath}`);
+    44	//                 return fs.readFileSync(filePath);
+    45	//             })
+    46	//             .join('');
+    47	        
+    48	//         const faceId = createHash('sha256').update(imageData).digest('hex');
+    49	//         console.log(`Generated face ID: ${faceId}`);
+    50	//         return faceId;
+    51	//     } catch (error) {
+    52	//         console.error('Error generating face ID:', error);
+    53	//         return null;
+    54	//     }
+    55	// }
+    56	
+    57	// Create a new voter (root endpoint)
+    58	router.post(
+    59	  '/',
+    60	  createVoterValidation,
+    61	  validate,
+    62	  voterController.createVoter
+    63	);
+    64	
+    65	// Create a new voter (register endpoint)
+    66	router.post('/register', createVoterValidation, validate, voterController.createVoter);
+    67	
+    68	// Reconcile the public identity commitment after the admin wallet transaction.
+    69	router.patch('/zk-registration-status', voterController.updateZkRegistrationStatus);
+    70	
+    71	// Get voter profile by wallet address
+    72	// router.get('/profile', getVoterByWalletValidation, validate, voterController.getVoterProfile);
+    73	
+    74	// Get face hash by national ID
+    75	// router.get('/face-hash/:nid', voterController.getFaceHash);
+    76	
+    77	// Train face by national ID
+    78	router.post('/train-face/:nid', voterController.handleTrainFace);
+    79	
+    80	// DEMO: Face verification - will be deleted later
+    81	// router.post('/verify-face-demo', voterController.handleVerifyFaceDemo);
+    82	
+    83	// router.get('/by-fingerprint/:fingerId', voterController.getVoterByFingerprint);
+    84	
+    85	
+    86	// Update voter
+    87	router.put('/voter', updateVoterValidation, validate, voterController.updateVoter);
+    88	
+    89	// Delete voter
+    90	router.delete('/voter', deleteVoterValidation, validate, voterController.deleteVoter);
+    91	
+    92	export default router; 
+
+======================================================================
+FILE: votechain-central-server/models/Candidate.js
+======================================================================
+     1	import mongoose from 'mongoose'
+     2	
+     3	export const CANDIDATE_REGISTRATION_STATUSES = ['pending', 'registered', 'failed']
+     4	
+     5	const candidateSchema = new mongoose.Schema({
+     6	  candidateId: {
+     7	    type: Number,
+     8	    required: [true, 'Candidate ID is required'],
+     9	    immutable: true,
+    10	    min: [1, 'Candidate ID must be a positive integer'],
+    11	    validate: {
+    12	      validator: Number.isSafeInteger,
+    13	      message: 'Candidate ID must be a safe integer',
+    14	    },
+    15	  },
+    16	  nationalId: {
+    17	    type: String,
+    18	    required: [true, 'National ID is required'],
+    19	    unique: true,
+    20	    trim: true,
+    21	    match: [/^\d{10}$/, 'National ID must be exactly 10 digits'],
+    22	  },
+    23	  name: {
+    24	    type: String,
+    25	    required: [true, 'Name is required'],
+    26	    trim: true,
+    27	    minlength: [3, 'Name must be at least 3 characters long'],
+    28	    maxlength: [50, 'Name cannot exceed 50 characters'],
+    29	    match: [/^[A-Za-z ]+$/, 'Name should contain only letters and spaces'],
+    30	  },
+    31	  location: {
+    32	    type: String,
+    33	    required: [true, 'Location is required'],
+    34	    trim: true,
+    35	    minlength: [2, 'Location must be at least 2 characters long'],
+    36	    maxlength: [100, 'Location cannot exceed 100 characters'],
+    37	    match: [/^[A-Za-z ,.-]+$/, 'Location can only contain letters, spaces, commas, hyphens, and periods'],
+    38	  },
+    39	  age: {
+    40	    type: Number,
+    41	    required: [true, 'Age is required'],
+    42	    min: [18, 'Age must be at least 18'],
+    43	    max: [120, 'Age cannot exceed 120'],
+    44	  },
+    45	  party: {
+    46	    type: String,
+    47	    required: [true, 'Party name is required'],
+    48	    trim: true,
+    49	    minlength: [2, 'Party name must be at least 2 characters long'],
+    50	    maxlength: [40, 'Party name cannot exceed 40 characters'],
+    51	    match: [/^[A-Za-z ]+$/, 'Party name should contain only letters and spaces'],
+    52	  },
+    53	  registrationStatus: {
+    54	    type: String,
+    55	    enum: CANDIDATE_REGISTRATION_STATUSES,
+    56	    default: 'pending',
+    57	    required: true,
+    58	  },
+    59	}, {
+    60	  timestamps: true,
+    61	  collection: 'candidatesCollection',
+    62	})
+    63	
+    64	candidateSchema.index(
+    65	  { candidateId: 1 },
+    66	  {
+    67	    name: 'candidateId_unique_valid',
+    68	    unique: true,
+    69	    partialFilterExpression: { candidateId: { $type: 'number', $gte: 1 } },
+    70	  },
+    71	)
+    72	candidateSchema.index({ nationalId: 1 }, { unique: true })
+    73	candidateSchema.index({ name: 'text', party: 'text', location: 'text' })
+    74	
+    75	candidateSchema.pre('save', function trimStrings(next) {
+    76	  Object.keys(this.schema.paths).forEach((key) => {
+    77	    if (this.schema.paths[key].instance === 'String' && typeof this[key] === 'string') {
+    78	      this[key] = this[key].trim()
+    79	    }
+    80	  })
+    81	  next()
+    82	})
+    83	
+    84	const Candidate = mongoose.model('Candidate', candidateSchema)
+    85	
+    86	export default Candidate
+
+======================================================================
+FILE: votechain-central-server/.env.example
+======================================================================
+     1	PORT=5000
+     2	MONGO_URI=mongodb://127.0.0.1:27017/votechain_test
+     3	FRONTEND_ORIGINS=http://localhost:5273
+     4	RPC_URL=http://127.0.0.1:8545
+     5	# Active VoteChain-ZK contract address.
+     6	CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
+     7	# Exactly 32 bytes. Use a dedicated secret; do not reuse the historical voter-salt key.
+     8	ZK_CREDENTIAL_SECRET_KEY=replace-with-32-byte-secret-key!
+     9	# Historical VC-W01/VC-W02 baseline only. Not used by the active ZK flow.
+    10	VOTER_SALT_SECRET_KEY=baseline-only-32-byte-secret!!!!
+    11	MIGRATION_ALLOW_RUN=false
+    12	# Optional offline/reproducible official Semaphore proving artifacts. Configure both or neither.
+    13	# ZK_SNARK_WASM=/absolute/path/to/semaphore.wasm
+    14	# ZK_SNARK_ZKEY=/absolute/path/to/semaphore.zkey
+    15	
+    16	# Optional optimization for on-chain commitment event reconstruction (default: 0)
+    17	ZK_CONTRACT_DEPLOYMENT_BLOCK=0
+    18	
+    19	# Existing ESP32/R307 serial integration; override per deployment host.
+    20	FINGERPRINT_SERIAL_PORT=COM3
+
+======================================================================
+FILE: votechain-frontend-ts/src/config/contract.ts
+======================================================================
+     1	import { Contract, JsonRpcProvider, type ContractRunner, type Signer } from "ethers"
+     2	import zkLocalVotingAbi from "@/abi/ZKLocalVoting.json"
+     3	
+     4	export const contractAddress = (import.meta.env.VITE_CONTRACT_ADDRESS || "").trim()
+     5	export const rpcUrl = (import.meta.env.VITE_RPC_URL || "").trim()
+     6	export const contractABI = zkLocalVotingAbi
+     7	
+     8	function requireContractAddress() {
+     9	  if (!contractAddress) throw new Error("VITE_CONTRACT_ADDRESS is not configured")
+    10	  return contractAddress
+    11	}
+    12	
+    13	export function createContract(runner: ContractRunner | Signer) {
+    14	  return new Contract(requireContractAddress(), contractABI, runner)
+    15	}
+    16	
+    17	export function getProvider() {
+    18	  if (!rpcUrl) throw new Error("VITE_RPC_URL is not configured")
+    19	  return new JsonRpcProvider(rpcUrl)
+    20	}
+    21	
+    22	export function createReadOnlyContract() {
+    23	  return createContract(getProvider())
+    24	}
+
+======================================================================
+FILE: votechain-frontend-ts/src/config/api.ts
+======================================================================
+     1	export const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "")
+     2	
+     3	export function apiUrl(path: string) {
+     4	  if (!apiBaseUrl) {
+     5	    throw new Error("VITE_API_BASE_URL is not configured")
+     6	  }
+     7	  return `${apiBaseUrl}${path.startsWith("/") ? path : `/${path}`}`
+     8	}
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx
+======================================================================
+     1	import { useEffect, useState } from "react"
+     2	import { useContract } from "@/hooks/useContract"
+     3	import { useWallet } from "@/components/ui/wallet-provider"
+     4	import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+     5	import { Button } from "@/components/ui/button"
+     6	import { useNavigate } from "react-router-dom"
+     7	import { Input } from "@/components/ui/input"
+     8	import { Label } from "@/components/ui/label"
+     9	import { useToast } from "@/components/ui/use-toast"
+    10	import { FaceCapture } from "@/components/Biometric/face-recognition/FaceCapture"
+    11	import { FingerprintCapture } from "@/components/Biometric/fingerprint/FingerprintCapture"
+    12	import { Calendar } from "@/components/ui/calendar"
+    13	import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+    14	import { format } from "date-fns"
+    15	import { CalendarIcon } from "lucide-react"
+    16	import { cn } from "@/lib/utils"
+    17	import { Alert, AlertDescription } from "@/components/ui/alert"
+    18	import { apiUrl } from "@/config/api"
+    19	import { createVoter, updateVoterZkRegistrationStatus, type ElectionState } from "@/services/api"
+    20	
+    21	interface FormData {
+    22	  name: string
+    23	  nationalId: string
+    24	  dateOfBirth: Date
+    25	  location: string
+    26	}
+    27	
+    28	export function RegisterVoter() {
+    29	  const navigate = useNavigate()
+    30	  const { registerVoterCommitment, getElectionState, isAdmin, isInitialized } = useContract()
+    31	  const { address } = useWallet()
+    32	  const { toast } = useToast()
+    33	  const [formData, setFormData] = useState<FormData>({
+    34	    name: "",
+    35	    nationalId: "",
+    36	    dateOfBirth: new Date(2000, 0, 1),
+    37	    location: "",
+    38	  })
+    39	  const [isLoading, setIsLoading] = useState(false)
+    40	  const [error, setError] = useState<string | null>(null)
+    41	  const [electionState, setElectionState] = useState<ElectionState | null>(null)
+    42	  const [biometricStatus, setBiometricStatus] = useState({
+    43	    faceCaptured: false,
+    44	    fingerprintCaptured: false,
+    45	    faceTrainingProgress: 0,
+    46	    isTraining: false,
+    47	  })
+    48	
+    49	  useEffect(() => {
+    50	    if (isInitialized) {
+    51	      void getElectionState().then(setElectionState).catch(() => setElectionState(null))
+    52	    }
+    53	  }, [isInitialized, getElectionState])
+    54	
+    55	  const handleTrainFace = async () => {
+    56	    if (!formData.nationalId.trim() || !biometricStatus.faceCaptured) {
+    57	      toast({ title: "Error", description: "Enter the National ID and capture face images first", variant: "destructive" })
+    58	      return
+    59	    }
+    60	
+    61	    setBiometricStatus((previous) => ({ ...previous, isTraining: true, faceTrainingProgress: 0 }))
+    62	    try {
+    63	      const response = await fetch(apiUrl(`/api/voters/train-face/${formData.nationalId}`), {
+    64	        method: "POST",
+    65	        headers: { "Content-Type": "application/json" },
+    66	      })
+    67	      const payload = await response.json()
+    68	      if (!response.ok || !payload.success) throw new Error(payload.message || "Failed to train face model")
+    69	      setBiometricStatus((previous) => ({ ...previous, faceTrainingProgress: 100, isTraining: false }))
+    70	      toast({ title: "Success", description: "Face training completed successfully" })
+    71	    } catch (trainingError) {
+    72	      setBiometricStatus((previous) => ({ ...previous, isTraining: false, faceTrainingProgress: 0 }))
+    73	      toast({ title: "Error", description: trainingError instanceof Error ? trainingError.message : "Failed to train face model", variant: "destructive" })
+    74	    }
+    75	  }
+    76	
+    77	  const handleSubmit = async (event: React.FormEvent) => {
+    78	    event.preventDefault()
+    79	    setError(null)
+    80	
+    81	    if (!address || !isAdmin) {
+    82	      toast({ title: "Error", description: "Only the Election Commission wallet can register voters", variant: "destructive" })
+    83	      return
+    84	    }
+    85	    if (!biometricStatus.faceCaptured) {
+    86	      toast({ title: "Error", description: "Please capture face biometric data", variant: "destructive" })
+    87	      return
+    88	    }
+    89	
+    90	    const currentState = await getElectionState()
+    91	    setElectionState(currentState)
+    92	    if (currentState !== "Registration") {
+    93	      toast({ title: "Registration closed", description: `Voter registration is unavailable while the election is ${currentState}.`, variant: "destructive" })
+    94	      return
+    95	    }
+    96	
+    97	    const today = new Date()
+    98	    let age = today.getFullYear() - formData.dateOfBirth.getFullYear()
+    99	    const monthDifference = today.getMonth() - formData.dateOfBirth.getMonth()
+   100	    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < formData.dateOfBirth.getDate())) age -= 1
+   101	    if (age < 18 || age > 120) {
+   102	      toast({ title: "Error", description: "Voter must be between 18 and 120 years old", variant: "destructive" })
+   103	      return
+   104	    }
+   105	
+   106	    setIsLoading(true)
+   107	    try {
+   108	      const { identityCommitment } = await createVoter({
+   109	        name: formData.name,
+   110	        nationalId: formData.nationalId,
+   111	        dateOfBirth: formData.dateOfBirth.toISOString(),
+   112	        location: formData.location,
+   113	      })
+   114	
+   115	      try {
+   116	        const receipt = await registerVoterCommitment(identityCommitment)
+   117	        await updateVoterZkRegistrationStatus(identityCommitment, "registered", receipt?.hash)
+   118	      } catch (chainError) {
+   119	        await updateVoterZkRegistrationStatus(identityCommitment, "failed").catch(() => undefined)
+   120	        throw chainError
+   121	      }
+   122	
+   123	      toast({ title: "Success", description: "Voter Semaphore commitment registered on-chain successfully" })
+   124	      navigate("/admin")
+   125	    } catch (registrationError) {
+   126	      const message = registrationError instanceof Error ? registrationError.message : "Failed to register voter"
+   127	      setError(message)
+   128	      toast({ title: "Error", description: message, variant: "destructive" })
+   129	    } finally {
+   130	      setIsLoading(false)
+   131	    }
+   132	  }
+   133	
+   134	  const registrationOpen = electionState === null || electionState === "Registration"
+   135	
+   136	  return (
+   137	    <div className="container mx-auto p-4">
+   138	      <Card>
+   139	        <CardHeader><CardTitle>Register Voter</CardTitle></CardHeader>
+   140	        <CardContent>
+   141	          {electionState && electionState !== "Registration" && (
+   142	            <Alert variant="destructive" className="mb-6"><AlertDescription>Registration is closed. Current state: {electionState}.</AlertDescription></Alert>
+   143	          )}
+   144	          <form onSubmit={handleSubmit} className="space-y-6">
+   145	            <div className="grid gap-4 md:grid-cols-2">
+   146	              <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} required pattern="^[A-Za-z ]{3,50}$" /></div>
+   147	              <div className="space-y-2"><Label htmlFor="nationalId">National ID</Label><Input id="nationalId" value={formData.nationalId} onChange={(event) => setFormData({ ...formData, nationalId: event.target.value.trim() })} required pattern="^\d{10}$" /></div>
+   148	              <div className="space-y-2">
+   149	                <Label>Date of Birth</Label>
+   150	                <Popover>
+   151	                  <PopoverTrigger asChild>
+   152	                    <Button variant="outline" className={cn("w-full justify-start text-left font-normal")} type="button">
+   153	                      <CalendarIcon className="mr-2 h-4 w-4" />{format(formData.dateOfBirth, "PPP")}
+   154	                    </Button>
+   155	                  </PopoverTrigger>
+   156	                  <PopoverContent className="w-auto p-0">
+   157	                    <Calendar mode="single" selected={formData.dateOfBirth} onSelect={(date) => date && setFormData({ ...formData, dateOfBirth: date })} initialFocus />
+   158	                  </PopoverContent>
+   159	                </Popover>
+   160	              </div>
+   161	              <div className="space-y-2"><Label htmlFor="location">Location</Label><Input id="location" value={formData.location} onChange={(event) => setFormData({ ...formData, location: event.target.value })} required pattern="^[A-Za-z ,.-]{2,100}$" /></div>
+   162	            </div>
+   163	
+   164	            <FaceCapture nid={formData.nationalId} onCaptureComplete={(success) => setBiometricStatus((previous) => ({ ...previous, faceCaptured: success }))} />
+   165	            {biometricStatus.faceCaptured && (
+   166	              <Button type="button" variant="outline" onClick={handleTrainFace} disabled={biometricStatus.isTraining}>
+   167	                {biometricStatus.isTraining ? "Training Face..." : biometricStatus.faceTrainingProgress === 100 ? "Face Trained" : "Train Face"}
+   168	              </Button>
+   169	            )}
+   170	            <FingerprintCapture
+   171	              nid={formData.nationalId}
+   172	              isCaptured={biometricStatus.fingerprintCaptured}
+   173	              onCapture={() => setBiometricStatus((previous) => ({ ...previous, fingerprintCaptured: true }))}
+   174	              onRetake={() => setBiometricStatus((previous) => ({ ...previous, fingerprintCaptured: false }))}
+   175	            />
+   176	
+   177	            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
+   178	            <Button type="submit" disabled={isLoading || !registrationOpen || !isAdmin} className="w-full">
+   179	              {isLoading ? "Registering..." : "Register Voter"}
+   180	            </Button>
+   181	          </form>
+   182	        </CardContent>
+   183	      </Card>
+   184	    </div>
+   185	  )
+   186	}
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx
+======================================================================
+     1	import { useEffect, useState } from "react"
+     2	import { useContract } from "@/hooks/useContract"
+     3	import { useWallet } from "@/components/ui/wallet-provider"
+     4	import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+     5	import { Button } from "@/components/ui/button"
+     6	import { useNavigate } from "react-router-dom"
+     7	import { Input } from "@/components/ui/input"
+     8	import { Label } from "@/components/ui/label"
+     9	import { useToast } from "@/components/ui/use-toast"
+    10	import {
+    11	  createCandidateMetadata,
+    12	  updateCandidateRegistrationStatus,
+    13	  type ElectionState,
+    14	} from "@/services/api"
+    15	import { Alert, AlertDescription } from "@/components/ui/alert"
+    16	
+    17	interface FormData {
+    18	  name: string
+    19	  party: string
+    20	  nationalId: string
+    21	  age: number
+    22	  location: string
+    23	}
+    24	
+    25	export function RegisterCandidate() {
+    26	  const navigate = useNavigate()
+    27	  const { registerCandidate, getElectionState, isAdmin, isInitialized } = useContract()
+    28	  const { address } = useWallet()
+    29	  const { toast } = useToast()
+    30	  const [formData, setFormData] = useState<FormData>({ name: "", party: "", nationalId: "", age: 18, location: "" })
+    31	  const [isLoading, setIsLoading] = useState(false)
+    32	  const [electionState, setElectionState] = useState<ElectionState | null>(null)
+    33	
+    34	  useEffect(() => {
+    35	    if (isInitialized) {
+    36	      void getElectionState().then(setElectionState).catch(() => setElectionState(null))
+    37	    }
+    38	  }, [isInitialized, getElectionState])
+    39	
+    40	  const handleSubmit = async (event: React.FormEvent) => {
+    41	    event.preventDefault()
+    42	    if (!address || !isAdmin) {
+    43	      toast({ title: "Error", description: "Only the Election Commission wallet can register candidates", variant: "destructive" })
+    44	      return
+    45	    }
+    46	
+    47	    const currentState = await getElectionState()
+    48	    setElectionState(currentState)
+    49	    if (currentState !== "Registration") {
+    50	      toast({ title: "Registration closed", description: `Candidate registration is unavailable while the election is ${currentState}.`, variant: "destructive" })
+    51	      return
+    52	    }
+    53	
+    54	    setIsLoading(true)
+    55	    let candidateId: number | null = null
+    56	    let chainRegistered = false
+    57	
+    58	    try {
+    59	      const candidate = await createCandidateMetadata(formData)
+    60	      candidateId = candidate.candidateId
+    61	
+    62	      try {
+    63	        await registerCandidate(candidate.candidateId)
+    64	        chainRegistered = true
+    65	      } catch (chainError) {
+    66	        try {
+    67	          await updateCandidateRegistrationStatus(candidate.candidateId, "failed")
+    68	        } catch (statusError) {
+    69	          console.error("Failed to mark candidate registration as failed", statusError)
+    70	        }
+    71	        throw chainError
+    72	      }
+    73	
+    74	      await updateCandidateRegistrationStatus(candidate.candidateId, "registered")
+    75	      toast({ title: "Success", description: `Candidate #${candidate.candidateId} registered on-chain successfully.` })
+    76	      navigate("/admin")
+    77	    } catch (registrationError) {
+    78	      console.error("Candidate registration error", registrationError)
+    79	      const message = chainRegistered && candidateId
+    80	        ? `Candidate #${candidateId} exists on-chain, but the database status could not be synchronized. Reconciliation is required.`
+    81	        : registrationError instanceof Error ? registrationError.message : "Failed to register candidate"
+    82	      toast({ title: "Registration failed", description: message, variant: "destructive" })
+    83	    } finally {
+    84	      setIsLoading(false)
+    85	    }
+    86	  }
+    87	
+    88	  const registrationOpen = electionState === null || electionState === "Registration"
+    89	
+    90	  return (
+    91	    <div className="container mx-auto p-4">
+    92	      <Card>
+    93	        <CardHeader><CardTitle>Register Candidate</CardTitle></CardHeader>
+    94	        <CardContent>
+    95	          {electionState && electionState !== "Registration" && (
+    96	            <Alert variant="destructive" className="mb-6"><AlertDescription>Registration is closed. Current state: {electionState}.</AlertDescription></Alert>
+    97	          )}
+    98	          <form onSubmit={handleSubmit} className="space-y-6">
+    99	            <div className="grid gap-4 md:grid-cols-2">
+   100	              <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} required pattern="^[A-Za-z ]{3,50}$" /></div>
+   101	              <div className="space-y-2"><Label htmlFor="party">Party</Label><Input id="party" value={formData.party} onChange={(event) => setFormData({ ...formData, party: event.target.value })} required pattern="^[A-Za-z ]{2,40}$" /></div>
+   102	              <div className="space-y-2"><Label htmlFor="nationalId">National ID</Label><Input id="nationalId" value={formData.nationalId} onChange={(event) => setFormData({ ...formData, nationalId: event.target.value.trim() })} required pattern="^\d{10}$" title="National ID must be exactly 10 digits" /></div>
+   103	              <div className="space-y-2"><Label htmlFor="age">Age</Label><Input id="age" type="number" value={formData.age} onChange={(event) => setFormData({ ...formData, age: Number(event.target.value) })} required min={18} max={120} /></div>
+   104	              <div className="space-y-2"><Label htmlFor="location">Location</Label><Input id="location" value={formData.location} onChange={(event) => setFormData({ ...formData, location: event.target.value })} required pattern="^[A-Za-z ,.-]{2,100}$" /></div>
+   105	            </div>
+   106	            <Button type="submit" disabled={isLoading || !registrationOpen || !isAdmin} className="w-full">
+   107	              {isLoading ? "Registering..." : "Register Candidate"}
+   108	            </Button>
+   109	          </form>
+   110	        </CardContent>
+   111	      </Card>
+   112	    </div>
+   113	  )
+   114	}
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Dashboard/PublicDashboard.tsx
+======================================================================
+     1	import { useCallback, useEffect, useState } from "react"
+     2	import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+     3	import { Badge } from "@/components/ui/badge"
+     4	import { Loader2, AlertCircle, RefreshCw } from "lucide-react"
+     5	import { Button } from "@/components/ui/button"
+     6	import { getPublicElectionData, type PublicElectionData } from "@/services/api"
+     7	import { CandidateList } from "@/components/Dashboard/CandidateList"
+     8	
+     9	export function PublicDashboard() {
+    10	  const [data, setData] = useState<PublicElectionData | null>(null)
+    11	  const [loading, setLoading] = useState(true)
+    12	  const [error, setError] = useState<string | null>(null)
+    13	
+    14	  const fetchPublicElectionData = useCallback(async () => {
+    15	    setLoading(true)
+    16	    setError(null)
+    17	    try {
+    18	      setData(await getPublicElectionData())
+    19	    } catch (requestError) {
+    20	      console.error("Failed to load public election data", requestError)
+    21	      setError(requestError instanceof Error ? requestError.message : "Could not fetch election data")
+    22	    } finally {
+    23	      setLoading(false)
+    24	    }
+    25	  }, [])
+    26	
+    27	  useEffect(() => {
+    28	    void fetchPublicElectionData()
+    29	  }, [fetchPublicElectionData])
+    30	
+    31	  if (loading) {
+    32	    return (
+    33	      <div className="container mx-auto p-6">
+    34	        <Card>
+    35	          <CardHeader><CardTitle>Public Dashboard</CardTitle></CardHeader>
+    36	          <CardContent className="flex flex-col items-center justify-center py-12">
+    37	            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+    38	            <p className="text-muted-foreground mt-4">Loading election data...</p>
+    39	          </CardContent>
+    40	        </Card>
+    41	      </div>
+    42	    )
+    43	  }
+    44	
+    45	  if (error || !data) {
+    46	    return (
+    47	      <div className="container mx-auto p-6">
+    48	        <Card>
+    49	          <CardHeader><CardTitle>Public Dashboard</CardTitle></CardHeader>
+    50	          <CardContent className="flex flex-col items-center justify-center py-12">
+    51	            <AlertCircle className="h-8 w-8 text-destructive" />
+    52	            <p className="text-destructive mt-4">{error || "Election data unavailable"}</p>
+    53	            <Button variant="outline" onClick={fetchPublicElectionData} className="mt-4">
+    54	              <RefreshCw className="h-4 w-4 mr-2" /> Try Again
+    55	            </Button>
+    56	          </CardContent>
+    57	        </Card>
+    58	      </div>
+    59	    )
+    60	  }
+    61	
+    62	  const totalVotes = data.candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0)
+    63	
+    64	  return (
+    65	    <div className="container mx-auto p-6 space-y-6">
+    66	      <Card>
+    67	        <CardHeader><CardTitle>Public Dashboard</CardTitle></CardHeader>
+    68	        <CardContent>
+    69	          <div className="flex items-center gap-2">
+    70	            <span className="text-lg font-semibold">Election State</span>
+    71	            <Badge variant={data.electionState === "Active" ? "default" : "secondary"}>
+    72	              {data.electionState}
+    73	            </Badge>
+    74	          </div>
+    75	          <div className="mt-2 text-sm">
+    76	            <span className="font-medium">On-chain candidates with metadata:</span> {data.candidateCount}<br />
+    77	            <span className="font-medium">Authoritative total votes:</span> {totalVotes}
+    78	          </div>
+    79	        </CardContent>
+    80	      </Card>
+    81	
+    82	      <CandidateList candidates={data.candidates} isLoading={false} />
+    83	    </div>
+    84	  )
+    85	}
+
+======================================================================
+FILE: votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx
+======================================================================
+     1	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+     2	import { Progress } from "@/components/ui/progress"
+     3	import { Button } from "@/components/ui/button"
+     4	import type { PublicCandidate } from "@/services/api"
+     5	
+     6	interface CandidateListProps {
+     7	  candidates: PublicCandidate[]
+     8	  onVote?: (candidateId: number) => void
+     9	  isLoading: boolean
+    10	  votingEnabled?: boolean
+    11	}
+    12	
+    13	export function CandidateList({ candidates, onVote, isLoading, votingEnabled = true }: CandidateListProps) {
+    14	  if (isLoading) return <div>Loading candidates...</div>
+    15	
+    16	  const totalVotes = candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0)
+    17	
+    18	  return (
+    19	    <div className="grid gap-4">
+    20	      {candidates.map((candidate) => {
+    21	        const percentage = totalVotes > 0 ? (candidate.voteCount / totalVotes) * 100 : 0
+    22	
+    23	        return (
+    24	          <Card key={candidate.candidateId}>
+    25	            <CardHeader>
+    26	              <CardTitle>{candidate.name}</CardTitle>
+    27	              <CardDescription>
+    28	                Candidate #{candidate.candidateId} · {candidate.party} · {candidate.location}
+    29	              </CardDescription>
+    30	            </CardHeader>
+    31	            <CardContent>
+    32	              <div className="space-y-4">
+    33	                <div className="space-y-2">
+    34	                  <div className="flex justify-between text-sm">
+    35	                    <span>Votes: {candidate.voteCount}</span>
+    36	                    <span>{percentage.toFixed(1)}%</span>
+    37	                  </div>
+    38	                  <Progress value={percentage} />
+    39	                </div>
+    40	                {onVote && (
+    41	                  <Button
+    42	                    onClick={() => onVote(candidate.candidateId)}
+    43	                    className="w-full"
+    44	                    disabled={!votingEnabled}
+    45	                  >
+    46	                    Vote
+    47	                  </Button>
+    48	                )}
+    49	              </div>
+    50	            </CardContent>
+    51	          </Card>
+    52	        )
+    53	      })}
+    54	    </div>
+    55	  )
+    56	}
+
+======================================================================
+FILE: votechain-frontend-ts/.env.example
+======================================================================
+     1	VITE_API_BASE_URL=http://localhost:5000
+     2	# Active VoteChain-ZK contract address.
+     3	VITE_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
+     4	VITE_RPC_URL=http://127.0.0.1:8545
+
+======================================================================
+FILE: crypto/package.json
+======================================================================
+     1	{
+     2	  "name": "@votechain-zk/crypto-poc",
+     3	  "version": "0.1.0",
+     4	  "private": true,
+     5	  "type": "module",
+     6	  "description": "VoteChain-ZK WP2 isolated cryptographic proof-of-concept",
+     7	  "scripts": {
+     8	    "preflight": "node test/preflight.mjs"
+     9	  },
+    10	  "dependencies": {
+    11	    "circomlib": "2.0.5",
+    12	    "circomlibjs": "0.1.7"
+    13	  }
+    14	}
+
+======================================================================
+FILE: crypto/config/wp3-build-profile.json
+======================================================================
+     1	{
+     2	  "profile": "VoteChain-ZK-WP3-v1",
+     3	  "proofSystem": "Groth16/snarkjs",
+     4	  "circuitLanguage": "Circom-2",
+     5	  "maxCandidates": 16,
+     6	  "merkleDepth": 17,
+     7	  "eligibleCapacity": 131072,
+     8	  "fieldModulus": "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+     9	  "domainDerivation": "SHA256(UTF8(label)) mod BN254_Fr",
+    10	  "labels": {
+    11	    "identity": "VoteChain-ZK/identity/v1",
+    12	    "nullifier": "VoteChain-ZK/nullifier/v1",
+    13	    "electionContext": "VoteChain-ZK/election-context/v1",
+    14	    "ciphertextBinding": "VoteChain-ZK/ciphertext-binding/v1",
+    15	    "candidateManifest": "VoteChain-ZK/candidate-manifest/v1",
+    16	    "devContractDomain": "VoteChain-ZK/dev-contract-domain/v1"
+    17	  },
+    18	  "domains": {
+    19	    "identity": "10304592805145852052914897443128100987694469729912842507111180023223117126083",
+    20	    "nullifier": "10453404237957698720657045535443762146790887818934613735227294786620760799811",
+    21	    "electionContext": "14324722980020043862268597353745221880876054874966425232640820492390099498617",
+    22	    "ciphertextBinding": "19125745417040834467958581383394473365054202296533443463458738476729992215493",
+    23	    "candidateManifest": "4784106652413558587724286788315853598751113888294269658302998980512237578693"
+    24	  },
+    25	  "testContractDomain": "16652924954244182622400990392520996814925114752355617844386524606803177265731",
+    26	  "babyjub": {
+    27	    "base8X": "5299619240641551281634865583518297030282874472190772894086521144482721001553",
+    28	    "base8Y": "16950150798460657717958625567821834550301663161624707787222815936182638968203",
+    29	    "subOrder": "2736030358979909402780800718157159386076813972158567259200215660948447373041",
+    30	    "subOrderMinusOne": "2736030358979909402780800718157159386076813972158567259200215660948447373040",
+    31	    "scalarBits": 253,
+    32	    "circuitPointRepresentation": "AFFINE_XY_CANONICAL_FIELD_ELEMENTS",
+    33	    "evmSerialization": "DEFERRED_WP4_GAS_GATE"
+    34	  },
+    35	  "ciphertextBinding": {
+    36	    "direct": "PUBLIC_AFFINE_XY_COORDINATES",
+    37	    "poseidon": "POSEIDON_CHAIN_OVER_AFFINE_COORDINATES",
+    38	    "finalDecision": "DEFERRED_PENDING_WP4_EVM_GAS_AND_CALLDATA"
+    39	  },
+    40	  "threshold": {
+    41	    "architecture": "CONFIGURABLE_T_OF_N",
+    42	    "prototypeDefault": "3_OF_5",
+    43	    "productionDkg": "DEFERRED_WP6"
+    44	  }
+    45	}
+
+======================================================================
+FILE: crypto/scripts/wp3-build-vectors.mjs
+======================================================================
+     1	import fs from "node:fs";
+     2	import path from "node:path";
+     3	
+     4	const pkg =
+     5	    await import("circomlibjs");
+     6	
+     7	const buildBabyjub =
+     8	    pkg.buildBabyjub ??
+     9	    pkg.default?.buildBabyjub;
+    10	
+    11	const buildPoseidon =
+    12	    pkg.buildPoseidon ??
+    13	    pkg.default?.buildPoseidon;
+    14	
+    15	if (
+    16	    !buildBabyjub ||
+    17	    !buildPoseidon
+    18	) {
+    19	    throw new Error(
+    20	        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+    21	    );
+    22	}
+    23	
+    24	const [
+    25	    ,
+    26	    ,
+    27	    profilePath,
+    28	    outputRoot
+    29	] = process.argv;
+    30	
+    31	const profile =
+    32	    JSON.parse(
+    33	        fs.readFileSync(
+    34	            profilePath,
+    35	            "utf8"
+    36	        )
+    37	    );
+    38	
+    39	const babyjub =
+    40	    await buildBabyjub();
+    41	
+    42	const poseidon =
+    43	    await buildPoseidon();
+    44	
+    45	const PF =
+    46	    poseidon.F;
+    47	
+    48	const BF =
+    49	    babyjub.F;
+    50	
+    51	const MAX =
+    52	    profile.maxCandidates;
+    53	
+    54	const DEPTH =
+    55	    profile.merkleDepth;
+    56	
+    57	const D_ID =
+    58	    BigInt(
+    59	        profile.domains.identity
+    60	    );
+    61	
+    62	const D_NULL =
+    63	    BigInt(
+    64	        profile.domains.nullifier
+    65	    );
+    66	
+    67	const D_CTX =
+    68	    BigInt(
+    69	        profile.domains.electionContext
+    70	    );
+    71	
+    72	const D_BIND =
+    73	    BigInt(
+    74	        profile.domains.ciphertextBinding
+    75	    );
+    76	
+    77	const D_MANIFEST =
+    78	    BigInt(
+    79	        profile.domains.candidateManifest
+    80	    );
+    81	
+    82	const SUBORDER =
+    83	    BigInt(
+    84	        profile.babyjub.subOrder
+    85	    );
+    86	
+    87	function h(values) {
+    88	    return PF.toObject(
+    89	        poseidon(
+    90	            values.map(
+    91	                v => BigInt(v)
+    92	            )
+    93	        )
+    94	    );
+    95	}
+    96	
+    97	function pointBig(P) {
+    98	    return [
+    99	        BF.toObject(P[0]),
+   100	        BF.toObject(P[1])
+   101	    ];
+   102	}
+   103	
+   104	function pointString(P) {
+   105	    const p =
+   106	        pointBig(P);
+   107	
+   108	    return [
+   109	        p[0].toString(),
+   110	        p[1].toString()
+   111	    ];
+   112	}
+   113	
+   114	function jsonWrite(
+   115	    file,
+   116	    object
+   117	) {
+   118	    fs.mkdirSync(
+   119	        path.dirname(file),
+   120	        {
+   121	            recursive: true
+   122	        }
+   123	    );
+   124	
+   125	    fs.writeFileSync(
+   126	        file,
+   127	        JSON.stringify(
+   128	            object,
+   129	            (
+   130	                key,
+   131	                value
+   132	            ) =>
+   133	                typeof value ===
+   134	                "bigint"
+   135	                    ? value.toString()
+   136	                    : value,
+   137	            2
+   138	        ) + "\n"
+   139	    );
+   140	}
+   141	
+   142	function clone(x) {
+   143	    return structuredClone(x);
+   144	}
+   145	
+   146	function plusOne(x) {
+   147	    return (
+   148	        BigInt(x) + 1n
+   149	    ).toString();
+   150	}
+   151	
+   152	const secret =
+   153	    42424242424242n;
+   154	
+   155	const electionId =
+   156	    202609300001n;
+   157	
+   158	const candidateCount =
+   159	    4n;
+   160	
+   161	const contractDomain =
+   162	    BigInt(
+   163	        profile.testContractDomain
+   164	    );
+   165	
+   166	const candidateIds = [
+   167	    101n,
+   168	    102n,
+   169	    103n,
+   170	    104n
+   171	];
+   172	
+   173	const manifestHash =
+   174	    h(
+   175	        [
+   176	            D_MANIFEST,
+   177	            ...candidateIds
+   178	        ]
+   179	    );
+   180	
+   181	const bits =
+   182	    Array.from(
+   183	        {
+   184	            length: MAX
+   185	        },
+   186	        (
+   187	            _,
+   188	            i
+   189	        ) =>
+   190	            i === 1
+   191	                ? 1n
+   192	                : 0n
+   193	    );
+   194	
+   195	const randomness =
+   196	    Array.from(
+   197	        {
+   198	            length: MAX
+   199	        },
+   200	        (
+   201	            _,
+   202	            i
+   203	        ) =>
+   204	            1001n +
+   205	            BigInt(i)
+   206	    );
+   207	
+   208	const identityCommitment =
+   209	    h(
+   210	        [
+   211	            D_ID,
+   212	            secret
+   213	        ]
+   214	    );
+   215	
+   216	const siblings =
+   217	    Array.from(
+   218	        {
+   219	            length: DEPTH
+   220	        },
+   221	        (
+   222	            _,
+   223	            i
+   224	        ) =>
+   225	            3001n +
+   226	            BigInt(i)
+   227	    );
+   228	
+   229	const pathBits =
+   230	    Array.from(
+   231	        {
+   232	            length: DEPTH
+   233	        },
+   234	        (
+   235	            _,
+   236	            i
+   237	        ) =>
+   238	            BigInt(i % 2)
+   239	    );
+   240	
+   241	let current =
+   242	    identityCommitment;
+   243	
+   244	for (
+   245	    let i = 0;
+   246	    i < DEPTH;
+   247	    i++
+   248	) {
+   249	    const bit =
+   250	        pathBits[i];
+   251	
+   252	    const left =
+   253	        bit === 0n
+   254	            ? current
+   255	            : siblings[i];
+   256	
+   257	    const right =
+   258	        bit === 0n
+   259	            ? siblings[i]
+   260	            : current;
+   261	
+   262	    current =
+   263	        h(
+   264	            [
+   265	                left,
+   266	                right
+   267	            ]
+   268	        );
+   269	}
+   270	
+   271	const eligibleRoot =
+   272	    current;
+   273	
+   274	const nullifier =
+   275	    h(
+   276	        [
+   277	            D_NULL,
+   278	            secret,
+   279	            electionId
+   280	        ]
+   281	    );
+   282	
+   283	const crossElectionNullifier =
+   284	    h(
+   285	        [
+   286	            D_NULL,
+   287	            secret,
+   288	            electionId + 1n
+   289	        ]
+   290	    );
+   291	
+   292	if (
+   293	    nullifier ===
+   294	    crossElectionNullifier
+   295	) {
+   296	    throw new Error(
+   297	        "Cross-election nullifier separation failed"
+   298	    );
+   299	}
+   300	
+   301	const electionSecretKey =
+   302	    123456789n;
+   303	
+   304	const Y =
+   305	    babyjub.mulPointEscalar(
+   306	        babyjub.Base8,
+   307	        electionSecretKey
+   308	    );
+   309	
+   310	const identityPoint = [
+   311	    BF.e(0),
+   312	    BF.e(1)
+   313	];
+   314	
+   315	function makeCiphertexts(
+   316	    YPoint,
+   317	    ballotBits = bits,
+   318	    rValues = randomness
+   319	) {
+   320	    const out = [];
+   321	
+   322	    for (
+   323	        let j = 0;
+   324	        j < MAX;
+   325	        j++
+   326	    ) {
+   327	        const r =
+   328	            BigInt(
+   329	                rValues[j]
+   330	            );
+   331	
+   332	        const bit =
+   333	            BigInt(
+   334	                ballotBits[j]
+   335	            );
+   336	
+   337	        const R =
+   338	            babyjub.mulPointEscalar(
+   339	                babyjub.Base8,
+   340	                r
+   341	            );
+   342	
+   343	        const rY =
+   344	            babyjub.mulPointEscalar(
+   345	                YPoint,
+   346	                r
+   347	            );
+   348	
+   349	        const message =
+   350	            bit === 1n
+   351	                ? babyjub.Base8
+   352	                : identityPoint;
+   353	
+   354	        const S =
+   355	            babyjub.addPoint(
+   356	                rY,
+   357	                message
+   358	            );
+   359	
+   360	        out.push({
+   361	            R:
+   362	                pointBig(R),
+   363	
+   364	            S:
+   365	                pointBig(S)
+   366	        });
+   367	    }
+   368	
+   369	    return out;
+   370	}
+   371	
+   372	function bindingDigest(
+   373	    ciphertexts
+   374	) {
+   375	    let state =
+   376	        D_BIND;
+   377	
+   378	    for (
+   379	        const c
+   380	        of ciphertexts
+   381	    ) {
+   382	        state =
+   383	            h(
+   384	                [
+   385	                    state,
+   386	                    c.R[0],
+   387	                    c.R[1],
+   388	                    c.S[0],
+   389	                    c.S[1]
+   390	                ]
+   391	            );
+   392	    }
+   393	
+   394	    return state;
+   395	}
+   396	
+   397	function buildCase(
+   398	    YPoint
+   399	) {
+   400	    const y =
+   401	        pointBig(
+   402	            YPoint
+   403	        );
+   404	
+   405	    const context =
+   406	        h(
+   407	            [
+   408	                D_CTX,
+   409	                electionId,
+   410	                manifestHash,
+   411	                candidateCount,
+   412	                contractDomain,
+   413	                y[0],
+   414	                y[1]
+   415	            ]
+   416	        );
+   417	
+   418	    const ciphertexts =
+   419	        makeCiphertexts(
+   420	            YPoint
+   421	        );
+   422	
+   423	    const digest =
+   424	        bindingDigest(
+   425	            ciphertexts
+   426	        );
+   427	
+   428	    const common = {
+   429	        secret,
+   430	        siblings,
+   431	        pathBits,
+   432	        bit:
+   433	            bits,
+   434	        randomness,
+   435	
+   436	        eligibleRoot,
+   437	
+   438	        electionId,
+   439	        candidateManifestHash:
+   440	            manifestHash,
+   441	        candidateCount,
+   442	        contractDomain,
+   443	
+   444	        Yx:
+   445	            y[0],
+   446	        Yy:
+   447	            y[1],
+   448	
+   449	        electionContextHash:
+   450	            context,
+   451	
+   452	        nullifier
+   453	    };
+   454	
+   455	    const direct = {
+   456	        ...common,
+   457	
+   458	        Rx:
+   459	            ciphertexts.map(
+   460	                c => c.R[0]
+   461	            ),
+   462	
+   463	        Ry:
+   464	            ciphertexts.map(
+   465	                c => c.R[1]
+   466	            ),
+   467	
+   468	        Sx:
+   469	            ciphertexts.map(
+   470	                c => c.S[0]
+   471	            ),
+   472	
+   473	        Sy:
+   474	            ciphertexts.map(
+   475	                c => c.S[1]
+   476	            )
+   477	    };
+   478	
+   479	    const digestInput = {
+   480	        ...common,
+   481	
+   482	        bindingDigest:
+   483	            digest
+   484	    };
+   485	
+   486	    return {
+   487	        direct,
+   488	        digest:
+   489	            digestInput,
+   490	        ciphertexts,
+   491	        bindingDigestValue:
+   492	            digest
+   493	    };
+   494	}
+   495	
+   496	const base =
+   497	    buildCase(
+   498	        Y
+   499	    );
+   500	
+   501	if (
+   502	    typeof base.direct !== "object" ||
+   503	    base.direct === null ||
+   504	    Array.isArray(base.direct) ||
+   505	    typeof base.digest !== "object" ||
+   506	    base.digest === null ||
+   507	    Array.isArray(base.digest) ||
+   508	    base.direct.secret === undefined ||
+   509	    base.digest.secret === undefined ||
+   510	    base.digest.bindingDigest === undefined
+   511	) {
+   512	    throw new Error(
+   513	        "WP3 vector shape preflight failed"
+   514	    );
+   515	}
+   516	
+   517	console.log(
+   518	    "WP3_VECTOR_SHAPE_PREFLIGHT=PASS"
+   519	);
+   520	
+   521	const wrongKey =
+   522	    babyjub.mulPointEscalar(
+   523	        babyjub.Base8,
+   524	        987654321n
+   525	    );
+   526	
+   527	const wrongKeyXY =
+   528	    pointString(
+   529	        wrongKey
+   530	    );
+   531	
+   532	/*
+   533	 * Prefer circomlibjs' full-order Generator as a
+   534	 * self-consistent non-prime-subgroup public key.
+   535	 *
+   536	 * Fall back to the BabyJub order-2 point (0,-1).
+   537	 */
+   538	let badSubgroupY =
+   539	    babyjub.Generator;
+   540	
+   541	let badSubgroupMode =
+   542	    "CIRCOMLIB_GENERATOR";
+   543	
+   544	if (!badSubgroupY) {
+   545	    badSubgroupY = [
+   546	        BF.e(0),
+   547	        BF.e(
+   548	            BigInt(
+   549	                profile.fieldModulus
+   550	            ) - 1n
+   551	        )
+   552	    ];
+   553	
+   554	    badSubgroupMode =
+   555	        "ORDER_2_POINT_0_MINUS1";
+   556	}
+   557	
+   558	if (
+   559	    typeof babyjub.inSubgroup ===
+   560	    "function" &&
+   561	    babyjub.inSubgroup(
+   562	        badSubgroupY
+   563	    )
+   564	) {
+   565	    badSubgroupY = [
+   566	        BF.e(0),
+   567	        BF.e(
+   568	            BigInt(
+   569	                profile.fieldModulus
+   570	            ) - 1n
+   571	        )
+   572	    ];
+   573	
+   574	    badSubgroupMode =
+   575	        "ORDER_2_POINT_0_MINUS1";
+   576	}
+   577	
+   578	const badSubgroup =
+   579	    buildCase(
+   580	        badSubgroupY
+   581	    );
+   582	
+   583	const directDir =
+   584	    path.join(
+   585	        outputRoot,
+   586	        "direct"
+   587	    );
+   588	
+   589	const digestDir =
+   590	    path.join(
+   591	        outputRoot,
+   592	        "digest"
+   593	    );
+   594	
+   595	fs.mkdirSync(
+   596	    directDir,
+   597	    {
+   598	        recursive: true
+   599	    }
+   600	);
+   601	
+   602	fs.mkdirSync(
+   603	    digestDir,
+   604	    {
+   605	        recursive: true
+   606	    }
+   607	);
+   608	
+   609	jsonWrite(
+   610	    path.join(
+   611	        directDir,
+   612	        "valid.json"
+   613	    ),
+   614	    base.direct
+   615	);
+   616	
+   617	jsonWrite(
+   618	    path.join(
+   619	        digestDir,
+   620	        "valid.json"
+   621	    ),
+   622	    base.digest
+   623	);
+   624	
+   625	function writeCommonNegatives(
+   626	    dir,
+   627	    valid
+   628	) {
+   629	    let x;
+   630	
+   631	    x =
+   632	        clone(valid);
+   633	
+   634	    x.secret =
+   635	        plusOne(
+   636	            x.secret
+   637	        );
+   638	
+   639	    jsonWrite(
+   640	        path.join(
+   641	            dir,
+   642	            "wrong-secret.json"
+   643	        ),
+   644	        x
+   645	    );
+   646	
+   647	    x =
+   648	        clone(valid);
+   649	
+   650	    x.siblings[0] =
+   651	        plusOne(
+   652	            x.siblings[0]
+   653	        );
+   654	
+   655	    jsonWrite(
+   656	        path.join(
+   657	            dir,
+   658	            "wrong-path.json"
+   659	        ),
+   660	        x
+   661	    );
+   662	
+   663	    x =
+   664	        clone(valid);
+   665	
+   666	    x.pathBits[0] =
+   667	        "2";
+   668	
+   669	    jsonWrite(
+   670	        path.join(
+   671	            dir,
+   672	            "bad-path-bit.json"
+   673	        ),
+   674	        x
+   675	    );
+   676	
+   677	    x =
+   678	        clone(valid);
+   679	
+   680	    x.eligibleRoot =
+   681	        plusOne(
+   682	            x.eligibleRoot
+   683	        );
+   684	
+   685	    jsonWrite(
+   686	        path.join(
+   687	            dir,
+   688	            "wrong-root.json"
+   689	        ),
+   690	        x
+   691	    );
+   692	
+   693	    x =
+   694	        clone(valid);
+   695	
+   696	    x.electionId =
+   697	        plusOne(
+   698	            x.electionId
+   699	        );
+   700	
+   701	    jsonWrite(
+   702	        path.join(
+   703	            dir,
+   704	            "wrong-election.json"
+   705	        ),
+   706	        x
+   707	    );
+   708	
+   709	    x =
+   710	        clone(valid);
+   711	
+   712	    x.nullifier =
+   713	        plusOne(
+   714	            x.nullifier
+   715	        );
+   716	
+   717	    jsonWrite(
+   718	        path.join(
+   719	            dir,
+   720	            "wrong-nullifier.json"
+   721	        ),
+   722	        x
+   723	    );
+   724	
+   725	    x =
+   726	        clone(valid);
+   727	
+   728	    x.electionContextHash =
+   729	        plusOne(
+   730	            x.electionContextHash
+   731	        );
+   732	
+   733	    jsonWrite(
+   734	        path.join(
+   735	            dir,
+   736	            "wrong-context.json"
+   737	        ),
+   738	        x
+   739	    );
+   740	
+   741	    x =
+   742	        clone(valid);
+   743	
+   744	    x.candidateManifestHash =
+   745	        plusOne(
+   746	            x.candidateManifestHash
+   747	        );
+   748	
+   749	    jsonWrite(
+   750	        path.join(
+   751	            dir,
+   752	            "wrong-manifest.json"
+   753	        ),
+   754	        x
+   755	    );
+   756	
+   757	    x =
+   758	        clone(valid);
+   759	
+   760	    x.contractDomain =
+   761	        plusOne(
+   762	            x.contractDomain
+   763	        );
+   764	
+   765	    jsonWrite(
+   766	        path.join(
+   767	            dir,
+   768	            "wrong-contract-domain.json"
+   769	        ),
+   770	        x
+   771	    );
+   772	
+   773	    x =
+   774	        clone(valid);
+   775	
+   776	    x.bit[0] =
+   777	        "1";
+   778	
+   779	    x.bit[1] =
+   780	        "1";
+   781	
+   782	    jsonWrite(
+   783	        path.join(
+   784	            dir,
+   785	            "duplicate-selection.json"
+   786	        ),
+   787	        x
+   788	    );
+   789	
+   790	    x =
+   791	        clone(valid);
+   792	
+   793	    x.bit =
+   794	        x.bit.map(
+   795	            () => "0"
+   796	        );
+   797	
+   798	    jsonWrite(
+   799	        path.join(
+   800	            dir,
+   801	            "zero-selection.json"
+   802	        ),
+   803	        x
+   804	    );
+   805	
+   806	    x =
+   807	        clone(valid);
+   808	
+   809	    x.bit =
+   810	        x.bit.map(
+   811	            () => "0"
+   812	        );
+   813	
+   814	    x.bit[5] =
+   815	        "1";
+   816	
+   817	    jsonWrite(
+   818	        path.join(
+   819	            dir,
+   820	            "padded-selection.json"
+   821	        ),
+   822	        x
+   823	    );
+   824	
+   825	    x =
+   826	        clone(valid);
+   827	
+   828	    x.randomness[0] =
+   829	        "0";
+   830	
+   831	    jsonWrite(
+   832	        path.join(
+   833	            dir,
+   834	            "zero-randomness.json"
+   835	        ),
+   836	        x
+   837	    );
+   838	
+   839	    x =
+   840	        clone(valid);
+   841	
+   842	    x.randomness[0] =
+   843	        SUBORDER.toString();
+   844	
+   845	    jsonWrite(
+   846	        path.join(
+   847	            dir,
+   848	            "out-of-range-randomness.json"
+   849	        ),
+   850	        x
+   851	    );
+   852	
+   853	    x =
+   854	        clone(valid);
+   855	
+   856	    x.candidateCount =
+   857	        "0";
+   858	
+   859	    jsonWrite(
+   860	        path.join(
+   861	            dir,
+   862	            "candidate-count-zero.json"
+   863	        ),
+   864	        x
+   865	    );
+   866	
+   867	    x =
+   868	        clone(valid);
+   869	
+   870	    x.candidateCount =
+   871	        "17";
+   872	
+   873	    jsonWrite(
+   874	        path.join(
+   875	            dir,
+   876	            "candidate-count-17.json"
+   877	        ),
+   878	        x
+   879	    );
+   880	
+   881	    x =
+   882	        clone(valid);
+   883	
+   884	    x.Yx =
+   885	        wrongKeyXY[0];
+   886	
+   887	    x.Yy =
+   888	        wrongKeyXY[1];
+   889	
+   890	    jsonWrite(
+   891	        path.join(
+   892	            dir,
+   893	            "wrong-public-key.json"
+   894	        ),
+   895	        x
+   896	    );
+   897	}
+   898	
+   899	writeCommonNegatives(
+   900	    directDir,
+   901	    base.direct
+   902	);
+   903	
+   904	writeCommonNegatives(
+   905	    digestDir,
+   906	    base.digest
+   907	);
+   908	
+   909	/*
+   910	 * Self-consistent bad subgroup input:
+   911	 * only subgroup/key safety should make it unacceptable.
+   912	 */
+   913	jsonWrite(
+   914	    path.join(
+   915	        directDir,
+   916	        "bad-subgroup-y.json"
+   917	    ),
+   918	    badSubgroup.direct
+   919	);
+   920	
+   921	jsonWrite(
+   922	    path.join(
+   923	        digestDir,
+   924	        "bad-subgroup-y.json"
+   925	    ),
+   926	    badSubgroup.digest
+   927	);
+   928	
+   929	/*
+   930	 * Direct-specific ciphertext mismatch.
+   931	 */
+   932	{
+   933	    const x =
+   934	        clone(
+   935	            base.direct
+   936	        );
+   937	
+   938	    x.Rx[0] =
+   939	        plusOne(
+   940	            x.Rx[0]
+   941	        );
+   942	
+   943	    jsonWrite(
+   944	        path.join(
+   945	            directDir,
+   946	            "tampered-ciphertext.json"
+   947	        ),
+   948	        x
+   949	    );
+   950	}
+   951	
+   952	/*
+   953	 * Digest-specific incorrect binding.
+   954	 */
+   955	{
+   956	    const x =
+   957	        clone(
+   958	            base.digest
+   959	        );
+   960	
+   961	    x.bindingDigest =
+   962	        plusOne(
+   963	            x.bindingDigest
+   964	        );
+   965	
+   966	    jsonWrite(
+   967	        path.join(
+   968	            digestDir,
+   969	            "wrong-binding.json"
+   970	        ),
+   971	        x
+   972	    );
+   973	}
+   974	
+   975	/*
+   976	 * Compute the digest that a future contract would obtain
+   977	 * if submitted ciphertext coordinate Rx[0] were modified.
+   978	 */
+   979	const tamperedCiphertexts =
+   980	    base.ciphertexts.map(
+   981	        c => ({
+   982	            R:
+   983	                [
+   984	                    c.R[0],
+   985	                    c.R[1]
+   986	                ],
+   987	
+   988	            S:
+   989	                [
+   990	                    c.S[0],
+   991	                    c.S[1]
+   992	                ]
+   993	        })
+   994	    );
+   995	
+   996	tamperedCiphertexts[0].R[0] =
+   997	    tamperedCiphertexts[0].R[0] +
+   998	    1n;
+   999	
+  1000	const tamperedBindingDigest =
+  1001	    bindingDigest(
+  1002	        tamperedCiphertexts
+  1003	    );
+  1004	
+  1005	jsonWrite(
+  1006	    path.join(
+  1007	        outputRoot,
+  1008	        "wp3-known-answer-vector.json"
+  1009	    ),
+  1010	    {
+  1011	        profile:
+  1012	            profile.profile,
+  1013	
+  1014	        secret,
+  1015	
+  1016	        identityCommitment,
+  1017	        eligibleRoot,
+  1018	
+  1019	        electionId,
+  1020	        nullifier,
+  1021	        crossElectionNullifier,
+  1022	
+  1023	        candidateCount,
+  1024	        candidateIds,
+  1025	        candidateManifestHash:
+  1026	            manifestHash,
+  1027	
+  1028	        contractDomain,
+  1029	
+  1030	        publicKey:
+  1031	            pointBig(Y),
+  1032	
+  1033	        bindingDigest:
+  1034	            base.digest.bindingDigest,
+  1035	
+  1036	        tamperedBindingDigest,
+  1037	
+  1038	        ciphertexts:
+  1039	            base.ciphertexts,
+  1040	
+  1041	        badSubgroupMode,
+  1042	
+  1043	        badSubgroupY:
+  1044	            pointBig(
+  1045	                badSubgroupY
+  1046	            ),
+  1047	
+  1048	        assertions: {
+  1049	            crossElectionNullifierSeparation:
+  1050	                true,
+  1051	
+  1052	            maxCandidates:
+  1053	                MAX,
+  1054	
+  1055	            merkleDepth:
+  1056	                DEPTH,
+  1057	
+  1058	            syntheticOnly:
+  1059	                true
+  1060	        }
+  1061	    }
+  1062	);
+  1063	
+  1064	console.log(
+  1065	    "WP3_VECTOR_BUILD=PASS"
+  1066	);
+
+======================================================================
+FILE: circuits/VoteChainVoteDirect.circom
+======================================================================
+     1	pragma circom 2.2.0;
+     2	
+     3	include "./lib/VoteChainVoteCore.circom";
+     4	
+     5	/*
+     6	 * DIRECT ciphertext binding.
+     7	 *
+     8	 * All submitted ciphertext coordinates are Groth16 public inputs.
+     9	 */
+    10	
+    11	template VoteChainVoteDirect(
+    12	    MAX_CANDIDATES,
+    13	    MERKLE_DEPTH
+    14	) {
+    15	    signal input secret;
+    16	
+    17	    signal input siblings[MERKLE_DEPTH];
+    18	    signal input pathBits[MERKLE_DEPTH];
+    19	
+    20	    signal input bit[MAX_CANDIDATES];
+    21	    signal input randomness[MAX_CANDIDATES];
+    22	
+    23	    signal input eligibleRoot;
+    24	
+    25	    signal input electionId;
+    26	    signal input candidateManifestHash;
+    27	    signal input candidateCount;
+    28	    signal input contractDomain;
+    29	
+    30	    signal input Yx;
+    31	    signal input Yy;
+    32	
+    33	    signal input electionContextHash;
+    34	    signal input nullifier;
+    35	
+    36	    signal input Rx[MAX_CANDIDATES];
+    37	    signal input Ry[MAX_CANDIDATES];
+    38	    signal input Sx[MAX_CANDIDATES];
+    39	    signal input Sy[MAX_CANDIDATES];
+    40	
+    41	    component core =
+    42	        VoteChainVoteCore(
+    43	            MAX_CANDIDATES,
+    44	            MERKLE_DEPTH
+    45	        );
+    46	
+    47	    core.secret <==
+    48	        secret;
+    49	
+    50	    core.eligibleRoot <==
+    51	        eligibleRoot;
+    52	
+    53	    core.electionId <==
+    54	        electionId;
+    55	
+    56	    core.candidateManifestHash <==
+    57	        candidateManifestHash;
+    58	
+    59	    core.candidateCount <==
+    60	        candidateCount;
+    61	
+    62	    core.contractDomain <==
+    63	        contractDomain;
+    64	
+    65	    core.Yx <==
+    66	        Yx;
+    67	
+    68	    core.Yy <==
+    69	        Yy;
+    70	
+    71	    core.electionContextHash <==
+    72	        electionContextHash;
+    73	
+    74	    core.nullifier <==
+    75	        nullifier;
+    76	
+    77	    for (
+    78	        var d = 0;
+    79	        d < MERKLE_DEPTH;
+    80	        d++
+    81	    ) {
+    82	        core.siblings[d] <==
+    83	            siblings[d];
+    84	
+    85	        core.pathBits[d] <==
+    86	            pathBits[d];
+    87	    }
+    88	
+    89	    /*
+    90	     * Circom component rule:
+    91	     * initialize every core input before reading any core output.
+    92	     */
+    93	    for (
+    94	        var j = 0;
+    95	        j < MAX_CANDIDATES;
+    96	        j++
+    97	    ) {
+    98	        core.bit[j] <==
+    99	            bit[j];
+   100	
+   101	        core.randomness[j] <==
+   102	            randomness[j];
+   103	    }
+   104	
+   105	    for (
+   106	        var k = 0;
+   107	        k < MAX_CANDIDATES;
+   108	        k++
+   109	    ) {
+   110	        Rx[k] ===
+   111	            core.Rx[k];
+   112	
+   113	        Ry[k] ===
+   114	            core.Ry[k];
+   115	
+   116	        Sx[k] ===
+   117	            core.Sx[k];
+   118	
+   119	        Sy[k] ===
+   120	            core.Sy[k];
+   121	    }
+   122	}
+   123	
+   124	component main {
+   125	    public [
+   126	        eligibleRoot,
+   127	        electionId,
+   128	        candidateManifestHash,
+   129	        candidateCount,
+   130	        contractDomain,
+   131	        Yx,
+   132	        Yy,
+   133	        electionContextHash,
+   134	        nullifier,
+   135	        Rx,
+   136	        Ry,
+   137	        Sx,
+   138	        Sy
+   139	    ]
+   140	} = VoteChainVoteDirect(
+   141	    VC_MAX_CANDIDATES(),
+   142	    VC_MERKLE_DEPTH()
+   143	);
+
+======================================================================
+FILE: circuits/lib/VoteChainVoteCore.circom
+======================================================================
+     1	pragma circom 2.2.0;
+     2	
+     3	include "../config/VoteChainBuildProfile.circom";
+     4	
+     5	include "circomlib/circuits/poseidon.circom";
+     6	include "circomlib/circuits/bitify.circom";
+     7	include "circomlib/circuits/comparators.circom";
+     8	include "circomlib/circuits/compconstant.circom";
+     9	include "circomlib/circuits/gates.circom";
+    10	include "circomlib/circuits/babyjub.circom";
+    11	include "circomlib/circuits/escalarmulfix.circom";
+    12	include "circomlib/circuits/escalarmulany.circom";
+    13	
+    14	/*
+    15	 * VoteChain-ZK full voting statement core.
+    16	 *
+    17	 * PRIVATE:
+    18	 *   secret
+    19	 *   siblings[]
+    20	 *   pathBits[]
+    21	 *   bit[]
+    22	 *   randomness[]
+    23	 *
+    24	 * PUBLIC:
+    25	 *   supplied by wrapper:
+    26	 *   eligibleRoot
+    27	 *   electionId
+    28	 *   candidateManifestHash
+    29	 *   candidateCount
+    30	 *   contractDomain
+    31	 *   Yx/Yy
+    32	 *   electionContextHash
+    33	 *   nullifier
+    34	 *
+    35	 * Core proves:
+    36	 *   identity commitment
+    37	 *   Merkle membership
+    38	 *   election nullifier
+    39	 *   election-context binding
+    40	 *   candidate-count range
+    41	 *   binary/padded/one-hot ballot
+    42	 *   BabyJub public-key validation
+    43	 *   prime-subgroup membership
+    44	 *   nonzero in-range randomness
+    45	 *   exponential ElGamal correctness
+    46	 */
+    47	
+    48	template VoteChainVoteCore(
+    49	    MAX_CANDIDATES,
+    50	    MERKLE_DEPTH
+    51	) {
+    52	    signal input secret;
+    53	
+    54	    signal input siblings[MERKLE_DEPTH];
+    55	    signal input pathBits[MERKLE_DEPTH];
+    56	
+    57	    signal input bit[MAX_CANDIDATES];
+    58	    signal input randomness[MAX_CANDIDATES];
+    59	
+    60	    signal input eligibleRoot;
+    61	
+    62	    signal input electionId;
+    63	    signal input candidateManifestHash;
+    64	    signal input candidateCount;
+    65	    signal input contractDomain;
+    66	
+    67	    signal input Yx;
+    68	    signal input Yy;
+    69	
+    70	    signal input electionContextHash;
+    71	    signal input nullifier;
+    72	
+    73	    signal output Rx[MAX_CANDIDATES];
+    74	    signal output Ry[MAX_CANDIDATES];
+    75	    signal output Sx[MAX_CANDIDATES];
+    76	    signal output Sy[MAX_CANDIDATES];
+    77	
+    78	    /*
+    79	     * Secret must not be zero.
+    80	     */
+    81	    component secretZero = IsZero();
+    82	
+    83	    secretZero.in <== secret;
+    84	    secretZero.out === 0;
+    85	
+    86	    /*
+    87	     * identityCommitment =
+    88	     * Poseidon(DOMAIN_IDENTITY, secret)
+    89	     */
+    90	    component identityCommitment =
+    91	        Poseidon(2);
+    92	
+    93	    identityCommitment.inputs[0] <==
+    94	        VC_DOMAIN_IDENTITY();
+    95	
+    96	    identityCommitment.inputs[1] <==
+    97	        secret;
+    98	
+    99	    /*
+   100	     * Poseidon binary Merkle membership.
+   101	     */
+   102	    signal current[MERKLE_DEPTH + 1];
+   103	    signal left[MERKLE_DEPTH];
+   104	    signal right[MERKLE_DEPTH];
+   105	
+   106	    component merkleHash[MERKLE_DEPTH];
+   107	
+   108	    current[0] <==
+   109	        identityCommitment.out;
+   110	
+   111	    for (
+   112	        var level = 0;
+   113	        level < MERKLE_DEPTH;
+   114	        level++
+   115	    ) {
+   116	        pathBits[level] *
+   117	        (
+   118	            pathBits[level] - 1
+   119	        ) === 0;
+   120	
+   121	        left[level] <==
+   122	            current[level] +
+   123	            pathBits[level] *
+   124	            (
+   125	                siblings[level] -
+   126	                current[level]
+   127	            );
+   128	
+   129	        right[level] <==
+   130	            siblings[level] +
+   131	            pathBits[level] *
+   132	            (
+   133	                current[level] -
+   134	                siblings[level]
+   135	            );
+   136	
+   137	        merkleHash[level] =
+   138	            Poseidon(2);
+   139	
+   140	        merkleHash[level].inputs[0] <==
+   141	            left[level];
+   142	
+   143	        merkleHash[level].inputs[1] <==
+   144	            right[level];
+   145	
+   146	        current[level + 1] <==
+   147	            merkleHash[level].out;
+   148	    }
+   149	
+   150	    current[MERKLE_DEPTH] ===
+   151	        eligibleRoot;
+   152	
+   153	    /*
+   154	     * Election-scoped nullifier =
+   155	     * Poseidon(
+   156	     *   DOMAIN_NULLIFIER,
+   157	     *   secret,
+   158	     *   electionId
+   159	     * )
+   160	     */
+   161	    component nullifierHash =
+   162	        Poseidon(3);
+   163	
+   164	    nullifierHash.inputs[0] <==
+   165	        VC_DOMAIN_NULLIFIER();
+   166	
+   167	    nullifierHash.inputs[1] <==
+   168	        secret;
+   169	
+   170	    nullifierHash.inputs[2] <==
+   171	        electionId;
+   172	
+   173	    nullifierHash.out ===
+   174	        nullifier;
+   175	
+   176	    /*
+   177	     * Bind election configuration:
+   178	     *
+   179	     * Poseidon(
+   180	     *   DOMAIN_ELECTION_CONTEXT,
+   181	     *   electionId,
+   182	     *   candidateManifestHash,
+   183	     *   candidateCount,
+   184	     *   contractDomain,
+   185	     *   Yx,
+   186	     *   Yy
+   187	     * )
+   188	     */
+   189	    component electionContext =
+   190	        Poseidon(7);
+   191	
+   192	    electionContext.inputs[0] <==
+   193	        VC_DOMAIN_ELECTION_CONTEXT();
+   194	
+   195	    electionContext.inputs[1] <==
+   196	        electionId;
+   197	
+   198	    electionContext.inputs[2] <==
+   199	        candidateManifestHash;
+   200	
+   201	    electionContext.inputs[3] <==
+   202	        candidateCount;
+   203	
+   204	    electionContext.inputs[4] <==
+   205	        contractDomain;
+   206	
+   207	    electionContext.inputs[5] <==
+   208	        Yx;
+   209	
+   210	    electionContext.inputs[6] <==
+   211	        Yy;
+   212	
+   213	    electionContext.out ===
+   214	        electionContextHash;
+   215	
+   216	    /*
+   217	     * candidateCount:
+   218	     *   1 <= candidateCount <= 16
+   219	     */
+   220	    component candidateCountBits =
+   221	        Num2Bits(5);
+   222	
+   223	    candidateCountBits.in <==
+   224	        candidateCount;
+   225	
+   226	    component candidateCountZero =
+   227	        IsZero();
+   228	
+   229	    candidateCountZero.in <==
+   230	        candidateCount;
+   231	
+   232	    candidateCountZero.out === 0;
+   233	
+   234	    component candidateCountLt17 =
+   235	        LessThan(5);
+   236	
+   237	    candidateCountLt17.in[0] <==
+   238	        candidateCount;
+   239	
+   240	    candidateCountLt17.in[1] <==
+   241	        17;
+   242	
+   243	    candidateCountLt17.out === 1;
+   244	
+   245	    /*
+   246	     * Validate election public key:
+   247	     *
+   248	     * 1. on BabyJub curve
+   249	     * 2. not identity
+   250	     * 3. prime-subgroup member:
+   251	     *      subOrder * Y == identity
+   252	     */
+   253	    component checkY =
+   254	        BabyCheck();
+   255	
+   256	    checkY.x <==
+   257	        Yx;
+   258	
+   259	    checkY.y <==
+   260	        Yy;
+   261	
+   262	    component zeroY =
+   263	        IsZero();
+   264	
+   265	    zeroY.in <==
+   266	        Yx;
+   267	
+   268	    zeroY.out === 0;
+   269	
+   270	    component subgroupScalarBits =
+   271	        Num2Bits(253);
+   272	
+   273	    subgroupScalarBits.in <==
+   274	        VC_BABYJUB_SUBORDER();
+   275	
+   276	    component subgroupCheck =
+   277	        EscalarMulAny(253);
+   278	
+   279	    for (
+   280	        var sb = 0;
+   281	        sb < 253;
+   282	        sb++
+   283	    ) {
+   284	        subgroupCheck.e[sb] <==
+   285	            subgroupScalarBits.out[sb];
+   286	    }
+   287	
+   288	    subgroupCheck.p[0] <==
+   289	        Yx;
+   290	
+   291	    subgroupCheck.p[1] <==
+   292	        Yy;
+   293	
+   294	    /*
+   295	     * BabyJub identity = (0, 1)
+   296	     */
+   297	    subgroupCheck.out[0] === 0;
+   298	    subgroupCheck.out[1] === 1;
+   299	
+   300	    var G[2] = [
+   301	        VC_BABYJUB_BASE8_X(),
+   302	        VC_BABYJUB_BASE8_Y()
+   303	    ];
+   304	
+   305	    signal bitSum[MAX_CANDIDATES + 1];
+   306	
+   307	    bitSum[0] <== 0;
+   308	
+   309	    component active[MAX_CANDIDATES];
+   310	
+   311	    component zeroR[MAX_CANDIDATES];
+   312	    component rBits[MAX_CANDIDATES];
+   313	    component rRange[MAX_CANDIDATES];
+   314	
+   315	    component rG[MAX_CANDIDATES];
+   316	    component rY[MAX_CANDIDATES];
+   317	    component addPoint[MAX_CANDIDATES];
+   318	
+   319	    signal messageX[MAX_CANDIDATES];
+   320	    signal messageY[MAX_CANDIDATES];
+   321	
+   322	    for (
+   323	        var j = 0;
+   324	        j < MAX_CANDIDATES;
+   325	        j++
+   326	    ) {
+   327	        /*
+   328	         * bit[j] is Boolean.
+   329	         */
+   330	        bit[j] *
+   331	        (
+   332	            bit[j] - 1
+   333	        ) === 0;
+   334	
+   335	        /*
+   336	         * active[j] = (j < candidateCount)
+   337	         */
+   338	        active[j] =
+   339	            LessThan(5);
+   340	
+   341	        active[j].in[0] <==
+   342	            j;
+   343	
+   344	        active[j].in[1] <==
+   345	            candidateCount;
+   346	
+   347	        /*
+   348	         * Padding slots must be zero.
+   349	         */
+   350	        bit[j] *
+   351	        (
+   352	            1 -
+   353	            active[j].out
+   354	        ) === 0;
+   355	
+   356	        bitSum[j + 1] <==
+   357	            bitSum[j] +
+   358	            bit[j];
+   359	
+   360	        /*
+   361	         * 1 <= randomness[j] < BabyJub subOrder
+   362	         */
+   363	        zeroR[j] =
+   364	            IsZero();
+   365	
+   366	        zeroR[j].in <==
+   367	            randomness[j];
+   368	
+   369	        zeroR[j].out === 0;
+   370	
+   371	        rBits[j] =
+   372	            Num2Bits(253);
+   373	
+   374	        rBits[j].in <==
+   375	            randomness[j];
+   376	
+   377	        rRange[j] =
+   378	            CompConstant(
+   379	                VC_BABYJUB_SUBORDER_MINUS_ONE()
+   380	            );
+   381	
+   382	        for (
+   383	            var rb = 0;
+   384	            rb < 253;
+   385	            rb++
+   386	        ) {
+   387	            rRange[j].in[rb] <==
+   388	                rBits[j].out[rb];
+   389	        }
+   390	
+   391	        rRange[j].in[253] <==
+   392	            0;
+   393	
+   394	        rRange[j].out ===
+   395	            0;
+   396	
+   397	        /*
+   398	         * R_j = r_j G
+   399	         */
+   400	        rG[j] =
+   401	            EscalarMulFix(
+   402	                253,
+   403	                G
+   404	            );
+   405	
+   406	        for (
+   407	            var rg = 0;
+   408	            rg < 253;
+   409	            rg++
+   410	        ) {
+   411	            rG[j].e[rg] <==
+   412	                rBits[j].out[rg];
+   413	        }
+   414	
+   415	        Rx[j] <==
+   416	            rG[j].out[0];
+   417	
+   418	        Ry[j] <==
+   419	            rG[j].out[1];
+   420	
+   421	        /*
+   422	         * r_j Y
+   423	         */
+   424	        rY[j] =
+   425	            EscalarMulAny(253);
+   426	
+   427	        for (
+   428	            var ry = 0;
+   429	            ry < 253;
+   430	            ry++
+   431	        ) {
+   432	            rY[j].e[ry] <==
+   433	                rBits[j].out[ry];
+   434	        }
+   435	
+   436	        rY[j].p[0] <==
+   437	            Yx;
+   438	
+   439	        rY[j].p[1] <==
+   440	            Yy;
+   441	
+   442	        /*
+   443	         * Encode bit as:
+   444	         *   0 -> identity (0,1)
+   445	         *   1 -> G
+   446	         */
+   447	        messageX[j] <==
+   448	            bit[j] *
+   449	            G[0];
+   450	
+   451	        messageY[j] <==
+   452	            1 +
+   453	            bit[j] *
+   454	            (
+   455	                G[1] - 1
+   456	            );
+   457	
+   458	        /*
+   459	         * S_j = r_j Y + bit_j G
+   460	         */
+   461	        addPoint[j] =
+   462	            BabyAdd();
+   463	
+   464	        addPoint[j].x1 <==
+   465	            rY[j].out[0];
+   466	
+   467	        addPoint[j].y1 <==
+   468	            rY[j].out[1];
+   469	
+   470	        addPoint[j].x2 <==
+   471	            messageX[j];
+   472	
+   473	        addPoint[j].y2 <==
+   474	            messageY[j];
+   475	
+   476	        Sx[j] <==
+   477	            addPoint[j].xout;
+   478	
+   479	        Sy[j] <==
+   480	            addPoint[j].yout;
+   481	    }
+   482	
+   483	    /*
+   484	     * Exactly one active candidate.
+   485	     */
+   486	    bitSum[MAX_CANDIDATES] ===
+   487	        1;
+   488	}
+
+======================================================================
+FILE: contracts/wp4-foundry/src/VoteChainWP4.sol
+======================================================================
+     1	// SPDX-License-Identifier: MIT
+     2	pragma solidity >=0.8.20 <0.9.0;
+     3	
+     4	import "./WP4Profile.sol";
+     5	
+     6	interface IVerifierDirect {
+     7	    function verifyProof(
+     8	        uint256[2] calldata a,
+     9	        uint256[2][2] calldata b,
+    10	        uint256[2] calldata c,
+    11	        uint256[73] calldata input
+    12	    )
+    13	        external
+    14	        view
+    15	        returns (bool);
+    16	}
+    17	
+    18	interface IVerifierDigest {
+    19	    function verifyProof(
+    20	        uint256[2] calldata a,
+    21	        uint256[2][2] calldata b,
+    22	        uint256[2] calldata c,
+    23	        uint256[10] calldata input
+    24	    )
+    25	        external
+    26	        view
+    27	        returns (bool);
+    28	}
+    29	
+    30	/*
+    31	 * BabyJub affine twisted-Edwards addition.
+    32	 *
+    33	 * a*x^2 + y^2 = 1 + d*x^2*y^2
+    34	 * a = 168700
+    35	 * d = 168696
+    36	 *
+    37	 * This is intentionally instrumented in WP4 because its EVM
+    38	 * cost is one of the authorized architecture review gates.
+    39	 */
+    40	library BabyJubAffine {
+    41	    uint256 internal constant P =
+    42	        21888242871839275222246405745257275088548364400416034343698204186575808495617;
+    43	
+    44	    uint256 internal constant A =
+    45	        168700;
+    46	
+    47	    uint256 internal constant D =
+    48	        168696;
+    49	
+    50	    struct Point {
+    51	        uint256 x;
+    52	        uint256 y;
+    53	    }
+    54	
+    55	    function _submod(
+    56	        uint256 x,
+    57	        uint256 y
+    58	    )
+    59	        private
+    60	        pure
+    61	        returns (uint256)
+    62	    {
+    63	        return
+    64	            x >= y
+    65	                ? x - y
+    66	                : P - (y - x);
+    67	    }
+    68	
+    69	    /*
+    70	     * EIP-198 modular exponentiation precompile.
+    71	     *
+    72	     * inverse(a) = a^(P-2) mod P
+    73	     */
+    74	    function _inverse(
+    75	        uint256 x
+    76	    )
+    77	        private
+    78	        view
+    79	        returns (uint256 out)
+    80	    {
+    81	        require(
+    82	            x != 0,
+    83	            "BABYJUB_ZERO_DENOMINATOR"
+    84	        );
+    85	
+    86	        bytes memory input =
+    87	            abi.encode(
+    88	                uint256(32),
+    89	                uint256(32),
+    90	                uint256(32),
+    91	                x,
+    92	                P - 2,
+    93	                P
+    94	            );
+    95	
+    96	        bytes memory output =
+    97	            new bytes(32);
+    98	
+    99	        bool ok;
+   100	
+   101	        assembly ("memory-safe") {
+   102	            ok := staticcall(
+   103	                gas(),
+   104	                5,
+   105	                add(input, 32),
+   106	                mload(input),
+   107	                add(output, 32),
+   108	                32
+   109	            )
+   110	        }
+   111	
+   112	        require(
+   113	            ok,
+   114	            "MODEXP_FAILED"
+   115	        );
+   116	
+   117	        out =
+   118	            abi.decode(
+   119	                output,
+   120	                (uint256)
+   121	            );
+   122	
+   123	        require(
+   124	            out != 0,
+   125	            "BAD_INVERSE"
+   126	        );
+   127	    }
+   128	
+   129	    function add(
+   130	        Point memory p1,
+   131	        Point memory p2
+   132	    )
+   133	        internal
+   134	        view
+   135	        returns (Point memory r)
+   136	    {
+   137	        require(
+   138	            p1.x < P &&
+   139	            p1.y < P &&
+   140	            p2.x < P &&
+   141	            p2.y < P,
+   142	            "NON_CANONICAL_POINT"
+   143	        );
+   144	
+   145	        uint256 x1x2 =
+   146	            mulmod(
+   147	                p1.x,
+   148	                p2.x,
+   149	                P
+   150	            );
+   151	
+   152	        uint256 y1y2 =
+   153	            mulmod(
+   154	                p1.y,
+   155	                p2.y,
+   156	                P
+   157	            );
+   158	
+   159	        uint256 x1y2 =
+   160	            mulmod(
+   161	                p1.x,
+   162	                p2.y,
+   163	                P
+   164	            );
+   165	
+   166	        uint256 y1x2 =
+   167	            mulmod(
+   168	                p1.y,
+   169	                p2.x,
+   170	                P
+   171	            );
+   172	
+   173	        uint256 t =
+   174	            mulmod(
+   175	                x1x2,
+   176	                y1y2,
+   177	                P
+   178	            );
+   179	
+   180	        uint256 dt =
+   181	            mulmod(
+   182	                D,
+   183	                t,
+   184	                P
+   185	            );
+   186	
+   187	        uint256 numeratorX =
+   188	            addmod(
+   189	                x1y2,
+   190	                y1x2,
+   191	                P
+   192	            );
+   193	
+   194	        uint256 numeratorY =
+   195	            _submod(
+   196	                y1y2,
+   197	                mulmod(
+   198	                    A,
+   199	                    x1x2,
+   200	                    P
+   201	                )
+   202	            );
+   203	
+   204	        uint256 denominatorX =
+   205	            addmod(
+   206	                1,
+   207	                dt,
+   208	                P
+   209	            );
+   210	
+   211	        uint256 denominatorY =
+   212	            _submod(
+   213	                1,
+   214	                dt
+   215	            );
+   216	
+   217	        r.x =
+   218	            mulmod(
+   219	                numeratorX,
+   220	                _inverse(
+   221	                    denominatorX
+   222	                ),
+   223	                P
+   224	            );
+   225	
+   226	        r.y =
+   227	            mulmod(
+   228	                numeratorY,
+   229	                _inverse(
+   230	                    denominatorY
+   231	                ),
+   232	                P
+   233	            );
+   234	    }
+   235	}
+   236	
+   237	abstract contract VoteChainBase {
+   238	    uint256 internal constant MAX =
+   239	        WP4Profile.MAX_CANDIDATES;
+   240	
+   241	    uint256 internal constant P =
+   242	        WP4Profile.FIELD_MODULUS;
+   243	
+   244	    enum Phase {
+   245	        Registration,
+   246	        Active,
+   247	        Ended,
+   248	        Finalized
+   249	    }
+   250	
+   251	    struct ElectionConfig {
+   252	        uint256 eligibleRoot;
+   253	
+   254	        uint256 electionId;
+   255	
+   256	        uint256 candidateManifestHash;
+   257	
+   258	        uint256 candidateCount;
+   259	
+   260	        uint256 contractDomain;
+   261	
+   262	        uint256 Yx;
+   263	        uint256 Yy;
+   264	
+   265	        uint256 electionContextHash;
+   266	    }
+   267	
+   268	    address public immutable admin;
+   269	
+   270	    Phase public phase;
+   271	
+   272	    bool public configured;
+   273	
+   274	    uint256 public eligibleRoot;
+   275	
+   276	    uint256 public electionId;
+   277	
+   278	    uint256 public candidateManifestHash;
+   279	
+   280	    uint256 public candidateCount;
+   281	
+   282	    uint256 public contractDomain;
+   283	
+   284	    uint256 public Yx;
+   285	    uint256 public Yy;
+   286	
+   287	    uint256 public electionContextHash;
+   288	
+   289	    uint256 public acceptedBallotCount;
+   290	
+   291	    mapping(uint256 => bool)
+   292	        public usedNullifier;
+   293	
+   294	    uint256[16] internal tallyRx;
+   295	    uint256[16] internal tallyRy;
+   296	    uint256[16] internal tallySx;
+   297	    uint256[16] internal tallySy;
+   298	
+   299	    event ElectionConfigured(
+   300	        uint256 indexed electionId,
+   301	        uint256 eligibleRoot,
+   302	        uint256 candidateManifestHash,
+   303	        uint256 candidateCount
+   304	    );
+   305	
+   306	    event ElectionActivated(
+   307	        uint256 indexed electionId
+   308	    );
+   309	
+   310	    event ElectionEnded(
+   311	        uint256 indexed electionId
+   312	    );
+   313	
+   314	    event EncryptedVoteAccepted(
+   315	        uint256 indexed nullifier,
+   316	        bytes32 ciphertextHash,
+   317	        uint256 acceptedBallotCount
+   318	    );
+   319	
+   320	    constructor() {
+   321	        admin =
+   322	            msg.sender;
+   323	
+   324	        phase =
+   325	            Phase.Registration;
+   326	
+   327	        /*
+   328	         * BabyJub identity = (0,1)
+   329	         */
+   330	        for (
+   331	            uint256 i = 0;
+   332	            i < MAX;
+   333	            i++
+   334	        ) {
+   335	            tallyRy[i] = 1;
+   336	            tallySy[i] = 1;
+   337	        }
+   338	    }
+   339	
+   340	    modifier onlyAdmin() {
+   341	        require(
+   342	            msg.sender == admin,
+   343	            "ONLY_ADMIN"
+   344	        );
+   345	
+   346	        _;
+   347	    }
+   348	
+   349	    modifier inPhase(
+   350	        Phase expected
+   351	    ) {
+   352	        require(
+   353	            phase == expected,
+   354	            "WRONG_PHASE"
+   355	        );
+   356	
+   357	        _;
+   358	    }
+   359	
+   360	    function configure(
+   361	        ElectionConfig calldata cfg
+   362	    )
+   363	        external
+   364	        onlyAdmin
+   365	        inPhase(
+   366	            Phase.Registration
+   367	        )
+   368	    {
+   369	        require(
+   370	            !configured,
+   371	            "ALREADY_CONFIGURED"
+   372	        );
+   373	
+   374	        require(
+   375	            cfg.candidateCount >= 1 &&
+   376	            cfg.candidateCount <= MAX,
+   377	            "BAD_CANDIDATE_COUNT"
+   378	        );
+   379	
+   380	        require(
+   381	            cfg.eligibleRoot < P &&
+   382	            cfg.candidateManifestHash < P &&
+   383	            cfg.contractDomain < P &&
+   384	            cfg.Yx < P &&
+   385	            cfg.Yy < P &&
+   386	            cfg.electionContextHash < P,
+   387	            "NON_CANONICAL_CONFIG"
+   388	        );
+   389	
+   390	        require(
+   391	            cfg.Yx != 0,
+   392	            "IDENTITY_PUBLIC_KEY"
+   393	        );
+   394	
+   395	        eligibleRoot =
+   396	            cfg.eligibleRoot;
+   397	
+   398	        electionId =
+   399	            cfg.electionId;
+   400	
+   401	        candidateManifestHash =
+   402	            cfg.candidateManifestHash;
+   403	
+   404	        candidateCount =
+   405	            cfg.candidateCount;
+   406	
+   407	        contractDomain =
+   408	            cfg.contractDomain;
+   409	
+   410	        Yx =
+   411	            cfg.Yx;
+   412	
+   413	        Yy =
+   414	            cfg.Yy;
+   415	
+   416	        electionContextHash =
+   417	            cfg.electionContextHash;
+   418	
+   419	        configured =
+   420	            true;
+   421	
+   422	        emit ElectionConfigured(
+   423	            electionId,
+   424	            eligibleRoot,
+   425	            candidateManifestHash,
+   426	            candidateCount
+   427	        );
+   428	    }
+   429	
+   430	    function activate()
+   431	        external
+   432	        onlyAdmin
+   433	        inPhase(
+   434	            Phase.Registration
+   435	        )
+   436	    {
+   437	        require(
+   438	            configured,
+   439	            "NOT_CONFIGURED"
+   440	        );
+   441	
+   442	        phase =
+   443	            Phase.Active;
+   444	
+   445	        emit ElectionActivated(
+   446	            electionId
+   447	        );
+   448	    }
+   449	
+   450	    function endElection()
+   451	        external
+   452	        onlyAdmin
+   453	        inPhase(
+   454	            Phase.Active
+   455	        )
+   456	    {
+   457	        phase =
+   458	            Phase.Ended;
+   459	
+   460	        emit ElectionEnded(
+   461	            electionId
+   462	        );
+   463	    }
+   464	
+   465	    function getTally(
+   466	        uint256 slot
+   467	    )
+   468	        external
+   469	        view
+   470	        returns (
+   471	            uint256 rx,
+   472	            uint256 ry,
+   473	            uint256 sx,
+   474	            uint256 sy
+   475	        )
+   476	    {
+   477	        require(
+   478	            slot < MAX,
+   479	            "BAD_SLOT"
+   480	        );
+   481	
+   482	        return (
+   483	            tallyRx[slot],
+   484	            tallyRy[slot],
+   485	            tallySx[slot],
+   486	            tallySy[slot]
+   487	        );
+   488	    }
+   489	
+   490	    function _requireCanonicalCiphertext(
+   491	        uint256[16] calldata rx,
+   492	        uint256[16] calldata ry,
+   493	        uint256[16] calldata sx,
+   494	        uint256[16] calldata sy
+   495	    )
+   496	        internal
+   497	        pure
+   498	    {
+   499	        for (
+   500	            uint256 i = 0;
+   501	            i < MAX;
+   502	            i++
+   503	        ) {
+   504	            require(
+   505	                rx[i] < P &&
+   506	                ry[i] < P &&
+   507	                sx[i] < P &&
+   508	                sy[i] < P,
+   509	                "NON_CANONICAL_CIPHERTEXT"
+   510	            );
+   511	        }
+   512	    }
+   513	
+   514	    function _applyTally(
+   515	        uint256[16] calldata rx,
+   516	        uint256[16] calldata ry,
+   517	        uint256[16] calldata sx,
+   518	        uint256[16] calldata sy
+   519	    )
+   520	        internal
+   521	    {
+   522	        for (
+   523	            uint256 i = 0;
+   524	            i < MAX;
+   525	            i++
+   526	        ) {
+   527	            BabyJubAffine.Point memory oldR =
+   528	                BabyJubAffine.Point(
+   529	                    tallyRx[i],
+   530	                    tallyRy[i]
+   531	                );
+   532	
+   533	            BabyJubAffine.Point memory newR =
+   534	                BabyJubAffine.Point(
+   535	                    rx[i],
+   536	                    ry[i]
+   537	                );
+   538	
+   539	            BabyJubAffine.Point memory oldS =
+   540	                BabyJubAffine.Point(
+   541	                    tallySx[i],
+   542	                    tallySy[i]
+   543	                );
+   544	
+   545	            BabyJubAffine.Point memory newS =
+   546	                BabyJubAffine.Point(
+   547	                    sx[i],
+   548	                    sy[i]
+   549	                );
+   550	
+   551	            BabyJubAffine.Point memory sumR =
+   552	                BabyJubAffine.add(
+   553	                    oldR,
+   554	                    newR
+   555	                );
+   556	
+   557	            BabyJubAffine.Point memory sumS =
+   558	                BabyJubAffine.add(
+   559	                    oldS,
+   560	                    newS
+   561	                );
+   562	
+   563	            tallyRx[i] =
+   564	                sumR.x;
+   565	
+   566	            tallyRy[i] =
+   567	                sumR.y;
+   568	
+   569	            tallySx[i] =
+   570	                sumS.x;
+   571	
+   572	            tallySy[i] =
+   573	                sumS.y;
+   574	        }
+   575	    }
+   576	
+   577	    function _accept(
+   578	        uint256 nullifier,
+   579	        uint256[16] calldata rx,
+   580	        uint256[16] calldata ry,
+   581	        uint256[16] calldata sx,
+   582	        uint256[16] calldata sy
+   583	    )
+   584	        internal
+   585	    {
+   586	        require(
+   587	            phase == Phase.Active,
+   588	            "NOT_ACTIVE"
+   589	        );
+   590	
+   591	        require(
+   592	            !usedNullifier[
+   593	                nullifier
+   594	            ],
+   595	            "NULLIFIER_USED"
+   596	        );
+   597	
+   598	        usedNullifier[
+   599	            nullifier
+   600	        ] =
+   601	            true;
+   602	
+   603	        _applyTally(
+   604	            rx,
+   605	            ry,
+   606	            sx,
+   607	            sy
+   608	        );
+   609	
+   610	        acceptedBallotCount +=
+   611	            1;
+   612	
+   613	        emit EncryptedVoteAccepted(
+   614	            nullifier,
+   615	            keccak256(
+   616	                abi.encode(
+   617	                    rx,
+   618	                    ry,
+   619	                    sx,
+   620	                    sy
+   621	                )
+   622	            ),
+   623	            acceptedBallotCount
+   624	        );
+   625	    }
+   626	}
+   627	
+   628	contract VoteChainDirect is
+   629	    VoteChainBase
+   630	{
+   631	    IVerifierDirect
+   632	        public immutable verifier;
+   633	
+   634	    constructor(
+   635	        address verifierAddress
+   636	    ) {
+   637	        require(
+   638	            verifierAddress !=
+   639	                address(0),
+   640	            "ZERO_VERIFIER"
+   641	        );
+   642	
+   643	        verifier =
+   644	            IVerifierDirect(
+   645	                verifierAddress
+   646	            );
+   647	    }
+   648	
+   649	    function _buildInputs(
+   650	        uint256 nullifier,
+   651	        uint256[16] calldata rx,
+   652	        uint256[16] calldata ry,
+   653	        uint256[16] calldata sx,
+   654	        uint256[16] calldata sy
+   655	    )
+   656	        private
+   657	        view
+   658	        returns (
+   659	            uint256[73] memory input
+   660	        )
+   661	    {
+   662	        input[0] =
+   663	            eligibleRoot;
+   664	
+   665	        input[1] =
+   666	            electionId;
+   667	
+   668	        input[2] =
+   669	            candidateManifestHash;
+   670	
+   671	        input[3] =
+   672	            candidateCount;
+   673	
+   674	        input[4] =
+   675	            contractDomain;
+   676	
+   677	        input[5] =
+   678	            Yx;
+   679	
+   680	        input[6] =
+   681	            Yy;
+   682	
+   683	        input[7] =
+   684	            electionContextHash;
+   685	
+   686	        input[8] =
+   687	            nullifier;
+   688	
+   689	        uint256 offset =
+   690	            9;
+   691	
+   692	        for (
+   693	            uint256 i = 0;
+   694	            i < MAX;
+   695	            i++
+   696	        ) {
+   697	            input[
+   698	                offset + i
+   699	            ] =
+   700	                rx[i];
+   701	        }
+   702	
+   703	        offset += MAX;
+   704	
+   705	        for (
+   706	            uint256 i = 0;
+   707	            i < MAX;
+   708	            i++
+   709	        ) {
+   710	            input[
+   711	                offset + i
+   712	            ] =
+   713	                ry[i];
+   714	        }
+   715	
+   716	        offset += MAX;
+   717	
+   718	        for (
+   719	            uint256 i = 0;
+   720	            i < MAX;
+   721	            i++
+   722	        ) {
+   723	            input[
+   724	                offset + i
+   725	            ] =
+   726	                sx[i];
+   727	        }
+   728	
+   729	        offset += MAX;
+   730	
+   731	        for (
+   732	            uint256 i = 0;
+   733	            i < MAX;
+   734	            i++
+   735	        ) {
+   736	            input[
+   737	                offset + i
+   738	            ] =
+   739	                sy[i];
+   740	        }
+   741	    }
+   742	
+   743	    function castVote(
+   744	        uint256[2] calldata a,
+   745	        uint256[2][2] calldata b,
+   746	        uint256[2] calldata c,
+   747	        uint256 nullifier,
+   748	        uint256[16] calldata rx,
+   749	        uint256[16] calldata ry,
+   750	        uint256[16] calldata sx,
+   751	        uint256[16] calldata sy
+   752	    )
+   753	        external
+   754	    {
+   755	        require(
+   756	            phase == Phase.Active,
+   757	            "NOT_ACTIVE"
+   758	        );
+   759	
+   760	        require(
+   761	            !usedNullifier[
+   762	                nullifier
+   763	            ],
+   764	            "NULLIFIER_USED"
+   765	        );
+   766	
+   767	        _requireCanonicalCiphertext(
+   768	            rx,
+   769	            ry,
+   770	            sx,
+   771	            sy
+   772	        );
+   773	
+   774	        uint256[73] memory input =
+   775	            _buildInputs(
+   776	                nullifier,
+   777	                rx,
+   778	                ry,
+   779	                sx,
+   780	                sy
+   781	            );
+   782	
+   783	        require(
+   784	            verifier.verifyProof(
+   785	                a,
+   786	                b,
+   787	                c,
+   788	                input
+   789	            ),
+   790	            "INVALID_PROOF"
+   791	        );
+   792	
+   793	        _accept(
+   794	            nullifier,
+   795	            rx,
+   796	            ry,
+   797	            sx,
+   798	            sy
+   799	        );
+   800	    }
+   801	}
+   802	
+   803	contract VoteChainPoseidon is
+   804	    VoteChainBase
+   805	{
+   806	    IVerifierDigest
+   807	        public immutable verifier;
+   808	
+   809	    address
+   810	        public immutable poseidon5;
+   811	
+   812	    constructor(
+   813	        address verifierAddress,
+   814	        address poseidonAddress
+   815	    ) {
+   816	        require(
+   817	            verifierAddress !=
+   818	                address(0),
+   819	            "ZERO_VERIFIER"
+   820	        );
+   821	
+   822	        require(
+   823	            poseidonAddress !=
+   824	                address(0),
+   825	            "ZERO_POSEIDON"
+   826	        );
+   827	
+   828	        verifier =
+   829	            IVerifierDigest(
+   830	                verifierAddress
+   831	            );
+   832	
+   833	        poseidon5 =
+   834	            poseidonAddress;
+   835	    }
+   836	
+   837	    function _poseidon(
+   838	        uint256[5] memory values
+   839	    )
+   840	        private
+   841	        view
+   842	        returns (uint256)
+   843	    {
+   844	        (
+   845	            bool ok,
+   846	            bytes memory data
+   847	        ) =
+   848	            poseidon5.staticcall(
+   849	                abi.encodeWithSignature(
+   850	                    "poseidon(uint256[5])",
+   851	                    values
+   852	                )
+   853	            );
+   854	
+   855	        require(
+   856	            ok &&
+   857	            data.length >= 32,
+   858	            "POSEIDON_CALL_FAILED"
+   859	        );
+   860	
+   861	        return
+   862	            abi.decode(
+   863	                data,
+   864	                (uint256)
+   865	            );
+   866	    }
+   867	
+   868	    function _binding(
+   869	        uint256[16] calldata rx,
+   870	        uint256[16] calldata ry,
+   871	        uint256[16] calldata sx,
+   872	        uint256[16] calldata sy
+   873	    )
+   874	        private
+   875	        view
+   876	        returns (uint256 state)
+   877	    {
+   878	        state =
+   879	            WP4Profile
+   880	                .CIPHERTEXT_BINDING_DOMAIN;
+   881	
+   882	        for (
+   883	            uint256 i = 0;
+   884	            i < MAX;
+   885	            i++
+   886	        ) {
+   887	            uint256[5] memory values;
+   888	
+   889	            values[0] =
+   890	                state;
+   891	
+   892	            values[1] =
+   893	                rx[i];
+   894	
+   895	            values[2] =
+   896	                ry[i];
+   897	
+   898	            values[3] =
+   899	                sx[i];
+   900	
+   901	            values[4] =
+   902	                sy[i];
+   903	
+   904	            state =
+   905	                _poseidon(
+   906	                    values
+   907	                );
+   908	        }
+   909	    }
+   910	
+   911	    function previewBindingDigest(
+   912	        uint256[16] calldata rx,
+   913	        uint256[16] calldata ry,
+   914	        uint256[16] calldata sx,
+   915	        uint256[16] calldata sy
+   916	    )
+   917	        external
+   918	        view
+   919	        returns (uint256)
+   920	    {
+   921	        _requireCanonicalCiphertext(
+   922	            rx,
+   923	            ry,
+   924	            sx,
+   925	            sy
+   926	        );
+   927	
+   928	        return
+   929	            _binding(
+   930	                rx,
+   931	                ry,
+   932	                sx,
+   933	                sy
+   934	            );
+   935	    }
+   936	
+   937	    function castVote(
+   938	        uint256[2] calldata a,
+   939	        uint256[2][2] calldata b,
+   940	        uint256[2] calldata c,
+   941	        uint256 nullifier,
+   942	        uint256[16] calldata rx,
+   943	        uint256[16] calldata ry,
+   944	        uint256[16] calldata sx,
+   945	        uint256[16] calldata sy
+   946	    )
+   947	        external
+   948	    {
+   949	        require(
+   950	            phase == Phase.Active,
+   951	            "NOT_ACTIVE"
+   952	        );
+   953	
+   954	        require(
+   955	            !usedNullifier[
+   956	                nullifier
+   957	            ],
+   958	            "NULLIFIER_USED"
+   959	        );
+   960	
+   961	        _requireCanonicalCiphertext(
+   962	            rx,
+   963	            ry,
+   964	            sx,
+   965	            sy
+   966	        );
+   967	
+   968	        uint256 digest =
+   969	            _binding(
+   970	                rx,
+   971	                ry,
+   972	                sx,
+   973	                sy
+   974	            );
+   975	
+   976	        uint256[10] memory input;
+   977	
+   978	        input[0] =
+   979	            eligibleRoot;
+   980	
+   981	        input[1] =
+   982	            electionId;
+   983	
+   984	        input[2] =
+   985	            candidateManifestHash;
+   986	
+   987	        input[3] =
+   988	            candidateCount;
+   989	
+   990	        input[4] =
+   991	            contractDomain;
+   992	
+   993	        input[5] =
+   994	            Yx;
+   995	
+   996	        input[6] =
+   997	            Yy;
+   998	
+   999	        input[7] =
+  1000	            electionContextHash;
+  1001	
+  1002	        input[8] =
+  1003	            nullifier;
+  1004	
+  1005	        input[9] =
+  1006	            digest;
+  1007	
+  1008	        require(
+  1009	            verifier.verifyProof(
+  1010	                a,
+  1011	                b,
+  1012	                c,
+  1013	                input
+  1014	            ),
+  1015	            "INVALID_PROOF"
+  1016	        );
+  1017	
+  1018	        _accept(
+  1019	            nullifier,
+  1020	            rx,
+  1021	            ry,
+  1022	            sx,
+  1023	            sy
+  1024	        );
+  1025	    }
+  1026	}
+  1027	
+  1028	contract BabyJubTallyHarness {
+  1029	    uint256[16] internal tallyRx;
+  1030	    uint256[16] internal tallyRy;
+  1031	    uint256[16] internal tallySx;
+  1032	    uint256[16] internal tallySy;
+  1033	
+  1034	    constructor() {
+  1035	        for (
+  1036	            uint256 i = 0;
+  1037	            i < 16;
+  1038	            i++
+  1039	        ) {
+  1040	            tallyRy[i] = 1;
+  1041	            tallySy[i] = 1;
+  1042	        }
+  1043	    }
+  1044	
+  1045	    function applyBallot(
+  1046	        uint256[16] calldata rx,
+  1047	        uint256[16] calldata ry,
+  1048	        uint256[16] calldata sx,
+  1049	        uint256[16] calldata sy
+  1050	    )
+  1051	        external
+  1052	    {
+  1053	        for (
+  1054	            uint256 i = 0;
+  1055	            i < 16;
+  1056	            i++
+  1057	        ) {
+  1058	            BabyJubAffine.Point memory sumR =
+  1059	                BabyJubAffine.add(
+  1060	                    BabyJubAffine.Point(
+  1061	                        tallyRx[i],
+  1062	                        tallyRy[i]
+  1063	                    ),
+  1064	                    BabyJubAffine.Point(
+  1065	                        rx[i],
+  1066	                        ry[i]
+  1067	                    )
+  1068	                );
+  1069	
+  1070	            BabyJubAffine.Point memory sumS =
+  1071	                BabyJubAffine.add(
+  1072	                    BabyJubAffine.Point(
+  1073	                        tallySx[i],
+  1074	                        tallySy[i]
+  1075	                    ),
+  1076	                    BabyJubAffine.Point(
+  1077	                        sx[i],
+  1078	                        sy[i]
+  1079	                    )
+  1080	                );
+  1081	
+  1082	            tallyRx[i] =
+  1083	                sumR.x;
+  1084	
+  1085	            tallyRy[i] =
+  1086	                sumR.y;
+  1087	
+  1088	            tallySx[i] =
+  1089	                sumS.x;
+  1090	
+  1091	            tallySy[i] =
+  1092	                sumS.y;
+  1093	        }
+  1094	    }
+  1095	}

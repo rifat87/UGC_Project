@@ -1,0 +1,102 @@
+WP8E C8C-R3 CANDIDATE-COUNT COVERAGE DECISION
+=============================================
+
+1. EXISTING WP8D COVERAGE
+
+The completed WP8D DIRECT K={2,4,8,16}, depth=17 results are retained as
+FINAL COMPILE-TIME CIRCUIT-PROFILE SCALING evidence.
+
+Those profiles vary MAX_CANDIDATES at circuit-compilation time.
+
+Their DIRECT public-signal dimensions differ:
+
+K=2  -> 17
+K=4  -> 25
+K=8  -> 41
+K=16 -> 73
+
+WP8D therefore characterizes circuit/proving scalability across separately
+compiled K profiles.
+
+WP8D does not contain the final on-chain accepted-vote candidate-count
+measurement.
+
+2. ACTIVE FINAL SYSTEM
+
+The active final VoteChain DIRECT deployment remains the frozen K=16 system:
+
+MAX_CANDIDATES = 16
+Groth16 public signals = 73
+ciphertext slots = 16
+tally slots = 16
+
+Runtime candidateCount remains an election public parameter inside that fixed
+K=16 system.
+
+The active castVote validation/tally path iterates over fixed MAX=16 rather
+than reducing the on-chain loop bound to runtime candidateCount.
+
+3. WP8E FINAL COVERAGE DECISION
+
+The frozen C8A coverage audit classified:
+
+candidateCount = {2,4,8,16}
+
+as PENDING_FINAL.
+
+The later C8C-R2 audit established that the pre-existing WP8D K-profile
+campaign is a different experiment: compile-time circuit-profile scaling with
+no on-chain vote measurement.
+
+Therefore:
+
+WP8D_COMPILE_TIME_K_PROFILE_SCALING=COMPLETE
+WP8D_REPLACEMENT_PROOFS_REQUIRED=NO
+
+WP8E_ACTIVE_K16_RUNTIME_CANDIDATECOUNT_MATRIX=PENDING_FINAL
+WP8D_CAN_SUBSTITUTE_FOR_RUNTIME_CANDIDATECOUNT_MATRIX=NO
+
+4. EXPERIMENTAL INTERPRETATION BOUNDARY
+
+The pending WP8E experiment must be described as:
+
+ACTIVE-K16 RUNTIME candidateCount SENSITIVITY
+
+and not as recompilation-based circuit scaling.
+
+The compile-time WP8D result and the runtime WP8E result answer different
+questions and must remain separately reported.
+
+The runtime matrix must not claim that the active Solidity tally loop becomes
+shorter as candidateCount decreases, because the active vote path remains
+fixed at MAX=16.
+
+5. SAFETY / FREEZE BOUNDARY
+
+No new K2/K4/K8 active circuit, verifier, proving key, or Solidity deployment
+profile is required for the runtime matrix.
+
+No existing WP8D artifact is to be overwritten.
+
+No active circuit, Solidity source, verifier, zkey, or architecture may be
+modified for the runtime matrix.
+
+Before any proof generation or transaction, the next gate must freeze:
+
+- exact runtime levels {2,4,8,16};
+- exact candidate-ID set for each level;
+- exact candidateManifestHash for each level;
+- exact electionContextHash for each level;
+- exact deterministic voter/eligibility fixture basis;
+- exact inactive-slot semantics under K16;
+- exact per-level ballot selection;
+- exact warm-up/measured repetition plan;
+- exact fresh-chain/election policy;
+- exact gas/latency timing interval;
+- exact correctness checks;
+- exact exclusion/failure policy.
+
+CANDIDATE_MATRIX_EXECUTION_STARTED=NO
+PROOF_GENERATION_STARTED=NO
+ANVIL_STARTED=NO
+TRANSACTION_SUBMITTED=NO

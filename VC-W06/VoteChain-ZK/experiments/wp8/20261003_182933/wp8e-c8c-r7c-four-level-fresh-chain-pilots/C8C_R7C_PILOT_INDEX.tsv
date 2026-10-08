@@ -1,0 +1,5 @@
+candidate_count	order_position	repetition_id	status	gas_used	calldata_bytes	calldata_zero_bytes	calldata_nonzero_bytes	latency_ms	tx_hash
+2	1	c8c-r7c-pilot-k2	PASS	1866402	2340	10	2330	907.100300	0x0b7c58ca6dffecdb66bc80ffbb1826a354648d0213e6e6dc3c50032540b79a6f
+4	2	c8c-r7c-pilot-k4	PASS	1866414	2340	9	2331	864.385900	0xd5eabbb3474d4071f72685419723e5f4f9139ca1b54366eb2c89f10d668e661d
+8	3	c8c-r7c-pilot-k8	PASS	1866414	2340	9	2331	878.620600	0xa06ef23cda764d59ca04ea4f1b28706cf73fa1bac6e980f3bad370817e03f864
+16	4	c8c-r7c-pilot-k16	PASS	1866414	2340	9	2331	910.515000	0xacdba7077e900b0794094ec23411938c75dd027e5227f2b913733eb08db18b27

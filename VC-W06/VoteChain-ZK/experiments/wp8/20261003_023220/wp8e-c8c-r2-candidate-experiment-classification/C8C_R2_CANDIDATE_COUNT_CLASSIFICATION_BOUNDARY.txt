@@ -1,0 +1,44 @@
+WP8E C8C-R2 CANDIDATE-COUNT EXPERIMENT CLASSIFICATION
+======================================================
+
+ACTIVE FINAL SYSTEM
+-------------------
+The active DIRECT deployment is the frozen K16 profile.
+It has 73 Groth16 public signals and fixed uint256[16]
+ciphertext/tally arrays.
+
+Runtime candidateCount is a public election parameter, but
+active castVote validation/tally work iterates over MAX=16.
+
+COMPILE-TIME PROFILE DISTINCTION
+--------------------------------
+Separately compiled DIRECT K profiles have different public
+signal dimensions:
+K2=17, K4=25, K8=41, K16=73.
+
+Therefore K2/K4/K8 compile-time profiles are not substitutes
+for runtime candidateCount values inside the active K16 verifier.
+
+EXISTING WP8D FINAL CAMPAIGN
+----------------------------
+WP8D_EXPERIMENT_CLASSIFICATION=COMPILE_TIME_CIRCUIT_PROFILE_SCALING
+WP8D_DIRECT_D17_PLAN_COMPLETE=YES
+WP8D_DIRECT_D17_RAW_COMPLETE=YES
+WP8D_HAS_CRYPTO_SCALING_TERMS=YES
+WP8D_HAS_ONCHAIN_VOTE_MEASUREMENT_TERMS=NO
+
+REPORTING BOUNDARY
+------------------
+Do not merge compile-time K-profile circuit-scaling results
+with runtime candidateCount behavior of the active K16
+on-chain system unless the frozen benchmark protocol explicitly
+defines them as the same experimental dimension.
+
+Do not generate replacement K-profile proofs until existing
+WP8D final evidence has been coverage-classified.
+
+Do not launch an active on-chain candidateCount matrix until
+the final-protocol wording has been compared with WP8D.
+
+CANDIDATE_MATRIX_EXECUTION_STARTED=NO
+PROOF_GENERATION_STARTED=NO

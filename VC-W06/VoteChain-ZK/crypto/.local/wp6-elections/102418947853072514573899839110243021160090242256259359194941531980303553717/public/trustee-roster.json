@@ -1,0 +1,27 @@
+[
+  {
+    "trusteeId": 1,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BBnlnsSRa2Dygocpm7twmSw1Of5upMemi8ALG3JOuSIDzJeJ33vnJd+D5+cchFvx+rHP773GuNSkBfT5AFeuYbQ="
+  },
+  {
+    "trusteeId": 2,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BDnWH7Qez4+R8yjEMOuEZ4QgQ//ElZhJ5nR9y1McF9vzsZ5p5VaFp9q38UHhnp/Y0nMzJM5HVDenJtY4z5O6beM="
+  },
+  {
+    "trusteeId": 3,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BFJkrpuMBKApUbKw+r2X/8GXzI5A3SQ9TptgZv92MUX8gQ3H4L7zwWJ1MH9e470GjWFoBTvDQ6zbQrDNtflOIx4="
+  },
+  {
+    "trusteeId": 4,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BDOmO1vR4fDEO4WCURlCG6FCTUtiBjmxHr70Nnv2vhpaLO2HM67kfdH6QjzcZ6WtNNPOmkZjHXa97IZhMUdFl1M="
+  },
+  {
+    "trusteeId": 5,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BH4q4zoI8NOmiq7jBZvLhS8y/fdO7TN7WmDsFwQKPqviiOcETvVsJsq2RG3vRZJMP5RJZXHyVvRl1fj0vS4gRvQ="
+  }
+]

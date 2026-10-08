@@ -1,0 +1,44 @@
+### Solidity deployment files
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/WP4Fixture.sol
+
+### contract deployments
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:124:            new VoteChainVoteDirectVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:127:            new VoteChainDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:156:            new VoteChainVoteDigestVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:162:            new VoteChainPoseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:901:            new VoteChainVoteDirectVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:904:            new VoteChainDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1026:            new VoteChainVoteDirectVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1036:            new VoteChainVoteDigestVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1069:            new VoteChainDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1081:            new VoteChainPoseidon(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP4.t.sol:1288:            new BabyJubTallyHarness();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:49:            new WP6BMockVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:52:            new VoteChainDirect(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:407:            new WP6BMockVerifier();
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/VoteChainWP6B.t.sol:410:            new VoteChainDirect(
+
+### WP4/WP5 experiment scripts mentioning castVote
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_Freeze_WP5_Preflight.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_PrivateVoting_GasGate.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5A_CandidateBlind_Authorization.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5A_CandidateBlind_Authorization.sh.before-json-fix
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_LocalPrivacyWorker.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_Synthetic_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_v2_CDP_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_v2_CDP_Runtime.sh.before-direct-vite-20260930_220144
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Auth_Network_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6B_Trustee_CLI_Contract_Finalization.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7_Security_Preflight.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8C_B_Stage_Resolved_Timing_Pilot.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8E_A0_Onchain_Measurement_Preflight.sh
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp4/20260930_174305/raw/wp4-20260930_174305-forge-test.txt
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp4/20260930_174305/results/VoteChainDirect.abi.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp4/20260930_174305/results/VoteChainPoseidon.abi.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20260930_201827/wp5c-local-worker/backup/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20260930_201827/wp5c-local-worker/backup/votechain-frontend-ts/src/hooks/useContract.ts
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20260930_201827/wp5c-local-worker/useContract.ts.before-ts-assertion-fix
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20260930_221026/wp5d-receipt-wait-fix/VoteChainZK_WP5D_v2_CDP_Runtime.sh.before-receipt-fix
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/preflight/20260930_175938/WP5_INTEGRATION_PREFLIGHT.txt

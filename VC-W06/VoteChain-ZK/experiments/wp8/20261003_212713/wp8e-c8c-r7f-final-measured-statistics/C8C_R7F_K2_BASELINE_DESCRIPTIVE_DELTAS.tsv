@@ -1,0 +1,5 @@
+candidate_count	gas_mean_delta_vs_k2	gas_mean_percent_delta_vs_k2	latency_mean_delta_ms_vs_k2	latency_median_delta_ms_vs_k2	latency_p95_delta_ms_vs_k2
+2	0.000	0.000000000	0.000000	0.000000	0.000000
+4	12.000	0.000642948	9.795585	4.064500	66.863100
+8	12.000	0.000642948	-0.448850	-0.430650	-15.245200
+16	12.000	0.000642948	-1.957970	-0.502700	-17.496800

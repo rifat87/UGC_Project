@@ -1,0 +1,11 @@
+--- /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp7/20261001_121705/wp7c-e-backend-nonforce-remediation/application-source-before.sha256	2026-10-01 12:17:06.088599500 +0600
++++ /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp7/20261001_121705/wp7c-e-backend-nonforce-remediation/application-source-after.sha256	2026-10-01 12:18:37.759928400 +0600
+@@ -40,7 +40,7 @@
+ 52e3cc004ca62b4146f70ed80f9a347a5fc59d620a0a2d9c12cc3a29a336def4 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Counter.js
+ f9226342df7e40ab2f579582226237866763280b468767296ea81556317d1118 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js
+ 2347f4d1f3a0b5e6e49eb926473deeebe8592d7e9c853c78a4ea930bf658f509 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package.json
+-db80444db12645aec4589172ac416ab2691aff473f6bbe7827c1b588be9d536b */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json
++e90530c83f32cb355fe4f515de35de4b7b7be28b61ac21a973a682bf0fa48494 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/package-lock.json
+ f22510d3eda712f9875bf729e512438f8af884fff4405684b8ff2a211e31008e */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js
+ f6124886cc620a2b3d71e03ca1a404b34902dd91a27bcd64bb71b344453e76d2 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/blockchainRoutes.js
+ 2e9b7a105d1c4daa7d4c6708a9775907dd94ed8b54e9c9ac8e87e3e8221801e0 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js

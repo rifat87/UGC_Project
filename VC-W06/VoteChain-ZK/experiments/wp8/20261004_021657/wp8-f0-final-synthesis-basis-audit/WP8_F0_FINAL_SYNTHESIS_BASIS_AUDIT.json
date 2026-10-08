@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "classification": "READ_ONLY_FINAL_SYNTHESIS_BASIS_AUDIT",
+  "passReceiptCount": 0,
+  "categories": {
+    "ACCEPTED_BALLOT_SCALING": {
+      "count": 0,
+      "receipts": []
+    },
+    "FRESH_CHAIN_MICROBENCHMARK": {
+      "count": 0,
+      "receipts": []
+    },
+    "CANDIDATE_COUNT_SCALING": {
+      "count": 0,
+      "receipts": []
+    },
+    "ELIGIBLE_SET_SCALING": {
+      "count": 0,
+      "receipts": []
+    }
+  },
+  "artifactCandidateCount": 59,
+  "c8dFormallyComplete": false,
+  "benchmarkExecutionStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "onchainExecutionStarted": false
+}

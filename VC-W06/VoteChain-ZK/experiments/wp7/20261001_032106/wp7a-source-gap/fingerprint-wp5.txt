@@ -1,0 +1,193 @@
+1-// ... updated code:
+2-import { SerialPort } from 'serialport'
+3-import { ReadlineParser } from '@serialport/parser-readline'
+4-import Voter from '../models/Voter.js'
+5-import { prepareProofAfterBiometricAuthentication } from '../services/zk/biometricProofGate.js'
+6-import { generateVoteProofForVoter } from '../services/zk/proofService.js'
+7:import { authorizeWp5Voter } from '../services/zk/wp5PrivacyService.js'
+8-
+9-let parser
+10-let serial
+11-const serialPortPath = process.env.FINGERPRINT_SERIAL_PORT || 'COM3'
+12-
+13-function initSerial() {
+14-  if (!serial) {
+15-    console.log(`[Serial] Initializing serial connection on ${serialPortPath}...`)
+16-    serial = new SerialPort({ path: serialPortPath, baudRate: 115200 })
+17-    parser = serial.pipe(new ReadlineParser({ delimiter: '\n' }))
+18-
+19-    serial.on('open', () => {
+20-      console.log(`[Serial] Serial port ${serialPortPath} opened successfully.`)
+21-    })
+22-
+23-    serial.on('error', (err) => {
+24-      console.error("[Serial] Serial port error:", err.message)
+25-    })
+26-  }
+27-}
+--
+48-
+49-    parser.on('data', onData)
+50-
+51-    serial.write(jsonStr + "\n", (err) => {
+52-      if (err) {
+53-        parser.removeListener('data', onData)
+54-        console.error("[Serial] Failed to write to serial port:", err.message)
+55-        reject(err)
+56-      } else {
+57-        console.log("[Serial] Command sent successfully.")
+58-      }
+59-    })
+60-  })
+61-}
+62-
+63-// ================== API Controllers ==================
+64-
+65-// ENROLL
+66-const captureFingerprint = async (req, res) => {
+67-  console.log("[API] /api/fingerprint/enroll called")
+68:  const { nid } = req.body
+69-  if (!nid) {
+70-    return res.status(400).json({ success: false, message: "NID is required" })
+71-  }
+72-
+73-  try {
+74-    const response = await sendSerialJSON({ cmd: "ENROLL", nid })
+75-    console.log(`[API] ENROLL result: ${response.status || 'unknown'}`)
+76-
+77-    if (response.status === "success" && response.action === "enroll") {
+78-      return res.status(200).json({
+79-        success: true,
+80-        message: "Fingerprint enrollment successful"
+81-      })
+82-    }
+83-
+84-    return res.status(400).json({
+85-      success: false,
+86-      message: "Enrollment failed"
+87-    })
+88-  } catch (error) {
+89-    console.error("[API] Enrollment error:", error.message)
+90-    return res.status(500).json({ success: false, error: error.message })
+91-  }
+92-}
+93-
+94-// DETECT
+95-const detectFingerprint = async (req, res) => {
+96-  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+97:  const candidateId = Number(req.body?.candidateId)
+98:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+99:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+100-  }
+101-
+102-  try {
+103-    const response = await sendSerialJSON({ cmd: "DETECT" })
+104-    console.log(`[API] DETECT result: ${response.status || 'unknown'}`)
+105-
+106-    if (response.status === "success" && response.action === "detect" && response.nid) {
+107-      const voter = await Voter.findOne({ nationalId: response.nid })
+108-      if (!voter) {
+109-        return res.status(404).json({ success: false, message: "Fingerprint matched, but voter is not enrolled" })
+110-      }
+111-
+112:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+113-      return res.status(200).json({
+114-        success: true,
+115-        message: "Fingerprint match successful; anonymous eligibility proof prepared",
+116-        data: proofPayload,
+117-      })
+118-    }
+119-
+120-    return res.status(400).json({ success: false, message: "No match found" })
+121-  } catch (error) {
+122-    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+123-    return res.status(500).json({ success: false, message: "Unable to prepare anonymous eligibility proof" })
+124-  }
+125-}
+126-
+127-
+128:const detectWp5Fingerprint = async (req, res) => {
+129-  console.log(
+130-    '[WP5] fingerprint DETECT called for candidate-blind authorization',
+131-  )
+132-
+133:  const credentialPublicKey =
+134:    req.body?.credentialPublicKey
+135-
+136:  if (!credentialPublicKey) {
+137-    return res.status(400).json({
+138-      success: false,
+139:      message: 'credentialPublicKey is required',
+140-    })
+141-  }
+142-
+143-  try {
+144-    const response =
+145-      await sendSerialJSON({ cmd: 'DETECT' })
+146-
+147-    if (
+148-      response.status === 'success' &&
+149-      response.action === 'detect' &&
+150-      response.nid
+151-    ) {
+152-      const voter = await Voter.findOne({
+153-        nationalId: response.nid,
+154-      })
+155-
+156-      if (!voter) {
+157-        return res.status(404).json({
+158-          success: false,
+159-          message:
+160-            'Fingerprint matched, but voter is not enrolled',
+161-        })
+162-      }
+163-
+164-      const authorization =
+165:        await authorizeWp5Voter({
+166-          voter,
+167-          clientPublicKey:
+168:            credentialPublicKey,
+169-        })
+170-
+171-      return res.status(200).json({
+172-        success: true,
+173-        message:
+174-          'Fingerprint match successful; candidate-blind authorization issued',
+175-        data: authorization,
+176-      })
+177-    }
+178-
+179-    return res.status(401).json({
+180-      success: false,
+181-      message: 'No match found',
+182-    })
+183-  } catch (error) {
+184-    console.error(
+185-      '[WP5] fingerprint authorization failed:',
+186-      error.message,
+187-    )
+188-
+--
+198-const formatFingerprintDatabase = async (req, res) => {
+199-  console.log("[API] /api/fingerprint/format called")
+200-  try {
+201-    const response = await sendSerialJSON({ cmd: "FORMAT" })
+202-    console.log(`[API] FORMAT result: ${response.status || 'unknown'}`)
+203-
+204-    if (response.status === "success") {
+205-      return res.status(200).json({ success: true, message: "Fingerprint database cleared" })
+206-    }
+207-
+208-    return res.status(400).json({ success: false, message: "Format failed" })
+209-  } catch (error) {
+210-    console.error("[API] Format error:", error.message)
+211-    return res.status(500).json({ success: false, error: error.message })
+212-  }
+213-}
+214-
+215-export default {
+216-  captureFingerprint,
+217-  detectFingerprint,
+218:  detectWp5Fingerprint,
+219-  formatFingerprintDatabase,
+220-}

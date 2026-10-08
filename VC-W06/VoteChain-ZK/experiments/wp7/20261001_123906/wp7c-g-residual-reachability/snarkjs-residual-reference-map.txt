@@ -1,0 +1,54 @@
+
+----------------------------------------------------------------------
+PATTERN=bfj
+----------------------------------------------------------------------
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:19:var bfj = require('bfj');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:50:var bfj__default = /*#__PURE__*/_interopDefaultLegacy(bfj);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:12910:    await bfj__default["default"].write(jsonName, r1csObj, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:12959:    await bfj__default["default"].write(jsonName, stringifyBigInts(w), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:12998:    await bfj.write(provingKeyName, stringifyBigInts(setup.vk_proof), { space: 1 });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13000:    await bfj.write(verificationKeyName, stringifyBigInts(setup.vk_verifier), { space: 1 });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13018:    await bfj__default["default"].write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13019:    await bfj__default["default"].write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13039:    await bfj__default["default"].write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13040:    await bfj__default["default"].write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13076:    await bfj__default["default"].write(vKeyFilename, stringifyBigInts(vKey), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13090:    await bfj__default["default"].write(zkeyJsonName, zKeyJson, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13379:    await bfj__default["default"].write(jsonName, pTauJson, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13629:    await bfj__default["default"].write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13630:    await bfj__default["default"].write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13651:    await bfj__default["default"].write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13652:    await bfj__default["default"].write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13704:        await bfj__default["default"].write(proofFilename, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13705:        await bfj__default["default"].write(publicInputsFilename, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13726:    await bfj__default["default"].write(proofFilename, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/build/cli.cjs:13727:    await bfj__default["default"].write(publicInputsFilename, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:45:import bfj from "bfj";
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:427:    await bfj.write(jsonName, r1csObj, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:476:    await bfj.write(jsonName, stringifyBigInts(w), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:515:    await bfj.write(provingKeyName, stringifyBigInts(setup.vk_proof), { space: 1 });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:517:    await bfj.write(verificationKeyName, stringifyBigInts(setup.vk_verifier), { space: 1 });
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:535:    await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:536:    await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:556:    await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:557:    await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:593:    await bfj.write(vKeyFilename, stringifyBigInts(vKey), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:607:    await bfj.write(zkeyJsonName, zKeyJson, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:896:    await bfj.write(jsonName, pTauJson, {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1146:    await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1147:    await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1168:    await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1169:    await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1221:        await bfj.write(proofFilename, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1222:        await bfj.write(publicInputsFilename, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1243:    await bfj.write(proofFilename, stringifyBigInts(proof), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/cli.js:1244:    await bfj.write(publicInputsFilename, stringifyBigInts(publicSignals), {space: 1});
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/package.json:61:    "bfj": "^7.0.2",
+
+----------------------------------------------------------------------
+PATTERN=jsonpath
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+PATTERN=underscore
+----------------------------------------------------------------------

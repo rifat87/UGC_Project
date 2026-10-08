@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "txHash": "0x12cf79e70865576fce942edbaba97b1a50d0791f3ae40f980433d5a63cbee884",
+  "gasUsed": "1866336",
+  "calldataBytes": 2340,
+  "latencyMs": 2001.2050000000002,
+  "acceptedBefore": "0",
+  "acceptedAfter": "1",
+  "nullifierUsed": true,
+  "firstBallotTallyMatch": true,
+  "duplicateNullifierRejected": true,
+  "candidateNamedCastInputs": 0
+}

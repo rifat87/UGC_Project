@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_SUBMISSION_V2_VALIDATION",
+  "v1FilesBytePreserved": 779,
+  "publicationAssetFilesBytePreserved": 42,
+  "manifestV2Rows": 823,
+  "archiveV2FileEntries": 824,
+  "exactV2MemberSet": true,
+  "allV2TimestampsFixed": true,
+  "allManifestV2HashesVerified": true,
+  "baseV1ArchiveSha256": "afd8484c2ec70c2b01198cd6431e0ec328b7c45e7d6cc702312ea2dbfd802db2",
+  "publicationAssetArchiveSha256": "aa52eedb5e3c2a9dff2e82d9995ba3ba7dc2dfcb80a5ab5eabad12e2eb5b8f8d",
+  "submissionV2ArchiveSha256": "eb43c182a6c08867bb40c30ca712a40b86e649e750c910f46fc5e8971be862cc",
+  "submissionV2ArchiveSizeBytes": 61525625,
+  "reportBodyModified": false,
+  "sourceFilesModified": false,
+  "errors": []
+}

@@ -1,0 +1,212 @@
+18-
+19-const appProfile = JSON.parse(
+20-  fs.readFileSync(
+21-    new URL('../../../crypto/config/wp5-application-profile.json', import.meta.url),
+22-    'utf8',
+23-  ),
+24-)
+25-
+26-const FIELD = BigInt(profile.fieldModulus)
+27-const DEPTH = Number(profile.merkleDepth)
+28:const CAPACITY = Number(profile.eligibleCapacity)
+29-
+30-const D_ID = BigInt(profile.domains.identity)
+31-const D_MANIFEST = BigInt(profile.domains.candidateManifest)
+32-const WP5_MANIFEST_ALGORITHM = appProfile.candidateManifest.algorithm
+33-
+34-let poseidonPromise
+35-
+36-async function poseidon() {
+37-  if (!poseidonPromise) poseidonPromise = buildPoseidon()
+38-  return poseidonPromise
+--
+70-  const highest = await Voter
+71-    .findOne({ wp5GroupIndex: { $type: 'number' } })
+72-    .sort({ wp5GroupIndex: -1 })
+73-    .select({ wp5GroupIndex: 1 })
+74-    .lean()
+75-
+76-  const next = highest?.wp5GroupIndex === undefined
+77-    ? 0
+78-    : Number(highest.wp5GroupIndex) + 1
+79-
+80:  if (!Number.isSafeInteger(next) || next < 0 || next >= CAPACITY) {
+81:    throw new Error('WP5 eligible voter capacity exhausted')
+82-  }
+83-
+84-  return next
+85-}
+86-
+87-export async function createWp5Credential(options = {}) {
+88-  const secret = options.secret === undefined
+89-    ? randomFieldSecret()
+90-    : BigInt(options.secret)
+91-
+--
+101-    wp5SecretKey(options.credentialKey),
+102-  )
+103-
+104-  return {
+105-    secret: secret.toString(),
+106-    identityCommitment: commitment.toString(),
+107-    encryptedCredential,
+108-  }
+109-}
+110-
+111:async function zeroHashes() {
+112-  const zeros = [0n]
+113-
+114-  for (let level = 0; level < DEPTH; level += 1) {
+115-    zeros.push(
+116-      await wp5Hash([
+117-        zeros[level],
+118-        zeros[level],
+119-      ]),
+120-    )
+121-  }
+122-
+123-  return zeros
+124-}
+125-
+126:function normalizeRecords(records) {
+127-  const normalized = records
+128-    .map((record) => ({
+129-      index: Number(record.wp5GroupIndex),
+130-      commitment: BigInt(record.wp5IdentityCommitment),
+131-    }))
+132-    .sort((a, b) => a.index - b.index)
+133-
+134-  normalized.forEach((record, expectedIndex) => {
+135-    if (
+136-      !Number.isSafeInteger(record.index) ||
+137-      record.index !== expectedIndex
+138-    ) {
+139-      throw new Error(
+140-        `WP5 Merkle indices must be contiguous from zero; expected ${expectedIndex}, got ${record.index}`,
+141-      )
+142-    }
+143-  })
+144-
+145:  if (normalized.length > CAPACITY) {
+146:    throw new Error('WP5 Merkle capacity exceeded')
+147-  }
+148-
+149-  return normalized
+150-}
+151-
+152:export async function buildWp5MerkleSnapshot(records, targetIndex = null) {
+153:  const normalized = normalizeRecords(records)
+154:  const zeros = await zeroHashes()
+155-
+156-  let current = new Map(
+157-    normalized.map((record) => [
+158-      record.index,
+159-      record.commitment,
+160-    ]),
+161-  )
+162-
+163:  const siblings = []
+164:  const pathBits = []
+165:  let cursor = targetIndex
+166-
+167-  if (
+168-    cursor !== null &&
+169-    (
+170-      !Number.isSafeInteger(cursor) ||
+171-      cursor < 0 ||
+172-      cursor >= normalized.length
+173-    )
+174-  ) {
+175-    throw new Error('Invalid WP5 witness index')
+176-  }
+177-
+178-  for (let level = 0; level < DEPTH; level += 1) {
+179-    if (cursor !== null) {
+180-      const bit = cursor & 1
+181:      const siblingIndex = bit === 0 ? cursor + 1 : cursor - 1
+182-
+183:      pathBits.push(String(bit))
+184:      siblings.push(
+185-        String(
+186:          current.get(siblingIndex) ?? zeros[level],
+187-        ),
+188-      )
+189-
+190-      cursor = Math.floor(cursor / 2)
+191-    }
+192-
+193-    const parents = new Set(
+194-      [...current.keys()].map((index) => Math.floor(index / 2)),
+195-    )
+196-
+--
+202-
+203-      next.set(
+204-        parent,
+205-        await wp5Hash([left, right]),
+206-      )
+207-    }
+208-
+209-    current = next
+210-  }
+211-
+212:  const root = current.get(0) ?? zeros[DEPTH]
+213-
+214-  return {
+215-    root: root.toString(),
+216-    size: normalized.length,
+217-    depth: DEPTH,
+218:    siblings,
+219:    pathBits,
+220-  }
+221-}
+222-
+223-async function registeredWp5Voters() {
+224-  return Voter
+225-    .find({
+226-      wp5RegistrationStatus: 'registered',
+227-      wp5IdentityCommitment: { $type: 'string' },
+228-      wp5GroupIndex: { $type: 'number' },
+229-    })
+--
+240-    voter?.wp5RegistrationStatus !== 'registered' ||
+241-    !voter?.wp5IdentityCommitment ||
+242-    !Number.isSafeInteger(Number(voter?.wp5GroupIndex))
+243-  ) {
+244-    throw new Error('Voter does not have an active WP5 custom credential')
+245-  }
+246-
+247-  const records = await registeredWp5Voters()
+248-  const index = Number(voter.wp5GroupIndex)
+249-
+250:  const snapshot = await buildWp5MerkleSnapshot(
+251-    records,
+252-    index,
+253-  )
+254-
+255-  const record = records[index]
+256-
+257-  if (
+258-    !record ||
+259-    String(record.wp5IdentityCommitment) !==
+260-      String(voter.wp5IdentityCommitment)
+261-  ) {
+262-    throw new Error('WP5 Merkle index/commitment mismatch')
+263-  }
+264-
+265-  return {
+266-    identityCommitment: String(voter.wp5IdentityCommitment),
+267-    index,
+268-    eligibleRoot: snapshot.root,
+269:    siblings: snapshot.siblings,
+270:    pathBits: snapshot.pathBits,
+271-  }
+272-}
+273-
+274-export async function hashCandidateManifest(candidateIds) {
+275-  const ids = candidateIds.map(
+276-    (candidateId) => BigInt(candidateId),
+277-  )
+278-
+279-  if (
+280-    ids.length < 1 ||

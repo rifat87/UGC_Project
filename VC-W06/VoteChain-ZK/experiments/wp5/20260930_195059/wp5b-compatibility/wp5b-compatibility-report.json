@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "vectorRun": "20260930_170614",
+  "baseVectorPath": "D:\\University\\4thYear2ndSemester\\Capstone\\UGC_Project\\VC-W06\\VoteChain-ZK\\crypto\\vectors\\wp3\\20260930_170614\\direct\\valid.json",
+  "wp3FourCandidateManifestKat": true,
+  "oneShotK16Supported": false,
+  "oneShotK16Error": "Invalid poseidon size",
+  "oneShotK16Value": null,
+  "manifestAlgorithm": "POSEIDON_INDEXED_CHAIN_V1",
+  "canonicalManifest16": "8725646181372109278719673995639063952864499962493037230511085907915024360632",
+  "k16Groth16Verify": true,
+  "k16PublicSignalCount": 73,
+  "k16ProofMs": 6032.3153,
+  "artifactHashes": {
+    "wasm": "02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a",
+    "zkey": "867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50",
+    "vkey": "90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1",
+    "verifier": "55b31cad6c02422bf22073abf482516d576d3f3eec0b964d4fecaf4effff7eba"
+  },
+  "trustedSetup": "DEV_ONLY"
+}

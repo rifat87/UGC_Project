@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "classification": "PILOT_ONLY_NOT_FINAL_BENCHMARK",
+  "freshChainPerIteration": true,
+  "ballotId": "001",
+  "candidateIndex": 0,
+  "warmupIterations": 0,
+  "measuredIterations": 0,
+  "totalIterations": 1,
+  "timedInterval": "cast-send-start-to-receipt-return",
+  "setupInsideTimedInterval": false,
+  "postReceiptChecksInsideTimedInterval": false
+}

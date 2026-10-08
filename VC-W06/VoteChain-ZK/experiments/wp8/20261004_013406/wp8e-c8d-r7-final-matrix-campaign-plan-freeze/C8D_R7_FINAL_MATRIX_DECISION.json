@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "classification": "POST_PILOT_PRE_CAMPAIGN_MATRIX_DECISION",
+  "pilotExcludedFromFinalStatistics": true,
+  "pilotObservationCount": 4,
+  "pilotAllObservationsPass": true,
+  "maxPilotGroth16ProveMs": 3482.3495,
+  "maxSinglePilotTimedObservationMs": 6079.7889,
+  "roughProjectedDefaultMatrixTimedStageSeconds": 529.1926575,
+  "roughProjectionForPublication": false,
+  "reductionOptionInvoked": false,
+  "reductionJustification": "NOT_INVOKED: excluded pilot completed all four N levels without failure or retry, and the observed proving burden does not require reducing the preregistered default matrix.",
+  "finalMatrixDecision": "RETAIN_DEFAULT_5_WARMUP_PLUS_20_MEASURED_PER_N",
+  "warmupPerN": 5,
+  "measuredPerN": 20,
+  "totalPerN": 25,
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "totalWarmupObservations": 20,
+  "totalMeasuredObservations": 80,
+  "totalCampaignObservations": 100,
+  "configuredMerkleDepth": 17,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "finalRepetitionMatrixFrozen": true,
+  "campaignExecuted": false
+}

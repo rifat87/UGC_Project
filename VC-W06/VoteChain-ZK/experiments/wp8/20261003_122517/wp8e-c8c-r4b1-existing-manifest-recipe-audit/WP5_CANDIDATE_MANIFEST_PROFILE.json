@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "candidateManifest": {
+    "algorithm": "POSEIDON_INDEXED_CHAIN_V1",
+    "historicalWp3Wp4SyntheticAlgorithm": "POSEIDON_DOMAIN_PLUS_IDS_V1",
+    "oneShotK16Supported": false,
+    "oneShotK16Error": "Invalid poseidon size",
+    "indexBase": 0,
+    "lengthBound": "Poseidon(D_MANIFEST,candidateCount)",
+    "candidateIds16": [
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "107",
+      "108",
+      "109",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116"
+    ],
+    "manifest16": "8725646181372109278719673995639063952864499962493037230511085907915024360632"
+  }
+}

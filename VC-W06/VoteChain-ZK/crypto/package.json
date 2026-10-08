@@ -1,0 +1,14 @@
+{
+  "name": "@votechain-zk/crypto-poc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "VoteChain-ZK WP2 isolated cryptographic proof-of-concept",
+  "scripts": {
+    "preflight": "node test/preflight.mjs"
+  },
+  "dependencies": {
+    "circomlib": "2.0.5",
+    "circomlibjs": "0.1.7"
+  }
+}

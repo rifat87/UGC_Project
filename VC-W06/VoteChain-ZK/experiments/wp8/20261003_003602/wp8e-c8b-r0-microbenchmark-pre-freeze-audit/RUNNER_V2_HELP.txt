@@ -1,0 +1,13 @@
+usage: wp8e-final-scaling-runner-v2.py [-h] [--root ROOT] --bundle BUNDLE
+                                       [--validate-only]
+                                       [--execute-final-campaign]
+                                       [--output OUTPUT] [--port PORT]
+
+options:
+  -h, --help            show this help message and exit
+  --root ROOT
+  --bundle BUNDLE
+  --validate-only
+  --execute-final-campaign
+  --output OUTPUT
+  --port PORT

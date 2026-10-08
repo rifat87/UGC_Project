@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_PUBLICATION_SAFE_SYNTHESIS_REVALIDATION",
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "M1MeanMonotonicIncreasing": true,
+  "M2MeanMonotonicIncreasing": true,
+  "M1N10000ToN10MeanRatio": 725.8596216562967,
+  "M2N10000ToN10MeanRatio": 202.23148109428715,
+  "allPrimaryMeansMatchFrozenMeanProfile": true,
+  "publicationGuardrailsPresent": true,
+  "failedR9SynthesisModified": false
+}

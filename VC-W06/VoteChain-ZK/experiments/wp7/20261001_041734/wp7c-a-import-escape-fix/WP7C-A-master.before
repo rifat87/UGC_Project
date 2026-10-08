@@ -1,0 +1,1083 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$PWD"
+
+if [ "$(basename "$ROOT")" != "VoteChain-ZK" ]; then
+    echo "ERROR: run from VoteChain-ZK root."
+    exit 2
+fi
+
+BACK="$ROOT/votechain-central-server"
+FRONT="$ROOT/votechain-frontend-ts"
+CRYPTO="$ROOT/crypto"
+FOUNDRY="$ROOT/contracts/wp4-foundry"
+
+OUTROOT="../VoteChain_VC-W03_FinalZK/Output/VC-W07"
+
+WP7B="$OUTROOT/VC-W07_WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING_SUMMARY.txt"
+
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+EVIDENCE="$ROOT/experiments/wp7/$RUN_ID/wp7c-final-callsite-audit"
+BACKUP="$EVIDENCE/before"
+
+SUMMARY="$OUTROOT/VC-W07_WP7C_FINAL_CALLSITE_AUDIT_PREFLIGHT_SUMMARY.txt"
+
+ADMIN_AUTH="$FRONT/src/services/adminAuth.ts"
+
+REGISTER_VOTER="$FRONT/src/components/Admin/RegisterVoter.tsx"
+FACE_CAPTURE="$FRONT/src/components/Biometric/face-recognition/FaceCapture.tsx"
+FINGERPRINT_CAPTURE="$FRONT/src/components/Biometric/fingerprint/FingerprintCapture.tsx"
+
+WP6_CORE="$CRYPTO/src/wp6-threshold.mjs"
+WP6_PROFILE="$CRYPTO/config/wp6-threshold-profile.json"
+CONTRACT="$FOUNDRY/src/VoteChainWP4.sol"
+
+EXPECTED_WP6_CORE_SHA="107ad1936884d4880c2fe992d9b1681039f5c725b0f506046cefb8bdb37ce9e1"
+EXPECTED_WP6_PROFILE_SHA="f414252b10cff7d9a4fa7e51564219c90299721d18e4d7d1d171ef8a344216e0"
+EXPECTED_CONTRACT_SHA="c833a70e832ce15cfe9d17c2ca71f202fc8806519514cd6846ba292804904d77"
+
+mkdir -p \
+    "$EVIDENCE" \
+    "$BACKUP" \
+    "$OUTROOT"
+
+echo
+echo "======================================================================"
+echo "VOTECHAIN-ZK WP7C-A — FINAL CALLSITE / AUDIT / RUNTIME PREFLIGHT"
+echo "======================================================================"
+echo "RUN_ID=$RUN_ID"
+echo
+echo "SOURCE_MODIFICATION=YES"
+echo "DATABASE_ACCESS=NO"
+echo "BIOMETRIC_EXECUTION=NO"
+echo "REAL_CREDENTIALS_READ=NO"
+echo "DEPENDENCY_MUTATION=NO"
+echo "NPM_AUDIT_FIX=NO"
+echo "FINAL_WP8_BENCHMARK=NO"
+echo
+
+###############################################################################
+# 1. REQUIRE ACCEPTED WP7B
+###############################################################################
+
+echo "=== 1. REQUIRE WP7B ==="
+
+if [ ! -f "$WP7B" ]; then
+    echo "ERROR: WP7B summary missing."
+    exit 10
+fi
+
+grep -q \
+    '^STATUS=PASS_WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING$' \
+    "$WP7B"
+
+grep -q \
+    '^THRESHOLD_ARTIFACT_NEGATIVE_MATRIX=PASS$' \
+    "$WP7B"
+
+echo "WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING=PASS"
+
+###############################################################################
+# 2. FREEZE CHECK
+###############################################################################
+
+echo
+echo "=== 2. VERIFY WP7B FROZEN SOURCES ==="
+
+CORE_SHA="$(
+    sha256sum "$WP6_CORE" |
+    awk '{print $1}'
+)"
+
+PROFILE_SHA="$(
+    sha256sum "$WP6_PROFILE" |
+    awk '{print $1}'
+)"
+
+CONTRACT_SHA="$(
+    sha256sum "$CONTRACT" |
+    awk '{print $1}'
+)"
+
+echo "WP6_CORE_SHA256=$CORE_SHA"
+echo "WP6_PROFILE_SHA256=$PROFILE_SHA"
+echo "CONTRACT_SHA256=$CONTRACT_SHA"
+
+if [ "$CORE_SHA" != "$EXPECTED_WP6_CORE_SHA" ]; then
+    echo "ERROR: hardened WP6 core drifted."
+    exit 11
+fi
+
+if [ "$PROFILE_SHA" != "$EXPECTED_WP6_PROFILE_SHA" ]; then
+    echo "ERROR: WP6 profile drifted."
+    exit 12
+fi
+
+if [ "$CONTRACT_SHA" != "$EXPECTED_CONTRACT_SHA" ]; then
+    echo "ERROR: voting contract drifted."
+    exit 13
+fi
+
+echo "WP7B_FROZEN_SOURCE_IDENTITY=PASS"
+
+###############################################################################
+# 3. REQUIRE THE THREE DISCOVERED FRONTEND CALLSITES
+###############################################################################
+
+echo
+echo "=== 3. REQUIRE DISCOVERED FRONTEND FILES ==="
+
+FILES=(
+    "$REGISTER_VOTER"
+    "$FACE_CAPTURE"
+    "$FINGERPRINT_CAPTURE"
+    "$ADMIN_AUTH"
+)
+
+for file in "${FILES[@]}"
+do
+    if [ ! -f "$file" ]; then
+        echo "ERROR: missing required frontend source: ${file#$ROOT/}"
+        exit 20
+    fi
+
+    echo "FOUND=${file#$ROOT/}"
+done
+
+###############################################################################
+# 4. BACKUP FRONTEND FILES
+###############################################################################
+
+echo
+echo "=== 4. BACKUP FRONTEND CALLSITES ==="
+
+for file in \
+    "$REGISTER_VOTER" \
+    "$FACE_CAPTURE" \
+    "$FINGERPRINT_CAPTURE"
+do
+    relative="${file#$ROOT/}"
+
+    mkdir -p \
+        "$BACKUP/$(dirname "$relative")"
+
+    cp \
+        "$file" \
+        "$BACKUP/$relative"
+done
+
+echo "FRONTEND_CALLSITE_BACKUP=PASS"
+
+###############################################################################
+# 5. PATCH REMAINING DIRECT PRIVILEGED FETCH CALLS
+###############################################################################
+
+echo
+echo "=== 5. PATCH REMAINING PRIVILEGED CALLSITES ==="
+
+PATCHER="$EVIDENCE/wp7c-callsite-patcher.py"
+
+cat > "$PATCHER" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+root = Path(sys.argv[1])
+
+targets = [
+    (
+        root / "votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx",
+        re.compile(
+            r"""fetch\(\s*
+                apiUrl\(\s*
+                (`/api/voters/train-face/\$\{formData\.nationalId\}`)
+                \s*\)\s*,
+            """,
+            re.VERBOSE,
+        ),
+        r"adminFetch(\1,",
+        "REGISTER_VOTER_TRAIN_FACE",
+    ),
+    (
+        root / "votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx",
+        re.compile(
+            r"""fetch\(\s*
+                apiUrl\(\s*
+                (["']/api/biometric/capture-face["'])
+                \s*\)\s*,
+            """,
+            re.VERBOSE,
+        ),
+        r"adminFetch(\1,",
+        "FACE_CAPTURE",
+    ),
+    (
+        root / "votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx",
+        re.compile(
+            r"""fetch\(\s*
+                apiUrl\(\s*
+                (["']/api/biometric/fingerprint/enroll["'])
+                \s*\)\s*,
+            """,
+            re.VERBOSE,
+        ),
+        r"adminFetch(\1,",
+        "FINGERPRINT_ENROLL",
+    ),
+]
+
+
+def ensure_admin_import(text: str) -> str:
+    if 'from "@/services/adminAuth"' in text:
+        return text
+
+    lines = text.splitlines(keepends=True)
+
+    last_import_end = -1
+    inside_import = False
+
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+
+        if stripped.startswith("import "):
+            inside_import = True
+
+        if inside_import:
+            last_import_end = index
+
+            if (
+                stripped.endswith('"') or
+                stripped.endswith('";') or
+                stripped.endswith("'") or
+                stripped.endswith("';")
+            ):
+                inside_import = False
+
+    insertion = (
+        'import {\\n'
+        '  adminFetch,\\n'
+        '} from "@/services/adminAuth"\\n'
+    )
+
+    if last_import_end < 0:
+        return insertion + "\\n" + text
+
+    lines.insert(
+        last_import_end + 1,
+        insertion,
+    )
+
+    return "".join(lines)
+
+
+def remove_unused_api_url_import(text: str) -> str:
+    if "apiUrl(" in text:
+        return text
+
+    patterns = [
+        re.compile(
+            r'^import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*["\\\']@/config/api["\\\'];?\\s*\\n',
+            re.MULTILINE,
+        ),
+        re.compile(
+            r'^import\\s+\\{\\s*apiUrl,?\\s*\\}\\s+from\\s+["\\\']@/config/api["\\\'];?\\s*\\n',
+            re.MULTILINE,
+        ),
+    ]
+
+    for pattern in patterns:
+        text = pattern.sub(
+            "",
+            text,
+        )
+
+    return text
+
+
+for path, pattern, replacement, label in targets:
+    text = path.read_text(
+        encoding="utf-8",
+    )
+
+    if "adminFetch(" in text:
+        direct = pattern.search(text)
+
+        if not direct:
+            print(
+                f"{label}=ALREADY_PATCHED"
+            )
+
+            continue
+
+    text, count = pattern.subn(
+        replacement,
+        text,
+        count=1,
+    )
+
+    if count != 1:
+        raise SystemExit(
+            f"ERROR: {label}: expected exactly one direct privileged fetch; found {count}"
+        )
+
+    text = ensure_admin_import(
+        text,
+    )
+
+    text = remove_unused_api_url_import(
+        text,
+    )
+
+    path.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print(
+        f"{label}=PATCHED"
+    )
+PY
+
+python \
+    "$PATCHER" \
+    "$ROOT"
+
+###############################################################################
+# 6. STRUCTURAL CALLSITE VERIFICATION
+###############################################################################
+
+echo
+echo "=== 6. VERIFY NO EXPLICIT PRIVILEGED fetch(apiUrl()) REMAINS ==="
+
+python - "$FRONT/src" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+root = Path(sys.argv[1])
+
+pattern = re.compile(
+    r"""fetch\s*\(\s*
+        apiUrl\s*\(\s*
+        (?:
+            ["']/api/(?:voters|candidates|biometric)
+            |
+            `/api/(?:voters|candidates|biometric)
+        )
+    """,
+    re.VERBOSE | re.DOTALL,
+)
+
+hits = []
+
+for path in root.rglob("*"):
+    if (
+        not path.is_file() or
+        path.suffix not in {".ts", ".tsx"}
+    ):
+        continue
+
+    text = path.read_text(
+        encoding="utf-8",
+        errors="replace",
+    )
+
+    for match in pattern.finditer(text):
+        line = (
+            text.count(
+                "\n",
+                0,
+                match.start(),
+            ) +
+            1
+        )
+
+        hits.append(
+            (
+                path,
+                line,
+            )
+        )
+
+if hits:
+    for path, line in hits:
+        print(
+            f"RAW_PRIVILEGED_FETCH={path}:{line}"
+        )
+
+    raise SystemExit(
+        "ERROR: explicit privileged fetch(apiUrl(...)) remains."
+    )
+
+print(
+    "RAW_PRIVILEGED_FETCH_APIURL_MATCHES=0"
+)
+PY
+
+for file in \
+    "$REGISTER_VOTER" \
+    "$FACE_CAPTURE" \
+    "$FINGERPRINT_CAPTURE"
+do
+    grep -q \
+        'adminFetch' \
+        "$file"
+
+    echo "ADMIN_FETCH_BOUND=${file#$ROOT/}"
+done
+
+echo "FRONTEND_PRIVILEGED_CALLSITE_BINDING=PASS"
+
+###############################################################################
+# 7. COMPLETE PRIVILEGED STRING INVENTORY
+###############################################################################
+
+echo
+echo "=== 7. CURRENT FRONTEND PRIVILEGED STRING INVENTORY ==="
+
+INVENTORY="$EVIDENCE/frontend-privileged-inventory.txt"
+
+grep -RniE \
+    --exclude-dir=node_modules \
+    --exclude-dir=dist \
+    --include='*.ts' \
+    --include='*.tsx' \
+    '/api/(voters|candidates|biometric)' \
+    "$FRONT/src" \
+    > "$INVENTORY" \
+    || true
+
+cat "$INVENTORY"
+
+echo "FRONTEND_PRIVILEGED_API_STRING_MATCHES=$(
+    wc -l < "$INVENTORY" |
+    tr -d ' '
+)"
+
+###############################################################################
+# 8. FRONTEND BUILD
+###############################################################################
+
+echo
+echo "=== 8. FRONTEND CLEAN BUILD ==="
+
+cd "$FRONT"
+
+npm run build \
+    > "$EVIDENCE/frontend-build.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FRONTEND_BUILD=PASS"
+
+###############################################################################
+# 9. FOUNDRY FULL REGRESSION
+###############################################################################
+
+echo
+echo "=== 9. FOUNDRY FULL REGRESSION ==="
+
+cd "$FOUNDRY"
+
+forge test \
+    -q \
+    > "$EVIDENCE/foundry-regression.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FOUNDRY_FULL_REGRESSION=PASS"
+
+###############################################################################
+# 10. STALE SYNTHETIC TRUSTEE PASSPHRASE HYGIENE
+###############################################################################
+
+echo
+echo "=== 10. SYNTHETIC TRUSTEE PASSPHRASE HYGIENE ==="
+
+STALE_BEFORE="$EVIDENCE/stale-passphrases-before.txt"
+STALE_AFTER="$EVIDENCE/stale-passphrases-after.txt"
+
+find \
+    "$ROOT/experiments/wp6" \
+    -type f \
+    -path '*/.private-runtime/*' \
+    \( \
+        -name '*.passphrase' \
+        -o \
+        -name '*passphrase*' \
+    \) \
+    -print \
+    2>/dev/null \
+    | sort \
+    > "$STALE_BEFORE" \
+    || true
+
+STALE_COUNT="$(
+    wc -l < "$STALE_BEFORE" |
+    tr -d ' '
+)"
+
+echo "STALE_SYNTHETIC_PASSPHRASE_FILES_BEFORE=$STALE_COUNT"
+
+if [ "$STALE_COUNT" -gt 0 ]; then
+    while IFS= read -r file
+    do
+        case "$file" in
+            "$ROOT"/experiments/wp6/*/.private-runtime/*)
+                rm -f -- "$file"
+                ;;
+            *)
+                echo "ERROR: refusing to remove unexpected path: $file"
+                exit 30
+                ;;
+        esac
+    done < "$STALE_BEFORE"
+fi
+
+find \
+    "$ROOT/experiments/wp6" \
+    -type f \
+    -path '*/.private-runtime/*' \
+    \( \
+        -name '*.passphrase' \
+        -o \
+        -name '*passphrase*' \
+    \) \
+    -print \
+    2>/dev/null \
+    | sort \
+    > "$STALE_AFTER" \
+    || true
+
+STALE_AFTER_COUNT="$(
+    wc -l < "$STALE_AFTER" |
+    tr -d ' '
+)"
+
+echo "STALE_SYNTHETIC_PASSPHRASE_FILES_AFTER=$STALE_AFTER_COUNT"
+
+if [ "$STALE_AFTER_COUNT" -ne 0 ]; then
+    echo "ERROR: stale synthetic trustee passphrase files remain."
+    cat "$STALE_AFTER"
+    exit 31
+fi
+
+echo "STALE_SYNTHETIC_TRUSTEE_PASSPHRASES=REMOVED_OR_NONE_PRESENT"
+
+###############################################################################
+# 11. PUBLIC SOURCE SECRET-LIKE SCAN
+###############################################################################
+
+echo
+echo "=== 11. PUBLIC SOURCE SECRET-LIKE SCAN ==="
+
+SECRET_SCAN="$EVIDENCE/public-secret-like-scan.txt"
+
+grep -RniE \
+    --exclude-dir=node_modules \
+    --exclude-dir=.git \
+    --exclude-dir=dist \
+    --exclude-dir=out \
+    --exclude-dir=cache \
+    --exclude-dir=.private-runtime \
+    --include='*.js' \
+    --include='*.mjs' \
+    --include='*.ts' \
+    --include='*.tsx' \
+    --include='*.json' \
+    '(BEGIN (RSA|EC|OPENSSH|PRIVATE) PRIVATE KEY|ADMIN_PRIVATE_KEY[[:space:]]*=|TRUSTEE_.*PASSPHRASE[[:space:]]*=|privateKey[[:space:]]*:[[:space:]]*["'\''][0-9a-fA-F]{64}["'\''])' \
+    "$BACK" \
+    "$FRONT/src" \
+    "$CRYPTO/src" \
+    "$CRYPTO/scripts" \
+    > "$SECRET_SCAN" \
+    || true
+
+cat "$SECRET_SCAN"
+
+echo "NOTE=Secret-like scan findings require contextual interpretation."
+
+###############################################################################
+# 12. READ-ONLY DEPENDENCY AUDITS
+###############################################################################
+
+echo
+echo "=== 12. READ-ONLY NPM DEPENDENCY AUDITS ==="
+
+AUDIT_SUMMARY="$EVIDENCE/npm-audit-summary.txt"
+
+: > "$AUDIT_SUMMARY"
+
+audit_package() {
+    local label="$1"
+    local dir="$2"
+
+    if [ ! -f "$dir/package.json" ]; then
+        echo "${label}_AUDIT=NOT_APPLICABLE" \
+            | tee -a "$AUDIT_SUMMARY"
+        return
+    fi
+
+    local json="$EVIDENCE/npm-audit-${label}.json"
+    local err="$EVIDENCE/npm-audit-${label}.stderr"
+
+    cd "$dir"
+
+    set +e
+
+    npm audit \
+        --json \
+        > "$json" \
+        2> "$err"
+
+    local rc=$?
+
+    set -e
+
+    cd "$ROOT"
+
+    echo "${label}_NPM_AUDIT_RC=$rc" \
+        | tee -a "$AUDIT_SUMMARY"
+
+    python - \
+        "$label" \
+        "$json" \
+        "$err" \
+        "$AUDIT_SUMMARY" <<'PY'
+from pathlib import Path
+import json
+import sys
+
+label = sys.argv[1]
+json_path = Path(sys.argv[2])
+err_path = Path(sys.argv[3])
+summary_path = Path(sys.argv[4])
+
+lines = []
+
+try:
+    payload = json.loads(
+        json_path.read_text(
+            encoding="utf-8",
+        )
+    )
+
+    vulnerabilities = (
+        payload
+        .get("metadata", {})
+        .get("vulnerabilities", {})
+    )
+
+    critical = int(
+        vulnerabilities.get(
+            "critical",
+            0,
+        )
+    )
+
+    high = int(
+        vulnerabilities.get(
+            "high",
+            0,
+        )
+    )
+
+    moderate = int(
+        vulnerabilities.get(
+            "moderate",
+            0,
+        )
+    )
+
+    low = int(
+        vulnerabilities.get(
+            "low",
+            0,
+        )
+    )
+
+    total = int(
+        vulnerabilities.get(
+            "total",
+            critical +
+            high +
+            moderate +
+            low,
+        )
+    )
+
+    lines.extend([
+        f"{label}_AUDIT_STATUS=AVAILABLE",
+        f"{label}_AUDIT_CRITICAL={critical}",
+        f"{label}_AUDIT_HIGH={high}",
+        f"{label}_AUDIT_MODERATE={moderate}",
+        f"{label}_AUDIT_LOW={low}",
+        f"{label}_AUDIT_TOTAL={total}",
+    ])
+
+except Exception as error:
+    stderr = ""
+
+    if err_path.exists():
+        stderr = err_path.read_text(
+            encoding="utf-8",
+            errors="replace",
+        )[:500].replace(
+            "\n",
+            " ",
+        )
+
+    lines.extend([
+        f"{label}_AUDIT_STATUS=UNAVAILABLE",
+        f"{label}_AUDIT_PARSE_ERROR={type(error).__name__}",
+        f"{label}_AUDIT_STDERR={stderr}",
+    ])
+
+with summary_path.open(
+    "a",
+    encoding="utf-8",
+) as handle:
+    for line in lines:
+        print(line)
+        handle.write(
+            line +
+            "\n"
+        )
+PY
+}
+
+audit_package \
+    "BACKEND" \
+    "$BACK"
+
+audit_package \
+    "FRONTEND" \
+    "$FRONT"
+
+audit_package \
+    "CRYPTO" \
+    "$CRYPTO"
+
+echo
+echo "--- dependency audit summary ---"
+cat "$AUDIT_SUMMARY"
+
+echo "DEPENDENCY_MUTATION=NO"
+echo "NPM_AUDIT_FIX_RUN=NO"
+
+###############################################################################
+# 13. CALCULATE DEPENDENCY SECURITY GATE
+###############################################################################
+
+echo
+echo "=== 13. DEPENDENCY SECURITY GATE ==="
+
+python - "$AUDIT_SUMMARY" "$EVIDENCE/dependency-gate.env" <<'PY'
+from pathlib import Path
+import sys
+
+summary = Path(
+    sys.argv[1]
+).read_text(
+    encoding="utf-8",
+)
+
+output = Path(
+    sys.argv[2]
+)
+
+values = {}
+
+for line in summary.splitlines():
+    if "=" not in line:
+        continue
+
+    key, value = line.split(
+        "=",
+        1,
+    )
+
+    values[key] = value
+
+
+labels = [
+    "BACKEND",
+    "FRONTEND",
+    "CRYPTO",
+]
+
+unavailable = []
+critical = 0
+high = 0
+
+for label in labels:
+    status = values.get(
+        f"{label}_AUDIT_STATUS",
+        "NOT_APPLICABLE",
+    )
+
+    if status == "UNAVAILABLE":
+        unavailable.append(
+            label
+        )
+
+    if status == "AVAILABLE":
+        critical += int(
+            values.get(
+                f"{label}_AUDIT_CRITICAL",
+                "0",
+            )
+        )
+
+        high += int(
+            values.get(
+                f"{label}_AUDIT_HIGH",
+                "0",
+            )
+        )
+
+if unavailable:
+    status = (
+        "REVIEW_REQUIRED_AUDIT_UNAVAILABLE"
+    )
+elif critical > 0 or high > 0:
+    status = (
+        "REVIEW_REQUIRED_CRITICAL_OR_HIGH_PRESENT"
+    )
+else:
+    status = (
+        "PASS_NO_CRITICAL_OR_HIGH_REPORTED"
+    )
+
+lines = [
+    f"DEPENDENCY_AUDIT_GATE={status}",
+    f"DEPENDENCY_AUDIT_CRITICAL_TOTAL={critical}",
+    f"DEPENDENCY_AUDIT_HIGH_TOTAL={high}",
+    "DEPENDENCY_AUDIT_UNAVAILABLE=" +
+    (
+        ",".join(
+            unavailable,
+        )
+        if unavailable
+        else
+        "NONE"
+    ),
+]
+
+output.write_text(
+    "\n".join(lines) +
+    "\n",
+    encoding="utf-8",
+)
+
+print(
+    output.read_text(
+        encoding="utf-8",
+    ),
+    end="",
+)
+PY
+
+###############################################################################
+# 14. DISCOVER EXACT ACCEPTED WP5E RUNTIME WORKFLOW
+###############################################################################
+
+echo
+echo "=== 14. DISCOVER EXISTING WP5E RUNTIME WORKFLOW ==="
+
+WP5E_DISCOVERY="$EVIDENCE/wp5e-runner-discovery.txt"
+
+: > "$WP5E_DISCOVERY"
+
+echo "--- scripts whose filename contains WP5E ---" \
+    >> "$WP5E_DISCOVERY"
+
+find "$OUTROOT/scripts" \
+    -maxdepth 1 \
+    -type f \
+    \( \
+        -iname '*WP5E*.sh' \
+        -o \
+        -iname '*WP5E*.bash' \
+    \) \
+    -print \
+    | sort \
+    >> "$WP5E_DISCOVERY" \
+    || true
+
+echo \
+    >> "$WP5E_DISCOVERY"
+
+echo "--- scripts containing WP5E status/runtime markers ---" \
+    >> "$WP5E_DISCOVERY"
+
+grep -RliE \
+    --include='*.sh' \
+    'WP5E|PASS_WP5E|BACKEND.*AUTH|BROWSER.*ONCHAIN' \
+    "$OUTROOT/scripts" \
+    2>/dev/null \
+    | sort \
+    >> "$WP5E_DISCOVERY" \
+    || true
+
+echo \
+    >> "$WP5E_DISCOVERY"
+
+echo "--- accepted WP5E summaries ---" \
+    >> "$WP5E_DISCOVERY"
+
+find "$OUTROOT" \
+    -maxdepth 1 \
+    -type f \
+    -iname '*WP5E*' \
+    -print \
+    | sort \
+    >> "$WP5E_DISCOVERY" \
+    || true
+
+cat "$WP5E_DISCOVERY"
+
+WP5E_FILENAME_COUNT="$(
+    find "$OUTROOT/scripts" \
+        -maxdepth 1 \
+        -type f \
+        -iname '*WP5E*.sh' \
+        -print \
+        2>/dev/null \
+    | wc -l \
+    | tr -d ' '
+)"
+
+echo "WP5E_FILENAME_SCRIPT_COUNT=$WP5E_FILENAME_COUNT"
+
+###############################################################################
+# 15. VERIFY FROZEN CRYPTO/CONTRACT STILL UNCHANGED
+###############################################################################
+
+echo
+echo "=== 15. FINAL FREEZE CHECK ==="
+
+CORE_AFTER="$(
+    sha256sum "$WP6_CORE" |
+    awk '{print $1}'
+)"
+
+PROFILE_AFTER="$(
+    sha256sum "$WP6_PROFILE" |
+    awk '{print $1}'
+)"
+
+CONTRACT_AFTER="$(
+    sha256sum "$CONTRACT" |
+    awk '{print $1}'
+)"
+
+if [ "$CORE_AFTER" != "$EXPECTED_WP6_CORE_SHA" ]; then
+    echo "ERROR: WP6 core changed during WP7C-A."
+    exit 50
+fi
+
+if [ "$PROFILE_AFTER" != "$EXPECTED_WP6_PROFILE_SHA" ]; then
+    echo "ERROR: WP6 profile changed during WP7C-A."
+    exit 51
+fi
+
+if [ "$CONTRACT_AFTER" != "$EXPECTED_CONTRACT_SHA" ]; then
+    echo "ERROR: contract changed during WP7C-A."
+    exit 52
+fi
+
+echo "WP6_CORE_CHANGED_DURING_WP7C_A=NO"
+echo "WP6_PROFILE_CHANGED_DURING_WP7C_A=NO"
+echo "VOTING_CONTRACT_CHANGED_DURING_WP7C_A=NO"
+
+###############################################################################
+# 16. HASH WP7C-A SOURCES
+###############################################################################
+
+echo
+echo "=== 16. HASH WP7C-A SOURCES ==="
+
+sha256sum \
+    "$REGISTER_VOTER" \
+    "$FACE_CAPTURE" \
+    "$FINGERPRINT_CAPTURE" \
+    "$ADMIN_AUTH" \
+    "$FRONT/src/services/api.ts" \
+    "$WP6_CORE" \
+    "$WP6_PROFILE" \
+    "$CONTRACT" \
+    > "$EVIDENCE/wp7c-a.sha256"
+
+cat "$EVIDENCE/wp7c-a.sha256"
+
+###############################################################################
+# 17. SUMMARY
+###############################################################################
+
+echo
+echo "=== 17. WRITE WP7C-A SUMMARY ==="
+
+# shellcheck disable=SC1090
+source "$EVIDENCE/dependency-gate.env"
+
+{
+    echo "======================================================================"
+    echo "VOTECHAIN-ZK WP7C-A — FINAL CALLSITE / AUDIT / RUNTIME PREFLIGHT"
+    echo "======================================================================"
+    echo
+    echo "STATUS=PASS_WP7C_A_CALLSITE_AUDIT_PREFLIGHT"
+    echo "RUN_ID=$RUN_ID"
+    echo
+    echo "WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING=PASS"
+    echo
+    echo "REGISTER_VOTER_TRAIN_FACE_ADMIN_FETCH=PASS"
+    echo "FACE_CAPTURE_ADMIN_FETCH=PASS"
+    echo "FINGERPRINT_ENROLL_ADMIN_FETCH=PASS"
+    echo "RAW_PRIVILEGED_FETCH_APIURL_MATCHES=0"
+    echo "FRONTEND_PRIVILEGED_CALLSITE_BINDING=PASS"
+    echo
+    echo "FRONTEND_BUILD=PASS"
+    echo "FOUNDRY_FULL_REGRESSION=PASS"
+    echo
+    echo "STALE_SYNTHETIC_TRUSTEE_PASSPHRASES=REMOVED_OR_NONE_PRESENT"
+    echo "DEPENDENCY_MUTATION=NO"
+    echo "NPM_AUDIT_FIX_RUN=NO"
+    echo "$DEPENDENCY_AUDIT_GATE"
+    echo "DEPENDENCY_AUDIT_CRITICAL_TOTAL=$DEPENDENCY_AUDIT_CRITICAL_TOTAL"
+    echo "DEPENDENCY_AUDIT_HIGH_TOTAL=$DEPENDENCY_AUDIT_HIGH_TOTAL"
+    echo "DEPENDENCY_AUDIT_UNAVAILABLE=$DEPENDENCY_AUDIT_UNAVAILABLE"
+    echo
+    echo "WP5E_FILENAME_SCRIPT_COUNT=$WP5E_FILENAME_COUNT"
+    echo "WP5E_RUNTIME_DISCOVERY=$WP5E_DISCOVERY"
+    echo
+    echo "WP6_CORE_CHANGED_DURING_WP7C_A=NO"
+    echo "WP6_PROFILE_CHANGED_DURING_WP7C_A=NO"
+    echo "VOTING_CONTRACT_CHANGED_DURING_WP7C_A=NO"
+    echo
+    echo "DATABASE_ACCESSED=NO"
+    echo "BIOMETRIC_EXECUTION=NO"
+    echo
+    echo "POST_HARDENING_BROWSER_HTTP_GROTH16_ONCHAIN_RUNTIME=NOT_YET_WP7C_B"
+    echo "FINAL_SECURITY_VERDICT=NOT_YET"
+    echo "CRITICAL_HIGH_DEFECT_GATE=NOT_YET"
+    echo
+    echo "EVIDENCE=$EVIDENCE"
+    echo "NEXT_ACTION=WP7C_B_POST_HARDENING_BROWSER_HTTP_GROTH16_ONCHAIN_AND_FINAL_GATE"
+    echo "======================================================================"
+} | tee "$SUMMARY"
+
+echo
+echo "======================================================================"
+echo "WP7C-A COMPLETE"
+echo "======================================================================"
+echo
+echo "Send me:"
+echo "$SUMMARY"
+echo
+echo "$WP5E_DISCOVERY"
+echo
+echo "and the terminal output."

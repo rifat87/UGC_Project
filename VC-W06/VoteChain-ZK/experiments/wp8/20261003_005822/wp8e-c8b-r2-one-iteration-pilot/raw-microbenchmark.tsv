@@ -1,0 +1,2 @@
+kind	iteration	repetition_id	ballot_id	candidate_index	tx_hash	receipt_status	gas_used	calldata_bytes	latency_ms
+pilot	1	pilot-01	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	711.969100

@@ -1,0 +1,2 @@
+
+[2m2026-10-03T13:04:41.086010Z[0m [31mERROR[0m [2malloy_provider::blocks[0m[2m:[0m failed to fetch block [3mnumber[0m[2m=[0m1 [3merr[0m[2m=[0merror sending request for url (http://127.0.0.1:8557/)

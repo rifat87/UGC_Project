@@ -1,0 +1,33 @@
+WP8E-C8D ELIGIBLE-SET SCALING — PUBLICATION-SAFE SYNTHESIS
+
+Scope:
+  Eligible-set sizes N = 10, 100, 1000, 10000.
+  Configured Merkle depth = 17 for every profile.
+  Final measured n = 20 observations per N; 80 measured observations total.
+  Pilot observations and warmups are excluded.
+  No outlier deletion was performed.
+
+Measured means (ms):
+  N=10, depth=17: M1=1.114595, M2=3.945765, M3=1100.572040, M4=5423.310715, M5=1039.343420
+  N=100, depth=17: M1=10.252050, M2=11.923485, M3=1090.561170, M4=5372.540045, M5=1030.482275
+  N=1000, depth=17: M1=89.919430, M2=88.386890, M3=1045.809035, M4=5292.146455, M5=1031.746775
+  N=10000, depth=17: M1=809.039505, M2=797.957900, M3=1044.413670, M4=5298.751655, M5=1018.917745
+
+Derived descriptive observations:
+  M1 N=10000/N=10 mean ratio = 725.859622x.
+  M2 N=10000/N=10 mean ratio = 202.231481x.
+  M1 mean monotonic across tested N = YES.
+  M2 mean monotonic across tested N = YES.
+  M3 mean range across N = 56.158370 ms (5.377024% of minimum mean).
+  M4 mean range across N = 131.164260 ms (2.478470% of minimum mean).
+  M5 mean range across N = 20.425675 ms (2.004644% of minimum mean).
+
+Interpretation:
+  M1 is eligible-identity leaf materialization.
+  M2 is integrated Merkle snapshot/root/target-path construction; it is not an isolated path-extraction metric.
+  M3-M5 use the same depth-17 circuit and frozen proving artifacts at every N.
+  M3-M5 differences are therefore reported as descriptive runtime variation, not as proof of N-dependent circuit complexity.
+  No inferential regression, causal opcode claim, or on-chain eligible-set scaling claim is made.
+  Local cryptographic-stage latency is not directly compared with biometric/IoT end-to-end voting latency.
+
+STATUS=PASS_PUBLICATION_SAFE_ELIGIBLE_SET_SCALING_SYNTHESIS

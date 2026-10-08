@@ -1,0 +1,8 @@
+votechain-central-server@1.0.0 D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\votechain-central-server
+├─┬ circomlibjs@0.1.7
+│ └─┬ ethers@5.8.0
+│   └─┬ @ethersproject/providers@5.8.0
+│     └── ws@8.18.0
+└─┬ ethers@6.17.0
+  └── ws@8.21.0
+

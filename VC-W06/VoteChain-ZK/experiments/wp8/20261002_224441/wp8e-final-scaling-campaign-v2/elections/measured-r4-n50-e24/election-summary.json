@@ -1,0 +1,21 @@
+{
+  "repetitionId": "measured-r4-n50-e24",
+  "kind": "measured",
+  "measuredRound": 4,
+  "scale": 50,
+  "verifierAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "directAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "correctness": {
+    "acceptedBallotCount": 50,
+    "consumedNullifiers": 50,
+    "tallySlotsChecked": 16,
+    "encryptedTallyMatch": true,
+    "candidatePlaintextCounts": [
+      13,
+      13,
+      12,
+      12
+    ]
+  },
+  "status": "PASS"
+}

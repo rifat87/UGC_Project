@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_REPORT_VISUAL_TABLE_INVENTORY",
+  "report": "VC-W06_Final_Report.md",
+  "markdownImageReferences": 0,
+  "mermaidBlocks": 0,
+  "markdownTableLines": 36,
+  "figureWordOccurrences": 0,
+  "tableWordOccurrences": 0,
+  "mentionsWp8": false,
+  "mentionsAcceptedBallot": false,
+  "mentionsCandidateCount": false,
+  "mentionsEligibleSet": false,
+  "publicationAssetsDirectoryReferenced": false
+}

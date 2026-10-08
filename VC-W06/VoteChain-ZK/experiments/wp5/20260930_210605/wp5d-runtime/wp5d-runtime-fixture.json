@@ -1,0 +1,96 @@
+{
+  "syntheticOnly": true,
+  "rpcUrl": "http://127.0.0.1:8547",
+  "chainId": "31337",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "verifierAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "contractAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "selectedCandidateId": 102,
+  "secret": "42424242424242",
+  "membership": {
+    "identityCommitment": "2539878472110751219951393652026582212223955265073864263725865837552657209138",
+    "index": 0,
+    "eligibleRoot": "2277620831377314141978945457980333993449016628146864069070495555328419738918",
+    "siblings": [
+      "3001",
+      "3002",
+      "3003",
+      "3004",
+      "3005",
+      "3006",
+      "3007",
+      "3008",
+      "3009",
+      "3010",
+      "3011",
+      "3012",
+      "3013",
+      "3014",
+      "3015",
+      "3016",
+      "3017"
+    ],
+    "pathBits": [
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0",
+      "1",
+      "0"
+    ]
+  },
+  "publicConfig": {
+    "profile": "VoteChain-ZK-WP5D-Synthetic-v1",
+    "phase": 1,
+    "configured": true,
+    "acceptedBallotCount": "0",
+    "candidates": [
+      {
+        "candidateId": 101,
+        "name": "Synthetic Candidate 101",
+        "party": "Synthetic Party A",
+        "location": "Synthetic District"
+      },
+      {
+        "candidateId": 102,
+        "name": "Synthetic Candidate 102",
+        "party": "Synthetic Party B",
+        "location": "Synthetic District"
+      },
+      {
+        "candidateId": 103,
+        "name": "Synthetic Candidate 103",
+        "party": "Synthetic Party C",
+        "location": "Synthetic District"
+      },
+      {
+        "candidateId": 104,
+        "name": "Synthetic Candidate 104",
+        "party": "Synthetic Party D",
+        "location": "Synthetic District"
+      }
+    ],
+    "manifestAlgorithm": "POSEIDON_INDEXED_CHAIN_V1",
+    "config": {
+      "eligibleRoot": "2277620831377314141978945457980333993449016628146864069070495555328419738918",
+      "electionId": "202609300005",
+      "candidateManifestHash": "366025876440818857840768213586785963363428078228844434671500172059520633217",
+      "candidateCount": "4",
+      "contractDomain": "16652924954244182622400990392520996814925114752355617844386524606803177265731",
+      "Yx": "15919299401931535325513703139194931338293993994510664661086800834970360591752",
+      "Yy": "1645780246786685895560641778865228215443840970280597910012614014295481144366",
+      "electionContextHash": "14455084569650573089649379581750321891282373004713982612977971247376197462433"
+    }
+  }
+}

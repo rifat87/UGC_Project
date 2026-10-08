@@ -1,0 +1,163 @@
+{
+  "status": "PASS",
+  "n": 80,
+  "gas": {
+    "n": 80,
+    "mean": 1866411,
+    "median": 1866414.0,
+    "min": 1866402,
+    "max": 1866414,
+    "sample_sd": 5.228936043967141,
+    "p95_nearest_rank": 1866414
+  },
+  "latency_ms": {
+    "n": 80,
+    "mean": 866.86830125,
+    "median": 859.14315,
+    "min": 836.8279,
+    "max": 991.14,
+    "sample_sd": 30.689541568037917,
+    "p95_nearest_rank": 954.6735
+  },
+  "perLevel": [
+    {
+      "candidate_count": 2,
+      "n": 20,
+      "gas": {
+        "n": 20,
+        "mean": 1866402,
+        "median": 1866402.0,
+        "min": 1866402,
+        "max": 1866402,
+        "sample_sd": 0.0,
+        "p95_nearest_rank": 1866402
+      },
+      "latency_ms": {
+        "n": 20,
+        "mean": 865.02111,
+        "median": 858.9264499999999,
+        "min": 844.7939,
+        "max": 948.7187,
+        "sample_sd": 23.340039344505232,
+        "p95_nearest_rank": 899.42
+      },
+      "calldata_bytes_unique": [
+        2340
+      ],
+      "calldata_zero_bytes_unique": [
+        10
+      ],
+      "calldata_nonzero_bytes_unique": [
+        2330
+      ],
+      "gas_unique": [
+        1866402
+      ]
+    },
+    {
+      "candidate_count": 4,
+      "n": 20,
+      "gas": {
+        "n": 20,
+        "mean": 1866414,
+        "median": 1866414.0,
+        "min": 1866414,
+        "max": 1866414,
+        "sample_sd": 0.0,
+        "p95_nearest_rank": 1866414
+      },
+      "latency_ms": {
+        "n": 20,
+        "mean": 874.816695,
+        "median": 862.99095,
+        "min": 836.8279,
+        "max": 991.14,
+        "sample_sd": 43.828457692936816,
+        "p95_nearest_rank": 966.2831
+      },
+      "calldata_bytes_unique": [
+        2340
+      ],
+      "calldata_zero_bytes_unique": [
+        9
+      ],
+      "calldata_nonzero_bytes_unique": [
+        2331
+      ],
+      "gas_unique": [
+        1866414
+      ]
+    },
+    {
+      "candidate_count": 8,
+      "n": 20,
+      "gas": {
+        "n": 20,
+        "mean": 1866414,
+        "median": 1866414.0,
+        "min": 1866414,
+        "max": 1866414,
+        "sample_sd": 0.0,
+        "p95_nearest_rank": 1866414
+      },
+      "latency_ms": {
+        "n": 20,
+        "mean": 864.57226,
+        "median": 858.4957999999999,
+        "min": 844.0336,
+        "max": 954.6735,
+        "sample_sd": 23.813502685404966,
+        "p95_nearest_rank": 884.1748
+      },
+      "calldata_bytes_unique": [
+        2340
+      ],
+      "calldata_zero_bytes_unique": [
+        9
+      ],
+      "calldata_nonzero_bytes_unique": [
+        2331
+      ],
+      "gas_unique": [
+        1866414
+      ]
+    },
+    {
+      "candidate_count": 16,
+      "n": 20,
+      "gas": {
+        "n": 20,
+        "mean": 1866414,
+        "median": 1866414.0,
+        "min": 1866414,
+        "max": 1866414,
+        "sample_sd": 0.0,
+        "p95_nearest_rank": 1866414
+      },
+      "latency_ms": {
+        "n": 20,
+        "mean": 863.06314,
+        "median": 858.42375,
+        "min": 841.8053,
+        "max": 975.3679,
+        "sample_sd": 28.150422345067643,
+        "p95_nearest_rank": 881.9232
+      },
+      "calldata_bytes_unique": [
+        2340
+      ],
+      "calldata_zero_bytes_unique": [
+        9
+      ],
+      "calldata_nonzero_bytes_unique": [
+        2331
+      ],
+      "gas_unique": [
+        1866414
+      ]
+    }
+  ],
+  "p95Definition": "nearest-rank ceil(0.95*n)",
+  "sampleSdDefinition": "sample standard deviation (n-1 denominator)",
+  "inferentialRegressionPerformed": false
+}

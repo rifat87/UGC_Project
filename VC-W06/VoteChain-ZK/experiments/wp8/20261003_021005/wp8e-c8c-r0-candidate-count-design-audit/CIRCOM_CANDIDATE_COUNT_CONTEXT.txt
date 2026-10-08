@@ -1,0 +1,135 @@
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom
+SHA256=8323685caa5149d98dab9790ffae9e00b10e3e6098ae7b626df748901e99c66e
+======================================================================
+1-pragma circom 2.2.0;
+2-
+3-include "./lib/VoteChainVoteCore.circom";
+4-
+5-/*
+6- * DIRECT ciphertext binding.
+7- *
+8: * All submitted ciphertext coordinates are Groth16 public inputs.
+9- */
+10-
+11-template VoteChainVoteDirect(
+12:    MAX_CANDIDATES,
+13-    MERKLE_DEPTH
+14-) {
+15-    signal input secret;
+16-
+17-    signal input siblings[MERKLE_DEPTH];
+18-    signal input pathBits[MERKLE_DEPTH];
+19-
+20:    signal input bit[MAX_CANDIDATES];
+21:    signal input randomness[MAX_CANDIDATES];
+22-
+23-    signal input eligibleRoot;
+24-
+25-    signal input electionId;
+26-    signal input candidateManifestHash;
+27:    signal input candidateCount;
+28-    signal input contractDomain;
+29-
+30-    signal input Yx;
+31-    signal input Yy;
+32-
+33-    signal input electionContextHash;
+34-    signal input nullifier;
+35-
+36:    signal input Rx[MAX_CANDIDATES];
+37:    signal input Ry[MAX_CANDIDATES];
+38:    signal input Sx[MAX_CANDIDATES];
+39:    signal input Sy[MAX_CANDIDATES];
+40-
+41-    component core =
+42-        VoteChainVoteCore(
+43:            MAX_CANDIDATES,
+44-            MERKLE_DEPTH
+45-        );
+46-
+47-    core.secret <==
+48-        secret;
+49-
+50-    core.eligibleRoot <==
+51-        eligibleRoot;
+52-
+53-    core.electionId <==
+54-        electionId;
+55-
+56-    core.candidateManifestHash <==
+57-        candidateManifestHash;
+58-
+59:    core.candidateCount <==
+60:        candidateCount;
+61-
+62-    core.contractDomain <==
+63-        contractDomain;
+64-
+65-    core.Yx <==
+66-        Yx;
+67-
+68-    core.Yy <==
+69-        Yy;
+70-
+--
+85-        core.pathBits[d] <==
+86-            pathBits[d];
+87-    }
+88-
+89-    /*
+90-     * Circom component rule:
+91-     * initialize every core input before reading any core output.
+92-     */
+93-    for (
+94-        var j = 0;
+95:        j < MAX_CANDIDATES;
+96-        j++
+97-    ) {
+98-        core.bit[j] <==
+99-            bit[j];
+100-
+101-        core.randomness[j] <==
+102-            randomness[j];
+103-    }
+104-
+105-    for (
+106-        var k = 0;
+107:        k < MAX_CANDIDATES;
+108-        k++
+109-    ) {
+110-        Rx[k] ===
+111-            core.Rx[k];
+112-
+113-        Ry[k] ===
+114-            core.Ry[k];
+115-
+116-        Sx[k] ===
+117-            core.Sx[k];
+--
+119-        Sy[k] ===
+120-            core.Sy[k];
+121-    }
+122-}
+123-
+124-component main {
+125-    public [
+126-        eligibleRoot,
+127-        electionId,
+128-        candidateManifestHash,
+129:        candidateCount,
+130-        contractDomain,
+131-        Yx,
+132-        Yy,
+133-        electionContextHash,
+134-        nullifier,
+135-        Rx,
+136-        Ry,
+137-        Sx,
+138-        Sy
+139-    ]
+140-} = VoteChainVoteDirect(
+141:    VC_MAX_CANDIDATES(),
+142-    VC_MERKLE_DEPTH()
+143-);
+

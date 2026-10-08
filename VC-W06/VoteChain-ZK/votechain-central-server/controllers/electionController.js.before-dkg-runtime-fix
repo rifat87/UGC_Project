@@ -1,0 +1,272 @@
+import Candidate from "../models/Candidate.js"
+
+import {
+  getContract,
+} from "../utils/contract.js"
+
+import {
+  buildPublicElectionData,
+} from "../services/electionDataService.js"
+
+import {
+  createElectionRecord,
+} from "../services/elections/electionLifecycleService.js"
+
+import {
+  storeElectionTrusteeTranscript,
+} from "../services/elections/electionTrusteeService.js"
+
+import {
+  startElectionLifecycle,
+} from "../services/elections/electionStartService.js"
+
+function lifecycleStatus(
+  error,
+) {
+  if (
+    error.code ===
+      "ELECTION_NOT_FOUND"
+  ) {
+    return 404
+  }
+
+  if (
+    [
+      "INVALID_DKG_TRANSCRIPT",
+      "DKG_CEREMONY_MISMATCH",
+    ].includes(
+      error.code,
+    )
+  ) {
+    return 400
+  }
+
+  if (
+    [
+      "ELECTION_IN_PROGRESS",
+      "ELECTION_NOT_IN_REGISTRATION",
+      "ELECTION_ADMIN_MISMATCH",
+      "ELECTION_CANNOT_START",
+      "TRUSTEE_TRANSCRIPT_REQUIRED",
+      "START_IN_PROGRESS",
+      "CURRENT_ELECTION_MISMATCH",
+      "SNAPSHOT_NOT_READY",
+      "CHAIN_ID_MISMATCH",
+      "DEPLOYER_ADMIN_MISMATCH",
+      "DIRECT_ADMIN_MISMATCH",
+      "DIRECT_VERIFIER_MISMATCH",
+      "CONTRACT_CONFIG_MISMATCH",
+      "TRUSTEE_TRANSCRIPT_MISMATCH",
+      "DIRECT_PHASE_INVALID",
+      "CHAIN_STATE_LOST",
+    ].includes(
+      error.code,
+    )
+  ) {
+    return 409
+  }
+
+  return 500
+}
+
+const getElectionData =
+  async (_req, res) => {
+    try {
+      const candidateRecords =
+        await Candidate
+          .find({
+            candidateId: {
+              $exists: true,
+            },
+          })
+          .sort({
+            candidateId: 1,
+          })
+          .lean()
+
+      const data =
+        await buildPublicElectionData({
+          candidateRecords,
+          contract:
+            getContract(),
+        })
+
+      return res.json({
+        success: true,
+        data,
+      })
+    } catch (error) {
+      console.error(
+        "Error fetching public election data:",
+        error.message,
+      )
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch election data",
+      })
+    }
+  }
+
+const createElection =
+  async (req, res) => {
+    try {
+      const election =
+        await createElectionRecord({
+          adminAddress:
+            req.voteChainAdmin
+              .address,
+        })
+
+      return res.status(201).json({
+        success: true,
+        message:
+          "Election created; registration is open",
+        data: {
+          electionId:
+            election.electionId,
+          status:
+            election.status,
+          chainId:
+            election.chainId,
+          createdAt:
+            election.createdAt,
+        },
+      })
+    } catch (error) {
+      if (
+        error.code ===
+          "ELECTION_IN_PROGRESS"
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            error.message,
+        })
+      }
+
+      console.error(
+        "Election creation failed:",
+        error.message,
+      )
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to create election",
+      })
+    }
+  }
+
+const setTrusteeTranscript =
+  async (req, res) => {
+    try {
+      const transcript =
+        req.body
+          ?.transcript
+
+      const result =
+        await storeElectionTrusteeTranscript({
+          electionId:
+            req.params
+              .electionId,
+
+          transcript,
+
+          adminAddress:
+            req.voteChainAdmin
+              .address,
+        })
+
+      return res.json({
+        success: true,
+        message:
+          "WP6 public trustee transcript verified and stored",
+        data: {
+          electionId:
+            result
+              .election
+              .electionId,
+
+          trusteeTranscriptHash:
+            result
+              .transcriptHash,
+
+          Yx:
+            result.Yx,
+
+          Yy:
+            result.Yy,
+        },
+      })
+    } catch (error) {
+      const status =
+        lifecycleStatus(
+          error,
+        )
+
+      console.error(
+        "Trustee transcript failed:",
+        error.message,
+      )
+
+      return res.status(
+        status,
+      ).json({
+        success: false,
+        message:
+          status === 500
+            ? "Failed to store trustee transcript"
+            : error.message,
+      })
+    }
+  }
+
+const startElection =
+  async (req, res) => {
+    try {
+      const data =
+        await startElectionLifecycle({
+          electionId:
+            req.params
+              .electionId,
+        })
+
+      return res.json({
+        success: true,
+        message:
+          data.alreadyActive
+            ? "Election is already active"
+            : "Election snapshot, deployment, configuration and activation completed",
+        data,
+      })
+    } catch (error) {
+      const status =
+        lifecycleStatus(
+          error,
+        )
+
+      console.error(
+        "Election start failed:",
+        error.message,
+      )
+
+      return res.status(
+        status,
+      ).json({
+        success: false,
+        message:
+          status === 500
+            ? "Failed to start election"
+            : error.message,
+      })
+    }
+  }
+
+export default {
+  getElectionData,
+  createElection,
+  setTrusteeTranscript,
+  startElection,
+}

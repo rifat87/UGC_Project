@@ -1,0 +1,50 @@
+WP8E C8C-R4B1 EXISTING MANIFEST CONVENTION BOUNDARY
+====================================================
+
+The failed C8C-R4B run is preserved and is not silently rerun.
+
+Its failure occurred before the proposed protocol supplement was frozen.
+
+Failure class:
+
+NODE ESM module resolution for circomlibjs.
+
+It is not:
+
+- an active circuit failure;
+- a Groth16 proof failure;
+- an on-chain transaction failure;
+- a Solidity/verifier failure.
+
+A more important fact was discovered before that HOLD:
+
+crypto/config/wp5-application-profile.json already defines an application
+candidate-manifest convention:
+
+POSEIDON_INDEXED_CHAIN_V1
+
+It also defines:
+
+- synthetic candidate IDs 101..116;
+- one-shot K16 support = false;
+- one-shot K16 error = Invalid poseidon size;
+- an index base;
+- a length-bound construction;
+- a frozen manifest16 value.
+
+Therefore the abandoned R4B proposal:
+
+Poseidon16(paddedCandidateIds) followed by Poseidon3(...)
+
+must NOT be treated as frozen or canonical.
+
+No new candidate-manifest construction will be invented while an existing
+repository convention remains available for source resolution.
+
+The next gate may freeze a runtime candidateCount supplement only after the
+exact POSEIDON_INDEXED_CHAIN_V1 recurrence/input order and its manifest16
+value have been independently reproduced from source.
+
+No active cryptographic artifact changes in this diagnostic.
+No Groth16 proof is generated.
+No candidate-matrix transaction is submitted.

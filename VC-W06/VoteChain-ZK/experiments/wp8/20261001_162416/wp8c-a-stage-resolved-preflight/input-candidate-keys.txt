@@ -1,0 +1,12 @@
+SCORE=13
+PATH=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp5\20260930_195059\wp5b-compatibility\wp5b-k16-input.json
+KEYS=Rx,Ry,Sx,Sy,Yx,Yy,bit,candidateCount,candidateManifestHash,contractDomain,electionContextHash,electionId,eligibleRoot,nullifier,pathBits,randomness,secret,siblings
+
+SCORE=7
+PATH=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_valid_final.json
+KEYS=Rx,Ry,Sx,Sy,Yx,Yy,bit,r
+
+SCORE=7
+PATH=D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\circuits\poc\input_elgamal_invalid_bit_final.json
+KEYS=Rx,Ry,Sx,Sy,Yx,Yy,bit,r
+

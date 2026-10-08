@@ -1,0 +1,4 @@
+
+> setup:zk
+> bash scripts/setup-zk-deps.sh
+

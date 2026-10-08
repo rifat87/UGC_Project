@@ -1,0 +1,17 @@
+{
+  "publicIdentity": {
+    "trusteeId": 5,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BMMUQ7JjbeaLVqAMH0PK3T5M1C7UCAMo5/2qH08+4f2Shq+yWtKeBaSE/BGFL5hfcVBviKNJAd1oq8DIailJRgA="
+  },
+  "privateCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "zA3XGn619Sg/xhl09uyJ7g==",
+    "iv": "q39OsPXr181K3pMN",
+    "aad": "15786533177717101073643042000645206797721030203528221512980381505658448079189|transport-private|5",
+    "ciphertext": "EjZmgjt2SW6nvPqdwyZvE4nZDGMHFOqRdAq4a3d5mEFMRUjMGWuB4JoKeGE=",
+    "authTag": "3bFZLZHkZTnXkI9F96ZEXw=="
+  }
+}

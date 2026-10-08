@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_ELIGIBLE_SET_SCALING_STATISTICS_POLICY",
+  "eligibleSetLevels": [10, 100, 1000, 10000],
+  "configuredMerkleDepth": 17,
+  "candidateCount": 16,
+  "pilotExcluded": true,
+  "warmupExcluded": true,
+  "measuredObservationsPerN": 20,
+  "primaryMetrics": [
+    "M1_ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+    "M2_MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+    "M3_CIRCUIT_WITNESS_GENERATION_MS",
+    "M4_GROTH16_PROVE_MS",
+    "M5_GROTH16_VERIFY_MS"
+  ],
+  "statisticsPerNPerMetric": [
+    "n",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sample SD",
+    "nearest-rank p95"
+  ],
+  "nearestRankP95ForN20": {
+    "rankOneIndexed": 19,
+    "rule": "ceil(0.95 * n)"
+  },
+  "outlierDeletion": "NONE",
+  "automaticRetry": false,
+  "failedCampaignPolicy": "preserve failure and stop; never silently replace failed observations",
+  "interpretation": "descriptive scaling only",
+  "regressionClaimAuthorized": false,
+  "causalOpcodeClaimAuthorized": false,
+  "purePathExtractionTimingClaimAuthorized": false,
+  "onchainEligibleSetScalingClaimAuthorized": false,
+  "reportNAndDepthTogether": true,
+  "localVsPublishedBiometricIoTDirectLatencyComparisonAuthorized": false
+}

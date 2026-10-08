@@ -1,0 +1,39 @@
+========================================================================
+WORKSPACE=BACKEND
+DIRECT_PACKAGE=express
+DECLARED_RANGE=^4.18.2
+SEVERITY=high
+VULNERABLE_RANGE=4.0.0-rc1 - 4.22.2 || 5.0.0-alpha.1 - 5.0.1
+FIX_AVAILABLE=true
+
+DIRECT_PACKAGE=mongoose
+DECLARED_RANGE=^7.0.3
+SEVERITY=high
+VULNERABLE_RANGE=7.0.0 - 7.8.9
+FIX_AVAILABLE=true
+
+DIRECT_PACKAGE=validator
+DECLARED_RANGE=^13.9.0
+SEVERITY=high
+VULNERABLE_RANGE=<=13.15.20
+FIX_AVAILABLE=true
+
+DIRECT_CRITICAL_HIGH_COUNT=3
+========================================================================
+WORKSPACE=FRONTEND
+DIRECT_PACKAGE=postcss
+DECLARED_RANGE=^8.4.35
+SEVERITY=high
+VULNERABLE_RANGE=<=8.5.22
+FIX_AVAILABLE=true
+
+DIRECT_PACKAGE=react-router-dom
+DECLARED_RANGE=^6.22.1
+SEVERITY=high
+VULNERABLE_RANGE=6.0.0-alpha.0 - 6.30.2
+FIX_AVAILABLE=true
+
+DIRECT_CRITICAL_HIGH_COUNT=2
+========================================================================
+WORKSPACE=CRYPTO
+DIRECT_CRITICAL_HIGH_COUNT=0

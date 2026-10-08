@@ -1,0 +1,38 @@
+0282: def extract_address(text):
+0283:     try:
+0284:         obj = json.loads(text)
+0285: 
+0286:         for key in (
+0287:             "deployedTo",
+0288:             "deployed_to",
+0289:             "address",
+0290:             "contractAddress",
+0291:             "contract_address",
+0292:         ):
+0293:             value = obj.get(key)
+0294: 
+0295:             if (
+0296:                 isinstance(
+0297:                     value,
+0298:                     str,
+0299:                 )
+0300:                 and re.fullmatch(
+0301:                     r"0x[a-fA-F0-9]{40}",
+0302:                     value,
+0303:                 )
+0304:             ):
+0305:                 return value
+0306:     except Exception:
+0307:         pass
+0308: 
+0309:     m = re.search(
+0310:         r"0x[a-fA-F0-9]{40}",
+0311:         text,
+0312:     )
+0313: 
+0314:     if m:
+0315:         return m.group(0)
+0316: 
+0317:     raise RuntimeError(
+0318:         "could not parse deployed address"
+0319:     )

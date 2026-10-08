@@ -1,0 +1,131 @@
+
+        for (
+            uint256 i = 0;
+            i < MAX;
+            i++
+        ) {
+            input[
+                offset + i
+            ] =
+                ry[i];
+        }
+
+        offset += MAX;
+
+        for (
+            uint256 i = 0;
+            i < MAX;
+            i++
+        ) {
+            input[
+                offset + i
+            ] =
+                sx[i];
+        }
+
+        offset += MAX;
+
+        for (
+            uint256 i = 0;
+            i < MAX;
+            i++
+        ) {
+            input[
+                offset + i
+            ] =
+                sy[i];
+        }
+    }
+
+    function castVote(
+        uint256[2] calldata a,
+        uint256[2][2] calldata b,
+        uint256[2] calldata c,
+        uint256 nullifier,
+        uint256[16] calldata rx,
+        uint256[16] calldata ry,
+        uint256[16] calldata sx,
+        uint256[16] calldata sy
+    )
+        external
+    {
+        require(
+            phase == Phase.Active,
+            "NOT_ACTIVE"
+        );
+
+        require(
+            !usedNullifier[
+                nullifier
+            ],
+            "NULLIFIER_USED"
+        );
+
+        _requireCanonicalCiphertext(
+            rx,
+            ry,
+            sx,
+            sy
+        );
+
+        uint256[73] memory input =
+            _buildInputs(
+                nullifier,
+                rx,
+                ry,
+                sx,
+                sy
+            );
+
+        require(
+            verifier.verifyProof(
+                a,
+                b,
+                c,
+                input
+            ),
+            "INVALID_PROOF"
+        );
+
+        _accept(
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+}
+
+contract VoteChainPoseidon is
+    VoteChainBase
+{
+    IVerifierDigest
+        public immutable verifier;
+
+    address
+        public immutable poseidon5;
+
+    constructor(
+        address verifierAddress,
+        address poseidonAddress
+    ) {
+        require(
+            verifierAddress !=
+                address(0),
+            "ZERO_VERIFIER"
+        );
+
+        require(
+            poseidonAddress !=
+                address(0),
+            "ZERO_POSEIDON"
+        );
+
+        verifier =
+            IVerifierDigest(
+                verifierAddress
+            );
+
+        poseidon5 =
+            poseidonAddress;

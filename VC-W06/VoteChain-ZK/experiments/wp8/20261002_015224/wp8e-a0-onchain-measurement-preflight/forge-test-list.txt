@@ -1,0 +1,24 @@
+No files changed, compilation skipped
+test/VoteChainWP4.t.sol
+  VoteChainWP4Test
+    testDirectTwoVotersSameWalletAndTally
+    testDuplicateNullifierRejected
+    testElectionConfigBindingRejected
+    testInvalidProofCausesNoStateChange
+    testLifecycleAndConfigFreeze
+    testPoseidonEvmMatchesCircuitVector
+    testPoseidonFullBindingDigest
+    testPoseidonTwoVotersSameWalletAndTally
+    testTamperedCiphertextRejectedBothBindings
+    testZZGasGate
+
+test/VoteChainWP6B.t.sol
+  VoteChainWP6BTest
+    testBadSumRejected
+    testDuplicateFinalizationRejected
+    testFinalizeBeforeEndedRejected
+    testFinalizeWithoutPinnedTranscriptRejected
+    testPaddedResultRejected
+    testTranscriptPinFrozenAfterFirstSet
+    testValidFinalization
+

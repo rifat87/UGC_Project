@@ -1,0 +1,387 @@
+Task: VC-W01
+Contract: LocalVoting — cleaned non-ZKP baseline
+Artifact type: Successful Foundry verification, gas report, and contract-size record
+Verification date: 2026-08-18
+Environment: Windows / MINGW64 (user-run verification)
+Solidity compiler observed: Solc 0.8.17
+
+VERIFICATION SUMMARY
+====================
+
+Commands executed:
+- forge build
+- forge fmt --check
+- forge test -vv
+- forge test --gas-report
+- forge build --sizes
+
+Build result:
+- Successful compilation with warnings only.
+
+Formatting result:
+- forge fmt --check completed with no formatting errors/output.
+
+Test result:
+- 33 passed
+- 0 failed
+- 0 skipped
+
+Required frozen-wallet regression test:
+- test_OneNonAdminWalletCanSubmitVotesForMultipleVoterHashes: PASS
+
+Gas report — LocalVoting:
+- Deployment Cost: 1,169,536 gas
+- Deployment Size: 5,282 bytes
+- castVote average: 52,878 gas
+- registerCandidate average: 58,007 gas
+- registerVoter average: 55,037 gas
+- startElection average: 26,423 gas
+- endElection average: 25,939 gas
+
+Contract size (forge build --sizes):
+- Runtime Size: 5,092 bytes
+- Initcode Size: 5,282 bytes
+- Runtime Margin: 19,484 bytes
+- Initcode Margin: 43,870 bytes
+
+Notes:
+- Compiler/lint warnings are preserved in the raw output below.
+- No gas values have been inferred or fabricated; all measurements below come from the user-supplied Foundry run.
+- The raw terminal transcript is copied faithfully after this summary for reproducibility.
+
+RAW FOUNDRY OUTPUT
+==================
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ forge build
+[⠊] Compiling...
+[⠔] Compiling 22 files with Solc 0.8.17
+[⠑] Solc 0.8.17 finished in 1.44s
+Compiler run successful with warnings:
+Warning (2072): Unused local variable.
+  --> script/LocalDeployVoting.s.sol:10:9:
+   |
+10 |         LocalVoting voting = new LocalVoting();
+   |         ^^^^^^^^^^^^^^^^^^
+
+Warning (2018): Function state mutability can be restricted to view
+  --> test/LocalVotingTest.t.sol:34:5:
+   |
+34 |     function test_DeploymentSetsElectionCommission() public {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning (2018): Function state mutability can be restricted to view
+  --> test/LocalVotingTest.t.sol:38:5:
+   |
+38 |     function test_InitialStateIsRegistration() public {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\LocalVotingTest.t.sol:4:8
+  |
+4 | import "forge-std/Test.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:32:5
+   |
+32 | /     modifier onlyCommission() {
+33 | |         require(msg.sender == electionCommission, "Only Election Commission can call this function");
+34 | |         _;
+35 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+32 ~     modifier onlyCommission() {
+33 +         _onlyCommission();
+34 +         _;
+35 +     }
+36 + 
+37 +     function _onlyCommission() internal {
+38 +         require(msg.sender == electionCommission, "Only Election Commission can call this function");
+39 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\LocalVotingTest.t.sol:5:8
+  |
+5 | import "../src/LocalVoting.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:37:5
+   |
+37 | /     modifier onlyRegistration() {
+38 | |         require(state == ElectionState.Registration, "Election is not in Registration state");
+39 | |         _;
+40 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+37 ~     modifier onlyRegistration() {
+38 +         _onlyRegistration();
+39 +         _;
+40 +     }
+41 + 
+42 +     function _onlyRegistration() internal {
+43 +         require(state == ElectionState.Registration, "Election is not in Registration state");
+44 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:42:5
+   |
+42 | /     modifier onlyActive() {
+43 | |         require(state == ElectionState.Active, "Election is not Active");
+44 | |         _;
+45 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+42 ~     modifier onlyActive() {
+43 +         _onlyActive();
+44 +         _;
+45 +     }
+46 + 
+47 +     function _onlyActive() internal {
+48 +         require(state == ElectionState.Active, "Election is not Active");
+49 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ forge fmt --check
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ forge test -vv
+[⠊] Compiling...
+No files changed, compilation skipped
+
+Ran 33 tests for test/LocalVotingTest.t.sol:LocalVotingTest
+[PASS] test_CastVote_IncrementsExactlyOneCandidateTally() (gas: 190069)
+[PASS] test_CastVote_SuccessDuringActive() (gas: 163224)
+[PASS] test_DeploymentSetsElectionCommission() (gas: 13429)
+[PASS] test_EndElection_Success() (gas: 17075)
+[PASS] test_GasReport() (gas: 159752)
+[PASS] test_InitialStateIsRegistration() (gas: 13316)
+[PASS] test_OneNonAdminWalletCanSubmitVotesForMultipleVoterHashes() (gas: 266616)
+[PASS] test_RegisterCandidate_IncrementsCount() (gas: 86394)
+[PASS] test_RegisterCandidate_Success() (gas: 65469)
+[PASS] test_RegisterVoter_IncrementsCount() (gas: 85909)
+[PASS] test_RegisterVoter_Success() (gas: 65998)
+[PASS] test_RevertWhen_EndingBeforeActive() (gas: 11556)
+[PASS] test_RevertWhen_EndingElectionTwice() (gas: 17368)
+[PASS] test_RevertWhen_GetVoteCountForInvalidCandidate() (gas: 12050)
+[PASS] test_RevertWhen_InvalidCandidate() (gas: 69902)
+[PASS] test_RevertWhen_NonCommissionEndsElection() (gas: 18326)
+[PASS] test_RevertWhen_NonCommissionRegistersCandidate() (gas: 14489)
+[PASS] test_RevertWhen_NonCommissionRegistersVoter() (gas: 16566)
+[PASS] test_RevertWhen_NonCommissionStartsElection() (gas: 14097)
+[PASS] test_RevertWhen_RegisteringCandidateAfterActivation() (gas: 16325)
+[PASS] test_RevertWhen_RegisteringCandidateAfterElectionEnd() (gas: 17864)
+[PASS] test_RevertWhen_RegisteringDuplicateCandidate() (gas: 62676)
+[PASS] test_RevertWhen_RegisteringDuplicateVoter() (gas: 62500)
+[PASS] test_RevertWhen_RegisteringInvalidVoterHash() (gas: 11937)
+[PASS] test_RevertWhen_RegisteringVoterAfterActivation() (gas: 18402)
+[PASS] test_RevertWhen_RegisteringVoterAfterElectionEnd() (gas: 19963)
+[PASS] test_RevertWhen_StartingElectionTwice() (gas: 15978)
+[PASS] test_RevertWhen_UnregisteredVoter() (gas: 72303)
+[PASS] test_RevertWhen_VoterVotesTwice() (gas: 162304)
+[PASS] test_RevertWhen_VotingAfterEnded() (gas: 117669)
+[PASS] test_RevertWhen_VotingBeforeActive() (gas: 111955)
+[PASS] test_StartElection_Success() (gas: 15514)
+[PASS] test_StateCannotReturnToPreviousPhase() (gas: 19509)
+Suite result: ok. 33 passed; 0 failed; 0 skipped; finished in 10.45ms (36.56ms CPU time)
+
+Ran 1 test suite in 37.25ms (10.45ms CPU time): 33 tests passed, 0 failed, 0 skipped (33 total tests)
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ forge test --gas-report
+[⠊] Compiling...
+No files changed, compilation skipped
+
+Ran 33 tests for test/LocalVotingTest.t.sol:LocalVotingTest
+[PASS] test_CastVote_IncrementsExactlyOneCandidateTally() (gas: 333133)
+[PASS] test_CastVote_SuccessDuringActive() (gas: 278284)
+[PASS] test_DeploymentSetsElectionCommission() (gas: 13429)
+[PASS] test_EndElection_Success() (gas: 66003)
+[PASS] test_GasReport() (gas: 283176)
+[PASS] test_InitialStateIsRegistration() (gas: 22316)
+[PASS] test_OneNonAdminWalletCanSubmitVotesForMultipleVoterHashes() (gas: 489772)
+[PASS] test_RegisterCandidate_IncrementsCount() (gas: 137602)
+[PASS] test_RegisterCandidate_Success() (gas: 110673)
+[PASS] test_RegisterVoter_IncrementsCount() (gas: 137861)
+[PASS] test_RegisterVoter_Success() (gas: 107574)
+[PASS] test_RevertWhen_EndingBeforeActive() (gas: 32620)
+[PASS] test_RevertWhen_EndingElectionTwice() (gas: 87360)
+[PASS] test_RevertWhen_GetVoteCountForInvalidCandidate() (gas: 12050)
+[PASS] test_RevertWhen_InvalidCandidate() (gas: 138270)
+[PASS] test_RevertWhen_NonCommissionEndsElection() (gas: 62454)
+[PASS] test_RevertWhen_NonCommissionRegistersCandidate() (gas: 35693)
+[PASS] test_RevertWhen_NonCommissionRegistersVoter() (gas: 38142)
+[PASS] test_RevertWhen_NonCommissionStartsElection() (gas: 35161)
+[PASS] test_RevertWhen_RegisteringCandidateAfterActivation() (gas: 60593)
+[PASS] test_RevertWhen_RegisteringCandidateAfterElectionEnd() (gas: 87996)
+[PASS] test_RevertWhen_RegisteringDuplicateCandidate() (gas: 113584)
+[PASS] test_RevertWhen_RegisteringDuplicateVoter() (gas: 114152)
+[PASS] test_RevertWhen_RegisteringInvalidVoterHash() (gas: 33129)
+[PASS] test_RevertWhen_RegisteringVoterAfterActivation() (gas: 63042)
+[PASS] test_RevertWhen_RegisteringVoterAfterElectionEnd() (gas: 90467)
+[PASS] test_RevertWhen_StartingElectionTwice() (gas: 60106)
+[PASS] test_RevertWhen_UnregisteredVoter() (gas: 142287)
+[PASS] test_RevertWhen_VoterVotesTwice() (gas: 289580)
+[PASS] test_RevertWhen_VotingAfterEnded() (gas: 235093)
+[PASS] test_RevertWhen_VotingBeforeActive() (gas: 180451)
+[PASS] test_StartElection_Success() (gas: 38578)
+[PASS] test_StateCannotReturnToPreviousPhase() (gas: 94001)
+Suite result: ok. 33 passed; 0 failed; 0 skipped; finished in 20.47ms (63.18ms CPU time)
+
+╭------------------------------------------+-----------------+-------+--------+-------+---------╮
+| src/LocalVoting.sol:LocalVoting Contract |                 |       |        |       |         |
++===============================================================================================+
+| Deployment Cost                          | Deployment Size |       |        |       |         |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| 1169536                                  | 5282            |       |        |       |         |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+|                                          |                 |       |        |       |         |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| Function Name                            | Min             | Avg   | Median | Max   | # Calls |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| candidateCount                           | 2496            | 2496  | 2496   | 2496  | 3       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| candidates                               | 5056            | 5056  | 5056   | 5056  | 1       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| castVote                                 | 24930           | 52878 | 73933  | 73933 | 11      |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| electionCommission                       | 2533            | 2533  | 2533   | 2533  | 1       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| endElection                              | 23727           | 25939 | 26818  | 26818 | 10      |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| getElectionState                         | 2706            | 2706  | 2706   | 2706  | 4       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| getVoteCount                             | 2977            | 4768  | 5067   | 5067  | 7       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| hasVoted                                 | 2864            | 2864  | 2864   | 2864  | 4       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| registerCandidate                        | 24128           | 58007 | 71137  | 71137 | 18      |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| registerVoter                            | 24365           | 55037 | 69198  | 69198 | 18      |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| registeredVoterCount                     | 2453            | 2453  | 2453   | 2453  | 3       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| startElection                            | 23749           | 26423 | 26840  | 26840 | 21      |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| state                                    | 2676            | 2676  | 2676   | 2676  | 1       |
+|------------------------------------------+-----------------+-------+--------+-------+---------|
+| voterEligible                            | 2841            | 2841  | 2841   | 2841  | 1       |
+╰------------------------------------------+-----------------+-------+--------+-------+---------╯
+
+
+Ran 1 test suite in 31.85ms (20.47ms CPU time): 33 tests passed, 0 failed, 0 skipped (33 total tests)
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ forge build --sizes
+[⠊] Compiling...
+No files changed, compilation skipped
+
+╭-------------+------------------+-------------------+--------------------+---------------------╮
+| Contract    | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++===============================================================================================+
+| LocalVoting | 5,092            | 5,282             | 19,484             | 43,870              |
+╰-------------+------------------+-------------------+--------------------+---------------------╯
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:32:5
+   |
+32 | /     modifier onlyCommission() {
+33 | |         require(msg.sender == electionCommission, "Only Election Commission can call this function");
+34 | |         _;
+35 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+32 ~     modifier onlyCommission() {
+33 +         _onlyCommission();
+34 +         _;
+35 +     }
+36 + 
+37 +     function _onlyCommission() internal {
+38 +         require(msg.sender == electionCommission, "Only Election Commission can call this function");
+39 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\LocalVotingTest.t.sol:4:8
+  |
+4 | import "forge-std/Test.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unaliased-plain-import]: use named imports '{A, B}' or alias 'import ".." as X'
+ --> test\LocalVotingTest.t.sol:5:8
+  |
+5 | import "../src/LocalVoting.sol";
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: https://book.getfoundry.sh/reference/forge/forge-lint#unaliased-plain-import
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:37:5
+   |
+37 | /     modifier onlyRegistration() {
+38 | |         require(state == ElectionState.Registration, "Election is not in Registration state");
+39 | |         _;
+40 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+37 ~     modifier onlyRegistration() {
+38 +         _onlyRegistration();
+39 +         _;
+40 +     }
+41 + 
+42 +     function _onlyRegistration() internal {
+43 +         require(state == ElectionState.Registration, "Election is not in Registration state");
+44 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size
+  --> src\LocalVoting.sol:42:5
+   |
+42 | /     modifier onlyActive() {
+43 | |         require(state == ElectionState.Active, "Election is not Active");
+44 | |         _;
+45 | |     }
+   | |_____^
+   |
+help: wrap modifier logic to reduce code size
+   |
+42 ~     modifier onlyActive() {
+43 +         _onlyActive();
+44 +         _;
+45 +     }
+46 + 
+47 +     function _onlyActive() internal {
+48 +         require(state == ElectionState.Active, "Election is not Active");
+49 +     }
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic
+
+
+88018@Rifat87 MINGW64 /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W01/VoteChain_VC-W01_CleanContract/VoteChain
+$ 

@@ -1,0 +1,27 @@
+VC-W02 revised environment limitations - 18 August 2026
+
+Foundry in worker runtime
+- forge is not installed locally.
+- User supplied external MINGW64 evidence: forge fmt --check PASS; forge build PASS; forge test -vv PASS (33 passed, 0 failed, 0 skipped).
+- Frozen VC-W01 files were not modified by the revision.
+
+Real Foundry-output ABI synchronization
+- NOT TESTED in worker runtime.
+- Reason: no forge/out artifact is available locally; node scripts/sync-local-voting-abi.mjs therefore cannot read out/LocalVoting.sol/LocalVoting.json.
+- Packaged frontend/backend ABI files are byte-identical and pass ABI compatibility tests.
+
+Backend dependencies
+- npm ci timed out in the worker environment.
+- npm test -- --runInBand nevertheless PASSed because the focused tests use the dependency-light Node test runner: 12 passed, 0 failed.
+
+Frontend
+- npm ci timed out.
+- npm run build: NOT TESTED / ENVIRONMENT BLOCKED because the partial install lacked required declaration packages.
+- npm run lint: NOT TESTED / ENVIRONMENT BLOCKED because eslint was unavailable after incomplete install.
+
+MongoDB / Anvil smoke flow
+- NOT TESTED: mongod and anvil are unavailable in worker runtime.
+- Migration NOT RUN AGAINST PRODUCTION DATABASE.
+
+Biometrics
+- NOT HARDWARE-TESTED.

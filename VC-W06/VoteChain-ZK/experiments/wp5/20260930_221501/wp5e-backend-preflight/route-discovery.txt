@@ -1,0 +1,28 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:12:import wp5Routes from './routes/wp5Routes.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:13:import { getServerConfig } from './config/env.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:56:app.use('/api/wp5', wp5Routes)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:3:  authorizeFace,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:5:} from '../controllers/wp5Controller.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:6:import fingerprintController from '../controllers/fingerprintController.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:10:router.get('/config', getConfig)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:17:router.post('/authorize/face', authorizeFace)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:19:  '/authorize/fingerprint',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js:20:  fingerprintController.detectWp5Fingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:7:  authorizeWp5Voter,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:9:} from '../services/zk/wp5PrivacyService.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:25:    console.error('[WP5] public config failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:28:      message: 'Unable to load WP5 public configuration',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:33:export async function authorizeFace(req, res) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:44:    console.log('[WP5] Starting candidate-blind face authorization')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:46:    const faceRecPath = path.join(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:48:      '../../votechain-face-recognition/face_rec_demo.py',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:51:    if (!fs.existsSync(faceRecPath)) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:60:      [faceRecPath],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:61:      { cwd: path.dirname(faceRecPath) },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:73:        '[WP5] face-recognition process reported an error',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:91:          outputLower.includes('face recognition successful') ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:127:          await authorizeWp5Voter({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:140:          '[WP5] face authorization failed:',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:157:        '[WP5] Failed to start face recognition:',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:163:        message: 'Failed to launch face recognition',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:167:    console.error('[WP5] authorizeFace error:', error.message)

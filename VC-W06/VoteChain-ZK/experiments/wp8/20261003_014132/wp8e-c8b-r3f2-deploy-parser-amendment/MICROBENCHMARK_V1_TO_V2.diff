@@ -1,0 +1,26 @@
+--- /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_005333/wp8e-c8b-r1-microbenchmark-runner-freeze/runner/wp8e-final-fresh-chain-microbenchmark.py	2026-10-03 00:53:37.776550700 +0600
++++ /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_014132/wp8e-c8b-r3f2-deploy-parser-amendment/microbenchmark-runner-v2/wp8e-final-fresh-chain-microbenchmark-v2.py	2026-10-03 01:41:36.675228800 +0600
+@@ -11,7 +11,7 @@
+ from pathlib import Path
+ 
+ 
+-EXPECTED_V2_SHA = "0b3c77a0581f83cf4cee0215aabb444ddbc739cc6865067f9cde28b8d78f2ed0"
++EXPECTED_V2_SHA = "421854b66fa862a1a6beafb2022bcd113d1bb664d20dd613bbd372de0da5a6c2"
+ EXPECTED_CONFIG_SHA = "6071b3f9f9cc0981593d74e992f81ccb53463f01909c1b33b523a0a96a3b1f39"
+ EXPECTED_SOL_SHA = "c833a70e832ce15cfe9d17c2ca71f202fc8806519514cd6846ba292804904d77"
+ EXPECTED_VERIFIER_SHA = "55b31cad6c02422bf22073abf482516d576d3f3eec0b964d4fecaf4effff7eba"
+@@ -33,11 +33,9 @@
+ TOTAL_FINAL_ITERATIONS = 25
+ 
+ V2_RUNNER_REL = Path(
+-    "experiments/wp8"
+-    "/20261002_223739"
+-    "/wp8e-c6c-r2-runner-v2-freeze"
+-    "/runner-v2"
+-    "/wp8e-final-scaling-runner-v2.py"
++    "experiments/wp8/20261003_014132/wp8e-c8b-r3f2-deploy-parser-amendment"
++    "/runner-v3"
++    "/wp8e-final-scaling-runner-v3.py"
+ )
+ 
+ CONFIG_REL = Path(

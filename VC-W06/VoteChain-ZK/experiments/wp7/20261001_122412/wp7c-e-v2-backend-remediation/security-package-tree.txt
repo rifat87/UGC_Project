@@ -1,0 +1,23 @@
+votechain-central-server@1.0.0 D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\votechain-central-server
+├─┬ circomlibjs@0.1.7
+│ └─┬ ethers@5.8.0
+│   └─┬ @ethersproject/providers@5.8.0
+│     └── ws@8.18.0
+├─┬ ethers@6.17.0
+│ └── ws@8.21.0
+├─┬ express-rate-limit@6.11.2
+│ └── express@4.22.3 deduped
+├─┬ express-validator@7.3.2
+│ ├── lodash@4.18.1
+│ └── validator@13.15.35 deduped
+├─┬ express@4.22.3
+│ ├── body-parser@1.20.8
+│ └── path-to-regexp@0.1.13
+├─┬ jsonwebtoken@9.0.2
+│ └── jws@3.2.3
+├─┬ mongoose@7.8.12
+│ └─┬ mongodb@5.9.2
+│   └─┬ socks@2.8.10
+│     └── ip-address@10.7.2
+└── validator@13.15.35
+

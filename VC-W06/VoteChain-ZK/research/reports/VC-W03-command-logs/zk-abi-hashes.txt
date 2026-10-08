@@ -1,0 +1,3 @@
+15847b22773f3a7d41aae2066e4eed22bde0603a447b484cc155e00fb1e42c1f  votechain-central-server/abi/ZKLocalVoting.json
+15847b22773f3a7d41aae2066e4eed22bde0603a447b484cc155e00fb1e42c1f  votechain-frontend-ts/src/abi/ZKLocalVoting.json
+ZK_ABI_COPIES_IDENTICAL

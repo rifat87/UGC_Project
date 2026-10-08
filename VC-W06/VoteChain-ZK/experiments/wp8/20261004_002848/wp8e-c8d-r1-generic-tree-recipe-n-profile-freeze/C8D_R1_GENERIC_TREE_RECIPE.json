@@ -1,0 +1,113 @@
+{
+  "status": "PASS",
+  "classification": "EXPERIMENT_ONLY_GENERIC_ELIGIBLE_SET_TREE_RECIPE",
+  "notApplicationProtocolChange": true,
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "selectedVoter": {
+    "leafIndex": 0,
+    "secret": "42424242424242",
+    "pathBits": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "identityLeafRecipe": "leaf_i = Poseidon(D_ID, secret_i)",
+  "syntheticAdditionalVoterSecretRecipe": {
+    "scope": "NONPRODUCTION_BENCHMARK_ONLY",
+    "indexRange": "i=1..N-1",
+    "formula": "secret_i = selectedVoterSecret + i"
+  },
+  "populationRecipe": {
+    "occupiedLeafIndices": "0..N-1",
+    "allRemainingLeaves": "empty",
+    "emptyLeafValue": 0
+  },
+  "zeroSubtreeRecipe": {
+    "zero_0": 0,
+    "recurrence": "zero_(level+1) = Poseidon(zero_level, zero_level)"
+  },
+  "treeRecipe": {
+    "depth": 17,
+    "pairHash": "Poseidon(left,right)",
+    "missingNodeValue": "zero[level]",
+    "root": "single level-17 root after sparse population"
+  },
+  "membershipRecipe": {
+    "targetLeafIndex": 0,
+    "pathLength": 17,
+    "pathBits": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "bit0": "Poseidon(current,sibling)",
+    "bit1": "Poseidon(sibling,current)",
+    "requiredValidation": "recomputeRoot(targetLeaf,siblings,pathBits)==eligibleRoot"
+  },
+  "controlledInputMutation": {
+    "mayChangeAcrossN": [
+      "eligibleRoot",
+      "siblings"
+    ],
+    "mustRemainFrozenAcrossN": [
+      "secret",
+      "pathBits",
+      "electionId",
+      "candidateManifestHash",
+      "candidateCount",
+      "contractDomain",
+      "Yx",
+      "Yy",
+      "electionContextHash",
+      "nullifier",
+      "bit",
+      "randomness",
+      "Rx",
+      "Ry",
+      "Sx",
+      "Sy"
+    ]
+  },
+  "interpretation": [
+    "N changes occupied eligible leaves while configured Merkle depth remains 17.",
+    "The target voter remains leaf index 0 with the same private secret and all-zero path direction bits.",
+    "Candidate/election/ElGamal/nullifier basis remains the frozen R5B K16 basis.",
+    "This recipe is an experiment fixture construction, not a change to the active application protocol."
+  ]
+}

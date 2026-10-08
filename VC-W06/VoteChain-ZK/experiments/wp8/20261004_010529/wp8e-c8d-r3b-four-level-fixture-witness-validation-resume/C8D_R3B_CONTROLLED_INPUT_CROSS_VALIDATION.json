@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "levels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "allowedChangedFields": [
+    "eligibleRoot",
+    "siblings"
+  ],
+  "rootsDistinct": true,
+  "records": [
+    {
+      "N": 10,
+      "changedFields": [
+        "siblings",
+        "eligibleRoot"
+      ],
+      "eligibleRoot": "10808214713092482047228606241538523319110633436497162311371414651462813138730",
+      "siblingsLength": 17,
+      "pathBitsLength": 17,
+      "candidateCount": 16,
+      "selectedSecretUnchanged": true
+    },
+    {
+      "N": 100,
+      "changedFields": [
+        "siblings",
+        "eligibleRoot"
+      ],
+      "eligibleRoot": "15966971221913887048395438206170922964811009876860962930096006795624024547697",
+      "siblingsLength": 17,
+      "pathBitsLength": 17,
+      "candidateCount": 16,
+      "selectedSecretUnchanged": true
+    },
+    {
+      "N": 1000,
+      "changedFields": [
+        "siblings",
+        "eligibleRoot"
+      ],
+      "eligibleRoot": "17779567653428992471304250266062683829855228424254382291028280637265957885867",
+      "siblingsLength": 17,
+      "pathBitsLength": 17,
+      "candidateCount": 16,
+      "selectedSecretUnchanged": true
+    },
+    {
+      "N": 10000,
+      "changedFields": [
+        "siblings",
+        "eligibleRoot"
+      ],
+      "eligibleRoot": "17824984607998524213634133139816546926493577631255909258060628030075063946002",
+      "siblingsLength": 17,
+      "pathBitsLength": 17,
+      "candidateCount": 16,
+      "selectedSecretUnchanged": true
+    }
+  ],
+  "proofGenerationStarted": false,
+  "benchmarkTimingStarted": false,
+  "onchainExecutionStarted": false
+}

@@ -1,0 +1,332 @@
+6-include "circomlib/circuits/bitify.circom";
+7-include "circomlib/circuits/comparators.circom";
+8-include "circomlib/circuits/compconstant.circom";
+9-include "circomlib/circuits/gates.circom";
+10-include "circomlib/circuits/babyjub.circom";
+11-include "circomlib/circuits/escalarmulfix.circom";
+12-include "circomlib/circuits/escalarmulany.circom";
+13-
+14-/*
+15- * VoteChain-ZK full voting statement core.
+16- *
+17- * PRIVATE:
+18- *   secret
+19- *   siblings[]
+20- *   pathBits[]
+21- *   bit[]
+22: *   randomness[]
+23- *
+24- * PUBLIC:
+25- *   supplied by wrapper:
+26- *   eligibleRoot
+27- *   electionId
+28- *   candidateManifestHash
+29: *   candidateCount
+30- *   contractDomain
+31- *   Yx/Yy
+32- *   electionContextHash
+33- *   nullifier
+34- *
+35- * Core proves:
+36- *   identity commitment
+37- *   Merkle membership
+38- *   election nullifier
+39- *   election-context binding
+40- *   candidate-count range
+41- *   binary/padded/one-hot ballot
+42- *   BabyJub public-key validation
+43- *   prime-subgroup membership
+44- *   nonzero in-range randomness
+45- *   exponential ElGamal correctness
+46- */
+47-
+48-template VoteChainVoteCore(
+49-    MAX_CANDIDATES,
+50-    MERKLE_DEPTH
+51-) {
+52-    signal input secret;
+53-
+54-    signal input siblings[MERKLE_DEPTH];
+55-    signal input pathBits[MERKLE_DEPTH];
+56-
+57-    signal input bit[MAX_CANDIDATES];
+58:    signal input randomness[MAX_CANDIDATES];
+59-
+60-    signal input eligibleRoot;
+61-
+62-    signal input electionId;
+63-    signal input candidateManifestHash;
+64:    signal input candidateCount;
+65-    signal input contractDomain;
+66-
+67-    signal input Yx;
+68-    signal input Yy;
+69-
+70-    signal input electionContextHash;
+71-    signal input nullifier;
+72-
+73-    signal output Rx[MAX_CANDIDATES];
+74-    signal output Ry[MAX_CANDIDATES];
+75-    signal output Sx[MAX_CANDIDATES];
+76-    signal output Sy[MAX_CANDIDATES];
+77-
+78-    /*
+79-     * Secret must not be zero.
+80-     */
+--
+167-    nullifierHash.inputs[1] <==
+168-        secret;
+169-
+170-    nullifierHash.inputs[2] <==
+171-        electionId;
+172-
+173-    nullifierHash.out ===
+174-        nullifier;
+175-
+176-    /*
+177-     * Bind election configuration:
+178-     *
+179-     * Poseidon(
+180-     *   DOMAIN_ELECTION_CONTEXT,
+181-     *   electionId,
+182-     *   candidateManifestHash,
+183:     *   candidateCount,
+184-     *   contractDomain,
+185-     *   Yx,
+186-     *   Yy
+187-     * )
+188-     */
+189-    component electionContext =
+190-        Poseidon(7);
+191-
+192-    electionContext.inputs[0] <==
+193-        VC_DOMAIN_ELECTION_CONTEXT();
+194-
+195-    electionContext.inputs[1] <==
+196-        electionId;
+197-
+198-    electionContext.inputs[2] <==
+199-        candidateManifestHash;
+200-
+201-    electionContext.inputs[3] <==
+202:        candidateCount;
+203-
+204-    electionContext.inputs[4] <==
+205-        contractDomain;
+206-
+207-    electionContext.inputs[5] <==
+208-        Yx;
+209-
+210-    electionContext.inputs[6] <==
+211-        Yy;
+212-
+213-    electionContext.out ===
+214-        electionContextHash;
+215-
+216-    /*
+217:     * candidateCount:
+218:     *   1 <= candidateCount <= 16
+219-     */
+220:    component candidateCountBits =
+221-        Num2Bits(5);
+222-
+223:    candidateCountBits.in <==
+224:        candidateCount;
+225-
+226:    component candidateCountZero =
+227-        IsZero();
+228-
+229:    candidateCountZero.in <==
+230:        candidateCount;
+231-
+232:    candidateCountZero.out === 0;
+233-
+234:    component candidateCountLt17 =
+235-        LessThan(5);
+236-
+237:    candidateCountLt17.in[0] <==
+238:        candidateCount;
+239-
+240:    candidateCountLt17.in[1] <==
+241-        17;
+242-
+243:    candidateCountLt17.out === 1;
+244-
+245-    /*
+246-     * Validate election public key:
+247-     *
+248-     * 1. on BabyJub curve
+249-     * 2. not identity
+250-     * 3. prime-subgroup member:
+251-     *      subOrder * Y == identity
+252-     */
+253-    component checkY =
+254-        BabyCheck();
+255-
+256-    checkY.x <==
+257-        Yx;
+258-
+259-    checkY.y <==
+--
+289-        Yx;
+290-
+291-    subgroupCheck.p[1] <==
+292-        Yy;
+293-
+294-    /*
+295-     * BabyJub identity = (0, 1)
+296-     */
+297-    subgroupCheck.out[0] === 0;
+298-    subgroupCheck.out[1] === 1;
+299-
+300-    var G[2] = [
+301-        VC_BABYJUB_BASE8_X(),
+302-        VC_BABYJUB_BASE8_Y()
+303-    ];
+304-
+305:    signal bitSum[MAX_CANDIDATES + 1];
+306-
+307:    bitSum[0] <== 0;
+308-
+309:    component active[MAX_CANDIDATES];
+310-
+311-    component zeroR[MAX_CANDIDATES];
+312-    component rBits[MAX_CANDIDATES];
+313-    component rRange[MAX_CANDIDATES];
+314-
+315-    component rG[MAX_CANDIDATES];
+316-    component rY[MAX_CANDIDATES];
+317-    component addPoint[MAX_CANDIDATES];
+318-
+319:    signal messageX[MAX_CANDIDATES];
+320:    signal messageY[MAX_CANDIDATES];
+321-
+322-    for (
+323-        var j = 0;
+324-        j < MAX_CANDIDATES;
+325-        j++
+326-    ) {
+327-        /*
+328-         * bit[j] is Boolean.
+329-         */
+330-        bit[j] *
+331-        (
+332-            bit[j] - 1
+333-        ) === 0;
+334-
+335-        /*
+336:         * active[j] = (j < candidateCount)
+337-         */
+338:        active[j] =
+339-            LessThan(5);
+340-
+341:        active[j].in[0] <==
+342-            j;
+343-
+344:        active[j].in[1] <==
+345:            candidateCount;
+346-
+347-        /*
+348:         * Padding slots must be zero.
+349-         */
+350-        bit[j] *
+351-        (
+352-            1 -
+353:            active[j].out
+354-        ) === 0;
+355-
+356:        bitSum[j + 1] <==
+357:            bitSum[j] +
+358-            bit[j];
+359-
+360-        /*
+361:         * 1 <= randomness[j] < BabyJub subOrder
+362-         */
+363-        zeroR[j] =
+364-            IsZero();
+365-
+366-        zeroR[j].in <==
+367:            randomness[j];
+368-
+369-        zeroR[j].out === 0;
+370-
+371-        rBits[j] =
+372-            Num2Bits(253);
+373-
+374-        rBits[j].in <==
+375:            randomness[j];
+376-
+377-        rRange[j] =
+378-            CompConstant(
+379-                VC_BABYJUB_SUBORDER_MINUS_ONE()
+380-            );
+381-
+382-        for (
+383-            var rb = 0;
+384-            rb < 253;
+385-            rb++
+386-        ) {
+387-            rRange[j].in[rb] <==
+388-                rBits[j].out[rb];
+389-        }
+390-
+391-        rRange[j].in[253] <==
+--
+431-        ) {
+432-            rY[j].e[ry] <==
+433-                rBits[j].out[ry];
+434-        }
+435-
+436-        rY[j].p[0] <==
+437-            Yx;
+438-
+439-        rY[j].p[1] <==
+440-            Yy;
+441-
+442-        /*
+443-         * Encode bit as:
+444-         *   0 -> identity (0,1)
+445-         *   1 -> G
+446-         */
+447:        messageX[j] <==
+448-            bit[j] *
+449-            G[0];
+450-
+451:        messageY[j] <==
+452-            1 +
+453-            bit[j] *
+454-            (
+455-                G[1] - 1
+456-            );
+457-
+458-        /*
+459-         * S_j = r_j Y + bit_j G
+460-         */
+461-        addPoint[j] =
+462-            BabyAdd();
+463-
+464-        addPoint[j].x1 <==
+465-            rY[j].out[0];
+466-
+467-        addPoint[j].y1 <==
+468-            rY[j].out[1];
+469-
+470-        addPoint[j].x2 <==
+471:            messageX[j];
+472-
+473-        addPoint[j].y2 <==
+474:            messageY[j];
+475-
+476-        Sx[j] <==
+477-            addPoint[j].xout;
+478-
+479-        Sy[j] <==
+480-            addPoint[j].yout;
+481-    }
+482-
+483-    /*
+484:     * Exactly one active candidate.
+485-     */
+486:    bitSum[MAX_CANDIDATES] ===
+487-        1;
+488-}

@@ -1,0 +1,4 @@
+ROOT=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK
+TIMESTAMP=2026-10-04 03:24:49 +0600
+
+----- GIT STATUS PORCELAIN -----

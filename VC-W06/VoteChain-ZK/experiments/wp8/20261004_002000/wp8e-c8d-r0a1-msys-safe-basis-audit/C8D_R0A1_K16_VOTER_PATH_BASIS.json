@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "inputPath": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k16-input.json",
+  "topLevelKeys": [
+    "Rx",
+    "Ry",
+    "Sx",
+    "Sy",
+    "Yx",
+    "Yy",
+    "bit",
+    "candidateCount",
+    "candidateManifestHash",
+    "contractDomain",
+    "electionContextHash",
+    "electionId",
+    "eligibleRoot",
+    "nullifier",
+    "pathBits",
+    "randomness",
+    "secret",
+    "siblings"
+  ],
+  "allArrayLengths": {
+    "Rx": 16,
+    "Ry": 16,
+    "Sx": 16,
+    "Sy": 16,
+    "bit": 16,
+    "pathBits": 17,
+    "randomness": 16,
+    "siblings": 17
+  },
+  "pathLikeArrays": {
+    "siblings": {
+      "length": 17,
+      "sample": [
+        "15372100737773183877627644043777226522266568998371439489213780889079019377493",
+        "9185139883656503590087674073678805837285306752733227247851570656302178051605",
+        "3408645616849480697998432226643520586984052952233743472693137307626832996825"
+      ]
+    },
+    "pathBits": {
+      "length": 17,
+      "sample": [
+        "0",
+        "0",
+        "0"
+      ]
+    }
+  },
+  "pathLikeArrayLengths": [
+    17
+  ]
+}

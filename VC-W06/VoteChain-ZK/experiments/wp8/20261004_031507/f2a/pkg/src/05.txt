@@ -1,0 +1,40 @@
+WP8E C8C RUNTIME CANDIDATE-COUNT CLOSEOUT
+=========================================
+
+Measured population: 80 accepted-vote observations.
+Per level: 20 observations at K=2,4,8,16.
+Warmups excluded: YES.
+Pilots excluded: YES.
+
+Gas:
+  K2  = 1,866,402 gas.
+  K4  = 1,866,414 gas.
+  K8  = 1,866,414 gas.
+  K16 = 1,866,414 gas.
+  Within-level gas SD = 0 at every level.
+  Across-level mean range = 12 gas.
+
+Calldata composition:
+  K2  = 10 zero / 2,330 nonzero bytes.
+  K4  = 9 zero / 2,331 nonzero bytes.
+  K8  = 9 zero / 2,331 nonzero bytes.
+  K16 = 9 zero / 2,331 nonzero bytes.
+  Total calldata = 2,340 bytes for every level.
+
+Mean local latency:
+  K2  = 865.021110 ms.
+  K4  = 874.816695 ms.
+  K8  = 864.572260 ms.
+  K16 = 863.063140 ms.
+  Across-level mean range = 11.753555 ms.
+  Monotonic increase with K = NO.
+  Monotonic decrease with K = NO.
+
+Interpretation:
+  Candidate-count experiment measures transaction-level runtime configuration sensitivity, not isolated candidateCount opcode cost.
+  The only observed gas separation is the K2 12-gas difference, which coincides with its one-byte zero/nonzero calldata-composition difference.
+  K4/K8/K16 show identical measured transaction gas despite different runtime candidateCount values.
+  Local latency variation is non-monotonic and is reported descriptively without inferential claims.
+
+Candidate-count runtime scaling status: COMPLETE.
+Next work package: eligible-set scaling handoff.

@@ -1,0 +1,682 @@
+import crypto from 'node:crypto'
+import fs from 'node:fs'
+import { buildPoseidon } from 'circomlibjs'
+import Voter from '../../models/Voter.js'
+import Candidate from '../../models/Candidate.js'
+import {
+  encryptZkCredential,
+  decryptZkCredential,
+} from './credentialCrypto.js'
+import { getActiveWp5Contract } from '../../utils/wp5Contract.js'
+import { getActiveElectionMembership } from '../elections/electionMembershipService.js'
+import { getActiveElectionCandidates } from '../elections/electionCandidateService.js'
+
+const profile = JSON.parse(
+  fs.readFileSync(
+    new URL('../../../crypto/config/wp3-build-profile.json', import.meta.url),
+    'utf8',
+  ),
+)
+
+const appProfile = JSON.parse(
+  fs.readFileSync(
+    new URL('../../../crypto/config/wp5-application-profile.json', import.meta.url),
+    'utf8',
+  ),
+)
+
+const FIELD = BigInt(profile.fieldModulus)
+const DEPTH = Number(profile.merkleDepth)
+const CAPACITY = Number(profile.eligibleCapacity)
+
+const D_ID = BigInt(profile.domains.identity)
+const D_MANIFEST = BigInt(profile.domains.candidateManifest)
+const WP5_MANIFEST_ALGORITHM = appProfile.candidateManifest.algorithm
+
+let poseidonPromise
+
+async function poseidon() {
+  if (!poseidonPromise) poseidonPromise = buildPoseidon()
+  return poseidonPromise
+}
+
+export async function wp5Hash(values) {
+  const p = await poseidon()
+  return BigInt(
+    p.F.toObject(
+      p(values.map((value) => BigInt(value))),
+    ),
+  )
+}
+
+function wp5SecretKey(secret = process.env.WP5_CREDENTIAL_SECRET_KEY) {
+  if (!secret) {
+    throw new Error('WP5_CREDENTIAL_SECRET_KEY is missing')
+  }
+  if (Buffer.byteLength(secret, 'utf8') !== 32) {
+    throw new Error('WP5_CREDENTIAL_SECRET_KEY must be exactly 32 bytes')
+  }
+  return secret
+}
+
+function randomFieldSecret() {
+  const raw = BigInt(`0x${crypto.randomBytes(32).toString('hex')}`)
+  return (raw % (FIELD - 1n)) + 1n
+}
+
+export async function commitmentFromWp5Secret(secret) {
+  return wp5Hash([D_ID, BigInt(secret)])
+}
+
+export async function allocateWp5GroupIndex() {
+  const highest = await Voter
+    .findOne({ wp5GroupIndex: { $type: 'number' } })
+    .sort({ wp5GroupIndex: -1 })
+    .select({ wp5GroupIndex: 1 })
+    .lean()
+
+  const next = highest?.wp5GroupIndex === undefined
+    ? 0
+    : Number(highest.wp5GroupIndex) + 1
+
+  if (!Number.isSafeInteger(next) || next < 0 || next >= CAPACITY) {
+    throw new Error('WP5 eligible voter capacity exhausted')
+  }
+
+  return next
+}
+
+export async function createWp5Credential(options = {}) {
+  const secret = options.secret === undefined
+    ? randomFieldSecret()
+    : BigInt(options.secret)
+
+  if (secret <= 0n || secret >= FIELD) {
+    throw new Error('WP5 secret must be a nonzero BN254 field element')
+  }
+
+  const commitment = await commitmentFromWp5Secret(secret)
+
+  const encryptedCredential = encryptZkCredential(
+    secret.toString(),
+    commitment.toString(),
+    wp5SecretKey(options.credentialKey),
+  )
+
+  return {
+    secret: secret.toString(),
+    identityCommitment: commitment.toString(),
+    encryptedCredential,
+  }
+}
+
+async function zeroHashes() {
+  const zeros = [0n]
+
+  for (let level = 0; level < DEPTH; level += 1) {
+    zeros.push(
+      await wp5Hash([
+        zeros[level],
+        zeros[level],
+      ]),
+    )
+  }
+
+  return zeros
+}
+
+function normalizeRecords(records) {
+  const normalized = records
+    .map((record) => ({
+      index: Number(record.wp5GroupIndex),
+      commitment: BigInt(record.wp5IdentityCommitment),
+    }))
+    .sort((a, b) => a.index - b.index)
+
+  normalized.forEach((record, expectedIndex) => {
+    if (
+      !Number.isSafeInteger(record.index) ||
+      record.index !== expectedIndex
+    ) {
+      throw new Error(
+        `WP5 Merkle indices must be contiguous from zero; expected ${expectedIndex}, got ${record.index}`,
+      )
+    }
+  })
+
+  if (normalized.length > CAPACITY) {
+    throw new Error('WP5 Merkle capacity exceeded')
+  }
+
+  return normalized
+}
+
+export async function buildWp5MerkleSnapshot(records, targetIndex = null) {
+  const normalized = normalizeRecords(records)
+  const zeros = await zeroHashes()
+
+  let current = new Map(
+    normalized.map((record) => [
+      record.index,
+      record.commitment,
+    ]),
+  )
+
+  const siblings = []
+  const pathBits = []
+  let cursor = targetIndex
+
+  if (
+    cursor !== null &&
+    (
+      !Number.isSafeInteger(cursor) ||
+      cursor < 0 ||
+      cursor >= normalized.length
+    )
+  ) {
+    throw new Error('Invalid WP5 witness index')
+  }
+
+  for (let level = 0; level < DEPTH; level += 1) {
+    if (cursor !== null) {
+      const bit = cursor & 1
+      const siblingIndex = bit === 0 ? cursor + 1 : cursor - 1
+
+      pathBits.push(String(bit))
+      siblings.push(
+        String(
+          current.get(siblingIndex) ?? zeros[level],
+        ),
+      )
+
+      cursor = Math.floor(cursor / 2)
+    }
+
+    const parents = new Set(
+      [...current.keys()].map((index) => Math.floor(index / 2)),
+    )
+
+    const next = new Map()
+
+    for (const parent of parents) {
+      const left = current.get(parent * 2) ?? zeros[level]
+      const right = current.get(parent * 2 + 1) ?? zeros[level]
+
+      next.set(
+        parent,
+        await wp5Hash([left, right]),
+      )
+    }
+
+    current = next
+  }
+
+  const root = current.get(0) ?? zeros[DEPTH]
+
+  return {
+    root: root.toString(),
+    size: normalized.length,
+    depth: DEPTH,
+    siblings,
+    pathBits,
+  }
+}
+
+async function registeredWp5Voters() {
+  return Voter
+    .find({
+      wp5RegistrationStatus: 'registered',
+      wp5IdentityCommitment: { $type: 'string' },
+      wp5GroupIndex: { $type: 'number' },
+    })
+    .sort({ wp5GroupIndex: 1 })
+    .select({
+      wp5IdentityCommitment: 1,
+      wp5GroupIndex: 1,
+    })
+    .lean()
+}
+
+export async function witnessForWp5Voter(voter) {
+  if (
+    voter?.wp5RegistrationStatus !== "registered" ||
+    !voter?.wp5IdentityCommitment
+  ) {
+    throw new Error(
+      "Voter does not have an active WP5 custom credential",
+    )
+  }
+
+  const {
+    election,
+    index,
+    records,
+  } =
+    await getActiveElectionMembership(
+      voter,
+    )
+
+  const snapshot =
+    await buildWp5MerkleSnapshot(
+      records,
+      index,
+    )
+
+  if (
+    !election.eligibleRoot ||
+    BigInt(snapshot.root) !==
+      BigInt(
+        election.eligibleRoot,
+      )
+  ) {
+    throw new Error(
+      "Election membership Merkle root does not match the frozen election snapshot",
+    )
+  }
+
+  return {
+    identityCommitment:
+      String(
+        voter.wp5IdentityCommitment,
+      ),
+
+    index,
+
+    eligibleRoot:
+      snapshot.root,
+
+    siblings:
+      snapshot.siblings,
+
+    pathBits:
+      snapshot.pathBits,
+  }
+}
+
+export async function hashCandidateManifest(candidateIds) {
+  const ids = candidateIds.map(
+    (candidateId) => BigInt(candidateId),
+  )
+
+  if (
+    ids.length < 1 ||
+    ids.length > Number(profile.maxCandidates)
+  ) {
+    throw new Error(
+      'Candidate manifest length is outside the frozen WP5 range',
+    )
+  }
+
+  if (
+    WP5_MANIFEST_ALGORITHM ===
+    'POSEIDON_DOMAIN_PLUS_IDS_V1'
+  ) {
+    return wp5Hash([
+      D_MANIFEST,
+      ...ids,
+    ])
+  }
+
+  if (
+    WP5_MANIFEST_ALGORITHM ===
+    'POSEIDON_INDEXED_CHAIN_V1'
+  ) {
+    let state = await wp5Hash([
+      D_MANIFEST,
+      BigInt(ids.length),
+    ])
+
+    for (
+      let index = 0;
+      index < ids.length;
+      index += 1
+    ) {
+      state = await wp5Hash([
+        state,
+        BigInt(index),
+        ids[index],
+      ])
+    }
+
+    return state
+  }
+
+  throw new Error(
+    `Unsupported WP5 candidate-manifest algorithm: ${WP5_MANIFEST_ALGORITHM}`,
+  )
+}
+
+export async function getRegisteredWp5Candidates() {
+  const candidates = await Candidate
+    .find({
+      registrationStatus: 'registered',
+      candidateId: { $exists: true },
+    })
+    .sort({ candidateId: 1 })
+    .select({
+      candidateId: 1,
+      name: 1,
+      party: 1,
+      location: 1,
+    })
+    .lean()
+
+  return candidates.map((candidate) => ({
+    candidateId: Number(candidate.candidateId),
+    name: candidate.name,
+    party: candidate.party,
+    location: candidate.location,
+  }))
+}
+
+function validateClientJwk(jwk) {
+  if (
+    !jwk ||
+    jwk.kty !== 'EC' ||
+    jwk.crv !== 'P-256' ||
+    typeof jwk.x !== 'string' ||
+    typeof jwk.y !== 'string' ||
+    'd' in jwk
+  ) {
+    throw new Error('A public P-256 credential-release key is required')
+  }
+
+  return jwk
+}
+
+async function sealCredentialForClient({
+  plaintextSecret,
+  clientPublicJwk,
+  identityCommitment,
+  electionId,
+  expiresAt,
+}) {
+  const subtle = crypto.webcrypto.subtle
+  const clientPublicKey = await subtle.importKey(
+    'jwk',
+    validateClientJwk(clientPublicJwk),
+    { name: 'ECDH', namedCurve: 'P-256' },
+    false,
+    [],
+  )
+
+  const serverKeyPair = await subtle.generateKey(
+    { name: 'ECDH', namedCurve: 'P-256' },
+    true,
+    ['deriveBits'],
+  )
+
+  const shared = await subtle.deriveBits(
+    {
+      name: 'ECDH',
+      public: clientPublicKey,
+    },
+    serverKeyPair.privateKey,
+    256,
+  )
+
+  const salt = crypto.randomBytes(32)
+  const iv = crypto.randomBytes(12)
+  const info = Buffer.from(
+    'VoteChain-ZK/WP5/credential-release/v1',
+    'utf8',
+  )
+
+  const ikm = await subtle.importKey(
+    'raw',
+    shared,
+    'HKDF',
+    false,
+    ['deriveKey'],
+  )
+
+  const aesKey = await subtle.deriveKey(
+    {
+      name: 'HKDF',
+      hash: 'SHA-256',
+      salt,
+      info,
+    },
+    ikm,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt'],
+  )
+
+  const aad = Buffer.from(
+    [
+      'VoteChain-ZK/WP5/v1',
+      identityCommitment,
+      electionId,
+      String(expiresAt),
+    ].join('|'),
+    'utf8',
+  )
+
+  const ciphertext = await subtle.encrypt(
+    {
+      name: 'AES-GCM',
+      iv,
+      additionalData: aad,
+    },
+    aesKey,
+    Buffer.from(String(plaintextSecret), 'utf8'),
+  )
+
+  return {
+    version: 1,
+    keyAgreement: 'ECDH-P256-HKDF-SHA256',
+    contentEncryption: 'AES-256-GCM',
+    serverPublicKey: await subtle.exportKey(
+      'jwk',
+      serverKeyPair.publicKey,
+    ),
+    salt: salt.toString('base64'),
+    iv: iv.toString('base64'),
+    aad: aad.toString('base64'),
+    ciphertext: Buffer.from(ciphertext).toString('base64'),
+    expiresAt,
+  }
+}
+
+export async function authorizeWp5Voter({
+  voter,
+  clientPublicKey,
+  now = Date.now(),
+}) {
+  if (!voter) {
+    throw new Error('Biometrically verified voter record is required')
+  }
+
+  if (
+    voter.wp5RegistrationStatus !== 'registered' ||
+    !voter.wp5IdentityCommitment ||
+    !voter.wp5Credential
+  ) {
+    throw new Error(
+      'Voter requires WP5 custom-credential enrollment before private voting',
+    )
+  }
+
+  const {
+    election: activeElection,
+    contract,
+  } =
+    await getActiveWp5Contract()
+
+  const [
+    phase,
+    electionId,
+    eligibleRoot,
+  ] = await Promise.all([
+    contract.phase(),
+    contract.electionId(),
+    contract.eligibleRoot(),
+  ])
+
+  if (
+    String(
+      activeElection.electionId,
+    ) !==
+      String(
+        electionId,
+      )
+  ) {
+    throw new Error(
+      "Active election record does not match the configured Direct contract",
+    )
+  }
+
+  if (Number(phase) !== 1) {
+    throw new Error(
+      'WP5 credential release is only available while the election is Active',
+    )
+  }
+
+  const witness = await witnessForWp5Voter(voter)
+
+  if (BigInt(witness.eligibleRoot) !== BigInt(eligibleRoot)) {
+    throw new Error(
+      'WP5 local Merkle root does not match the frozen contract root',
+    )
+  }
+
+  const plaintextSecret = decryptZkCredential(
+    voter.wp5Credential,
+    voter.wp5IdentityCommitment,
+    wp5SecretKey(),
+  )
+
+  const recomputedCommitment =
+    await commitmentFromWp5Secret(plaintextSecret)
+
+  if (
+    recomputedCommitment.toString() !==
+    String(voter.wp5IdentityCommitment)
+  ) {
+    throw new Error('WP5 credential/commitment mismatch')
+  }
+
+  const expiresAt = now + 2 * 60 * 1000
+
+  const credentialEnvelope =
+    await sealCredentialForClient({
+      plaintextSecret,
+      clientPublicJwk: clientPublicKey,
+      identityCommitment:
+        String(voter.wp5IdentityCommitment),
+      electionId: String(electionId),
+      expiresAt,
+    })
+
+  return {
+    version: 'VoteChain-ZK-WP5-Authorization-v1',
+    electionId: String(electionId),
+    expiresAt,
+    membership: witness,
+    credentialEnvelope,
+  }
+}
+
+export async function getWp5PublicConfig() {
+  const {
+    election: contractElection,
+    contract,
+  } =
+    await getActiveWp5Contract()
+
+  const {
+    election: activeElection,
+    candidates,
+  } =
+    await getActiveElectionCandidates()
+
+  if (
+    String(
+      contractElection._id,
+    ) !==
+      String(
+        activeElection._id,
+      )
+  ) {
+    throw new Error(
+      "Contract election and candidate snapshot refer to different elections",
+    )
+  }
+
+  const [
+    phase,
+    configured,
+    eligibleRoot,
+    electionId,
+    candidateManifestHash,
+    candidateCount,
+    contractDomain,
+    Yx,
+    Yy,
+    electionContextHash,
+    acceptedBallotCount,
+  ] = await Promise.all([
+    contract.phase(),
+    contract.configured(),
+    contract.eligibleRoot(),
+    contract.electionId(),
+    contract.candidateManifestHash(),
+    contract.candidateCount(),
+    contract.contractDomain(),
+    contract.Yx(),
+    contract.Yy(),
+    contract.electionContextHash(),
+    contract.acceptedBallotCount(),
+  ])
+
+  if (
+    String(activeElection.electionId || "") &&
+    String(activeElection.electionId) !==
+      String(electionId)
+  ) {
+    throw new Error(
+      "Active election record does not match the configured contract electionId",
+    )
+  }
+
+  const candidateIds =
+    candidates.map((candidate) => candidate.candidateId)
+
+  const localManifest =
+    await hashCandidateManifest(candidateIds)
+
+  if (Boolean(configured)) {
+    if (
+      BigInt(candidateCount) !== BigInt(candidateIds.length) ||
+      BigInt(candidateManifestHash) !== localManifest
+    ) {
+      throw new Error(
+        'WP5 candidate manifest does not match the configured contract',
+      )
+    }
+  }
+
+  return {
+    directContractAddress:
+      contractElection
+        .directContractAddress,
+
+    profile: 'VoteChain-ZK-WP5-v1',
+    phase: Number(phase),
+    configured: Boolean(configured),
+    acceptedBallotCount: String(acceptedBallotCount),
+    candidates,
+    manifestAlgorithm: WP5_MANIFEST_ALGORITHM,
+    config: {
+      eligibleRoot: String(eligibleRoot),
+      electionId: String(electionId),
+      candidateManifestHash: String(candidateManifestHash),
+      candidateCount: String(candidateCount),
+      contractDomain: String(contractDomain),
+      Yx: String(Yx),
+      Yy: String(Yy),
+      electionContextHash: String(electionContextHash),
+    },
+  }
+}

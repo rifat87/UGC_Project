@@ -1,0 +1,10 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:65:      const response = await adminFetch(`/api/voters/train-face/${formData.nationalId}`, {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/face-recognition/FaceCapture.tsx:38:      const response = await adminFetch("/api/biometric/capture-face", {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:30:      const response = await adminFetch("/api/biometric/fingerprint/enroll", {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:36:      path.startsWith("/api/candidates") ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:37:      path.startsWith("/api/voters") ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:38:      path.startsWith("/api/biometric")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:82:  return request<CandidateAdminRecord>("/api/candidates/register", {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:94:    `/api/candidates/${candidateId}/registration-status`,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:130:  const response = await adminFetch("/api/voters", {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:148:  const response = await adminFetch("/api/voters/zk-registration-status", {

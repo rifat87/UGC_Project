@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_100_OBSERVATION_CAMPAIGN_VALIDATION",
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "plannedObservations": 100,
+  "completedObservations": 100,
+  "warmupObservations": 20,
+  "measuredObservations": 80,
+  "warmupPerN": {
+    "10": 5,
+    "100": 5,
+    "1000": 5,
+    "10000": 5
+  },
+  "measuredPerN": {
+    "10": 20,
+    "100": 20,
+    "1000": 20,
+    "10000": 20
+  },
+  "measuredPositionCounts": {
+    "10": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "100": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "1000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    },
+    "10000": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "4": 5
+    }
+  },
+  "executedSequenceMatchesFrozenPlan": true,
+  "allObservationStatusesPass": true,
+  "allWitnessChecksRc0": true,
+  "allGroth16VerificationsRc0": true,
+  "allSemanticVerifyLogsPass": true,
+  "allPublicSignalBindings73Of73": true,
+  "allEligibleRootsMatchFrozenFixtures": true,
+  "allControlledInputsMatchFrozenFixtures": true,
+  "allSuccessfulWitnessesRemoved": true,
+  "allProofHashesValidated": true,
+  "allPublicHashesValidated": true,
+  "pilotIncluded": false,
+  "automaticRetry": false,
+  "resumeAfterFailure": false,
+  "outlierDeletionPerformed": false,
+  "onchainExecution": false,
+  "statisticsComputedInR8": false
+}

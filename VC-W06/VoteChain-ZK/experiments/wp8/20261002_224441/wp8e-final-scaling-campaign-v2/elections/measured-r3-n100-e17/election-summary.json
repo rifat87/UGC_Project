@@ -1,0 +1,21 @@
+{
+  "repetitionId": "measured-r3-n100-e17",
+  "kind": "measured",
+  "measuredRound": 3,
+  "scale": 100,
+  "verifierAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "directAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "correctness": {
+    "acceptedBallotCount": 100,
+    "consumedNullifiers": 100,
+    "tallySlotsChecked": 16,
+    "encryptedTallyMatch": true,
+    "candidatePlaintextCounts": [
+      25,
+      25,
+      25,
+      25
+    ]
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,6 @@
+SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js
+SHA256=386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7
+SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts
+SHA256=7802e24372be865692237dffa027f08e0ba350878484cad4ec3dde7c6b5ded47
+SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs
+SHA256=65dec4fbb1a6093a59e54330e89b77593295a2db102c4528765d0231bab5e75d

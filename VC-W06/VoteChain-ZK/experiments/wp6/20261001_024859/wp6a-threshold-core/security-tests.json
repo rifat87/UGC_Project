@@ -1,0 +1,54 @@
+[
+  {
+    "test": "public DKG transcript verifies",
+    "status": "PASS"
+  },
+  {
+    "test": "public DKG transcript hash deterministic",
+    "status": "PASS"
+  },
+  {
+    "test": "combined private election key not present in transcript",
+    "status": "PASS"
+  },
+  {
+    "test": "3-of-5 valid trustee finalization",
+    "status": "PASS"
+  },
+  {
+    "test": "two unavailable trustees tolerated",
+    "status": "PASS"
+  },
+  {
+    "test": "fewer than threshold rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "tampered DLEQ proof rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "wrong election context rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "duplicate trustee record rejected",
+    "status": "PASS"
+  },
+  {
+    "test": "bounded BSGS rejects outside accepted ballot bound",
+    "status": "PASS"
+  },
+  {
+    "test": "padded candidate slots decode to zero",
+    "status": "PASS"
+  },
+  {
+    "test": "verified totals sum to accepted ballot count",
+    "status": "PASS"
+  },
+  {
+    "test": "finalization transcript hash changes on mutation",
+    "status": "PASS"
+  }
+]

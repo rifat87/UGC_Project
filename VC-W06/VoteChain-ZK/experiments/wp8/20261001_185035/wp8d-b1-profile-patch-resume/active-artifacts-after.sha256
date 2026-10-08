@@ -1,0 +1,6 @@
+bd2bcf6748f67f1f2c48373fa444ca44274eb08c559389e2b918bf600710da14 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom
+87d9094fb52345312a8dfe1db4b7a3c9e2624495aa3c968e7533b46026939592 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+8323685caa5149d98dab9790ffae9e00b10e3e6098ae7b626df748901e99c66e */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom
+11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs
+02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm
+867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey

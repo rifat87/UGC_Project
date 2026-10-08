@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "classification": "PERSISTED_RUNNER_SOURCE_NOT_RECOVERED_BEHAVIORAL_RECONSTRUCTION_REQUIRED",
+  "strongRepositoryCandidates": [],
+  "bashHistoryRecoverable": false,
+  "persistedRunnerSourceRecovered": false,
+  "deploymentParserPolicy": "raw_decode first JSON object; preserve trailing diagnostic text separately",
+  "receiptParserPolicy": "strict JSON",
+  "c8bBehavioralEvidenceAvailable": true,
+  "nextGatePolicy": {
+    "persistedSourceRecovered": "Reuse recovered successful runner machinery, versioned for four-level fixtures.",
+    "persistedSourceNotRecovered": "Author a new versioned R7B runner reconstructed from frozen C8B behavior, parser policy, active ABI, R4C2 execution matrix and frozen R6 proof fixtures.",
+    "claimBytewiseReuseWithoutSource": false,
+    "executionAllowedHere": false
+  }
+}

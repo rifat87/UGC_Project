@@ -1,0 +1,9 @@
+{
+  "name": "votechain-semaphore-v4-deps",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@semaphore-protocol/contracts": "4.14.3",
+    "@semaphore-protocol/core": "4.14.3"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "classification": "FROZEN_PUBLICATION_BENCHMARK_FIGURE_SPEC",
+  "figures": [
+    {
+      "id": "F-PUB-01",
+      "title": "Accepted-ballot gas summary",
+      "source": "table-data/T01_ACCEPTED_BALLOT_OVERALL.tsv",
+      "metric": "gas",
+      "render": "range-marker-summary",
+      "markers": [
+        "min",
+        "median",
+        "mean",
+        "p95",
+        "max"
+      ],
+      "boundary": "Summary-statistic visualization only; do not render a boxplot or infer quartiles because raw quartiles are not part of the frozen publication dataset."
+    },
+    {
+      "id": "F-PUB-02",
+      "title": "Accepted-ballot local cast receipt latency summary",
+      "source": "table-data/T01_ACCEPTED_BALLOT_OVERALL.tsv",
+      "metric": "latency",
+      "render": "range-marker-summary",
+      "markers": [
+        "min",
+        "median",
+        "mean",
+        "p95",
+        "max"
+      ]
+    },
+    {
+      "id": "F-PUB-03",
+      "title": "Gas consumption by runtime candidate count",
+      "source": "table-data/T03_CANDIDATE_COUNT_SCALING.tsv",
+      "x": "candidateCount",
+      "y": "mean gas",
+      "profiles": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "render": "point-line",
+      "boundary": "Do not interpret the 12-gas difference as isolated candidate-processing cost."
+    },
+    {
+      "id": "F-PUB-04",
+      "title": "Local cast receipt latency by runtime candidate count",
+      "source": "table-data/T03_CANDIDATE_COUNT_SCALING.tsv",
+      "x": "candidateCount",
+      "y": "mean latency ms",
+      "profiles": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "render": "point-line",
+      "boundary": "Observed means are non-monotonic."
+    },
+    {
+      "id": "F-PUB-05",
+      "title": "Eligible-set construction and path-integrated preparation scaling",
+      "source": "table-data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv",
+      "x": "eligible-set size N",
+      "xScale": "log10",
+      "series": [
+        "M1_mean_ms",
+        "M2_mean_ms"
+      ],
+      "render": "point-line",
+      "fixedMerkleDepth": 17,
+      "boundary": "N is occupied leaves. M2 integrates Merkle snapshot/root/target path; no isolated path-extraction timing claim."
+    },
+    {
+      "id": "F-PUB-06",
+      "title": "Eligible-set proof-pipeline component latency",
+      "source": "table-data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv",
+      "x": "eligible-set size N",
+      "xScale": "log10",
+      "series": [
+        "M3_mean_ms",
+        "M4_mean_ms",
+        "M5_mean_ms"
+      ],
+      "render": "point-line",
+      "fixedMerkleDepth": 17,
+      "boundary": "M3-M5 include child-process overhead and use fixed depth 17; their variation is descriptive and must not be presented as N-dependent computational complexity."
+    }
+  ],
+  "figuresSpecified": 6,
+  "rawDistributionInvented": false,
+  "regressionFitAuthorized": false,
+  "inferentialStatisticsAuthorized": false
+}

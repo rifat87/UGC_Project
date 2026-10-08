@@ -1,0 +1,863 @@
+00227:             mulmod(
+00228:                 numeratorY,
+00229:                 _inverse(
+00230:                     denominatorY
+00231:                 ),
+00232:                 P
+00233:             );
+00234:     }
+00235: }
+00236: 
+00237: abstract contract VoteChainBase {
+00238:     uint256 internal constant MAX =
+00239:         WP4Profile.MAX_CANDIDATES;
+00240: 
+00241:     uint256 internal constant P =
+00242:         WP4Profile.FIELD_MODULUS;
+00243: 
+00244:     enum Phase {
+00245:         Registration,
+00246:         Active,
+00247:         Ended,
+00248:         Finalized
+00249:     }
+00250: 
+00251:     struct ElectionConfig {
+00252:         uint256 eligibleRoot;
+00253: 
+00254:         uint256 electionId;
+00255: 
+00256:         uint256 candidateManifestHash;
+00257: 
+00258:         uint256 candidateCount;
+00259: 
+00260:         uint256 contractDomain;
+00261: 
+00262:         uint256 Yx;
+00263:         uint256 Yy;
+00264: 
+00265:         uint256 electionContextHash;
+00266:     }
+00267: 
+00268:     address public immutable admin;
+00269: 
+00270:     Phase public phase;
+00271: 
+00272:     bool public configured;
+00273: 
+00274:     uint256 public eligibleRoot;
+00275: 
+00276:     uint256 public electionId;
+00277: 
+00278:     uint256 public candidateManifestHash;
+00279: 
+00280:     uint256 public candidateCount;
+00281: 
+00282:     uint256 public contractDomain;
+00283: 
+00284:     uint256 public Yx;
+00285:     uint256 public Yy;
+00286: 
+00287:     uint256 public electionContextHash;
+00288: 
+00289:     uint256 public acceptedBallotCount;
+00290: 
+00291:     /*
+00292:      * WP6 threshold-finalization evidence.
+00293:      *
+00294:      * trusteeTranscriptHash is pinned during Registration.
+00295:      * finalizationTranscriptHash is written only after Ended.
+00296:      *
+00297:      * The full threshold transcript remains public/off-chain;
+00298:      * Solidity anchors its canonical SHA-256 hash and the
+00299:      * independently verified plaintext aggregate totals.
+00300:      */
+00301:     bytes32 public trusteeTranscriptHash;
+00302: 
+00303:     bytes32 public finalizationTranscriptHash;
+00304: 
+00305:     uint256[16] internal finalResults;
+00306: 
+00307:     mapping(uint256 => bool)
+00308:         public usedNullifier;
+00309: 
+00310:     uint256[16] internal tallyRx;
+00311:     uint256[16] internal tallyRy;
+00312:     uint256[16] internal tallySx;
+00313:     uint256[16] internal tallySy;
+00314: 
+00315:     event ElectionConfigured(
+00316:         uint256 indexed electionId,
+00317:         uint256 eligibleRoot,
+00318:         uint256 candidateManifestHash,
+00319:         uint256 candidateCount
+00320:     );
+00321: 
+00322:     event ElectionActivated(
+00323:         uint256 indexed electionId
+00324:     );
+00325: 
+00326:     event ElectionEnded(
+00327:         uint256 indexed electionId
+00328:     );
+00329: 
+00330:     event TrusteeTranscriptPinned(
+00331:         bytes32 indexed transcriptHash
+00332:     );
+00333: 
+00334:     event TallyFinalized(
+00335:         bytes32 indexed transcriptHash,
+00336:         uint256 acceptedBallotCount
+00337:     );
+00338: 
+00339:     event EncryptedVoteAccepted(
+00340:         uint256 indexed nullifier,
+00341:         bytes32 ciphertextHash,
+00342:         uint256 acceptedBallotCount
+00343:     );
+00344: 
+00345:     constructor() {
+00346:         admin =
+00347:             msg.sender;
+00348: 
+00349:         phase =
+00350:             Phase.Registration;
+00351: 
+00352:         /*
+00353:          * BabyJub identity = (0,1)
+00354:          */
+00355:         for (
+00356:             uint256 i = 0;
+00357:             i < MAX;
+00358:             i++
+00359:         ) {
+00360:             tallyRy[i] = 1;
+00361:             tallySy[i] = 1;
+00362:         }
+00363:     }
+00364: 
+00365:     modifier onlyAdmin() {
+00366:         require(
+00367:             msg.sender == admin,
+00368:             "ONLY_ADMIN"
+00369:         );
+00370: 
+00371:         _;
+00372:     }
+00373: 
+00374:     modifier inPhase(
+00375:         Phase expected
+00376:     ) {
+00377:         require(
+00378:             phase == expected,
+00379:             "WRONG_PHASE"
+00380:         );
+00381: 
+00382:         _;
+00383:     }
+00384: 
+00385:     function configure(
+00386:         ElectionConfig calldata cfg
+00387:     )
+00388:         external
+00389:         onlyAdmin
+00390:         inPhase(
+00391:             Phase.Registration
+00392:         )
+00393:     {
+00394:         require(
+00395:             !configured,
+00396:             "ALREADY_CONFIGURED"
+00397:         );
+00398: 
+00399:         require(
+00400:             cfg.candidateCount >= 1 &&
+00401:             cfg.candidateCount <= MAX,
+00402:             "BAD_CANDIDATE_COUNT"
+00403:         );
+00404: 
+00405:         require(
+00406:             cfg.eligibleRoot < P &&
+00407:             cfg.candidateManifestHash < P &&
+00408:             cfg.contractDomain < P &&
+00409:             cfg.Yx < P &&
+00410:             cfg.Yy < P &&
+00411:             cfg.electionContextHash < P,
+00412:             "NON_CANONICAL_CONFIG"
+00413:         );
+00414: 
+00415:         require(
+00416:             cfg.Yx != 0,
+00417:             "IDENTITY_PUBLIC_KEY"
+00418:         );
+00419: 
+00420:         eligibleRoot =
+00421:             cfg.eligibleRoot;
+00422: 
+00423:         electionId =
+00424:             cfg.electionId;
+00425: 
+00426:         candidateManifestHash =
+00427:             cfg.candidateManifestHash;
+00428: 
+00429:         candidateCount =
+00430:             cfg.candidateCount;
+00431: 
+00432:         contractDomain =
+00433:             cfg.contractDomain;
+00434: 
+00435:         Yx =
+00436:             cfg.Yx;
+00437: 
+00438:         Yy =
+00439:             cfg.Yy;
+00440: 
+00441:         electionContextHash =
+00442:             cfg.electionContextHash;
+00443: 
+00444:         configured =
+00445:             true;
+00446: 
+00447:         emit ElectionConfigured(
+00448:             electionId,
+00449:             eligibleRoot,
+00450:             candidateManifestHash,
+00451:             candidateCount
+00452:         );
+00453:     }
+00454: 
+00455:     /*
+00456:      * Pin the public DKG ceremony transcript before Active.
+00457:      *
+00458:      * The transcript verifier independently checks that the
+00459:      * committed trustee public shares derive the configured Y.
+00460:      * Existing WP4/WP5 deployment flows remain ABI-compatible:
+00461:      * this is an additional registration-stage call.
+00462:      */
+00463:     function setTrusteeTranscriptHash(
+00464:         bytes32 transcriptHash
+00465:     )
+00466:         external
+00467:         onlyAdmin
+00468:         inPhase(
+00469:             Phase.Registration
+00470:         )
+00471:     {
+00472:         require(
+00473:             configured,
+00474:             "NOT_CONFIGURED"
+00475:         );
+00476: 
+00477:         require(
+00478:             transcriptHash !=
+00479:                 bytes32(0),
+00480:             "ZERO_TRUSTEE_TRANSCRIPT"
+00481:         );
+00482: 
+00483:         require(
+00484:             trusteeTranscriptHash ==
+00485:                 bytes32(0),
+00486:             "TRUSTEE_TRANSCRIPT_ALREADY_SET"
+00487:         );
+00488: 
+00489:         trusteeTranscriptHash =
+00490:             transcriptHash;
+00491: 
+00492:         emit TrusteeTranscriptPinned(
+00493:             transcriptHash
+00494:         );
+00495:     }
+00496: 
+00497:     function activate()
+00498:         external
+00499:         onlyAdmin
+00500:         inPhase(
+00501:             Phase.Registration
+00502:         )
+00503:     {
+00504:         require(
+00505:             configured,
+00506:             "NOT_CONFIGURED"
+00507:         );
+00508: 
+00509:         phase =
+00510:             Phase.Active;
+00511: 
+00512:         emit ElectionActivated(
+00513:             electionId
+00514:         );
+00515:     }
+00516: 
+00517:     function endElection()
+00518:         external
+00519:         onlyAdmin
+00520:         inPhase(
+00521:             Phase.Active
+00522:         )
+00523:     {
+00524:         phase =
+00525:             Phase.Ended;
+00526: 
+00527:         emit ElectionEnded(
+00528:             electionId
+00529:         );
+00530:     }
+00531: 
+00532:     /*
+00533:      * WP6 prototype finalization boundary.
+00534:      *
+00535:      * Threshold/DLEQ verification is performed by the public
+00536:      * transcript verifier before this transaction is submitted.
+00537:      * This contract:
+00538:      *
+00539:      *   - requires Ended,
+00540:      *   - requires a registration-stage trustee transcript pin,
+00541:      *   - enforces candidate padding,
+00542:      *   - enforces sum(totals) == acceptedBallotCount,
+00543:      *   - anchors the independently verified transcript hash,
+00544:      *   - exposes plaintext totals only in Finalized.
+00545:      *
+00546:      * The transcript and proofs stay independently re-verifiable.
+00547:      */
+00548:     function finalizeTally(
+00549:         uint256[16] calldata totals,
+00550:         bytes32 transcriptHash
+00551:     )
+00552:         external
+00553:         onlyAdmin
+00554:         inPhase(
+00555:             Phase.Ended
+00556:         )
+00557:     {
+00558:         require(
+00559:             trusteeTranscriptHash !=
+00560:                 bytes32(0),
+00561:             "TRUSTEE_TRANSCRIPT_NOT_PINNED"
+00562:         );
+00563: 
+00564:         require(
+00565:             transcriptHash !=
+00566:                 bytes32(0),
+00567:             "ZERO_FINALIZATION_TRANSCRIPT"
+00568:         );
+00569: 
+00570:         uint256 activeSum;
+00571: 
+00572:         for (
+00573:             uint256 i = 0;
+00574:             i < MAX;
+00575:             i++
+00576:         ) {
+00577:             if (
+00578:                 i <
+00579:                 candidateCount
+00580:             ) {
+00581:                 require(
+00582:                     totals[i] <=
+00583:                         acceptedBallotCount,
+00584:                     "RESULT_EXCEEDS_BALLOTS"
+00585:                 );
+00586: 
+00587:                 activeSum +=
+00588:                     totals[i];
+00589:             } else {
+00590:                 require(
+00591:                     totals[i] == 0,
+00592:                     "NONZERO_PADDED_RESULT"
+00593:                 );
+00594:             }
+00595: 
+00596:             finalResults[i] =
+00597:                 totals[i];
+00598:         }
+00599: 
+00600:         require(
+00601:             activeSum ==
+00602:                 acceptedBallotCount,
+00603:             "RESULT_SUM_MISMATCH"
+00604:         );
+00605: 
+00606:         finalizationTranscriptHash =
+00607:             transcriptHash;
+00608: 
+00609:         phase =
+00610:             Phase.Finalized;
+00611: 
+00612:         emit TallyFinalized(
+00613:             transcriptHash,
+00614:             acceptedBallotCount
+00615:         );
+00616:     }
+00617: 
+00618:     function getFinalResult(
+00619:         uint256 slot
+00620:     )
+00621:         external
+00622:         view
+00623:         returns (uint256)
+00624:     {
+00625:         require(
+00626:             phase ==
+00627:                 Phase.Finalized,
+00628:             "NOT_FINALIZED"
+00629:         );
+00630: 
+00631:         require(
+00632:             slot <
+00633:                 candidateCount,
+00634:             "BAD_FINAL_RESULT_SLOT"
+00635:         );
+00636: 
+00637:         return
+00638:             finalResults[slot];
+00639:     }
+00640: 
+00641:     function getTally(
+00642:         uint256 slot
+00643:     )
+00644:         external
+00645:         view
+00646:         returns (
+00647:             uint256 rx,
+00648:             uint256 ry,
+00649:             uint256 sx,
+00650:             uint256 sy
+00651:         )
+00652:     {
+00653:         require(
+00654:             slot < MAX,
+00655:             "BAD_SLOT"
+00656:         );
+00657: 
+00658:         return (
+00659:             tallyRx[slot],
+00660:             tallyRy[slot],
+00661:             tallySx[slot],
+00662:             tallySy[slot]
+00663:         );
+00664:     }
+00665: 
+00666:     function _requireCanonicalCiphertext(
+00667:         uint256[16] calldata rx,
+00668:         uint256[16] calldata ry,
+
+------------------------------------------------------------------------------
+
+00758:         uint256[16] calldata sy
+00759:     )
+00760:         internal
+00761:     {
+00762:         require(
+00763:             phase == Phase.Active,
+00764:             "NOT_ACTIVE"
+00765:         );
+00766: 
+00767:         require(
+00768:             !usedNullifier[
+00769:                 nullifier
+00770:             ],
+00771:             "NULLIFIER_USED"
+00772:         );
+00773: 
+00774:         usedNullifier[
+00775:             nullifier
+00776:         ] =
+00777:             true;
+00778: 
+00779:         _applyTally(
+00780:             rx,
+00781:             ry,
+00782:             sx,
+00783:             sy
+00784:         );
+00785: 
+00786:         acceptedBallotCount +=
+00787:             1;
+00788: 
+00789:         emit EncryptedVoteAccepted(
+00790:             nullifier,
+00791:             keccak256(
+00792:                 abi.encode(
+00793:                     rx,
+00794:                     ry,
+00795:                     sx,
+00796:                     sy
+00797:                 )
+00798:             ),
+00799:             acceptedBallotCount
+00800:         );
+00801:     }
+00802: }
+00803: 
+00804: contract VoteChainDirect is
+00805:     VoteChainBase
+00806: {
+00807:     IVerifierDirect
+00808:         public immutable verifier;
+00809: 
+00810:     constructor(
+00811:         address verifierAddress
+00812:     ) {
+00813:         require(
+00814:             verifierAddress !=
+00815:                 address(0),
+00816:             "ZERO_VERIFIER"
+00817:         );
+00818: 
+00819:         verifier =
+00820:             IVerifierDirect(
+00821:                 verifierAddress
+00822:             );
+00823:     }
+00824: 
+00825:     function _buildInputs(
+00826:         uint256 nullifier,
+00827:         uint256[16] calldata rx,
+00828:         uint256[16] calldata ry,
+00829:         uint256[16] calldata sx,
+00830:         uint256[16] calldata sy
+00831:     )
+00832:         private
+00833:         view
+00834:         returns (
+00835:             uint256[73] memory input
+00836:         )
+00837:     {
+00838:         input[0] =
+00839:             eligibleRoot;
+00840: 
+00841:         input[1] =
+00842:             electionId;
+00843: 
+00844:         input[2] =
+00845:             candidateManifestHash;
+00846: 
+00847:         input[3] =
+00848:             candidateCount;
+00849: 
+00850:         input[4] =
+00851:             contractDomain;
+00852: 
+00853:         input[5] =
+00854:             Yx;
+00855: 
+00856:         input[6] =
+00857:             Yy;
+00858: 
+00859:         input[7] =
+00860:             electionContextHash;
+00861: 
+00862:         input[8] =
+00863:             nullifier;
+00864: 
+00865:         uint256 offset =
+00866:             9;
+00867: 
+00868:         for (
+00869:             uint256 i = 0;
+00870:             i < MAX;
+00871:             i++
+00872:         ) {
+00873:             input[
+00874:                 offset + i
+00875:             ] =
+00876:                 rx[i];
+00877:         }
+00878: 
+00879:         offset += MAX;
+00880: 
+00881:         for (
+00882:             uint256 i = 0;
+00883:             i < MAX;
+00884:             i++
+00885:         ) {
+00886:             input[
+00887:                 offset + i
+00888:             ] =
+00889:                 ry[i];
+00890:         }
+00891: 
+00892:         offset += MAX;
+00893: 
+00894:         for (
+00895:             uint256 i = 0;
+
+------------------------------------------------------------------------------
+
+00909:             i < MAX;
+00910:             i++
+00911:         ) {
+00912:             input[
+00913:                 offset + i
+00914:             ] =
+00915:                 sy[i];
+00916:         }
+00917:     }
+00918: 
+00919:     function castVote(
+00920:         uint256[2] calldata a,
+00921:         uint256[2][2] calldata b,
+00922:         uint256[2] calldata c,
+00923:         uint256 nullifier,
+00924:         uint256[16] calldata rx,
+00925:         uint256[16] calldata ry,
+00926:         uint256[16] calldata sx,
+00927:         uint256[16] calldata sy
+00928:     )
+00929:         external
+00930:     {
+00931:         require(
+00932:             phase == Phase.Active,
+00933:             "NOT_ACTIVE"
+00934:         );
+00935: 
+00936:         require(
+00937:             !usedNullifier[
+00938:                 nullifier
+00939:             ],
+00940:             "NULLIFIER_USED"
+00941:         );
+00942: 
+00943:         _requireCanonicalCiphertext(
+00944:             rx,
+00945:             ry,
+00946:             sx,
+00947:             sy
+00948:         );
+00949: 
+00950:         uint256[73] memory input =
+00951:             _buildInputs(
+00952:                 nullifier,
+00953:                 rx,
+00954:                 ry,
+00955:                 sx,
+00956:                 sy
+00957:             );
+00958: 
+00959:         require(
+00960:             verifier.verifyProof(
+00961:                 a,
+00962:                 b,
+00963:                 c,
+00964:                 input
+00965:             ),
+00966:             "INVALID_PROOF"
+00967:         );
+00968: 
+00969:         _accept(
+00970:             nullifier,
+00971:             rx,
+00972:             ry,
+00973:             sx,
+00974:             sy
+00975:         );
+00976:     }
+00977: }
+00978: 
+00979: contract VoteChainPoseidon is
+00980:     VoteChainBase
+00981: {
+00982:     IVerifierDigest
+00983:         public immutable verifier;
+00984: 
+00985:     address
+00986:         public immutable poseidon5;
+00987: 
+00988:     constructor(
+00989:         address verifierAddress,
+00990:         address poseidonAddress
+00991:     ) {
+00992:         require(
+00993:             verifierAddress !=
+00994:                 address(0),
+00995:             "ZERO_VERIFIER"
+00996:         );
+00997: 
+00998:         require(
+00999:             poseidonAddress !=
+01000:                 address(0),
+01001:             "ZERO_POSEIDON"
+01002:         );
+01003: 
+01004:         verifier =
+01005:             IVerifierDigest(
+01006:                 verifierAddress
+01007:             );
+01008: 
+01009:         poseidon5 =
+01010:             poseidonAddress;
+01011:     }
+01012: 
+01013:     function _poseidon(
+01014:         uint256[5] memory values
+01015:     )
+01016:         private
+01017:         view
+01018:         returns (uint256)
+01019:     {
+01020:         (
+01021:             bool ok,
+01022:             bytes memory data
+01023:         ) =
+01024:             poseidon5.staticcall(
+01025:                 abi.encodeWithSignature(
+01026:                     "poseidon(uint256[5])",
+01027:                     values
+01028:                 )
+01029:             );
+01030: 
+01031:         require(
+01032:             ok &&
+01033:             data.length >= 32,
+01034:             "POSEIDON_CALL_FAILED"
+01035:         );
+01036: 
+01037:         return
+01038:             abi.decode(
+01039:                 data,
+
+------------------------------------------------------------------------------
+
+01103: 
+01104:         return
+01105:             _binding(
+01106:                 rx,
+01107:                 ry,
+01108:                 sx,
+01109:                 sy
+01110:             );
+01111:     }
+01112: 
+01113:     function castVote(
+01114:         uint256[2] calldata a,
+01115:         uint256[2][2] calldata b,
+01116:         uint256[2] calldata c,
+01117:         uint256 nullifier,
+01118:         uint256[16] calldata rx,
+01119:         uint256[16] calldata ry,
+01120:         uint256[16] calldata sx,
+01121:         uint256[16] calldata sy
+01122:     )
+01123:         external
+01124:     {
+01125:         require(
+01126:             phase == Phase.Active,
+01127:             "NOT_ACTIVE"
+01128:         );
+01129: 
+01130:         require(
+01131:             !usedNullifier[
+01132:                 nullifier
+01133:             ],
+01134:             "NULLIFIER_USED"
+01135:         );
+01136: 
+01137:         _requireCanonicalCiphertext(
+01138:             rx,
+01139:             ry,
+01140:             sx,
+01141:             sy
+01142:         );
+01143: 
+01144:         uint256 digest =
+01145:             _binding(
+01146:                 rx,
+01147:                 ry,
+01148:                 sx,
+01149:                 sy
+01150:             );
+01151: 
+01152:         uint256[10] memory input;
+01153: 
+01154:         input[0] =
+01155:             eligibleRoot;
+01156: 
+01157:         input[1] =
+01158:             electionId;
+01159: 
+01160:         input[2] =
+01161:             candidateManifestHash;
+01162: 
+01163:         input[3] =
+01164:             candidateCount;
+01165: 
+01166:         input[4] =
+01167:             contractDomain;
+01168: 
+01169:         input[5] =
+01170:             Yx;
+01171: 
+01172:         input[6] =
+01173:             Yy;
+01174: 
+01175:         input[7] =
+01176:             electionContextHash;
+01177: 
+01178:         input[8] =
+01179:             nullifier;
+01180: 
+01181:         input[9] =
+01182:             digest;
+01183: 
+01184:         require(
+01185:             verifier.verifyProof(
+01186:                 a,
+01187:                 b,
+01188:                 c,
+01189:                 input
+01190:             ),
+01191:             "INVALID_PROOF"
+01192:         );
+01193: 
+01194:         _accept(
+01195:             nullifier,
+01196:             rx,
+01197:             ry,
+01198:             sx,
+01199:             sy
+01200:         );
+01201:     }
+01202: }
+01203: 
+01204: contract BabyJubTallyHarness {
+01205:     uint256[16] internal tallyRx;
+01206:     uint256[16] internal tallyRy;
+01207:     uint256[16] internal tallySx;
+01208:     uint256[16] internal tallySy;
+01209: 
+01210:     constructor() {
+01211:         for (
+01212:             uint256 i = 0;
+01213:             i < 16;
+01214:             i++
+01215:         ) {
+01216:             tallyRy[i] = 1;
+01217:             tallySy[i] = 1;
+01218:         }
+01219:     }
+01220: 
+01221:     function applyBallot(
+01222:         uint256[16] calldata rx,
+01223:         uint256[16] calldata ry,
+01224:         uint256[16] calldata sx,
+01225:         uint256[16] calldata sy
+01226:     )
+01227:         external
+01228:     {
+01229:         for (
+01230:             uint256 i = 0;
+01231:             i < 16;
+01232:             i++
+01233:         ) {
+01234:             BabyJubAffine.Point memory sumR =
+01235:                 BabyJubAffine.add(
+01236:                     BabyJubAffine.Point(
+01237:                         tallyRx[i],
+01238:                         tallyRy[i]
+01239:                     ),
+01240:                     BabyJubAffine.Point(
+01241:                         rx[i],
+01242:                         ry[i]
+01243:                     )
+01244:                 );
+01245: 

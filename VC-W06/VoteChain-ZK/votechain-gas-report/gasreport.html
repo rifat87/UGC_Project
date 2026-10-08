@@ -1,0 +1,16 @@
+\begin{table}
+\caption{Average execution cost of VoteChain methods (in USD)}
+\label{tab:votechain_cost_usd}
+\begin{tabular}{lrrrr}
+\toprule
+Scenario & Baseline (20 Gwei) & Low (1 Gwei) & Stress (4.9 Gwei) & Typical (1.45 Gwei) \\
+\midrule
+castVote & 3.1333 & 0.1567 & 0.7676 & 0.2272 \\
+endElection & 1.5005 & 0.0750 & 0.3676 & 0.1088 \\
+getCandidate & 0.3737 & 0.0187 & 0.0916 & 0.0271 \\
+getVoter & 0.3507 & 0.0175 & 0.0859 & 0.0254 \\
+registerCandidate & 11.2622 & 0.5631 & 2.7592 & 0.8165 \\
+registerVoter & 9.9820 & 0.4991 & 2.4456 & 0.7237 \\
+\bottomrule
+\end{tabular}
+\end{table}

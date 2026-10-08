@@ -1,0 +1,294 @@
+import {
+  BrowserProvider,
+  getAddress,
+} from "ethers"
+
+import {
+  apiUrl,
+} from "@/config/api"
+
+import {
+  wp5ContractAddress,
+} from "@/config/contract"
+
+const ADMIN_AUTH_SCHEME =
+  "VoteChainAdmin"
+
+const ADMIN_AUTH_VERSION =
+  "VoteChain-ZK Admin Request v1"
+
+function normalizeJson(
+  value: unknown,
+): unknown {
+  if (
+    Array.isArray(value)
+  ) {
+    return value.map(
+      normalizeJson,
+    )
+  }
+
+  if (
+    value &&
+    typeof value === "object"
+  ) {
+    const record =
+      value as Record<
+        string,
+        unknown
+      >
+
+    return Object.fromEntries(
+      Object
+        .keys(record)
+        .sort()
+        .map(
+          key => [
+            key,
+            normalizeJson(
+              record[key],
+            ),
+          ],
+        ),
+    )
+  }
+
+  return value
+}
+
+function canonicalJson(
+  value: unknown,
+) {
+  return JSON.stringify(
+    normalizeJson(
+      value === undefined
+        ? null
+        : value,
+    ),
+  )
+}
+
+async function sha256Hex(
+  text: string,
+) {
+  const bytes =
+    new TextEncoder()
+      .encode(text)
+
+  const digest =
+    await crypto.subtle.digest(
+      "SHA-256",
+      bytes,
+    )
+
+  return Array.from(
+    new Uint8Array(
+      digest,
+    ),
+    byte =>
+      byte
+        .toString(16)
+        .padStart(
+          2,
+          "0",
+        ),
+  ).join("")
+}
+
+function randomNonce() {
+  const bytes =
+    new Uint8Array(16)
+
+  crypto.getRandomValues(
+    bytes,
+  )
+
+  return Array.from(
+    bytes,
+    byte =>
+      byte
+        .toString(16)
+        .padStart(
+          2,
+          "0",
+        ),
+  ).join("")
+}
+
+function bodyValue(
+  body:
+    | BodyInit
+    | null
+    | undefined,
+) {
+  if (
+    body === undefined ||
+    body === null
+  ) {
+    return null
+  }
+
+  if (
+    typeof body !== "string"
+  ) {
+    throw new Error(
+      "Administrator API mutations must use a JSON string body",
+    )
+  }
+
+  if (
+    body.length === 0
+  ) {
+    return null
+  }
+
+  try {
+    return JSON.parse(
+      body,
+    )
+  } catch {
+    throw new Error(
+      "Administrator API mutation body must be valid JSON",
+    )
+  }
+}
+
+function buildMessage({
+  audience,
+  address,
+  method,
+  path,
+  timestamp,
+  nonce,
+  bodyHash,
+}: {
+  audience: string
+  address: string
+  method: string
+  path: string
+  timestamp: string
+  nonce: string
+  bodyHash: string
+}) {
+  return [
+    ADMIN_AUTH_VERSION,
+    `audience:${audience.toLowerCase()}`,
+    `address:${address.toLowerCase()}`,
+    `method:${method.toUpperCase()}`,
+    `path:${path}`,
+    `timestamp:${timestamp}`,
+    `nonce:${nonce.toLowerCase()}`,
+    `body-sha256:${bodyHash.toLowerCase()}`,
+  ].join("\n")
+}
+
+/*
+ * Sign one privileged REST mutation with the currently connected wallet.
+ *
+ * The backend independently reads admin() from the active WP5 Direct
+ * contract, so possessing an arbitrary wallet is insufficient.
+ */
+export async function adminFetch(
+  path: string,
+  init: RequestInit = {},
+) {
+  const injected =
+    (
+      window as unknown as {
+        ethereum?: unknown
+      }
+    ).ethereum
+
+  if (!injected) {
+    throw new Error(
+      "An injected wallet is required for administrator API mutations",
+    )
+  }
+
+  if (
+    !wp5ContractAddress
+  ) {
+    throw new Error(
+      "VITE_WP5_CONTRACT_ADDRESS is required for administrator API mutations",
+    )
+  }
+
+  const provider =
+    new BrowserProvider(
+      injected as never,
+    )
+
+  const signer =
+    await provider
+      .getSigner()
+
+  const address =
+    getAddress(
+      await signer
+        .getAddress(),
+    )
+
+  const audience =
+    getAddress(
+      wp5ContractAddress,
+    )
+
+  const method =
+    (
+      init.method ||
+      "GET"
+    ).toUpperCase()
+
+  const timestamp =
+    String(
+      Date.now(),
+    )
+
+  const nonce =
+    randomNonce()
+
+  const bodyHash =
+    await sha256Hex(
+      canonicalJson(
+        bodyValue(
+          init.body,
+        ),
+      ),
+    )
+
+  const message =
+    buildMessage({
+      audience,
+      address,
+      method,
+      path,
+      timestamp,
+      nonce,
+      bodyHash,
+    })
+
+  const signature =
+    await signer
+      .signMessage(
+        message,
+      )
+
+  const headers =
+    new Headers(
+      init.headers,
+    )
+
+  headers.set(
+    "Authorization",
+    `${ADMIN_AUTH_SCHEME} ${address}.${timestamp}.${nonce}.${signature}`,
+  )
+
+  return fetch(
+    apiUrl(path),
+    {
+      ...init,
+      method,
+      headers,
+    },
+  )
+}

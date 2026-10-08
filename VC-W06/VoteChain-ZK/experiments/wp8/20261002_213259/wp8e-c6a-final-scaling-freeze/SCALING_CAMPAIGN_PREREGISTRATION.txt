@@ -1,0 +1,189 @@
+WP8E FINAL ACCEPTED-BALLOT STATE-GROWTH SCALING CAMPAIGN
+========================================================
+
+CLASSIFICATION
+--------------
+Final controlled local-chain scaling campaign for the frozen VoteChainDirect
+K=16 DIRECT profile.
+
+This campaign evaluates sequential accepted-ballot state growth only.
+It does NOT replace:
+  - the distinct candidateCount matrix {2,4,8,16},
+  - the distinct eligible-set-size matrix,
+  - a separate single-vote 5-warmup + 20-measured microbenchmark,
+  - proof-generation benchmarking,
+  - threshold-finalization benchmarking.
+
+FROZEN ACTIVE PROFILE
+---------------------
+MAX_CANDIDATES=16
+ACTIVE_CANDIDATE_COUNT=4
+MERKLE_DEPTH=17
+ELIGIBLE_CORPUS_SIZE=150
+
+SCALE MATRIX
+------------
+N = {25,50,75,100,150}
+
+Each scale uses the prefix ballots 001..N from the frozen C2 corpus and
+their corresponding frozen real Groth16 proofs from C4.
+
+PREFIX CANDIDATE DISTRIBUTIONS
+------------------------------
+N=25   -> 7,6,6,6
+N=50   -> 13,13,12,12
+N=75   -> 19,19,19,18
+N=100  -> 25,25,25,25
+N=150  -> 38,38,37,37
+
+REPETITION POLICY
+-----------------
+For each scale:
+  - 1 independent warm-up election
+  - 5 independent measured elections
+
+Every election repetition MUST begin from a fresh Anvil chain and fresh
+VoteChainVoteDirectVerifier + VoteChainDirect deployment.
+
+Warm-up transactions are preserved as raw evidence but excluded from
+reported benchmark statistics.
+
+TOTAL ACCEPTED TRANSACTIONS
+---------------------------
+Warm-up:
+  25 + 50 + 75 + 100 + 150 = 400
+
+Measured:
+  5 * (25 + 50 + 75 + 100 + 150) = 2000
+
+Total campaign accepted vote transactions:
+  2400
+
+ORDER POLICY
+------------
+Warm-up elections:
+  25,50,75,100,150
+
+Measured election round 1:
+  25,50,75,100,150
+
+Measured election round 2:
+  50,75,100,150,25
+
+Measured election round 3:
+  75,100,150,25,50
+
+Measured election round 4:
+  100,150,25,50,75
+
+Measured election round 5:
+  150,25,50,75,100
+
+This deterministic rotation distributes scale position across measured
+rounds while preserving exactly five independent measured elections per scale.
+
+PER-ELECTION SETUP
+------------------
+For every repetition:
+  1. Start fresh local Anvil chain.
+  2. Deploy frozen VoteChainVoteDirectVerifier.
+  3. Deploy frozen VoteChainDirect linked to that verifier.
+  4. Configure the frozen 150-member C2 election configuration.
+  5. Activate the election.
+  6. Confirm acceptedBallotCount == 0.
+  7. Submit ballots 001..N sequentially.
+
+The same frozen proof corpus may be reused across independent fresh chains.
+Within any one chain, every accepted ballot MUST use a distinct frozen
+nullifier.
+
+MEASURED TRANSACTION METRICS
+----------------------------
+For every accepted castVote transaction record:
+  - scale N
+  - measured repetition number
+  - sequential ballot/state position
+  - frozen ballot ID
+  - synthetic selected-candidate index as experiment oracle metadata
+  - transaction hash
+  - receipt status
+  - receipt gasUsed
+  - calldata byte length
+  - cast-send-start to receipt-return wall-clock latency
+
+The wall-clock metric is local RPC/process confirmation latency.
+It MUST NOT be represented as Groth16 proving time.
+
+Deployment/configuration/activation time is outside the vote-latency metric.
+
+CORRECTNESS GATE AFTER EVERY ELECTION
+-------------------------------------
+The repetition is valid only if all are true:
+  - every planned castVote receipt succeeds,
+  - acceptedBallotCount == N,
+  - all N submitted nullifiers are used,
+  - all 16 encrypted tally slots exactly equal the independently computed
+    frozen prefix checkpoint for that N.
+
+Any failure places the campaign on HOLD.
+Do not silently skip a failed completed measurement.
+
+DUPLICATE CONTROL
+-----------------
+Duplicate-nullifier rejection has already been demonstrated in the frozen
+C5B-V3 pilot.
+
+No duplicate real transaction is included in the final measured campaign.
+No rejection transaction is pooled with accepted-vote measurements.
+
+RAW DATA / OUTLIER POLICY
+-------------------------
+Preserve every raw accepted-vote observation.
+
+No silent outlier deletion.
+
+Warm-up exclusion is structural and preregistered, not post-hoc filtering.
+
+REPORTING
+---------
+For measured observations report, where meaningful:
+  - count
+  - mean
+  - median
+  - min
+  - max
+  - sample standard deviation
+  - nearest-rank p95
+
+At minimum report these for:
+  - transaction gasUsed
+  - cast-send wall-clock latency
+
+Also retain repetition-level aggregates so that the five independent
+elections per scale can be analyzed separately from pooled transaction-level
+descriptives.
+
+PROVENANCE / SECURITY SCOPE
+---------------------------
+The C2 corpus uses deterministic synthetic benchmark secrets and deterministic
+synthetic encryption randomness.
+
+This is acceptable for reproducible controlled benchmarking.
+
+It MUST NOT be presented as production randomness or as evidence of
+production key-generation security.
+
+The active Solidity, verifier source, circuit, WASM, zkey, vkey, C2 corpus
+and C4 proof corpus are frozen before the campaign.
+
+FINAL-PILOT EXCLUSION
+---------------------
+All A1A/A1B/C5B pilot gas and latency observations are excluded from final
+scaling benchmark statistics.
+
+C5B-V3 establishes harness correctness only.
+
+NO ARCHITECTURE SUBSTITUTION
+----------------------------
+This accepted-ballot scaling campaign does not replace the separately
+recommended candidate-count and eligible-set-size experimental dimensions.

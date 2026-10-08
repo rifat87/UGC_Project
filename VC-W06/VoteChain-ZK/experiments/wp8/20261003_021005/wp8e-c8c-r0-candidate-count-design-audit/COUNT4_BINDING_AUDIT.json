@@ -1,0 +1,28 @@
+{
+  "currentC2CandidateCount": 4,
+  "candidateManifestHash": "19781384269126278716736732997765189386011898966608979970255896527959671067339",
+  "electionContextHash": "18914847795334919135567982813789726793351165727535738995749151322352099278487",
+  "fixtureTopLevelKeys": [
+    "a",
+    "b",
+    "ballotId",
+    "c",
+    "calldata",
+    "calldataBytes",
+    "calldataSha256",
+    "candidateIndex",
+    "castArgs",
+    "castSignature",
+    "inputSha256",
+    "nullifier",
+    "proofSha256",
+    "publicSha256",
+    "rx",
+    "ry",
+    "selector",
+    "sx",
+    "sy"
+  ],
+  "publicSignalCount": null,
+  "publicSignalIndex3": null
+}

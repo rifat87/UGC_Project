@@ -1,0 +1,460 @@
+WP8E C8C RUNTIME candidateCount BENCHMARK SUPPLEMENT V1
+=======================================================
+
+CLASSIFICATION
+--------------
+
+This document is a PRE-EXECUTION benchmark supplement.
+
+It does not modify or retrospectively rewrite Final Benchmark Protocol V2.
+
+It freezes mechanics that were still unspecified for the already-registered
+runtime candidateCount={2,4,8,16} final benchmark dimension.
+
+No active Solidity, circuit, R1CS, WASM, proving key, verification key,
+verifier, or cryptographic architecture changes.
+
+
+1. EXPERIMENTAL QUESTION
+------------------------
+
+Measure accepted-vote transaction gas and local cast-to-receipt latency under:
+
+candidateCount = {2,4,8,16}
+
+inside the single frozen active K16 DIRECT deployment.
+
+This is distinct from WP8D compile-time K-profile circuit/proving scaling.
+
+
+2. ACTIVE TOPOLOGY
+------------------
+
+MAX_CANDIDATES = 16
+
+MERKLE_DEPTH = 17
+
+Groth16 public signals = 73
+
+ciphertext slots = 16
+
+tally slots = 16
+
+The active castVote path retains fixed MAX=16 representation/work.
+
+Therefore candidateCount must not be described as shortening the active
+Solidity vote loop.
+
+
+3. CANDIDATE-MANIFEST ALGORITHM
+-------------------------------
+
+Use the existing application/runtime convention:
+
+POSEIDON_INDEXED_CHAIN_V1
+
+It was recovered and independently verified before this supplement.
+
+For active candidate IDs c[0..K-1]:
+
+state_0 =
+    Poseidon(
+        D_MANIFEST,
+        K
+    )
+
+For i = 0..K-1:
+
+state_(i+1) =
+    Poseidon(
+        state_i,
+        i,
+        c[i]
+    )
+
+candidateManifestHash =
+    state_K
+
+Index base = 0.
+
+No new manifest algorithm is introduced by WP8E.
+
+
+4. SYNTHETIC CANDIDATE UNIVERSE
+-------------------------------
+
+Frozen benchmark candidate IDs:
+
+101,102,103,104,105,106,107,108,
+109,110,111,112,113,114,115,116
+
+For runtime candidateCount K, use the first K candidate IDs.
+
+The four frozen candidateManifestHash values are stored in the profile files
+produced by this gate.
+
+
+5. ELECTION CONTEXT
+-------------------
+
+Use the existing election-context construction:
+
+Poseidon(
+    D_ELECTION_CONTEXT,
+    electionId,
+    candidateManifestHash,
+    candidateCount,
+    contractDomain,
+    Yx,
+    Yy
+)
+
+Each runtime level therefore has a distinct electionContextHash.
+
+The four exact values are frozen in this gate's profile files.
+
+
+6. CONTROLLED PRIVATE FIXTURE BASIS
+-----------------------------------
+
+Use C2 ballot direct-001 as the controlled basis.
+
+Across all four candidateCount levels retain:
+
+same voter secret
+
+same depth-17 Merkle membership path
+
+same eligible root
+
+same electionId
+
+same contractDomain
+
+same election public key Y
+
+same 16-slot ballot vector
+
+same 16 randomness values
+
+same selected candidate index = 0
+
+The frozen bit vector is:
+
+[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+Thus selected slot 0 is active at all four levels.
+
+Only the following public proof-bound configuration values vary:
+
+candidateCount
+
+candidateManifestHash
+
+electionContextHash
+
+
+7. EXPECTED CONTROLLED CONSEQUENCES
+-----------------------------------
+
+Because secret and electionId are held fixed, the expected nullifier is held
+constant across levels.
+
+Because bit vector, randomness and election public key are held fixed, the
+expected 16-slot ciphertext is held constant across levels.
+
+These expectations must be validated during input/proof construction before
+any benchmark execution.
+
+
+8. PROOF FIXTURE POLICY
+-----------------------
+
+Create exactly one final real Groth16 fixture per runtime level:
+
+K2
+K4
+K8
+K16
+
+All four use the same frozen active K16:
+
+R1CS
+WASM
+zkey
+verification key
+verifier
+
+No K2/K4/K8 circuit recompilation.
+
+No replacement verifier.
+
+Proof generation occurs before benchmark execution and is excluded from all
+timed observations.
+
+A level-specific frozen proof may be reused across independent fresh-chain
+observations for that same level.
+
+
+9. PILOT POLICY
+---------------
+
+Before the final campaign, execute one accepted-vote pilot for each runtime
+level using the final frozen runner.
+
+Pilot observations are NONFINAL and excluded from final statistics.
+
+If any pilot fails, stop and preserve evidence before a final campaign.
+
+
+10. FINAL REPETITION PLAN
+-------------------------
+
+Per runtime level:
+
+5 warm-up observations
+
+20 measured observations
+
+Across four levels:
+
+20 warm-up observations
+
+80 measured observations
+
+100 total final accepted-vote observations
+
+Each observation uses a completely fresh Anvil chain.
+
+No successful observation is reused between levels.
+
+
+11. BALANCED EXECUTION ORDER
+----------------------------
+
+Base order:
+
+2,4,8,16
+
+Round r rotates the base order by:
+
+(r - 1) mod 4
+
+The frozen execution matrix is stored separately.
+
+Across the 20 measured rounds, every runtime level occupies each execution
+order position exactly five times.
+
+
+12. PER-OBSERVATION PROCEDURE
+-----------------------------
+
+For every observation:
+
+1. start fresh Anvil;
+
+2. deploy the frozen verifier;
+
+3. deploy the frozen VoteChainDirect contract;
+
+4. configure the level-specific election;
+
+5. activate the election;
+
+6. submit exactly one accepted vote;
+
+7. preserve receipt;
+
+8. perform correctness checks;
+
+9. stop Anvil.
+
+Deployment/configuration/activation are preparation operations and not the
+accepted-vote measurement itself.
+
+
+13. TIMING INTERVAL
+-------------------
+
+The latency timer starts immediately before the local:
+
+cast send
+
+operation and ends immediately after that command returns with receipt output.
+
+Included:
+
+local cast process startup
+
+JSON-RPC interaction
+
+instant local Anvil mining
+
+receipt return
+
+Excluded:
+
+Anvil startup
+
+contract deployment
+
+election configuration
+
+activation
+
+proof generation
+
+fixture construction
+
+post-return receipt parsing
+
+post-receipt state reads
+
+tally validation
+
+This metric is local process/RPC + instant Anvil mining latency.
+
+It is not public-network confirmation latency and not end-to-end biometric
+voting latency.
+
+
+14. RAW OBSERVATION FIELDS
+--------------------------
+
+Preserve at minimum:
+
+candidateCount
+
+kind
+
+round
+
+executionOrderPosition
+
+repetitionId
+
+fixtureId
+
+txHash
+
+receiptStatus
+
+gasUsed
+
+calldataBytes
+
+calldataZeroBytes
+
+calldataNonzeroBytes
+
+latencyMs
+
+postvalidationStatus
+
+
+15. CORRECTNESS REQUIREMENTS
+----------------------------
+
+Every accepted observation must satisfy:
+
+receipt status = 1
+
+acceptedBallotCount = 1
+
+usedNullifier = true
+
+phase = Active
+
+configured candidateCount exactly matches the level
+
+configured candidateManifestHash exactly matches the frozen level profile
+
+configured electionContextHash exactly matches the frozen level profile
+
+all 16 encrypted tally slots equal the submitted ciphertext after the single
+accepted vote
+
+No correctness check occurs inside the timed interval.
+
+
+16. FAILURE / EXCLUSION POLICY
+------------------------------
+
+No silent retry.
+
+No silent deletion.
+
+No latency reconstruction.
+
+No replacement of failed measured observations.
+
+Any failure freezes the partial campaign and places the gate on HOLD.
+
+Warm-ups are preserved but excluded from final statistics.
+
+Pilots are preserved but excluded from final statistics.
+
+No post-hoc outlier deletion.
+
+
+17. FINAL STATISTICS
+--------------------
+
+For each candidateCount level use only its 20 measured observations.
+
+For gas and latency report:
+
+n
+
+mean
+
+median
+
+minimum
+
+maximum
+
+sample standard deviation
+
+nearest-rank p95
+
+Also report calldata byte-composition diagnostics.
+
+
+18. INTERPRETATION GUARDRAIL
+----------------------------
+
+Observed gas differences across levels must not be described as isolated
+candidateCount opcode/loop cost.
+
+The active castVote path retains fixed MAX=16 processing, while each level
+uses a distinct proof and distinct proof-bound public values.
+
+Groth16 proof coordinate and calldata byte composition may therefore
+contribute to measured transaction-gas differences.
+
+The proper result is:
+
+accepted-vote transaction sensitivity of the frozen active K16 system under
+four runtime candidateCount configurations.
+
+
+19. NON-CLAIMS
+--------------
+
+This experiment is not:
+
+compile-time circuit scaling
+
+proving-time scaling
+
+eligible-set-size scaling
+
+a controlled decomposition of verifier gas
+
+public-Ethereum latency
+
+end-to-end biometric voting latency
+
+a new production candidate-manifest standard
+

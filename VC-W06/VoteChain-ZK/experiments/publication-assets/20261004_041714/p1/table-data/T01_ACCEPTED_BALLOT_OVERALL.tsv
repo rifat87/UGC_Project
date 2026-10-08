@@ -1,0 +1,3 @@
+family	profile	metric	unit	n	mean	median	min	max	sample_sd	p95	note
+ACCEPTED_BALLOT_SCALING	OVERALL_MEASURED	CAST_VOTE_GAS	gas	2000	1314307.122500	1307355.000000	1306506.000000	1866414.000000	62133.009238	1307783.000000	2000 measured accepted-vote observations across 25 independent elections
+ACCEPTED_BALLOT_SCALING	OVERALL_MEASURED	LOCAL_CAST_RECEIPT_LATENCY	ms	2000	760.639934	755.111150	669.912300	1026.096800	54.870226	845.692600	Local process/RPC plus instant-Anvil receipt latency; not biometric end-to-end latency

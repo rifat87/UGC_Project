@@ -1,0 +1,2 @@
+family,config,k,n,depth,binding,constraints,public_inputs,private_inputs,outputs,total_public_signals,r1cs_bytes,wasm_bytes,zkey_bytes,vkey_bytes,proof_bytes,public_json_bytes,compile_ms,setup_ms,zkey_contribute_ms
+CANDIDATE,candidate-direct-K2,2,,,DIRECT,6694,2,4,8,,1515700,106909,3665365,4569,802,818,2013,8475,1607

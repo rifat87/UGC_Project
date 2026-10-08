@@ -1,0 +1,17 @@
+{
+  "timestampUtc": "2026-09-29T20:52:38.697Z",
+  "osPlatform": "win32",
+  "osRelease": "10.0.26200",
+  "architecture": "x64",
+  "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+  "logicalCpuCount": 16,
+  "totalMemoryBytes": 10575405056,
+  "nodeVersion": "v22.15.0",
+  "npmVersion": "10.9.1",
+  "circomVersion": "circom compiler 2.2.3",
+  "snarkjsVersion": "snarkjs@0.7.6",
+  "circomlibjsVersion": "0.1.7",
+  "circomlibVersion": "2.0.5",
+  "warmups": 5,
+  "measuredIterations": 20
+}

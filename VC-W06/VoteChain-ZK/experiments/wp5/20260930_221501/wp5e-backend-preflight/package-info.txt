@@ -1,0 +1,8 @@
+PACKAGE_NAME=votechain-central-server
+PACKAGE_TYPE=module
+DEV_SCRIPT=nodemon server.js
+START_SCRIPT=node server.js
+DEP_express=^4.18.2
+DEP_mongoose=^7.0.3
+DEP_ethers=^6.15.0
+DEP_circomlibjs=0.1.7

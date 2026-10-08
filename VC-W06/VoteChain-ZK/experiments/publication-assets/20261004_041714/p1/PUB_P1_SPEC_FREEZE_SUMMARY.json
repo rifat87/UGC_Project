@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "classification": "PUBLICATION_TABLE_VALUE_AND_ASSET_SPEC_FREEZE",
+  "canonicalPublicationResultRows": 32,
+  "tablesSpecified": 5,
+  "benchmarkFiguresSpecified": 6,
+  "systemDiagramsSpecified": 5,
+  "totalPlannedRenderedAssets": 11,
+  "tableValuesRecomputed": false,
+  "publicationAssetsRendered": false,
+  "finalSubmissionZipModified": false,
+  "checks": {
+    "canonicalRows32": true,
+    "tables5": true,
+    "benchmarkFigures6": true,
+    "systemDiagrams5": true,
+    "guardrailsPresent": true,
+    "noAssetRenderingAtP1": true,
+    "noBenchmarkReexecution": true,
+    "noSubmissionMutation": true
+  },
+  "nextGate": "PUB_P2_GENERATE_AND_VALIDATE_PUBLICATION_ASSETS"
+}

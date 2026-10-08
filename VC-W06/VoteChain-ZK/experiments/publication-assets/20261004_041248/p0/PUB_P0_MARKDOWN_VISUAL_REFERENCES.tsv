@@ -1,0 +1,2 @@
+markdown_package_path	alt_text	target	reference_kind	resolved_package_path	target_present_in_final_plan
+lib/forge-std/README.md	CI status	https://github.com/foundry-rs/forge-std/actions/workflows/ci.yml/badge.svg	REMOTE		NO

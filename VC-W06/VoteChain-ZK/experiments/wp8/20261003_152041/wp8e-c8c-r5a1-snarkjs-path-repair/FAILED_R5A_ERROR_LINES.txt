@@ -1,0 +1,9 @@
+5:      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/circom_tester/node_modules/snarkjs/package.json",
+6:      "status": "PACKAGE_JSON_PARSE_ERROR",
+7:      "error": "FileNotFoundError(2, 'No such file or directory')"
+10:      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/.zk-deps/node_modules/snarkjs/package.json",
+11:      "status": "PACKAGE_JSON_PARSE_ERROR",
+12:      "error": "FileNotFoundError(2, 'No such file or directory')"
+15:      "packageJson": "/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/node_modules/snarkjs/package.json",
+16:      "status": "PACKAGE_JSON_PARSE_ERROR",
+17:      "error": "FileNotFoundError(2, 'No such file or directory')"

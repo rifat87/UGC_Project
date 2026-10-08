@@ -1,0 +1,35 @@
+import { readFileSync } from 'node:fs'
+import { Contract, JsonRpcProvider } from 'ethers'
+import { getBlockchainConfig } from '../config/env.js'
+
+const abi = JSON.parse(
+  readFileSync(
+    new URL('../abi/VoteChainDirect.json', import.meta.url),
+    'utf8',
+  ),
+)
+
+function requireWp5Address(env = process.env) {
+  const value = env.WP5_CONTRACT_ADDRESS?.trim()
+  if (!value) {
+    throw new Error('WP5_CONTRACT_ADDRESS is not configured')
+  }
+  return value
+}
+
+export function getWp5Provider() {
+  const { rpcUrl } = getBlockchainConfig()
+  return new JsonRpcProvider(rpcUrl)
+}
+
+export function getWp5Contract() {
+  return new Contract(
+    requireWp5Address(),
+    abi,
+    getWp5Provider(),
+  )
+}
+
+export function getWp5ContractAbi() {
+  return abi
+}

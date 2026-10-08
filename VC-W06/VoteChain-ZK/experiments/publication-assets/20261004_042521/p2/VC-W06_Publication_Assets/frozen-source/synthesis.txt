@@ -1,0 +1,50 @@
+WP8 FINAL PUBLICATION-SAFE RESULTS SYNTHESIS
+============================================
+
+1. Accepted-ballot scaling
+--------------------------
+The frozen C7 analysis contains 2,000 measured accepted-vote observations from 25 independent elections. Four hundred warmup observations are excluded from final statistics and no silent outlier deletion was performed.
+Overall castVote gas: mean=1314307.122500, median=1307355.000000, min=1306506.000000, max=1866414.000000, sample SD=62133.009238, nearest-rank p95=1307783.000000 gas.
+Overall local cast-receipt latency: mean=760.639934 ms, median=755.111150 ms, min=669.912300 ms, max=1026.096800 ms, sample SD=54.870226 ms, nearest-rank p95=845.692600 ms.
+The C7B interpretation audit records mean gas of 1329671.680000 at scale level 25 and 1311046.146667 at scale level 150, a descriptive change of -1.400762%.
+This campaign characterizes accepted-ballot/state progression under the frozen local protocol; it is not an isolated ZKP-overhead experiment.
+
+2. Fresh-chain first-vote microbenchmark
+----------------------------------------
+The final C8B analysis explicitly uses measuredSummary: 20 measured fresh-chain iterations after excluding five warmups, earlier pilots, and the aborted campaign.
+Fresh-chain castVote gas: mean=1866414.000000, median=1866414.000000, min=1866414.000000, max=1866414.000000, sample SD=0.000000, nearest-rank p95=1866414.000000 gas.
+Fresh-chain local cast-receipt latency: mean=724.030260 ms, median=723.301450 ms, min=707.326700 ms, max=741.583900 ms, sample SD=10.000788 ms, nearest-rank p95=741.169200 ms.
+These values describe the first accepted vote on a fresh local chain and must not be generalized as the gas distribution of all sequential votes.
+
+3. Runtime candidate-count sensitivity
+--------------------------------------
+K=2: gas mean=1866402.000000; local latency mean=865.021110 ms (n=20).
+K=4: gas mean=1866414.000000; local latency mean=874.816695 ms (n=20).
+K=8: gas mean=1866414.000000; local latency mean=864.572260 ms (n=20).
+K=16: gas mean=1866414.000000; local latency mean=863.063140 ms (n=20).
+The range of per-level gas means is 12.000000 gas.
+The per-level latency means are not monotonic.
+The candidate-count experiment varies runtime election configuration within the fixed-size K16 interface and therefore supports a transaction-level configuration-sensitivity interpretation, not an isolated candidateCount opcode-cost claim.
+
+4. Eligible-set scaling
+-----------------------
+The final eligible-set analysis varies occupied eligible-set size N={10,100,1000,10000} while configured Merkle depth remains fixed at 17. Each level contributes 20 measured observations.
+N=10, depth=17 means: M1=1.114595 ms, M2=3.945765 ms, M3=1100.572040 ms, M4=5423.310715 ms, M5=1039.343420 ms.
+N=100, depth=17 means: M1=10.252050 ms, M2=11.923485 ms, M3=1090.561170 ms, M4=5372.540045 ms, M5=1030.482275 ms.
+N=1000, depth=17 means: M1=89.919430 ms, M2=88.386890 ms, M3=1045.809035 ms, M4=5292.146455 ms, M5=1031.746775 ms.
+N=10000, depth=17 means: M1=809.039505 ms, M2=797.957900 ms, M3=1044.413670 ms, M4=5298.751655 ms, M5=1018.917745 ms.
+M1 mean increases by a factor of 725.859622 from N=10 to N=10000.
+M2 mean increases by a factor of 202.231481 from N=10 to N=10000.
+M1 and M2 means increase monotonically across the tested N levels.
+M2 is integrated Merkle snapshot/root/target-path construction; it is not an isolated path-extraction timing measurement.
+M3, M4, and M5 use the same fixed-depth circuit and frozen proving artifacts, so their observed differences are reported as descriptive runtime variation rather than N-dependent circuit-complexity scaling.
+
+5. Cross-strand interpretation boundary
+---------------------------------------
+The accepted-ballot, fresh-chain, runtime candidate-count, and eligible-set experiments answer different performance questions and are not merged into one causal scaling curve.
+No isolated ZKP-overhead claim is made from a raw pre-ZKP versus DIRECT castVote gas difference.
+No direct comparison is made between local process/RPC/cryptographic latency and biometric/IoT end-to-end voting latency.
+No on-chain eligible-set scaling claim is made.
+No inferential regression or silent outlier deletion is introduced in this synthesis.
+
+STATUS=PASS_WP8_PUBLICATION_SAFE_RESULTS_SYNTHESIS

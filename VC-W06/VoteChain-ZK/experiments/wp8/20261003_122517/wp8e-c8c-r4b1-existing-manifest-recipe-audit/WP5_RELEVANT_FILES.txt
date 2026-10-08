@@ -1,0 +1,6 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/config/wp5-application-profile.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_165820/direct/wrong-manifest.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/digest/wrong-manifest.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170346/direct/wrong-manifest.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/digest/wrong-manifest.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/vectors/wp3/20260930_170614/direct/wrong-manifest.json

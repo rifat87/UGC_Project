@@ -1,0 +1,30 @@
+[
+  {
+    "k": 2,
+    "file": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k2-d17/compatibility-result.json",
+    "fields": {
+      "candidateCount": 2
+    }
+  },
+  {
+    "k": 4,
+    "file": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k4-d17/compatibility-result.json",
+    "fields": {
+      "candidateCount": 4
+    }
+  },
+  {
+    "k": 8,
+    "file": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k8-d17/compatibility-result.json",
+    "fields": {
+      "candidateCount": 8
+    }
+  },
+  {
+    "k": 16,
+    "file": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_203037/wp8d-b2b-b-24-profile-compatibility-proofs/proofs/direct-k16-d17/compatibility-result.json",
+    "fields": {
+      "candidateCount": 16
+    }
+  }
+]

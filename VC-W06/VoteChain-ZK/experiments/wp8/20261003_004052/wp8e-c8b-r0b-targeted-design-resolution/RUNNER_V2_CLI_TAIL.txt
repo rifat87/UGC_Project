@@ -1,0 +1,120 @@
+    )
+
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--execute-final-campaign",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--output",
+    )
+
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8557,
+    )
+
+    args = parser.parse_args()
+
+    root = Path(
+        args.root
+    ).resolve()
+
+    bundle = Path(
+        args.bundle
+    ).resolve()
+
+    validate_frozen_inputs(
+        root,
+        bundle,
+    )
+
+    (
+        plan,
+        warmup_total,
+        measured_total,
+    ) = validate_plan()
+
+    print(
+        "FROZEN_INPUT_VALIDATION=PASS"
+    )
+
+    print(
+        f"CAMPAIGN_ELECTION_COUNT={len(plan)}"
+    )
+
+    print(
+        f"WARMUP_ACCEPTED_TX_TOTAL={warmup_total}"
+    )
+
+    print(
+        f"MEASURED_ACCEPTED_TX_TOTAL={measured_total}"
+    )
+
+    print(
+        "TOTAL_ACCEPTED_TX="
+        f"{warmup_total + measured_total}"
+    )
+
+    print(
+        "SCALES=25,50,75,100,150"
+    )
+
+    print(
+        "MEASURED_ELECTIONS_PER_SCALE=5"
+    )
+
+    if args.validate_only:
+
+        if args.execute_final_campaign:
+            raise RuntimeError(
+                "validate-only and execute "
+                "cannot be combined"
+            )
+
+        print(
+            "VALIDATE_ONLY=YES"
+        )
+
+        print(
+            "ANVIL_STARTED=NO"
+        )
+
+        print(
+            "TRANSACTION_SUBMITTED=NO"
+        )
+
+        print(
+            "RUNNER_VALIDATION=PASS"
+        )
+
+        return
+
+    if not args.execute_final_campaign:
+        raise RuntimeError(
+            "execution locked: "
+            "use --execute-final-campaign"
+        )
+
+    if not args.output:
+        raise RuntimeError(
+            "--output is required "
+            "for campaign execution"
+        )
+
+    execute_campaign(
+        root,
+        bundle,
+        Path(args.output).resolve(),
+        args.port,
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "classification": "WP8_PATH_SAFE_REPRODUCIBILITY_PACKAGE_BUILD",
+  "authoritativeSourceArtifacts": 9,
+  "provenanceArtifacts": 16,
+  "packageManifestRows": 36,
+  "packageManifestSha256": "ac190da95ac02e1eff06f4727a50e958e229be48cce945130cf13cd9ca49210a",
+  "archiveSha256": "b191e1f4fdabf05feceae0e37e401499e30707594860e6c546236e2b8c3d5ec7",
+  "archiveSizeBytes": 40417,
+  "archiveVerifiedAgainstPackageManifest": true,
+  "publicationCoreResultRows": 32,
+  "publicationResultsChanged": false,
+  "rawHistoricalExperimentCorpusEmbedded": false,
+  "rawHistoricalExperimentCorpusPreservedInProjectTree": true,
+  "newBenchmarkExecution": false,
+  "newWitnessGeneration": false,
+  "newProofGeneration": false,
+  "onchainExecution": false
+}

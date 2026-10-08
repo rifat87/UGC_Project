@@ -1,0 +1,8 @@
+HOLD_REASON=GENERATED_PILOT_PROFILE_DIMENSIONS_WRONG
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/build/VoteChainVoteDirect.r1cs
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/build/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/artifacts/VoteChainVoteDirect_K2_D4_0000.zkey
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/artifacts/verification_key.json
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/proof/proof.json
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/proof/public.json
+HOLD_REASON=EXPECTED_PILOT_ARTIFACT_MISSING:/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_182546/wp8d-b1-single-profile-full-build-pilot/direct-k2-d4/proof/compatibility-result.json

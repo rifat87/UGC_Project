@@ -1,0 +1,62 @@
+[
+  {
+    "backendAuthorizationMs": 258.80000001192093,
+    "browserLocalPrivacyMs": 4580.800000011921,
+    "browserOverallMs": 5017.300000011921,
+    "calldataBytes": 2340,
+    "campaignId": "20261001_161156",
+    "castGas": 1866354,
+    "pilotTrial": 1,
+    "status": "PASS_WP5E_BACKEND_AUTH_NETWORK_RUNTIME",
+    "transactionLatencyMs": 508.0475,
+    "warmup": true,
+    "wp5eEvidence": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20261001_161201/wp5e-auth-network",
+    "wp5eRunId": "20261001_161201",
+    "wrapperWallMs": 67221.4032
+  },
+  {
+    "backendAuthorizationMs": 54.10000002384186,
+    "browserLocalPrivacyMs": 4098.599999964237,
+    "browserOverallMs": 4255.199999988079,
+    "calldataBytes": 2340,
+    "campaignId": "20261001_161156",
+    "castGas": 1866390,
+    "pilotTrial": 2,
+    "status": "PASS_WP5E_BACKEND_AUTH_NETWORK_RUNTIME",
+    "transactionLatencyMs": 485.5,
+    "warmup": false,
+    "wp5eEvidence": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20261001_161309/wp5e-auth-network",
+    "wp5eRunId": "20261001_161309",
+    "wrapperWallMs": 34122.218
+  },
+  {
+    "backendAuthorizationMs": 58.59999996423721,
+    "browserLocalPrivacyMs": 5377.600000023842,
+    "browserOverallMs": 5568.699999988079,
+    "calldataBytes": 2340,
+    "campaignId": "20261001_161156",
+    "castGas": 1866450,
+    "pilotTrial": 3,
+    "status": "PASS_WP5E_BACKEND_AUTH_NETWORK_RUNTIME",
+    "transactionLatencyMs": 491.7632,
+    "warmup": false,
+    "wp5eEvidence": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20261001_161345/wp5e-auth-network",
+    "wp5eRunId": "20261001_161345",
+    "wrapperWallMs": 35139.8907
+  },
+  {
+    "backendAuthorizationMs": 52.299999952316284,
+    "browserLocalPrivacyMs": 4004.0,
+    "browserOverallMs": 4166.199999988079,
+    "calldataBytes": 2340,
+    "campaignId": "20261001_161156",
+    "castGas": 1866414,
+    "pilotTrial": 4,
+    "status": "PASS_WP5E_BACKEND_AUTH_NETWORK_RUNTIME",
+    "transactionLatencyMs": 534.3348000000001,
+    "warmup": false,
+    "wp5eEvidence": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20261001_161421/wp5e-auth-network",
+    "wp5eRunId": "20261001_161421",
+    "wrapperWallMs": 33061.8185
+  }
+]

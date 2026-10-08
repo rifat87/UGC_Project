@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@tanstack/react-query": "^5.76.1",
+    "@types/react-router-dom": "^5.3.3",
+    "@wagmi/connectors": "^5.8.2",
+    "caniuse-lite": "^1.0.30001731",
+    "ethers": "^6.13.5",
+    "lucide-react": "^0.484.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.4.0",
+    "viem": "^2.29.2",
+    "wagmi": "^2.15.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "sync:abi": "node scripts/sync-local-voting-abi.mjs",
+    "sync:zk-abi": "node scripts/sync-zk-local-voting-abi.mjs",
+    "setup:zk": "bash scripts/setup-zk-deps.sh",
+    "zk:poc": "node research/zkp/poc/semaphore-poc.mjs",
+    "zk:e2e": "node research/zkp/e2e/local-zk-e2e.mjs"
+  }
+}

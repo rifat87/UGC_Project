@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "checks": {
+    "profileAuditPass": true,
+    "sourceBindingMethod": true,
+    "bindingsDistinct": true,
+    "reusePass": true,
+    "reuseDecision": true,
+    "directBackendImport": true,
+    "activeWp5Hash": true,
+    "activeSnapshotBuilder": true,
+    "frozenNLevels": true,
+    "targetIndex0": true,
+    "rootMutation": true,
+    "siblingsMutation": true,
+    "mutationGuard": true,
+    "membershipReconstruction": true,
+    "noTiming": true,
+    "noProof": true,
+    "noOnchain": true,
+    "purePathTimingDisallowed": true,
+    "snapshotTimingFrozen": true,
+    "timingNotStarted": true
+  },
+  "failedChecks": [],
+  "adapterExecuted": false,
+  "fixtureGenerationStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "benchmarkTimingStarted": false,
+  "onchainExecutionStarted": false
+}

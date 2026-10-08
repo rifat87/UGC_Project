@@ -1,0 +1,651 @@
+
+========================================================================
+FUNCTION=receipt_info LINES=170-279
+========================================================================
+0170: def receipt_info(text):
+0171:     decoder = json.JSONDecoder()
+0172: 
+0173:     stripped = text.lstrip()
+0174: 
+0175:     if not stripped:
+0176:         raise RuntimeError(
+0177:             "empty cast receipt stdout"
+0178:         )
+0179: 
+0180:     try:
+0181:         obj, end = decoder.raw_decode(
+0182:             stripped
+0183:         )
+0184:     except json.JSONDecodeError as exc:
+0185:         raise RuntimeError(
+0186:             "could not decode leading "
+0187:             "cast receipt JSON"
+0188:         ) from exc
+0189: 
+0190:     if not isinstance(
+0191:         obj,
+0192:         dict,
+0193:     ):
+0194:         raise RuntimeError(
+0195:             "leading cast receipt JSON "
+0196:             "is not an object"
+0197:         )
+0198: 
+0199:     trailing = stripped[end:]
+0200: 
+0201:     # Full raw stdout is preserved separately in the receipt
+0202:     # artifact before this parser is called.  A sporadic Foundry/
+0203:     # Alloy diagnostic may therefore follow a valid receipt JSON.
+0204:     #
+0205:     # Do not interpret a second JSON object as harmless log text.
+0206:     trailing_nonws = trailing.lstrip()
+0207: 
+0208:     if trailing_nonws.startswith(
+0209:         ("{", "[")
+0210:     ):
+0211:         try:
+0212:             decoder.raw_decode(
+0213:                 trailing_nonws
+0214:             )
+0215:         except json.JSONDecodeError:
+0216:             pass
+0217:         else:
+0218:             raise RuntimeError(
+0219:                 "multiple top-level JSON values "
+0220:                 "in cast receipt stdout"
+0221:             )
+0222: 
+0223:     status = obj.get(
+0224:         "status"
+0225:     )
+0226: 
+0227:     if isinstance(
+0228:         status,
+0229:         str,
+0230:     ):
+0231:         ok = (
+0232:             status.lower()
+0233:             in {
+0234:                 "0x1",
+0235:                 "1",
+0236:                 "success",
+0237:             }
+0238:         )
+0239:     else:
+0240:         ok = status == 1
+0241: 
+0242:     tx = (
+0243:         obj.get(
+0244:             "transactionHash"
+0245:         )
+0246:         or obj.get(
+0247:             "transaction_hash"
+0248:         )
+0249:         or ""
+0250:     )
+0251: 
+0252:     gas = (
+0253:         obj.get(
+0254:             "gasUsed"
+0255:         )
+0256:         or obj.get(
+0257:             "gas_used"
+0258:         )
+0259:     )
+0260: 
+0261:     if gas is None:
+0262:         gas_int = None
+0263:     elif isinstance(
+0264:         gas,
+0265:         int,
+0266:     ):
+0267:         gas_int = gas
+0268:     else:
+0269:         gas_int = int(
+0270:             str(gas),
+0271:             0,
+0272:         )
+0273: 
+0274:     return (
+0275:         ok,
+0276:         tx,
+0277:         gas_int,
+0278:         obj,
+0279:     )
+
+========================================================================
+FUNCTION=validate_fixture_bundle LINES=330-427
+========================================================================
+0330: def validate_fixture_bundle(
+0331:     bundle,
+0332: ):
+0333:     manifest_path = (
+0334:         bundle
+0335:         / "FIXTURE_BUNDLE_MANIFEST.json"
+0336:     )
+0337: 
+0338:     require_hash(
+0339:         manifest_path,
+0340:         EXPECTED[
+0341:             "fixture_bundle_manifest"
+0342:         ],
+0343:         "fixture bundle manifest",
+0344:     )
+0345: 
+0346:     manifest = load_json(
+0347:         manifest_path
+0348:     )
+0349: 
+0350:     for item in manifest["files"]:
+0351:         path = (
+0352:             bundle
+0353:             / item["path"]
+0354:         )
+0355: 
+0356:         if not path.is_file():
+0357:             raise RuntimeError(
+0358:                 f"missing fixture bundle file: "
+0359:                 f"{item['path']}"
+0360:             )
+0361: 
+0362:         actual = sha_file(
+0363:             path
+0364:         )
+0365: 
+0366:         if actual != item["sha256"]:
+0367:             raise RuntimeError(
+0368:                 f"fixture bundle content mismatch: "
+0369:                 f"{item['path']}"
+0370:             )
+0371: 
+0372:     index_path = (
+0373:         bundle
+0374:         / "fixture-index.json"
+0375:     )
+0376: 
+0377:     tallies_path = (
+0378:         bundle
+0379:         / "expected-prefix-tallies.json"
+0380:     )
+0381: 
+0382:     require_hash(
+0383:         index_path,
+0384:         EXPECTED[
+0385:             "fixture_index"
+0386:         ],
+0387:         "fixture index",
+0388:     )
+0389: 
+0390:     require_hash(
+0391:         tallies_path,
+0392:         EXPECTED[
+0393:             "prefix_tallies"
+0394:         ],
+0395:         "prefix tallies",
+0396:     )
+0397: 
+0398:     index = load_json(
+0399:         index_path
+0400:     )
+0401: 
+0402:     if index["fixtureCount"] != 150:
+0403:         raise RuntimeError(
+0404:             "fixtureCount != 150"
+0405:         )
+0406: 
+0407:     if (
+0408:         index[
+0409:             "calldataBytesPerFixture"
+0410:         ]
+0411:         != 2340
+0412:     ):
+0413:         raise RuntimeError(
+0414:             "fixture calldata bytes != 2340"
+0415:         )
+0416: 
+0417:     if (
+0418:         index[
+0419:             "castVoteSelector"
+0420:         ]
+0421:         != "0x84943e35"
+0422:     ):
+0423:         raise RuntimeError(
+0424:             "fixture selector mismatch"
+0425:         )
+0426: 
+0427:     return index
+
+========================================================================
+FUNCTION=stop_anvil LINES=600-636
+========================================================================
+0600: def stop_anvil(
+0601:     process,
+0602:     cast,
+0603:     rpc,
+0604: ):
+0605:     if (
+0606:         process
+0607:         and process.poll()
+0608:         is None
+0609:     ):
+0610:         process.terminate()
+0611: 
+0612:         try:
+0613:             process.wait(
+0614:                 timeout=5
+0615:             )
+0616:         except subprocess.TimeoutExpired:
+0617:             process.kill()
+0618:             process.wait(
+0619:                 timeout=5
+0620:             )
+0621: 
+0622:     for _ in range(30):
+0623:         cp = run(
+0624:             [
+0625:                 cast,
+0626:                 "block-number",
+0627:                 "--rpc-url",
+0628:                 rpc,
+0629:             ],
+0630:             check=False,
+0631:         )
+0632: 
+0633:         if cp.returncode != 0:
+0634:             return
+0635: 
+0636:         time.sleep(0.1)
+
+========================================================================
+FUNCTION=start_anvil LINES=639-719
+========================================================================
+0639: def start_anvil(
+0640:     anvil,
+0641:     cast,
+0642:     port,
+0643:     log_file,
+0644: ):
+0645:     rpc = (
+0646:         f"http://127.0.0.1:{port}"
+0647:     )
+0648: 
+0649:     pre = run(
+0650:         [
+0651:             cast,
+0652:             "block-number",
+0653:             "--rpc-url",
+0654:             rpc,
+0655:         ],
+0656:         check=False,
+0657:     )
+0658: 
+0659:     if pre.returncode == 0:
+0660:         raise RuntimeError(
+0661:             f"RPC port {port} already in use"
+0662:         )
+0663: 
+0664:     log_handle = open(
+0665:         log_file,
+0666:         "w",
+0667:         encoding="utf-8",
+0668:         newline="\n",
+0669:     )
+0670: 
+0671:     process = subprocess.Popen(
+0672:         [
+0673:             anvil,
+0674:             "--silent",
+0675:             "--port",
+0676:             str(port),
+0677:             "--chain-id",
+0678:             "31337",
+0679:         ],
+0680:         stdout=log_handle,
+0681:         stderr=subprocess.STDOUT,
+0682:         text=True,
+0683:     )
+0684: 
+0685:     for _ in range(100):
+0686:         cp = run(
+0687:             [
+0688:                 cast,
+0689:                 "block-number",
+0690:                 "--rpc-url",
+0691:                 rpc,
+0692:             ],
+0693:             check=False,
+0694:         )
+0695: 
+0696:         if cp.returncode == 0:
+0697:             return (
+0698:                 process,
+0699:                 log_handle,
+0700:                 rpc,
+0701:             )
+0702: 
+0703:         if process.poll() is not None:
+0704:             break
+0705: 
+0706:         time.sleep(0.1)
+0707: 
+0708:     try:
+0709:         stop_anvil(
+0710:             process,
+0711:             cast,
+0712:             rpc,
+0713:         )
+0714:     finally:
+0715:         log_handle.close()
+0716: 
+0717:     raise RuntimeError(
+0718:         "Anvil failed to start"
+0719:     )
+
+========================================================================
+FUNCTION=deploy_contracts LINES=722-823
+========================================================================
+0722: def deploy_contracts(
+0723:     root,
+0724:     forge,
+0725:     cast,
+0726:     rpc,
+0727:     election_dir,
+0728: ):
+0729:     foundry = (
+0730:         root
+0731:         / "contracts/wp4-foundry"
+0732:     )
+0733: 
+0734:     verifier_cp = run(
+0735:         [
+0736:             forge,
+0737:             "create",
+0738:             (
+0739:                 "src/verifiers/"
+0740:                 "VoteChainVoteDirectVerifier.sol:"
+0741:                 "VoteChainVoteDirectVerifier"
+0742:             ),
+0743:             "--rpc-url",
+0744:             rpc,
+0745:             "--private-key",
+0746:             PRIVATE_KEY,
+0747:             "--broadcast",
+0748:             "--json",
+0749:         ],
+0750:         cwd=foundry,
+0751:     )
+0752: 
+0753:     (
+0754:         election_dir
+0755:         / "verifier-deploy.json"
+0756:     ).write_text(
+0757:         verifier_cp.stdout,
+0758:         encoding="utf-8",
+0759:         newline="\n",
+0760:     )
+0761: 
+0762:     verifier = extract_address(
+0763:         verifier_cp.stdout
+0764:     )
+0765: 
+0766:     direct_cp = run(
+0767:         [
+0768:             forge,
+0769:             "create",
+0770:             (
+0771:                 "src/VoteChainWP4.sol:"
+0772:                 "VoteChainDirect"
+0773:             ),
+0774:             "--rpc-url",
+0775:             rpc,
+0776:             "--private-key",
+0777:             PRIVATE_KEY,
+0778:             "--broadcast",
+0779:             "--json",
+0780:             "--constructor-args",
+0781:             verifier,
+0782:         ],
+0783:         cwd=foundry,
+0784:     )
+0785: 
+0786:     (
+0787:         election_dir
+0788:         / "direct-deploy.json"
+0789:     ).write_text(
+0790:         direct_cp.stdout,
+0791:         encoding="utf-8",
+0792:         newline="\n",
+0793:     )
+0794: 
+0795:     direct = extract_address(
+0796:         direct_cp.stdout
+0797:     )
+0798: 
+0799:     linked = first_token(
+0800:         run(
+0801:             [
+0802:                 cast,
+0803:                 "call",
+0804:                 direct,
+0805:                 "verifier()(address)",
+0806:                 "--rpc-url",
+0807:                 rpc,
+0808:             ]
+0809:         ).stdout
+0810:     )
+0811: 
+0812:     if (
+0813:         linked.lower()
+0814:         != verifier.lower()
+0815:     ):
+0816:         raise RuntimeError(
+0817:             "verifier constructor link mismatch"
+0818:         )
+0819: 
+0820:     return (
+0821:         verifier,
+0822:         direct,
+0823:     )
+
+========================================================================
+FUNCTION=configure_and_activate LINES=826-1024
+========================================================================
+0826: def configure_and_activate(
+0827:     root,
+0828:     cast,
+0829:     rpc,
+0830:     direct,
+0831: ):
+0832:     config_path = (
+0833:         root
+0834:         / "experiments/wp8"
+0835:         / "20261002_175126"
+0836:         / "wp8e-c2-150-ballot-input-corpus"
+0837:         / "corpus/corpus-config.json"
+0838:     )
+0839: 
+0840:     cfg = load_json(
+0841:         config_path
+0842:     )["config"]
+0843: 
+0844:     keys = (
+0845:         "eligibleRoot",
+0846:         "electionId",
+0847:         "candidateManifestHash",
+0848:         "candidateCount",
+0849:         "contractDomain",
+0850:         "Yx",
+0851:         "Yy",
+0852:         "electionContextHash",
+0853:     )
+0854: 
+0855:     config_arg = (
+0856:         "("
+0857:         + ",".join(
+0858:             str(cfg[k])
+0859:             for k in keys
+0860:         )
+0861:         + ")"
+0862:     )
+0863: 
+0864:     admin = first_token(
+0865:         run(
+0866:             [
+0867:                 cast,
+0868:                 "wallet",
+0869:                 "address",
+0870:                 "--private-key",
+0871:                 PRIVATE_KEY,
+0872:             ]
+0873:         ).stdout
+0874:     )
+0875: 
+0876:     run(
+0877:         [
+0878:             cast,
+0879:             "call",
+0880:             direct,
+0881:             CONFIG_SIG,
+0882:             config_arg,
+0883:             "--from",
+0884:             admin,
+0885:             "--rpc-url",
+0886:             rpc,
+0887:         ]
+0888:     )
+0889: 
+0890:     run(
+0891:         [
+0892:             cast,
+0893:             "send",
+0894:             direct,
+0895:             CONFIG_SIG,
+0896:             config_arg,
+0897:             "--private-key",
+0898:             PRIVATE_KEY,
+0899:             "--rpc-url",
+0900:             rpc,
+0901:             "--json",
+0902:         ]
+0903:     )
+0904: 
+0905:     configured = first_token(
+0906:         run(
+0907:             [
+0908:                 cast,
+0909:                 "call",
+0910:                 direct,
+0911:                 "configured()(bool)",
+0912:                 "--rpc-url",
+0913:                 rpc,
+0914:             ]
+0915:         ).stdout
+0916:     )
+0917: 
+0918:     if configured != "true":
+0919:         raise RuntimeError(
+0920:             "configured != true"
+0921:         )
+0922: 
+0923:     run(
+0924:         [
+0925:             cast,
+0926:             "call",
+0927:             direct,
+0928:             "activate()",
+0929:             "--from",
+0930:             admin,
+0931:             "--rpc-url",
+0932:             rpc,
+0933:         ]
+0934:     )
+0935: 
+0936:     run(
+0937:         [
+0938:             cast,
+0939:             "send",
+0940:             direct,
+0941:             "activate()",
+0942:             "--private-key",
+0943:             PRIVATE_KEY,
+0944:             "--rpc-url",
+0945:             rpc,
+0946:             "--json",
+0947:         ]
+0948:     )
+0949: 
+0950:     phase = first_token(
+0951:         run(
+0952:             [
+0953:                 cast,
+0954:                 "call",
+0955:                 direct,
+0956:                 "phase()(uint8)",
+0957:                 "--rpc-url",
+0958:                 rpc,
+0959:             ]
+0960:         ).stdout
+0961:     )
+0962: 
+0963:     count = first_token(
+0964:         run(
+0965:             [
+0966:                 cast,
+0967:                 "call",
+0968:                 direct,
+0969:                 (
+0970:                     "acceptedBallotCount()"
+0971:                     "(uint256)"
+0972:                 ),
+0973:                 "--rpc-url",
+0974:                 rpc,
+0975:             ]
+0976:         ).stdout
+0977:     )
+0978: 
+0979:     if phase != "1":
+0980:         raise RuntimeError(
+0981:             f"phase != 1: {phase}"
+0982:         )
+0983: 
+0984:     if count != "0":
+0985:         raise RuntimeError(
+0986:             f"initial count != 0: {count}"
+0987:         )
+0988: 
+0989:     for slot in range(16):
+0990:         values = [
+0991:             line.split()[0]
+0992:             for line in run(
+0993:                 [
+0994:                     cast,
+0995:                     "call",
+0996:                     direct,
+0997:                     (
+0998:                         "getTally(uint256)"
+0999:                         "(uint256,uint256,"
+1000:                         "uint256,uint256)"
+1001:                     ),
+1002:                     str(slot),
+1003:                     "--rpc-url",
+1004:                     rpc,
+1005:                 ]
+1006:             ).stdout
+1007:             .replace(
+1008:                 "\r",
+1009:                 "",
+1010:             )
+1011:             .splitlines()
+1012:             if line.strip()
+1013:         ]
+1014: 
+1015:         if values != [
+1016:             "0",
+1017:             "1",
+1018:             "0",
+1019:             "1",
+1020:         ]:
+1021:             raise RuntimeError(
+1022:                 f"initial tally slot "
+1023:                 f"{slot} mismatch"
+1024:             )

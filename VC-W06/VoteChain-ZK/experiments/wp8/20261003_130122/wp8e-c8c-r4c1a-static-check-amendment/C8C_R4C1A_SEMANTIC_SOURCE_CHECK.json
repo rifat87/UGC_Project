@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "server": {
+    "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js",
+    "checks": {
+      "algorithmBranch": true,
+      "lengthBoundSeed": true,
+      "zeroBasedIndex": true,
+      "loopBound": true,
+      "indexedStep": true,
+      "returnsState": true
+    }
+  },
+  "regression": {
+    "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs",
+    "checks": {
+      "lengthBoundSeed": true,
+      "zeroBasedIndex": true,
+      "loopBound": true,
+      "indexedStep": true,
+      "returnsState": true
+    }
+  },
+  "recoveredRecurrence": {
+    "seed": "Poseidon(D_MANIFEST,candidateCount)",
+    "indexBase": 0,
+    "step": "Poseidon(previous,index,candidateId[index])"
+  }
+}

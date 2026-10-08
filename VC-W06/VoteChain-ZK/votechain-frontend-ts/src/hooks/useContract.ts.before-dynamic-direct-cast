@@ -1,0 +1,636 @@
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
+import {
+  ethers,
+} from "ethers"
+import {
+  createContract,
+  createWp5Contract,
+} from "@/config/contract"
+import {
+  useWallet,
+} from "@/components/ui/wallet-provider"
+import type {
+  ElectionState,
+} from "@/services/api"
+import type {
+  Wp5EncryptedBallot,
+} from "@/privacy/wp5PrivacyClient"
+
+const ELECTION_STATES:
+  Record<
+    number,
+    ElectionState
+  > = {
+    0: "Registration",
+    1: "Active",
+    2: "Ended",
+  }
+
+function toElectionState(
+  value:
+    bigint |
+    number,
+): ElectionState {
+  const state =
+    ELECTION_STATES[
+      Number(value)
+    ]
+
+  if (!state) {
+    throw new Error(
+      `Unknown election state: ${value.toString()}`,
+    )
+  }
+
+  return state
+}
+
+export function useContract() {
+  /*
+   * Inherited contract stays available to existing
+   * registration/admin screens during migration.
+   */
+  const [
+    contract,
+    setContract,
+  ] =
+    useState<ethers.Contract | null>(
+      null,
+    )
+
+  const [
+    isLoading,
+    setIsLoading,
+  ] =
+    useState(false)
+
+  const [
+    error,
+    setError,
+  ] =
+    useState<Error | null>(
+      null,
+    )
+
+  const [
+    isInitialized,
+    setIsInitialized,
+  ] =
+    useState(false)
+
+  const [
+    isAdmin,
+    setIsAdmin,
+  ] =
+    useState(false)
+
+  /*
+   * WP5 DIRECT contract is a separate active voter path.
+   */
+  const [
+    wp5Contract,
+    setWp5Contract,
+  ] =
+    useState<ethers.Contract | null>(
+      null,
+    )
+
+  const [
+    wp5Loading,
+    setWp5Loading,
+  ] =
+    useState(false)
+
+  const [
+    wp5Error,
+    setWp5Error,
+  ] =
+    useState<Error | null>(
+      null,
+    )
+
+  const [
+    isWp5Initialized,
+    setIsWp5Initialized,
+  ] =
+    useState(false)
+
+  const [
+    isWp5Admin,
+    setIsWp5Admin,
+  ] =
+    useState(false)
+
+  const {
+    isConnected,
+    signer,
+    address,
+  } =
+    useWallet()
+
+  const lastAddress =
+    useRef<string | null>(
+      null,
+    )
+
+  const lastWp5Address =
+    useRef<string | null>(
+      null,
+    )
+
+  useEffect(() => {
+    if (
+      !isConnected ||
+      !address ||
+      !signer
+    ) {
+      setContract(null)
+      setIsInitialized(false)
+      setIsAdmin(false)
+      setIsLoading(false)
+      lastAddress.current =
+        null
+      return
+    }
+
+    if (
+      lastAddress.current ===
+      address
+    ) {
+      return
+    }
+
+    lastAddress.current =
+      address
+
+    setIsLoading(true)
+    setError(null)
+
+    const initializeContract =
+      async () => {
+        try {
+          const instance =
+            createContract(
+              signer,
+            )
+
+          const commission =
+            await instance
+              .electionCommission()
+
+          setContract(
+            instance,
+          )
+
+          setIsInitialized(
+            commission !==
+              ethers.ZeroAddress,
+          )
+
+          setIsAdmin(
+            address.toLowerCase() ===
+              String(
+                commission,
+              ).toLowerCase(),
+          )
+        } catch (
+          initializationError
+        ) {
+          setError(
+            
+        initializationError as Error,
+      
+          )
+
+          setContract(null)
+          setIsInitialized(false)
+          setIsAdmin(false)
+        } finally {
+          setIsLoading(false)
+        }
+      }
+
+    void initializeContract()
+  }, [
+    isConnected,
+    signer,
+    address,
+  ])
+
+  useEffect(() => {
+    if (
+      !isConnected ||
+      !address ||
+      !signer
+    ) {
+      setWp5Contract(null)
+      setIsWp5Initialized(false)
+      setIsWp5Admin(false)
+      setWp5Loading(false)
+      lastWp5Address.current =
+        null
+      return
+    }
+
+    if (
+      lastWp5Address.current ===
+      address
+    ) {
+      return
+    }
+
+    lastWp5Address.current =
+      address
+
+    setWp5Loading(true)
+    setWp5Error(null)
+
+    const initializeWp5 =
+      async () => {
+        try {
+          const instance =
+            createWp5Contract(
+              signer,
+            )
+
+          const [
+            admin,
+            configured,
+          ] =
+            await Promise.all([
+              instance.admin(),
+              instance.configured(),
+            ])
+
+          setWp5Contract(
+            instance,
+          )
+
+          setIsWp5Initialized(
+            Boolean(
+              configured,
+            ),
+          )
+
+          setIsWp5Admin(
+            address.toLowerCase() ===
+              String(
+                admin,
+              ).toLowerCase(),
+          )
+        } catch (
+          initializationError
+        ) {
+          setWp5Error(
+            
+        initializationError as Error,
+      
+          )
+
+          setWp5Contract(null)
+          setIsWp5Initialized(false)
+          setIsWp5Admin(false)
+        } finally {
+          setWp5Loading(false)
+        }
+      }
+
+    void initializeWp5()
+  }, [
+    isConnected,
+    signer,
+    address,
+  ])
+
+  const requireContract =
+    useCallback(
+      () => {
+        if (!contract) {
+          throw new Error(
+            "Legacy contract not initialized",
+          )
+        }
+
+        return contract
+      },
+      [contract],
+    )
+
+  const requireWp5Contract =
+    useCallback(
+      () => {
+        if (!wp5Contract) {
+          throw new Error(
+            "VoteChain-ZK DIRECT contract not initialized",
+          )
+        }
+
+        return wp5Contract
+      },
+      [wp5Contract],
+    )
+
+  const registerCandidate =
+    useCallback(
+      async (
+        candidateId:
+          number,
+      ) => {
+        const instance =
+          requireContract()
+
+        const tx =
+          await instance
+            .registerCandidate(
+              candidateId,
+            )
+
+        const receipt =
+          await tx.wait()
+
+        if (
+          receipt?.status ===
+          0
+        ) {
+          throw new Error(
+            "Candidate registration transaction failed",
+          )
+        }
+
+        return receipt
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  const registerVoterCommitment =
+    useCallback(
+      async (
+        identityCommitment:
+          string,
+      ) => {
+        if (
+          !/^\d+$/.test(
+            identityCommitment,
+          )
+        ) {
+          throw new Error(
+            "Invalid Semaphore identity commitment",
+          )
+        }
+
+        const instance =
+          requireContract()
+
+        const tx =
+          await instance
+            .registerVoterCommitment(
+              BigInt(
+                identityCommitment,
+              ),
+            )
+
+        const receipt =
+          await tx.wait()
+
+        if (
+          receipt?.status ===
+          0
+        ) {
+          throw new Error(
+            "Voter commitment registration transaction failed",
+          )
+        }
+
+        return receipt
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  const castEncryptedVote =
+    useCallback(
+      async (
+        ballot:
+          Wp5EncryptedBallot,
+      ) => {
+        if (
+          ballot.rx.length !==
+            16 ||
+          ballot.ry.length !==
+            16 ||
+          ballot.sx.length !==
+            16 ||
+          ballot.sy.length !==
+            16
+        ) {
+          throw new Error(
+            "Invalid encrypted ballot shape",
+          )
+        }
+
+        if (
+          !/^\d+$/.test(
+            ballot.nullifier,
+          )
+        ) {
+          throw new Error(
+            "Invalid WP5 nullifier",
+          )
+        }
+
+        const instance =
+          requireWp5Contract()
+
+        const nullifier =
+          BigInt(ballot.nullifier)
+
+        /*
+         * Read the contract's current spent-nullifier state first.
+         * This gives the voter a clean response without waiting for
+         * MetaMask/estimateGas to surface the raw Solidity revert.
+         *
+         * The contract check below is still authoritative, so this
+         * preflight does not weaken double-vote protection.
+         */
+        const alreadyUsed =
+          await instance.usedNullifier(
+            nullifier,
+          )
+
+        if (alreadyUsed) {
+          throw new Error(
+            "Vote already recorded. This voter has already voted in the current election.",
+          )
+        }
+
+        try {
+          const tx =
+            await instance.castVote(
+              ballot.a,
+              ballot.b,
+              ballot.c,
+              nullifier,
+              ballot.rx,
+              ballot.ry,
+              ballot.sx,
+              ballot.sy,
+            )
+
+          const receipt =
+            await tx.wait()
+
+          if (
+            receipt?.status ===
+            0
+          ) {
+            throw new Error(
+              "Encrypted vote transaction failed",
+            )
+          }
+
+          return receipt
+        } catch (transactionError) {
+          /*
+           * Keep the contract authoritative. A nullifier could become
+           * spent between the preflight read and transaction execution,
+           * so normalize the Solidity revert here as well.
+           */
+          const message =
+            transactionError instanceof Error
+              ? transactionError.message
+              : String(transactionError)
+
+          if (
+            message.includes(
+              "NULLIFIER_USED",
+            )
+          ) {
+            throw new Error(
+              "Vote already recorded. This voter has already voted in the current election.",
+            )
+          }
+
+          if (
+            message.includes(
+              "NOT_ACTIVE",
+            )
+          ) {
+            throw new Error(
+              "Voting is no longer active for this election.",
+            )
+          }
+
+          throw transactionError
+        }
+      },
+      [
+        requireWp5Contract,
+      ],
+    )
+
+  const startElection =
+    useCallback(
+      async () => {
+        const instance =
+          requireContract()
+
+        const tx =
+          await instance
+            .startElection()
+
+        return tx.wait()
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  const endElection =
+    useCallback(
+      async () => {
+        const instance =
+          requireContract()
+
+        const tx =
+          await instance
+            .endElection()
+
+        return tx.wait()
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  const getElectionState =
+    useCallback(
+      async () => {
+        const instance =
+          requireContract()
+
+        return toElectionState(
+          await instance
+            .getElectionState(),
+        )
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  const getVoteCount =
+    useCallback(
+      async (
+        candidateId:
+          number,
+      ) => {
+        const instance =
+          requireContract()
+
+        return Number(
+          await instance
+            .getVoteCount(
+              candidateId,
+            ),
+        )
+      },
+      [
+        requireContract,
+      ],
+    )
+
+  return {
+    /*
+     * Legacy/admin surface.
+     */
+    contract,
+    isLoading,
+    error,
+    isInitialized,
+    isAdmin,
+    registerCandidate,
+    registerVoterCommitment,
+    startElection,
+    endElection,
+    getElectionState,
+    getVoteCount,
+
+    /*
+     * WP5 private-voting surface.
+     */
+    wp5Contract,
+    wp5Loading,
+    wp5Error,
+    isWp5Initialized,
+    isWp5Admin,
+    castEncryptedVote,
+  }
+}

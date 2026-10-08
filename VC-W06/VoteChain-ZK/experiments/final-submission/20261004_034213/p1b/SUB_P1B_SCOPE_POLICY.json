@@ -1,0 +1,123 @@
+{
+  "status": "PASS",
+  "classification": "VC_W06_FINAL_SUBMISSION_SCOPE_POLICY",
+  "scopeModel": "explicit-filesystem-allowlist-with-frozen-generated-replacements",
+  "gitArchiveUsed": false,
+  "submissionArchiveCreatedAtThisGate": false,
+
+  "requiredTopLevelFiles": [
+    "README.md",
+    "package.json",
+    "VC-W06_Final_Report.md"
+  ],
+
+  "optionalTopLevelFiles": [
+    ".gitignore",
+    ".gitmodules",
+    "components.json",
+    "foundry.toml",
+    "package-lock.json",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "VC-W06_SHA256SUMS.txt"
+  ],
+
+  "requiredTrees": [
+    "circuits",
+    "contracts",
+    "crypto",
+    "research",
+    "trustee-tools",
+    "votechain-central-server",
+    "votechain-face-recognition",
+    "votechain-fingerprint",
+    "votechain-frontend-ts"
+  ],
+
+  "optionalTrees": [
+    ".github",
+    "backend",
+    "biometric",
+    "docs",
+    "frontend",
+    "images",
+    "lib",
+    "script",
+    "scripts",
+    "src",
+    "test",
+    "votechain-gas-report"
+  ],
+
+  "excludeEverywhereDirectoryNames": [
+    ".git",
+    ".zk-deps",
+    "node_modules",
+    ".next",
+    ".cache",
+    "cache",
+    "__pycache__",
+    ".pytest_cache",
+    "coverage",
+    "dist",
+    "build",
+    "out",
+    "target",
+    "bin",
+    "obj",
+    "broadcast",
+    "chrome-profile",
+    "optimization_guide_model_store"
+  ],
+
+  "excludeProjectRelativePrefixes": [
+    "experiments/",
+    "circuits/poc/",
+    "circuits/build/",
+    "circuits/artifacts/",
+    "docs/baseline/logs/"
+  ],
+
+  "excludeExactProjectRelativeFiles": [
+    "WP5_final_dependency_capture.txt",
+    "WP5_targeted_source_capture.tgz",
+    "WP5_targeted_source_capture.txt",
+    "WP5B_CANONICAL_COMPATIBILITY_PREFLIGHT.txt",
+    "gas_results.txt",
+    "demoABIfile.md",
+    "research/reports/VC-W02_Final_Report.md",
+    "research/reports/VC-W03_Final_Report.md"
+  ],
+
+  "packageReplacementTargets": [
+    "votechain-central-server/.env.example",
+    "votechain-frontend-ts/.env.example"
+  ],
+
+  "canonicalArtifactAdds": [
+    "circuits/VoteChainVoteDirect.circom",
+    "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs",
+    "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm",
+    "circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey",
+    "circuits/artifacts/wp3/20260930_170614/direct/verification_key.json",
+    "crypto/config/wp3-build-profile.json",
+    "contracts/wp4-foundry/src/VoteChainWP4.sol",
+    "contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol"
+  ],
+
+  "reproducibilityPackagePath": "reproducibility/wp8-final.zip",
+
+  "privacyPolicy": {
+    "realEnvironmentFiles": "forbidden",
+    "originalActiveEnvExamples": "replaced-in-package",
+    "realPrivateKeys": "forbidden",
+    "walletSecrets": "forbidden",
+    "databaseCredentials": "forbidden",
+    "trusteeSecretShares": "forbidden",
+    "syntheticCryptographicNegativeVectors": "allowed",
+    "thirdPartyPublicTestFixtures": "allowed",
+    "documentationPlaceholders": "allowed",
+    "rawHistoricalExperimentCorpus": "excluded",
+    "verifiedCompactWp8Archive": "included"
+  }
+}

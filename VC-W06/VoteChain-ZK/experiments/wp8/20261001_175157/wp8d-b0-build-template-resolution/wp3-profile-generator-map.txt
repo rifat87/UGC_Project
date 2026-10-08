@@ -1,0 +1,17 @@
+======================================================================
+WP3 PROFILE GENERATOR RELEVANT LINES
+======================================================================
+8:    circomPath
+11:if (!jsonPath || !circomPath) {
+13:        "Usage: node wp3-generate-profile.mjs profile.json profile.circom"
+63:    maxCandidates:
+66:    merkleDepth:
+148:fs.writeFileSync(
+163:const circom = `pragma circom 2.2.0;
+175:function VC_MAX_CANDIDATES() {
+176:    return ${profile.maxCandidates};
+179:function VC_MERKLE_DEPTH() {
+180:    return ${profile.merkleDepth};
+220:fs.writeFileSync(
+221:    circomPath,
+222:    circom

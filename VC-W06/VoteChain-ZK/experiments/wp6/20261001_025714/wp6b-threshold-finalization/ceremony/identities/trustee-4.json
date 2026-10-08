@@ -1,0 +1,17 @@
+{
+  "publicIdentity": {
+    "trusteeId": 4,
+    "keyAgreement": "ECDH-P256",
+    "transportPublicKey": "BITHbI6YRfcdSHFhM0jaDTiMjPHOMPFYrqeCMgwNaz7GHWL53tdSOF7LE78+U5DglRQxiW30qqRw2gg2RPYpM70="
+  },
+  "privateCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "I/vhPr0yJWEmlDK5VZfr1g==",
+    "iv": "gg+d4YiyvrpzmP58",
+    "aad": "VoteChain-ZK/WP6B/20261001_025714|transport-private|4",
+    "ciphertext": "xdeXTlnVvvE6WZvTk46xTq4UZwtJyRXtqaTB3JEvRVW5K6OJMJlSsIN3crU=",
+    "authTag": "iuPMuYcSnKi/UEhX0AeUgw=="
+  }
+}

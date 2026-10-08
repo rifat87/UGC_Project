@@ -1,0 +1,17 @@
+asset_id	asset_type	title	caption	primary_source
+T-PUB-01	TABLE	Accepted-ballot overall measured performance	2000 measured accepted-vote observations across 25 independent elections; warmups excluded; no silent outlier deletion.	data/T01_ACCEPTED_BALLOT_OVERALL.tsv
+T-PUB-02	TABLE	Fresh-chain first accepted-vote microbenchmark	20 measured fresh-chain first-vote observations; five warmups excluded; this condition is not the general sequential accepted-vote distribution.	data/T02_FRESH_CHAIN_FIRST_VOTE.tsv
+T-PUB-03	TABLE	Runtime candidate-count scaling	Candidate-count experiment uses fixed MAX_CANDIDATES=16 with runtime candidateCount. Gas differs by only 12 gas between K2 and K4/K8/K16; this is attributable to calldata zero-byte composition and must not be presented as isolated candidate-processing opcode cost.	data/T03_CANDIDATE_COUNT_SCALING.tsv
+T-PUB-04	TABLE	Eligible-set scaling: complete measured statistics	All eligible-set profiles use fixed Merkle depth 17. N denotes occupied eligible leaves, not tree depth.	data/T04_ELIGIBLE_SET_SCALING_FULL.tsv
+T-PUB-05	TABLE	Eligible-set scaling mean matrix	compact thesis/paper table and figure input	data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv
+F-PUB-01	FIGURE	Accepted-ballot gas summary	Summary-statistic visualization only; do not render a boxplot or infer quartiles because raw quartiles are not part of the frozen publication dataset.	data/T01_ACCEPTED_BALLOT_OVERALL.tsv
+F-PUB-02	FIGURE	Accepted-ballot local cast receipt latency summary		data/T01_ACCEPTED_BALLOT_OVERALL.tsv
+F-PUB-03	FIGURE	Gas consumption by runtime candidate count	Do not interpret the 12-gas difference as isolated candidate-processing cost.	data/T03_CANDIDATE_COUNT_SCALING.tsv
+F-PUB-04	FIGURE	Local cast receipt latency by runtime candidate count	Observed means are non-monotonic.	data/T03_CANDIDATE_COUNT_SCALING.tsv
+F-PUB-05	FIGURE	Eligible-set construction and path-integrated preparation scaling	N is occupied leaves. M2 integrates Merkle snapshot/root/target path; no isolated path-extraction timing claim.	data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv
+F-PUB-06	FIGURE	Eligible-set proof-pipeline component latency	M3-M5 include child-process overhead and use fixed depth 17; their variation is descriptive and must not be presented as N-dependent computational complexity.	data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv
+D-PUB-01	DIAGRAM	VoteChain-ZK end-to-end architecture	Preserve the existing biometric face/fingerprint 3-of-5 subsystem. Do not replace it with a ZK biometric claim.	metadata/diagram-spec.json
+D-PUB-02	DIAGRAM	Private vote generation and castVote verification sequence		metadata/diagram-spec.json
+D-PUB-03	DIAGRAM	Eligibility Merkle tree and election-scoped nullifier flow	Eligible-set size N must never be depicted as Merkle depth.	metadata/diagram-spec.json
+D-PUB-04	DIAGRAM	Encrypted ballot, homomorphic tally, and threshold-decryption flow	Do not depict plaintext votes being stored on-chain.	metadata/diagram-spec.json
+D-PUB-05	DIAGRAM	Biometric authentication to privacy-preserving vote authorization	Biometric authentication and ZK vote privacy are distinct subsystems connected at authorization; do not claim the Groth16 circuit proves biometric matching.	metadata/diagram-spec.json

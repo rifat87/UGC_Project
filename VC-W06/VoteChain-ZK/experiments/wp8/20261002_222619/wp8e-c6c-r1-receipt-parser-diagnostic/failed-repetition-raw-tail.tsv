@@ -1,0 +1,6 @@
+kind	measured_round	election_sequence	repetition_id	scale	ballot_position	ballot_id	candidate_index	tx_hash	receipt_status	gas_used	calldata_bytes	latency_ms
+measured	1	7	measured-r1-n50-e07	50	28	028	3	0x2b4a644df138ff8c503725092045849010135a4ffd98e3ec3b0794aa95ad8900	1	1307403	2340	691.173500
+measured	1	7	measured-r1-n50-e07	50	29	029	0	0xf285cb8f85a7bf2f6cde35badea9c879cd4780b715aa16a8f0c869a26733ee7e	1	1307403	2340	689.102800
+measured	1	7	measured-r1-n50-e07	50	30	030	1	0x6e258ecd4c9485f207e117c8470d79bb0b2d4d7b6f0ccc460a9f1eaafcad1899	1	1307052	2340	692.576600
+measured	1	7	measured-r1-n50-e07	50	31	031	2	0x8dacabddd67525a25e6cffbb1b8f060ad6b60999170dab5a76938ce2f2ac9217	1	1307100	2340	675.376700
+measured	1	7	measured-r1-n50-e07	50	32	032	3	0x3026409a8e374c03314d5b66dc0ffde2c739c8306eb86a1ab4b690e935642538	1	1307403	2340	689.761000

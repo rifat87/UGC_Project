@@ -1,0 +1,14 @@
+FRONTEND_CRITICAL=0
+FRONTEND_HIGH=4
+FRONTEND_MODERATE=26
+FRONTEND_LOW=12
+FRONTEND_TOTAL=42
+FRONTEND_CRITICAL_HIGH=4
+FRONTEND_DIRECT_CRITICAL_HIGH_COUNT=0
+FRONTEND_RESIDUAL_PACKAGES=bfj,jsonpath,underscore,ws
+FRONTEND_UNEXPECTED_CRITICAL_HIGH_COUNT=0
+FRONTEND_AUDIT_CLASSIFICATION=PASS_DOCUMENTED_TRANSITIVE_RESIDUALS
+FRONTEND_RESIDUAL={"direct": false, "fix": true, "name": "bfj", "nodes": ["node_modules/bfj"], "range": "7.1.0 - 9.1.2", "severity": "high"}
+FRONTEND_RESIDUAL={"direct": false, "fix": true, "name": "jsonpath", "nodes": ["node_modules/jsonpath"], "range": "*", "severity": "high"}
+FRONTEND_RESIDUAL={"direct": false, "fix": true, "name": "underscore", "nodes": ["node_modules/underscore"], "range": "<=1.13.7", "severity": "high"}
+FRONTEND_RESIDUAL={"direct": false, "fix": {"isSemVerMajor": true, "name": "wagmi", "version": "3.7.7"}, "name": "ws", "nodes": ["node_modules/ws"], "range": "8.0.0 - 8.20.1", "severity": "high"}

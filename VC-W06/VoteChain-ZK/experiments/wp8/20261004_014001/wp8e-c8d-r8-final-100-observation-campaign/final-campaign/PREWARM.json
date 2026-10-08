@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "timed": false,
+  "recipe": "one wp5Hash plus one 1-leaf buildWp5MerkleSnapshot",
+  "selectedVoterIndex": 0
+}

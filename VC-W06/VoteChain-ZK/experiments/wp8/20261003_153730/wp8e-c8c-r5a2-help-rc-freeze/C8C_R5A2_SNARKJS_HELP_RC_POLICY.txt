@@ -1,0 +1,34 @@
+WP8E C8C-R5A2 SNARKJS HELP RETURN-CODE POLICY
+=============================================
+
+Frozen CLI:
+
+snarkjs 0.7.5
+
+The preserved R5A1 run observed:
+
+snarkjs --help return code = 99
+
+while the emitted help text correctly identified snarkjs 0.7.5 and exposed:
+
+wtns calculate
+wtns check
+groth16 prove
+
+Therefore, for read-only HELP/USAGE diagnostics only, return code 99 is
+classified as an accepted usage-display return code when the required command
+semantics are present in captured output.
+
+This does NOT relax execution requirements.
+
+Actual:
+
+wtns calculate
+wtns check
+groth16 prove
+groth16 verify
+
+must return RC=0.
+
+No cryptographic artifact, circuit, Solidity contract, verifier, fixture, or
+benchmark semantics are modified by this harness amendment.

@@ -1,0 +1,4 @@
+classification	path	sha256
+NON_EXPERIMENT_EXACT_HASH_COPY	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/verification_key.json	90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1
+NON_EXPERIMENT_EXACT_HASH_COPY	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/public/zk/wp5/direct/verification_key.json	90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1
+NON_EXPERIMENT_EXACT_HASH_COPY	/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/dist/zk/wp5/direct/verification_key.json	90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1

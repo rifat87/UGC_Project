@@ -1,0 +1,200 @@
+
+> votechain-central-server@1.0.0 test
+> node scripts/run-tests.mjs --runInBand
+
+TAP version 13
+# Subtest: ABI contains the accepted VC-W01 interface
+ok 1 - ABI contains the accepted VC-W01 interface
+  ---
+  duration_ms: 0.636358
+  type: 'test'
+  ...
+# Subtest: ABI omits removed legacy application APIs
+ok 2 - ABI omits removed legacy application APIs
+  ---
+  duration_ms: 0.137905
+  type: 'test'
+  ...
+# Subtest: candidate IDs are positive, unique, and sequential
+ok 3 - candidate IDs are positive, unique, and sequential
+  ---
+  duration_ms: 1.009374
+  type: 'test'
+  ...
+# Subtest: client supplied candidateId cannot override backend allocation
+ok 4 - client supplied candidateId cannot override backend allocation
+  ---
+  duration_ms: 1.734905
+  type: 'test'
+  ...
+# Subtest: duplicate candidate NID protection remains
+ok 5 - duplicate candidate NID protection remains
+  ---
+  duration_ms: 0.656107
+  type: 'test'
+  ...
+# Subtest: Candidate schema keeps candidateId immutable and uses a partial unique index for valid IDs
+ok 6 - Candidate schema keeps candidateId immutable and uses a partial unique index for valid IDs
+  ---
+  duration_ms: 0.646864
+  type: 'test'
+  ...
+# Subtest: public election data uses Mongo metadata and authoritative chain state
+ok 7 - public election data uses Mongo metadata and authoritative chain state
+  ---
+  duration_ms: 1.614215
+  type: 'test'
+  ...
+# Subtest: migration safely handles multiple legacy candidates and preserves existing allocated IDs
+ok 8 - migration safely handles multiple legacy candidates and preserves existing allocated IDs
+  ---
+  duration_ms: 9.505372
+  type: 'test'
+  ...
+# Subtest: migration stops before index changes when existing candidate IDs are duplicated
+ok 9 - migration stops before index changes when existing candidate IDs are duplicated
+  ---
+  duration_ms: 0.778891
+  type: 'test'
+  ...
+# Subtest: candidate workflow projection omits candidate NID and voter-sensitive fields
+ok 10 - candidate workflow projection omits candidate NID and voter-sensitive fields
+  ---
+  duration_ms: 1.491963
+  type: 'test'
+  ...
+# Subtest: voter document projection omits NID, voterHash, encrypted salt, and DOB
+ok 11 - voter document projection omits NID, voterHash, encrypted salt, and DOB
+  ---
+  duration_ms: 1.303893
+  type: 'test'
+  ...
+# Subtest: ZK enrollment response exposes only public commitment plus safe voter projection
+ok 12 - ZK enrollment response exposes only public commitment plus safe voter projection
+  ---
+  duration_ms: 0.150574
+  type: 'test'
+  ...
+# Subtest: unused raw Candidate/Voter GET routes are removed
+ok 13 - unused raw Candidate/Voter GET routes are removed
+  ---
+  duration_ms: 1.450161
+  type: 'test'
+  ...
+# Subtest: ZK ABI exposes candidateId/commitment/proof lifecycle
+ok 14 - ZK ABI exposes candidateId/commitment/proof lifecycle
+  ---
+  duration_ms: 1.044856
+  type: 'test'
+  ...
+# Subtest: ZK ABI has no active voterHash or civil identity transaction input
+ok 15 - ZK ABI has no active voterHash or civil identity transaction input
+  ---
+  duration_ms: 1.133919
+  type: 'test'
+  ...
+# Subtest: active biometric and blockchain ZK path does not use voterHash or encryptedSalt
+ok 16 - active biometric and blockchain ZK path does not use voterHash or encryptedSalt
+  ---
+  duration_ms: 2.67793
+  type: 'test'
+  ...
+# Subtest: active voter flow sends candidateId plus Semaphore proof and keeps wallet identity separate
+ok 17 - active voter flow sends candidateId plus Semaphore proof and keeps wallet identity separate
+  ---
+  duration_ms: 0.240198
+  type: 'test'
+  ...
+# Subtest: backend gates ZK enrollment to Registration and proof preparation to Active valid candidates
+ok 18 - backend gates ZK enrollment to Registration and proof preparation to Active valid candidates
+  ---
+  duration_ms: 0.230503
+  type: 'test'
+  ...
+# Subtest: successful biometric authentication may cross the proof-generation gate
+ok 19 - successful biometric authentication may cross the proof-generation gate
+  ---
+  duration_ms: 1.160879
+  type: 'test'
+  ...
+# Subtest: failed biometric authentication cannot reach proof generation
+ok 20 - failed biometric authentication cannot reach proof generation
+  ---
+  duration_ms: 0.575868
+  type: 'test'
+  ...
+# Subtest: ZK credential encryption/decryption round-trip succeeds
+ok 21 - ZK credential encryption/decryption round-trip succeeds
+  ---
+  duration_ms: 1.600135
+  type: 'test'
+  ...
+# Subtest: wrong ZK credential encryption key fails authentication
+ok 22 - wrong ZK credential encryption key fails authentication
+  ---
+  duration_ms: 0.498603
+  type: 'test'
+  ...
+# Subtest: identity enrollment uses random Identity constructor and returns only encrypted private credential
+ok 23 - identity enrollment uses random Identity constructor and returns only encrypted private credential
+  ---
+  duration_ms: 0.408398
+  type: 'test'
+  ...
+# Subtest: group reconstruction sorts by authoritative on-chain registration index and matches chain root/size
+ok 24 - group reconstruction sorts by authoritative on-chain registration index and matches chain root/size
+  ---
+  duration_ms: 1.410642
+  type: 'test'
+  ...
+# Subtest: stale/incomplete group reconstruction is rejected
+ok 25 - stale/incomplete group reconstruction is rejected
+  ---
+  duration_ms: 0.387226
+  type: 'test'
+  ...
+# Subtest: incorrect reconstructed Merkle root is rejected
+ok 26 - incorrect reconstructed Merkle root is rejected
+  ---
+  duration_ms: 0.177544
+  type: 'test'
+  ...
+# Subtest: on-chain VoterCommitmentRegistered events deterministically define append-only group order
+ok 27 - on-chain VoterCommitmentRegistered events deterministically define append-only group order
+  ---
+  duration_ms: 0.285736
+  type: 'test'
+  ...
+# Subtest: biometric-authorized proof core binds candidateId as message and electionId as scope
+ok 28 - biometric-authorized proof core binds candidateId as message and electionId as scope
+  ---
+  duration_ms: 1.783157
+  type: 'test'
+  ...
+# Subtest: proof generation refuses voters whose ZK commitment is not chain-registered
+ok 29 - proof generation refuses voters whose ZK commitment is not chain-registered
+  ---
+  duration_ms: 0.63056
+  type: 'test'
+  ...
+# Subtest: proof generation detects encrypted credential/commitment mismatch
+ok 30 - proof generation detects encrypted credential/commitment mismatch
+  ---
+  duration_ms: 0.426235
+  type: 'test'
+  ...
+# Subtest: SNARK artifact config is optional but must be paired
+ok 31 - SNARK artifact config is optional but must be paired
+  ---
+  duration_ms: 1.427697
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 339.464258

@@ -1,0 +1,243 @@
+{
+  "status": "PASS",
+  "scaleLevelReview": {
+    "gasMeanN25": 1329671.68,
+    "gasMeanN150": 1311046.146667,
+    "gasMeanDelta": -18625.53333300003,
+    "gasMeanPctChange25To150": -1.4007618281379075,
+    "gasMedianAcrossScaleMin": 1307326.0,
+    "gasMedianAcrossScaleMax": 1307403.0,
+    "gasP95AcrossScaleMin": 1307759.0,
+    "gasP95AcrossScaleMax": 1307997.0,
+    "latencyMeanAcrossScaleMin": 749.865782,
+    "latencyMeanAcrossScaleMax": 773.656452,
+    "latencyMeanN25": 758.55826,
+    "latencyMeanN150": 756.355482,
+    "latencyMeanPctChange25To150": -0.29039008816540557,
+    "latencyP95AcrossScaleMin": 838.8767,
+    "latencyP95AcrossScaleMax": 859.3138
+  },
+  "positionLevelReview": {
+    "25": {
+      "position1GasMean": 1866414.0,
+      "position2GasMean": 1307682.0,
+      "lastPositionGasMean": 1307266.0,
+      "positions2ToNMeanGas": 1307307.4166666667,
+      "position1GasPremiumVs2ToN": 559106.5833333333,
+      "position1GasPremiumPctVs2ToN": 42.767797092356936,
+      "maxMeanGasPosition": 1,
+      "maxMeanGas": 1866414.0,
+      "minMeanGasPosition": 12,
+      "minMeanGas": 1306874.0,
+      "position1LatencyMeanMs": 747.43492,
+      "position2LatencyMeanMs": 782.91744,
+      "lastPositionLatencyMeanMs": 767.61052,
+      "positions2ToNMeanLatencyMs": 759.0217325,
+      "maxMeanLatencyPosition": 2,
+      "maxMeanLatencyMs": 782.91744,
+      "minMeanLatencyPosition": 7,
+      "minMeanLatencyMs": 730.44332
+    },
+    "50": {
+      "position1GasMean": 1866414.0,
+      "position2GasMean": 1307682.0,
+      "lastPositionGasMean": 1307540.0,
+      "positions2ToNMeanGas": 1307343.530612245,
+      "position1GasPremiumVs2ToN": 559070.469387755,
+      "position1GasPremiumPctVs2ToN": 42.763853286973124,
+      "maxMeanGasPosition": 1,
+      "maxMeanGas": 1866414.0,
+      "minMeanGasPosition": 41,
+      "minMeanGas": 1306833.0,
+      "position1LatencyMeanMs": 744.5426,
+      "position2LatencyMeanMs": 751.79382,
+      "lastPositionLatencyMeanMs": 750.54778,
+      "positions2ToNMeanLatencyMs": 749.9744187755102,
+      "maxMeanLatencyPosition": 47,
+      "maxMeanLatencyMs": 785.511,
+      "minMeanLatencyPosition": 40,
+      "minMeanLatencyMs": 698.56298
+    },
+    "75": {
+      "position1GasMean": 1866414.0,
+      "position2GasMean": 1307682.0,
+      "lastPositionGasMean": 1307706.0,
+      "positions2ToNMeanGas": 1307311.310810811,
+      "position1GasPremiumVs2ToN": 559102.6891891891,
+      "position1GasPremiumPctVs2ToN": 42.76737182381039,
+      "maxMeanGasPosition": 1,
+      "maxMeanGas": 1866414.0,
+      "minMeanGasPosition": 65,
+      "minMeanGas": 1306749.0,
+      "position1LatencyMeanMs": 741.54026,
+      "position2LatencyMeanMs": 764.28206,
+      "lastPositionLatencyMeanMs": 709.59854,
+      "positions2ToNMeanLatencyMs": 759.9759481081081,
+      "maxMeanLatencyPosition": 39,
+      "maxMeanLatencyMs": 798.9132,
+      "minMeanLatencyPosition": 75,
+      "minMeanLatencyMs": 709.59854
+    },
+    "100": {
+      "position1GasMean": 1866414.0,
+      "position2GasMean": 1307682.0,
+      "lastPositionGasMean": 1307783.0,
+      "positions2ToNMeanGas": 1307313.3636363635,
+      "position1GasPremiumVs2ToN": 559100.6363636365,
+      "position1GasPremiumPctVs2ToN": 42.7671476415163,
+      "maxMeanGasPosition": 1,
+      "maxMeanGas": 1866414.0,
+      "minMeanGasPosition": 88,
+      "minMeanGas": 1306506.0,
+      "position1LatencyMeanMs": 765.3939,
+      "position2LatencyMeanMs": 777.61834,
+      "lastPositionLatencyMeanMs": 807.5004,
+      "positions2ToNMeanLatencyMs": 773.7399117171717,
+      "maxMeanLatencyPosition": 27,
+      "maxMeanLatencyMs": 841.39164,
+      "minMeanLatencyPosition": 78,
+      "minMeanLatencyMs": 726.92864
+    },
+    "150": {
+      "position1GasMean": 1866414.0,
+      "position2GasMean": 1307682.0,
+      "lastPositionGasMean": 1307403.0,
+      "positions2ToNMeanGas": 1307318.8456375839,
+      "position1GasPremiumVs2ToN": 559095.1543624161,
+      "position1GasPremiumPctVs2ToN": 42.76654897373131,
+      "maxMeanGasPosition": 1,
+      "maxMeanGas": 1866414.0,
+      "minMeanGasPosition": 88,
+      "minMeanGas": 1306506.0,
+      "position1LatencyMeanMs": 758.96332,
+      "position2LatencyMeanMs": 748.4893,
+      "lastPositionLatencyMeanMs": 752.74888,
+      "positions2ToNMeanLatencyMs": 756.3379801342281,
+      "maxMeanLatencyPosition": 21,
+      "maxMeanLatencyMs": 798.76834,
+      "minMeanLatencyPosition": 40,
+      "minMeanLatencyMs": 720.75298
+    }
+  },
+  "independentElectionReview": {
+    "25": {
+      "gasMeanMin": 1329671.68,
+      "gasMeanMax": 1329671.68,
+      "gasMeanRange": 0.0,
+      "gasMeansIdentical": true,
+      "latencyMeanMinMs": 697.935044,
+      "latencyMeanMaxMs": 807.226304,
+      "latencyMeanRangeMs": 109.29126000000008,
+      "latencyElectionMeansMs": [
+        780.629672,
+        802.135596,
+        807.226304,
+        704.864684,
+        697.935044
+      ]
+    },
+    "50": {
+      "gasMeanMin": 1318524.94,
+      "gasMeanMax": 1318524.94,
+      "gasMeanRange": 0.0,
+      "gasMeansIdentical": true,
+      "latencyMeanMinMs": 695.187548,
+      "latencyMeanMaxMs": 792.896868,
+      "latencyMeanRangeMs": 97.70932000000005,
+      "latencyElectionMeansMs": [
+        781.041566,
+        792.896868,
+        781.827314,
+        698.375616,
+        695.187548
+      ]
+    },
+    "75": {
+      "gasMeanMin": 1314766.013333,
+      "gasMeanMax": 1314766.013333,
+      "gasMeanRange": 0.0,
+      "gasMeansIdentical": true,
+      "latencyMeanMinMs": 697.330799,
+      "latencyMeanMaxMs": 798.649203,
+      "latencyMeanRangeMs": 101.3184040000001,
+      "latencyElectionMeansMs": [
+        784.394627,
+        794.804885,
+        798.649203,
+        697.330799,
+        723.471181
+      ]
+    },
+    "100": {
+      "gasMeanMin": 1312904.37,
+      "gasMeanMax": 1312904.37,
+      "gasMeanRange": 0.0,
+      "gasMeansIdentical": true,
+      "latencyMeanMinMs": 708.513697,
+      "latencyMeanMaxMs": 799.160582,
+      "latencyMeanRangeMs": 90.646885,
+      "latencyElectionMeansMs": [
+        787.740128,
+        786.999875,
+        785.867976,
+        799.160582,
+        708.513697
+      ]
+    },
+    "150": {
+      "gasMeanMin": 1311046.146667,
+      "gasMeanMax": 1311046.146667,
+      "gasMeanRange": 0.0,
+      "gasMeansIdentical": true,
+      "latencyMeanMinMs": 697.200649,
+      "latencyMeanMaxMs": 789.640988,
+      "latencyMeanRangeMs": 92.440339,
+      "latencyElectionMeansMs": [
+        788.830511,
+        785.275928,
+        789.640988,
+        720.829336,
+        697.200649
+      ]
+    }
+  },
+  "trailingDiagnosticObservationCount": 2,
+  "trailingDiagnosticObservations": [
+    {
+      "repetitionId": "measured-r1-n75-e08",
+      "ballotId": "033",
+      "scale": 75,
+      "ballotPosition": 33,
+      "gasUsed": 1307742,
+      "latencyMs": 742.3974,
+      "trailingBytes": 215
+    },
+    {
+      "repetitionId": "measured-r4-n150-e22",
+      "ballotId": "048",
+      "scale": 150,
+      "ballotPosition": 48,
+      "gasUsed": 1307350,
+      "latencyMs": 749.3322,
+      "trailingBytes": 215
+    }
+  ],
+  "overallMeasuredLatencyMaxMs": 1026.0968,
+  "overallMeasuredLatencyMaxObservations": [
+    {
+      "repetitionId": "measured-r4-n100-e21",
+      "ballotId": "031",
+      "scale": 100,
+      "ballotPosition": 31,
+      "latencyMs": 1026.0968
+    }
+  ],
+  "overallLatencyMaxHasTrailingDiagnostic": false,
+  "interpretationGuardrails": [
+    "Do not interpret a decline in pooled mean gas across N as evidence that larger election state intrinsically reduces castVote cost without first considering the position-1 effect.",
+    "Median gas and nearest-rank p95 are preferred companions to the pooled mean for describing typical per-vote gas.",
+    "Zero between-repetition gas-mean spread reflects deterministic execution of the same frozen transaction/state sequence on fresh deterministic local chains; it is not a claim of zero deployment uncertainty.",
+    "Latency is local cast-send-start to receipt-return process/RPC wall-clock latency, not Groth16 proving time and not public-network confirmation latency.",
+    "Both trailing-diagnostic observations remain included; no observation is deleted or reconstructed."
+  ]
+}

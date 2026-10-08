@@ -1,0 +1,74 @@
+WP8E C8C-R0 CANDIDATE-COUNT MATRIX DESIGN QUESTIONS
+===================================================
+
+This audit performs no candidate-count benchmark execution.
+
+Before generating any new proof corpus or submitting any transaction,
+resolve the following from the frozen protocol and active sources:
+
+1. Exact candidate-count levels
+   Confirm the intended matrix is exactly:
+   {2, 4, 8, 16}.
+
+2. Circuit topology
+   Determine whether all four levels use the same already-frozen
+   MAX_CANDIDATES=16 R1CS/WASM/zkey/verifier, with candidateCount only
+   changing witness/public values, or whether the protocol intended
+   separately compiled circuits.
+
+3. Public-signal binding
+   Confirm where candidateCount appears among the 73 public signals and
+   whether electionContextHash and candidateManifestHash must change for
+   every candidate-count level.
+
+4. Fixture validity
+   Determine whether the existing count-4 ballot/proof fixtures are
+   invalid for counts 2, 8, and 16 and therefore require new deterministic
+   real Groth16 fixtures.
+
+5. Candidate identifiers
+   Freeze the exact candidate-ID set used for each level.
+   Do not infer IDs beyond what the frozen protocol/generator supports.
+
+6. Ciphertext representation
+   Confirm whether castVote calldata remains four fixed uint256[16]
+   ciphertext arrays at every candidateCount and how inactive slots are
+   constrained/represented.
+
+7. Solidity execution path
+   Determine exactly which on-chain work scales with runtime
+   candidateCount:
+   verifier call,
+   tally-update loop,
+   storage writes,
+   or any other operation.
+
+8. Measurement target
+   Resolve whether the candidate-count matrix measures:
+   - first accepted vote on a fresh chain,
+   - steady-state accepted vote,
+   - proving time,
+   - on-chain gas,
+   - local cast-to-receipt latency,
+   - or a specified combination.
+
+9. Repetition plan
+   Extract the exact preregistered warm-up/measured counts and whether
+   each level requires fresh independent chains/elections.
+
+10. Statistical unit
+    Freeze which observations are independent experimental repetitions
+    and prevent treating nested transaction rows as independent if the
+    protocol does not support that interpretation.
+
+11. Existing artifacts
+    Confirm no already-completed final candidate-count matrix exists
+    before generating a new one.
+
+12. Eligible-set isolation
+    Hold Merkle depth / eligible-set treatment constant during this
+    candidate-count dimension so the candidate-count effect is not
+    conflated with the separate eligible-set-size matrix.
+
+No circuit, Solidity, verifier, proving key, fixture, generator, or active
+architecture may be modified during this audit.

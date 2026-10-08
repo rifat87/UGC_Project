@@ -1,0 +1,72 @@
+{
+  "rawTransactionRows": 457,
+  "failedRepetition": "measured-r1-n50-e07",
+  "failedRepetitionRawRows": 32,
+  "highestRecordedBallot": 32,
+  "inferredNextBallot": 33,
+  "targetReceipt": {
+    "path": "receipts/measured-r1-n50-e07/ballot-033.json",
+    "exists": true,
+    "bytes": 1817,
+    "sha256": "7ee3da1259fac3efd7dd8b3ed7e874475f32a7d6274e286e78ed6cf44e88ae3b",
+    "lineCount": 2,
+    "documentCount": 1,
+    "parseError": {
+      "message": "Expecting value",
+      "pos": 1634,
+      "line": 2,
+      "column": 1,
+      "remaining": "\u001b[2m2026-10-02T16:21:40.335332Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2malloy_rpc_client::poller\u001b[0m\u001b[2m:\u001b[0m failed to poll \u001b[3merr\u001b[0m\u001b[2m=\u001b[0merror sending request for url (http://127.0.0.1:8557/)\n"
+    },
+    "documents": [
+      {
+        "index": 1,
+        "pythonType": "dict",
+        "start": 0,
+        "end": 1633,
+        "keys": [
+          "blobGasPrice",
+          "blockHash",
+          "blockNumber",
+          "contractAddress",
+          "cumulativeGasUsed",
+          "effectiveGasPrice",
+          "from",
+          "gasUsed",
+          "logs",
+          "logsBloom",
+          "status",
+          "to",
+          "transactionHash",
+          "transactionIndex",
+          "type"
+        ],
+        "status": "0x1",
+        "transactionHash": "0x0eb6cf9e69ff6ee02f5fa50207c699c69e84247f4e0ed877b91af8027c280b32",
+        "gasUsed": "0x13f45e",
+        "blockNumber": "0x25",
+        "success": true
+      }
+    ],
+    "textAfterFirstDocumentPreview": "'\\n\\x1b[2m2026-10-02T16:21:40.335332Z\\x1b[0m \\x1b[31mERROR\\x1b[0m \\x1b[2malloy_rpc_client::poller\\x1b[0m\\x1b[2m:\\x1b[0m failed to poll \\x1b[3merr\\x1b[0m\\x1b[2m=\\x1b[0merror sending request for url (http://127.0.0.1:8557/)\\n'"
+  },
+  "allReceiptFileCount": 458,
+  "singleJsonReceiptFiles": 457,
+  "multiJsonReceiptFiles": 0,
+  "parseErrorReceiptFiles": 1,
+  "multiJsonFiles": [],
+  "errorFiles": [
+    {
+      "path": "receipts/measured-r1-n50-e07/ballot-033.json",
+      "error": {
+        "message": "Expecting value",
+        "pos": 1634,
+        "line": 2,
+        "column": 1,
+        "remaining": "\u001b[2m2026-10-02T16:21:40.335332Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2malloy_rpc_client::poller\u001b[0m\u001b[2m:\u001b[0m failed to poll \u001b[3merr\u001b[0m\u001b[2m=\u001b[0merror sending request for url (http://127.0.0.1:8557/)\n"
+      }
+    }
+  ],
+  "successfulReceiptDocuments": 458,
+  "successfulReceiptDocumentsNotInRawTsv": []
+}

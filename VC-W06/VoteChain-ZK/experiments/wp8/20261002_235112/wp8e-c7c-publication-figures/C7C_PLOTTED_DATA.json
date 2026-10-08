@@ -1,0 +1,846 @@
+{
+  "scales": [
+    25,
+    50,
+    75,
+    100,
+    150
+  ],
+  "figure1": {
+    "medianGas": {
+      "25": 1307326.0,
+      "50": 1307403.0,
+      "75": 1307350.0,
+      "100": 1307361.0,
+      "150": 1307352.5
+    },
+    "nearestRankP95Gas": {
+      "25": 1307783.0,
+      "50": 1307997.0,
+      "75": 1307783.0,
+      "100": 1307759.0,
+      "150": 1307759.0
+    }
+  },
+  "figure2": {
+    "scale": 150,
+    "positions": [
+      {
+        "position": 1,
+        "gas_mean": 1866414.0,
+        "latency_mean": 758.96332
+      },
+      {
+        "position": 2,
+        "gas_mean": 1307682.0,
+        "latency_mean": 748.4893
+      },
+      {
+        "position": 3,
+        "gas_mean": 1307509.0,
+        "latency_mean": 791.13916
+      },
+      {
+        "position": 4,
+        "gas_mean": 1307326.0,
+        "latency_mean": 773.38112
+      },
+      {
+        "position": 5,
+        "gas_mean": 1307468.0,
+        "latency_mean": 777.07004
+      },
+      {
+        "position": 6,
+        "gas_mean": 1307064.0,
+        "latency_mean": 769.51868
+      },
+      {
+        "position": 7,
+        "gas_mean": 1307141.0,
+        "latency_mean": 757.14884
+      },
+      {
+        "position": 8,
+        "gas_mean": 1307189.0,
+        "latency_mean": 775.2081
+      },
+      {
+        "position": 9,
+        "gas_mean": 1306886.0,
+        "latency_mean": 788.78668
+      },
+      {
+        "position": 10,
+        "gas_mean": 1307451.0,
+        "latency_mean": 797.17956
+      },
+      {
+        "position": 11,
+        "gas_mean": 1307136.0,
+        "latency_mean": 777.18864
+      },
+      {
+        "position": 12,
+        "gas_mean": 1306874.0,
+        "latency_mean": 793.87092
+      },
+      {
+        "position": 13,
+        "gas_mean": 1307783.0,
+        "latency_mean": 783.48014
+      },
+      {
+        "position": 14,
+        "gas_mean": 1307201.0,
+        "latency_mean": 778.5248
+      },
+      {
+        "position": 15,
+        "gas_mean": 1307415.0,
+        "latency_mean": 753.91056
+      },
+      {
+        "position": 16,
+        "gas_mean": 1307605.0,
+        "latency_mean": 761.94162
+      },
+      {
+        "position": 17,
+        "gas_mean": 1307427.0,
+        "latency_mean": 770.3246
+      },
+      {
+        "position": 18,
+        "gas_mean": 1307504.0,
+        "latency_mean": 792.5266
+      },
+      {
+        "position": 19,
+        "gas_mean": 1307254.0,
+        "latency_mean": 776.73406
+      },
+      {
+        "position": 20,
+        "gas_mean": 1307261.0,
+        "latency_mean": 774.86418
+      },
+      {
+        "position": 21,
+        "gas_mean": 1307451.0,
+        "latency_mean": 798.76834
+      },
+      {
+        "position": 22,
+        "gas_mean": 1307100.0,
+        "latency_mean": 769.6242
+      },
+      {
+        "position": 23,
+        "gas_mean": 1307451.0,
+        "latency_mean": 765.45808
+      },
+      {
+        "position": 24,
+        "gas_mean": 1306934.0,
+        "latency_mean": 761.1478
+      },
+      {
+        "position": 25,
+        "gas_mean": 1307266.0,
+        "latency_mean": 763.09202
+      },
+      {
+        "position": 26,
+        "gas_mean": 1307100.0,
+        "latency_mean": 724.60342
+      },
+      {
+        "position": 27,
+        "gas_mean": 1307314.0,
+        "latency_mean": 762.43632
+      },
+      {
+        "position": 28,
+        "gas_mean": 1307403.0,
+        "latency_mean": 761.1798
+      },
+      {
+        "position": 29,
+        "gas_mean": 1307403.0,
+        "latency_mean": 766.32774
+      },
+      {
+        "position": 30,
+        "gas_mean": 1307052.0,
+        "latency_mean": 781.94044
+      },
+      {
+        "position": 31,
+        "gas_mean": 1307100.0,
+        "latency_mean": 739.01506
+      },
+      {
+        "position": 32,
+        "gas_mean": 1307403.0,
+        "latency_mean": 740.34324
+      },
+      {
+        "position": 33,
+        "gas_mean": 1307742.0,
+        "latency_mean": 736.48872
+      },
+      {
+        "position": 34,
+        "gas_mean": 1307997.0,
+        "latency_mean": 747.18222
+      },
+      {
+        "position": 35,
+        "gas_mean": 1307427.0,
+        "latency_mean": 745.29988
+      },
+      {
+        "position": 36,
+        "gas_mean": 1307165.0,
+        "latency_mean": 742.1776
+      },
+      {
+        "position": 37,
+        "gas_mean": 1308009.0,
+        "latency_mean": 758.26782
+      },
+      {
+        "position": 38,
+        "gas_mean": 1307403.0,
+        "latency_mean": 767.41088
+      },
+      {
+        "position": 39,
+        "gas_mean": 1307605.0,
+        "latency_mean": 743.2181
+      },
+      {
+        "position": 40,
+        "gas_mean": 1307759.0,
+        "latency_mean": 720.75298
+      },
+      {
+        "position": 41,
+        "gas_mean": 1306833.0,
+        "latency_mean": 780.89786
+      },
+      {
+        "position": 42,
+        "gas_mean": 1307242.0,
+        "latency_mean": 766.6016
+      },
+      {
+        "position": 43,
+        "gas_mean": 1307480.0,
+        "latency_mean": 765.88024
+      },
+      {
+        "position": 44,
+        "gas_mean": 1307141.0,
+        "latency_mean": 749.3838
+      },
+      {
+        "position": 45,
+        "gas_mean": 1307610.0,
+        "latency_mean": 736.0084
+      },
+      {
+        "position": 46,
+        "gas_mean": 1307403.0,
+        "latency_mean": 749.247
+      },
+      {
+        "position": 47,
+        "gas_mean": 1306975.0,
+        "latency_mean": 766.03426
+      },
+      {
+        "position": 48,
+        "gas_mean": 1307350.0,
+        "latency_mean": 737.73132
+      },
+      {
+        "position": 49,
+        "gas_mean": 1306999.0,
+        "latency_mean": 734.26514
+      },
+      {
+        "position": 50,
+        "gas_mean": 1307540.0,
+        "latency_mean": 766.92946
+      },
+      {
+        "position": 51,
+        "gas_mean": 1307177.0,
+        "latency_mean": 758.37608
+      },
+      {
+        "position": 52,
+        "gas_mean": 1307581.0,
+        "latency_mean": 772.07654
+      },
+      {
+        "position": 53,
+        "gas_mean": 1307718.0,
+        "latency_mean": 743.4719
+      },
+      {
+        "position": 54,
+        "gas_mean": 1307266.0,
+        "latency_mean": 768.00074
+      },
+      {
+        "position": 55,
+        "gas_mean": 1307557.0,
+        "latency_mean": 784.93514
+      },
+      {
+        "position": 56,
+        "gas_mean": 1306963.0,
+        "latency_mean": 761.3399
+      },
+      {
+        "position": 57,
+        "gas_mean": 1307593.0,
+        "latency_mean": 764.23184
+      },
+      {
+        "position": 58,
+        "gas_mean": 1307528.0,
+        "latency_mean": 738.37282
+      },
+      {
+        "position": 59,
+        "gas_mean": 1307403.0,
+        "latency_mean": 772.8659
+      },
+      {
+        "position": 60,
+        "gas_mean": 1307415.0,
+        "latency_mean": 763.73366
+      },
+      {
+        "position": 61,
+        "gas_mean": 1307343.0,
+        "latency_mean": 755.7464
+      },
+      {
+        "position": 62,
+        "gas_mean": 1307064.0,
+        "latency_mean": 742.14172
+      },
+      {
+        "position": 63,
+        "gas_mean": 1307391.0,
+        "latency_mean": 772.4465
+      },
+      {
+        "position": 64,
+        "gas_mean": 1307165.0,
+        "latency_mean": 723.96248
+      },
+      {
+        "position": 65,
+        "gas_mean": 1306749.0,
+        "latency_mean": 735.52304
+      },
+      {
+        "position": 66,
+        "gas_mean": 1307016.0,
+        "latency_mean": 772.82114
+      },
+      {
+        "position": 67,
+        "gas_mean": 1307492.0,
+        "latency_mean": 754.2672
+      },
+      {
+        "position": 68,
+        "gas_mean": 1307011.0,
+        "latency_mean": 779.08314
+      },
+      {
+        "position": 69,
+        "gas_mean": 1306821.0,
+        "latency_mean": 768.97762
+      },
+      {
+        "position": 70,
+        "gas_mean": 1306898.0,
+        "latency_mean": 746.5575
+      },
+      {
+        "position": 71,
+        "gas_mean": 1306934.0,
+        "latency_mean": 745.99962
+      },
+      {
+        "position": 72,
+        "gas_mean": 1306833.0,
+        "latency_mean": 740.37314
+      },
+      {
+        "position": 73,
+        "gas_mean": 1307153.0,
+        "latency_mean": 750.65872
+      },
+      {
+        "position": 74,
+        "gas_mean": 1307427.0,
+        "latency_mean": 748.29426
+      },
+      {
+        "position": 75,
+        "gas_mean": 1307706.0,
+        "latency_mean": 740.68466
+      },
+      {
+        "position": 76,
+        "gas_mean": 1307225.0,
+        "latency_mean": 753.36996
+      },
+      {
+        "position": 77,
+        "gas_mean": 1307278.0,
+        "latency_mean": 763.37292
+      },
+      {
+        "position": 78,
+        "gas_mean": 1307528.0,
+        "latency_mean": 736.6857
+      },
+      {
+        "position": 79,
+        "gas_mean": 1307249.0,
+        "latency_mean": 738.67128
+      },
+      {
+        "position": 80,
+        "gas_mean": 1307427.0,
+        "latency_mean": 753.52122
+      },
+      {
+        "position": 81,
+        "gas_mean": 1307367.0,
+        "latency_mean": 756.23548
+      },
+      {
+        "position": 82,
+        "gas_mean": 1307355.0,
+        "latency_mean": 778.34562
+      },
+      {
+        "position": 83,
+        "gas_mean": 1307052.0,
+        "latency_mean": 752.07908
+      },
+      {
+        "position": 84,
+        "gas_mean": 1307682.0,
+        "latency_mean": 747.53236
+      },
+      {
+        "position": 85,
+        "gas_mean": 1307391.0,
+        "latency_mean": 763.12664
+      },
+      {
+        "position": 86,
+        "gas_mean": 1307451.0,
+        "latency_mean": 741.23558
+      },
+      {
+        "position": 87,
+        "gas_mean": 1307552.0,
+        "latency_mean": 729.99836
+      },
+      {
+        "position": 88,
+        "gas_mean": 1306506.0,
+        "latency_mean": 754.7521
+      },
+      {
+        "position": 89,
+        "gas_mean": 1307367.0,
+        "latency_mean": 751.9255
+      },
+      {
+        "position": 90,
+        "gas_mean": 1306898.0,
+        "latency_mean": 768.5688
+      },
+      {
+        "position": 91,
+        "gas_mean": 1307569.0,
+        "latency_mean": 769.99304
+      },
+      {
+        "position": 92,
+        "gas_mean": 1306838.0,
+        "latency_mean": 740.69626
+      },
+      {
+        "position": 93,
+        "gas_mean": 1307355.0,
+        "latency_mean": 742.6989
+      },
+      {
+        "position": 94,
+        "gas_mean": 1307444.0,
+        "latency_mean": 741.03826
+      },
+      {
+        "position": 95,
+        "gas_mean": 1307605.0,
+        "latency_mean": 750.40388
+      },
+      {
+        "position": 96,
+        "gas_mean": 1307177.0,
+        "latency_mean": 761.49674
+      },
+      {
+        "position": 97,
+        "gas_mean": 1307569.0,
+        "latency_mean": 734.90316
+      },
+      {
+        "position": 98,
+        "gas_mean": 1307307.0,
+        "latency_mean": 729.68952
+      },
+      {
+        "position": 99,
+        "gas_mean": 1307011.0,
+        "latency_mean": 767.16274
+      },
+      {
+        "position": 100,
+        "gas_mean": 1307783.0,
+        "latency_mean": 749.06512
+      },
+      {
+        "position": 101,
+        "gas_mean": 1307754.0,
+        "latency_mean": 753.96524
+      },
+      {
+        "position": 102,
+        "gas_mean": 1307290.0,
+        "latency_mean": 772.57858
+      },
+      {
+        "position": 103,
+        "gas_mean": 1307766.0,
+        "latency_mean": 746.48736
+      },
+      {
+        "position": 104,
+        "gas_mean": 1307480.0,
+        "latency_mean": 727.2075
+      },
+      {
+        "position": 105,
+        "gas_mean": 1307201.0,
+        "latency_mean": 772.73172
+      },
+      {
+        "position": 106,
+        "gas_mean": 1307266.0,
+        "latency_mean": 741.99318
+      },
+      {
+        "position": 107,
+        "gas_mean": 1307516.0,
+        "latency_mean": 748.90284
+      },
+      {
+        "position": 108,
+        "gas_mean": 1307237.0,
+        "latency_mean": 770.02646
+      },
+      {
+        "position": 109,
+        "gas_mean": 1307617.0,
+        "latency_mean": 772.70956
+      },
+      {
+        "position": 110,
+        "gas_mean": 1307213.0,
+        "latency_mean": 748.3175
+      },
+      {
+        "position": 111,
+        "gas_mean": 1307254.0,
+        "latency_mean": 724.70424
+      },
+      {
+        "position": 112,
+        "gas_mean": 1307237.0,
+        "latency_mean": 747.64528
+      },
+      {
+        "position": 113,
+        "gas_mean": 1307403.0,
+        "latency_mean": 756.43588
+      },
+      {
+        "position": 114,
+        "gas_mean": 1307035.0,
+        "latency_mean": 768.37396
+      },
+      {
+        "position": 115,
+        "gas_mean": 1306749.0,
+        "latency_mean": 724.57732
+      },
+      {
+        "position": 116,
+        "gas_mean": 1307747.0,
+        "latency_mean": 736.50862
+      },
+      {
+        "position": 117,
+        "gas_mean": 1307427.0,
+        "latency_mean": 778.57398
+      },
+      {
+        "position": 118,
+        "gas_mean": 1307249.0,
+        "latency_mean": 746.8708
+      },
+      {
+        "position": 119,
+        "gas_mean": 1307189.0,
+        "latency_mean": 746.3611
+      },
+      {
+        "position": 120,
+        "gas_mean": 1307112.0,
+        "latency_mean": 727.85112
+      },
+      {
+        "position": 121,
+        "gas_mean": 1306987.0,
+        "latency_mean": 755.5267
+      },
+      {
+        "position": 122,
+        "gas_mean": 1307331.0,
+        "latency_mean": 751.33368
+      },
+      {
+        "position": 123,
+        "gas_mean": 1307415.0,
+        "latency_mean": 749.10334
+      },
+      {
+        "position": 124,
+        "gas_mean": 1307451.0,
+        "latency_mean": 766.37288
+      },
+      {
+        "position": 125,
+        "gas_mean": 1307314.0,
+        "latency_mean": 766.76962
+      },
+      {
+        "position": 126,
+        "gas_mean": 1307456.0,
+        "latency_mean": 742.74298
+      },
+      {
+        "position": 127,
+        "gas_mean": 1307367.0,
+        "latency_mean": 759.13894
+      },
+      {
+        "position": 128,
+        "gas_mean": 1307011.0,
+        "latency_mean": 753.7441
+      },
+      {
+        "position": 129,
+        "gas_mean": 1307350.0,
+        "latency_mean": 732.27906
+      },
+      {
+        "position": 130,
+        "gas_mean": 1306898.0,
+        "latency_mean": 743.6411
+      },
+      {
+        "position": 131,
+        "gas_mean": 1307165.0,
+        "latency_mean": 735.20208
+      },
+      {
+        "position": 132,
+        "gas_mean": 1307504.0,
+        "latency_mean": 778.4037
+      },
+      {
+        "position": 133,
+        "gas_mean": 1307540.0,
+        "latency_mean": 758.28098
+      },
+      {
+        "position": 134,
+        "gas_mean": 1307564.0,
+        "latency_mean": 761.16198
+      },
+      {
+        "position": 135,
+        "gas_mean": 1307201.0,
+        "latency_mean": 760.96228
+      },
+      {
+        "position": 136,
+        "gas_mean": 1307718.0,
+        "latency_mean": 734.25446
+      },
+      {
+        "position": 137,
+        "gas_mean": 1307254.0,
+        "latency_mean": 756.64748
+      },
+      {
+        "position": 138,
+        "gas_mean": 1306559.0,
+        "latency_mean": 767.60718
+      },
+      {
+        "position": 139,
+        "gas_mean": 1307427.0,
+        "latency_mean": 742.79304
+      },
+      {
+        "position": 140,
+        "gas_mean": 1307492.0,
+        "latency_mean": 769.1077
+      },
+      {
+        "position": 141,
+        "gas_mean": 1307350.0,
+        "latency_mean": 767.47072
+      },
+      {
+        "position": 142,
+        "gas_mean": 1307290.0,
+        "latency_mean": 777.05308
+      },
+      {
+        "position": 143,
+        "gas_mean": 1307855.0,
+        "latency_mean": 773.30054
+      },
+      {
+        "position": 144,
+        "gas_mean": 1307011.0,
+        "latency_mean": 746.09084
+      },
+      {
+        "position": 145,
+        "gas_mean": 1307468.0,
+        "latency_mean": 752.00568
+      },
+      {
+        "position": 146,
+        "gas_mean": 1307201.0,
+        "latency_mean": 734.37072
+      },
+      {
+        "position": 147,
+        "gas_mean": 1307593.0,
+        "latency_mean": 773.1822
+      },
+      {
+        "position": 148,
+        "gas_mean": 1307480.0,
+        "latency_mean": 727.38744
+      },
+      {
+        "position": 149,
+        "gas_mean": 1307088.0,
+        "latency_mean": 722.3422
+      },
+      {
+        "position": 150,
+        "gas_mean": 1307403.0,
+        "latency_mean": 752.74888
+      }
+    ],
+    "position1Gas": 1866414.0,
+    "c7bPosition1PremiumPct": 42.76654897373131
+  },
+  "figure3": {
+    "meanLatencyMs": {
+      "25": 758.55826,
+      "50": 749.865782,
+      "75": 759.730139,
+      "100": 773.656452,
+      "150": 756.355482
+    },
+    "medianLatencyMs": {
+      "25": 753.9116,
+      "50": 740.171,
+      "75": 750.8845,
+      "100": 768.47305,
+      "150": 749.1004
+    },
+    "nearestRankP95LatencyMs": {
+      "25": 851.2581,
+      "50": 841.3322,
+      "75": 846.8401,
+      "100": 859.3138,
+      "150": 838.8767
+    }
+  },
+  "figure4": {
+    "independentElectionMeanLatencyMs": {
+      "25": [
+        780.629672,
+        802.135596,
+        807.226304,
+        704.864684,
+        697.935044
+      ],
+      "50": [
+        781.041566,
+        792.896868,
+        781.827314,
+        698.375616,
+        695.187548
+      ],
+      "75": [
+        784.394627,
+        794.804885,
+        798.649203,
+        697.330799,
+        723.471181
+      ],
+      "100": [
+        787.740128,
+        786.999875,
+        785.867976,
+        799.160582,
+        708.513697
+      ],
+      "150": [
+        788.830511,
+        785.275928,
+        789.640988,
+        720.829336,
+        697.200649
+      ]
+    }
+  },
+  "trailingDiagnosticObservationCount": 2,
+  "overallLatencyMaxHasTrailingDiagnostic": false
+}

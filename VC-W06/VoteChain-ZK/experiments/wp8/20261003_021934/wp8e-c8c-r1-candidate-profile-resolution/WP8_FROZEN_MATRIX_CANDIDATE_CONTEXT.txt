@@ -1,0 +1,21 @@
+
+----- FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_154147/wp8a-protocol-environment-freeze/WP8_MEASUREMENT_MATRIX.csv -----
+SHA256=e54323f718247678d9144f29147bd315a8ff45c2ee1220371f2269357aa11bba
+1:cellId,variant,candidateCount,depth,capacity,candidateSlotRole,candidateSlot,warmups,measuredTrials,classification
+
+----- FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261001_154147/wp8a-protocol-environment-freeze/WP8_PROTOCOL_FROZEN.json -----
+SHA256=a1ab8f594e8970df0ea15444a0722bde16d36cb9549ae610c417a3a45a79fb9b
+4:    "activeMerkleDepth": 17,
+8:    "maxCandidates": 16,
+18:    "doNotReuseOld10To15SecondTimingAsZKE2E": true,
+25:    "primaryCostMetric": "gas",
+27:    "recordTransactionLatencySeparately": true
+29:  "candidateCounts": [
+35:  "candidateSlotPolicy": {
+74:      "depth": 4
+78:      "depth": 7
+82:      "depth": 10
+86:      "depth": 14
+90:      "depth": 17
+158:      "matrix": "ALL_CANDIDATE_COUNTS_X_ALL_DEPTHS",
+162:      "matrix": "ALL_CANDIDATE_COUNTS_AT_DEPTH_17",

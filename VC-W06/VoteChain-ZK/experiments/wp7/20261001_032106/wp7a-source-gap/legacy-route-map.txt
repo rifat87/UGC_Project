@@ -1,0 +1,39 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:12:router.post('/verify-face', (_req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:13:  return res.status(410).json({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:16:      'Legacy candidate-aware vote preparation is disabled. Use the VoteChain-ZK WP5 authorization path.',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js:20:router.get('/', (_req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:12:function parseCandidateId(value) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:13:  const candidateId = Number(value)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:14:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) return null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:15:  return candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:18:export const verifyFace = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:19:  const candidateId = parseCandidateId(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:20:  if (!candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:21:    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:62:        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:79:    console.error('[VoteController] verifyFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:11:const serialPortPath = process.env.FINGERPRINT_SERIAL_PORT || 'COM3'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:66:const captureFingerprint = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:67:  console.log("[API] /api/fingerprint/enroll called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:80:        message: "Fingerprint enrollment successful"
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:95:const detectFingerprint = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:96:  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:97:  const candidateId = Number(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:98:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:99:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:109:        return res.status(404).json({ success: false, message: "Fingerprint matched, but voter is not enrolled" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:112:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:115:        message: "Fingerprint match successful; anonymous eligibility proof prepared",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:122:    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:128:const detectWp5Fingerprint = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:130:    '[WP5] fingerprint DETECT called for candidate-blind authorization',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:160:            'Fingerprint matched, but voter is not enrolled',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:174:          'Fingerprint match successful; candidate-blind authorization issued',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:185:      '[WP5] fingerprint authorization failed:',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:198:const formatFingerprintDatabase = async (req, res) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:199:  console.log("[API] /api/fingerprint/format called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:205:      return res.status(200).json({ success: true, message: "Fingerprint database cleared" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:216:  captureFingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:217:  detectFingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:218:  detectWp5Fingerprint,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:219:  formatFingerprintDatabase,

@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "classification": "READ_ONLY_ABORTED_FINAL_MICROBENCHMARK_FORENSICS",
+  "directDeployArtifactCount": 17,
+  "verifierDeployArtifactCount": 17,
+  "directDeployFullJsonFailureCount": 1,
+  "directDeployTrailingTextCount": 17,
+  "directDeployAddressMismatchCount": 1,
+  "modalDirectDeployedTo": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+  "targetDirect": {
+    "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_012934/wp8e-final-fresh-chain-microbenchmark/iterations/measured-12/direct-deploy.json",
+    "bytes": 429,
+    "fullJsonOk": false,
+    "leadingJsonOk": true,
+    "leadingJsonType": "dict",
+    "leadingJsonKeys": [
+      "deployedTo",
+      "deployer",
+      "transactionHash"
+    ],
+    "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828",
+    "trailingBytes": 214,
+    "trailingText": "\n\u001b[2m2026-10-02T19:31:58.902035Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2malloy_provider::blocks\u001b[0m\u001b[2m:\u001b[0m failed to fetch block \u001b[3mnumber\u001b[0m\u001b[2m=\u001b[0m2 \u001b[3merr\u001b[0m\u001b[2m=\u001b[0merror sending request for url (http://127.0.0.1:8558/)\n",
+    "regexAddresses": [
+      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "0x77fb21445d0884f26e7b02e370032acebe8dffaf"
+    ],
+    "v2ExtractedAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "v2ExtractError": null,
+    "repetitionId": "measured-12"
+  },
+  "targetVerifier": {
+    "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_012934/wp8e-final-fresh-chain-microbenchmark/iterations/measured-12/verifier-deploy.json",
+    "bytes": 216,
+    "fullJsonOk": true,
+    "leadingJsonOk": true,
+    "leadingJsonType": "dict",
+    "leadingJsonKeys": [
+      "deployedTo",
+      "deployer",
+      "transactionHash"
+    ],
+    "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d",
+    "trailingBytes": 1,
+    "trailingText": "\n",
+    "regexAddresses": [
+      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "0xbb73acfd7179670b0f77189ec51cc337d9eef0ae"
+    ],
+    "v2ExtractedAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "v2ExtractError": null,
+    "repetitionId": "measured-12"
+  },
+  "failedIterationRawRowCount": 0,
+  "failedIterationVoteReceiptExists": false,
+  "failedIterationSummaryExists": false,
+  "failedIterationCastSendStderrExists": false,
+  "failureOccurredBeforeVoteSend": true,
+  "deployAddressParserMisselectionSignature": true,
+  "rootCauseClassification": "DEPLOY_STDOUT_TRAILING_DIAGNOSTIC_CAUSED_ADDRESS_FALLBACK_TO_DEPLOYER",
+  "abortedCampaignEligibleForFinalStatistics": false,
+  "latencyReconstructionAllowed": false
+}

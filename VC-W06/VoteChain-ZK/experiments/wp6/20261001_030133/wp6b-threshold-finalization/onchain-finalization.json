@@ -1,0 +1,36 @@
+{
+  "status": "PASS_WP6B_ONCHAIN_FINALIZATION",
+  "contractAddress": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "phaseBefore": 2,
+  "phaseAfter": 3,
+  "dkgPublicKeyMatch": true,
+  "dkgTranscriptPinMatch": true,
+  "finalizationTranscriptHash": "40ea3d4ac57d8e7ba8a05447a33efbdd5dbf00db81e28de5a8c27c2b5dc97903",
+  "storedFinalizationTranscriptHash": "0x40ea3d4ac57d8e7ba8a05447a33efbdd5dbf00db81e28de5a8c27c2b5dc97903",
+  "verifiedTotals": [
+    3,
+    2,
+    2,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "activeResults": [
+    3,
+    2,
+    2,
+    1
+  ],
+  "finalizeGas": "180273",
+  "duplicateFinalizationRejected": true
+}

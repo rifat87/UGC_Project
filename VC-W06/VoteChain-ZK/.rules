@@ -1,0 +1,256 @@
+You are an expert in TypeScript, Next.js App Router, React, and modern frontend development.
+  
+Code Style and Structure
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional and declarative programming patterns; avoid classes.
+- Prefer modularization and reusable components over code duplication.
+- Use descriptive variable names that convey intent (e.g., isLoading, hasError, userAccount).
+- Structure files into exported components, subcomponents, helper functions, static assets, and type definitions.
+- Favor named exports for components and helper functions.
+
+Naming Conventions
+- Use lowercase with dashes for directories (e.g., components/admin-dashboard).
+- Use camelCase for variables and functions, and PascalCase for React components.
+
+TypeScript Usage
+- Use TypeScript for all code; prefer interfaces over type aliases for object shapes.
+- Enable strict mode in tsconfig.json for better type safety.
+- Leverage TypeScript generics where applicable.
+- Use type inference appropriately to avoid explicit type annotations when unnecessary.
+
+Syntax and Formatting
+- Use the "function" keyword for pure functions.
+- Avoid unnecessary curly braces in conditionals; use concise conditional expressions.
+- Use declarative JSX with minimal inline logic.
+- Use Prettier (or a similar formatter) for consistent code formatting.
+
+UI and Styling
+Component Libraries
+- Use Shadcn UI for consistent, accessible component design.
+- Integrate Radix UI primitives for customizable, accessible UI elements.
+- Apply composition patterns to create modular, reusable components.
+- Follow Material Design guidelines
+- Implement responsive popup windows
+- Provide clear user feedback
+- Support keyboard navigation
+- Ensure proper loading states
+- Add appropriate animations
+
+Styling Guidelines
+- Use Tailwind CSS for styling
+- Use Tailwind CSS for utility-first, maintainable styling.
+- Design with mobile-first, responsive principles for flexibility across devices.
+- Implement dark mode using CSS variables or Tailwind’s dark mode features.
+- Ensure color contrast ratios meet accessibility standards for readability.
+- Maintain consistent spacing values to establish visual harmony.
+- Define CSS variables for theme colors and spacing to support easy theming and maintainability.
+
+
+
+Performance Optimization
+- Minimize the use of useState and useEffect; favor React Context and reducers for global state management.
+- Use dynamic imports and React's Suspense for code splitting and lazy loading of non-critical components.
+- Optimize images and static assets; use modern formats like WebP when possible.
+- Use memoization hooks (useMemo, useCallback) to avoid unnecessary re-renders.
+
+Navigation and Routing
+- Use Next.js App Router for file-based routing and server-side rendering where appropriate.
+- Configure deep linking and dynamic routes as needed.
+- Use Next.js Link component for client-side navigation.
+
+State Management and Data Fetching
+- Use React Context and useReducer for local state management.
+- For data fetching, consider SWR or React Query for caching and revalidation.
+- Validate all external data using libraries like Zod.
+- Handle errors gracefully using try/catch and proper fallback UI.
+
+Error Handling and Logging
+- Implement global error boundaries to catch and display user-friendly error messages.
+- Use early returns and guard clauses to handle error conditions.
+- Log errors using a centralized logging mechanism (e.g., Sentry) in production.
+
+Testing
+- Write unit tests using Jest and React Testing Library.
+- Use integration tests for critical user flows.
+- Consider snapshot testing for component UI consistency.
+
+Security
+- Sanitize all user inputs to prevent XSS and injection attacks.
+- Use HTTPS for API calls and secure storage for sensitive data.
+- Follow Next.js security guidelines for safe app deployment.
+
+Project-Specific Guidelines for VoteChain
+- Biometric Integration: Build modular components for biometric authentication (face and fingerprint capture) and ensure these are integrated seamlessly with the voter registration flow.
+- Use a centralized contract connection module that leverages ethers.js (or Viem/Wagmi v2) with TypeScript interfaces for strong typing.
+- Maintain a clean separation between public (landing/dashboard), admin, and voter interfaces.
+
+Solidity and Foundry Code Style and Structure
+- Write clear, modular, and concise Solidity code.
+- Use SPDX-License-Identifier at the top of your Solidity files.
+- Use the latest stable version of Solidity that meets your project requirements (e.g., pragma solidity ^0.8.17;).
+- Write functions with clear visibility specifiers (public, external, internal, private) and state mutability (view, pure, nonpayable, payable).
+- Use events to log key actions for off-chain tracking.
+- Follow the Checks-Effects-Interactions pattern to enhance contract security.
+- Modularize your contract code by splitting functionalities into smaller, reusable contracts if needed.
+- Add NatSpec comments for documentation of functions and parameters.
+
+Testing with Foundry
+- Use Foundry (forge) for compiling, testing, and deploying your contracts.
+- Write comprehensive tests in Solidity (using forge-std/Test.sol) to validate your contract logic.
+- Keep your test files organized in a separate test directory.
+- Use descriptive test names to indicate what each test case covers.
+- Use Foundry’s cheatcodes (e.g., vm.prank, vm.expectRevert) to simulate various scenarios.
+
+Deployment and Verification
+- Use Foundry scripts (with the .s.sol extension) for deploying your contracts.
+- Include console logging (via forge-std/console.sol) during development for debugging.
+- Verify your contract on Etherscan after deployment by leveraging Foundry’s verify command.
+
+Best Practices
+- Always check for edge cases and validate inputs.
+- Use immutable and constant variables where applicable.
+- Optimize gas usage by minimizing storage writes and using efficient data structures.
+- Prioritize security by using well-known libraries (e.g., OpenZeppelin) for common patterns.
+- Document your code and tests thoroughly for maintainability.
+
+
+
+
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.17;
+
+contract LocalVoting {
+    address public electionCommission;
+    bool public electionEnded;
+
+    struct Candidate {
+        string nationalId;
+        string name;
+        string location;
+        uint256 age;
+        string party;
+        uint256 voteCount;
+    }
+
+    struct Voter {
+        // string nationalId;
+        bytes32 voterHash;
+        string name;
+        string location;
+        string birthDate;
+    }
+
+    mapping(string => Candidate) public candidates;
+    // mapping(string => Voter) public voters;
+    mapping(bytes32 => Voter) public voters;
+    string[] public candidateIds;
+    // string[] public voterIds;
+    bytes32[] public voterIds;
+
+    mapping(string => bool) public nationalIdExists;
+    mapping(bytes32 => bool) public voterHashExists;
+    mapping(bytes32 => bool) public hasVoted;
+    // mapping(string => bool) public voterNationalIdExists;
+    // mapping(string => bool) public hasVoted;
+
+    // Events
+    // event CandidateRegistered(string nationalId, string name, string party, uint256 age, uint256 timestamp);
+
+    // event VoterRegistered(string nationalId, string name, string birthDate, uint256 timestamp);
+
+    // event VoteCast(string voterNID, string candidateNID, uint256 timestamp);
+
+    constructor() {
+        electionCommission = msg.sender;
+        electionEnded = false;
+    }
+
+    modifier onlyCommission() {
+        require(msg.sender == electionCommission, "Only Election Commission can call this function");
+        _;
+    }
+
+    // Candidate registration
+    function registerCandidate(
+        string memory _name,
+        string memory _nationalId,
+        string memory _location,
+        uint256 _age,
+        string memory _party
+    ) public onlyCommission {
+        require(!nationalIdExists[_nationalId], "Candidate NID already registered");
+
+        Candidate memory c = Candidate({
+            nationalId: _nationalId,
+            name: _name,
+            location: _location,
+            age: _age,
+            party: _party,
+            voteCount: 0
+        });
+
+        candidates[_nationalId] = c;
+        nationalIdExists[_nationalId] = true;
+        candidateIds.push(_nationalId);
+
+        // emit CandidateRegistered(_nationalId, _name, _party, _age, block.timestamp);
+    }
+
+    // Voter registration
+    function registerVoter(
+        string memory _name,
+        string memory _nationalId,
+        string memory _location,
+        string memory _birthDate
+    ) public onlyCommission {
+        require(!voterNationalIdExists[_nationalId], "Voter NID already registered");
+
+        Voter memory v = Voter({nationalId: _nationalId, name: _name, location: _location, birthDate: _birthDate});
+
+        voters[_nationalId] = v;
+        voterNationalIdExists[_nationalId] = true;
+        voterIds.push(_nationalId);
+
+        // emit VoterRegistered(_nationalId, _name, _birthDate, block.timestamp);
+    }
+
+    // Cast vote
+    function castVote(string memory _candidateNID, string memory _voterNID) public {
+        require(!hasVoted[_voterNID], "You have already voted");
+        require(voterNationalIdExists[_voterNID], "Unrecognised voter NID");
+        require(nationalIdExists[_candidateNID], "Invalid candidate");
+
+        hasVoted[_voterNID] = true;
+        candidates[_candidateNID].voteCount++;
+
+        // emit VoteCast(_voterNID, _candidateNID, block.timestamp);
+    }
+
+    // End election
+    function endElection() public onlyCommission {
+        electionEnded = true;
+    }
+
+    // Get candidate by NID
+    function getCandidate(string memory _candidateNID) public view returns (Candidate memory) {
+        require(nationalIdExists[_candidateNID], "Candidate not found");
+        return candidates[_candidateNID];
+    }
+
+    // Get all candidates
+    function getCandidates() public view returns (Candidate[] memory) {
+        Candidate[] memory allCandidates = new Candidate[](candidateIds.length);
+        for (uint256 i = 0; i < candidateIds.length; i++) {
+            allCandidates[i] = candidates[candidateIds[i]];
+        }
+        return allCandidates;
+    }
+
+    // Get voter by NID
+    function getVoter(string memory _voterNID) public view returns (Voter memory) {
+        require(voterNationalIdExists[_voterNID], "Voter not found");
+        return voters[_voterNID];
+    }
+}

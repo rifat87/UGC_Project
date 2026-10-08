@@ -1,0 +1,56 @@
+{
+  "runId": "20260930_031323",
+  "timestampUtc": "2026-09-29T21:36:11.202Z",
+  "osPlatform": "win32",
+  "osRelease": "10.0.26200",
+  "arch": "x64",
+  "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+  "logicalCpuCount": 16,
+  "totalMemoryBytes": 10575405056,
+  "nodeVersion": "v22.15.0",
+  "npmVersion": "10.9.1",
+  "circomVersion": "circom compiler 2.2.3",
+  "snarkjsVersion": "snarkjs@0.7.6",
+  "circomlibjsVersion": "0.1.7",
+  "circomlibVersion": "2.0.5",
+  "gitHead": "NO_GIT_HEAD",
+  "ptauSha256": "6ec2a30415f1461e6797fd8d41a90f042fa28d74e28e4b687647358e4674773f",
+  "coreVectorSha256": "a9fab65a193baecf88da42f8f479b17b76b97c70f143ac859e1c2363360d8fc2",
+  "experimentPolicy": {
+    "warmupsPerConfiguration": 5,
+    "measuredRunsPerConfiguration": 20,
+    "candidateMatrix": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "candidateBindingModes": [
+      "DIRECT",
+      "POSEIDON_CHAIN"
+    ],
+    "eligibleSetMatrix": [
+      {
+        "N": 10,
+        "depth": 4
+      },
+      {
+        "N": 100,
+        "depth": 7
+      },
+      {
+        "N": 1000,
+        "depth": 10
+      },
+      {
+        "N": 10000,
+        "depth": 14
+      },
+      {
+        "N": 100000,
+        "depth": 17
+      }
+    ],
+    "resultClass": "WP2_COMPONENT_PILOT_NOT_FINAL_WP8_CAMPAIGN"
+  }
+}

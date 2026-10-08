@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "classification": "DETERMINISTIC_FINAL_SUBMISSION_ARCHIVE_BUILD",
+  "archiveRoot": "VC-W06_VoteChain_Final_Submission",
+  "payloadEntries": 776,
+  "frozenSupportEntries": 2,
+  "manifestRows": 778,
+  "archiveFileEntries": 779,
+  "fixedZipTimestamp": "1980-01-01T00:00:00",
+  "compression": "ZIP_DEFLATED",
+  "compressionLevel": 9,
+  "manifestSha256": "86dd8d3ce290114e6a255dbf84783a1a5fc502e1d9626e5963dd7c58383e4b10",
+  "archiveSha256": "afd8484c2ec70c2b01198cd6431e0ec328b7c45e7d6cc702312ea2dbfd802db2",
+  "archiveSizeBytes": 61433938,
+  "singleArchiveBuildInvocation": true,
+  "automaticRetry": false,
+  "sourceFilesModified": false
+}

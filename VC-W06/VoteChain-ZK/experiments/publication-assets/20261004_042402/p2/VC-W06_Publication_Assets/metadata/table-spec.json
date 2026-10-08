@@ -1,0 +1,92 @@
+{
+  "status": "PASS",
+  "classification": "FROZEN_PUBLICATION_TABLE_SPEC",
+  "sourceOfTruth": "WP8 FINAL reproducibility package pub/results.tsv",
+  "sourceRows": 32,
+  "tables": [
+    {
+      "id": "T-PUB-01",
+      "title": "Accepted-ballot overall measured performance",
+      "data": "table-data/T01_ACCEPTED_BALLOT_OVERALL.tsv",
+      "rows": 2,
+      "columns": [
+        "metric",
+        "unit",
+        "n",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sample_sd",
+        "p95"
+      ],
+      "captionBoundary": "2000 measured accepted-vote observations across 25 independent elections; warmups excluded; no silent outlier deletion."
+    },
+    {
+      "id": "T-PUB-02",
+      "title": "Fresh-chain first accepted-vote microbenchmark",
+      "data": "table-data/T02_FRESH_CHAIN_FIRST_VOTE.tsv",
+      "rows": 2,
+      "columns": [
+        "metric",
+        "unit",
+        "n",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sample_sd",
+        "p95"
+      ],
+      "captionBoundary": "20 measured fresh-chain first-vote observations; five warmups excluded; this condition is not the general sequential accepted-vote distribution."
+    },
+    {
+      "id": "T-PUB-03",
+      "title": "Runtime candidate-count scaling",
+      "data": "table-data/T03_CANDIDATE_COUNT_SCALING.tsv",
+      "rows": 8,
+      "profiles": [
+        "K2",
+        "K4",
+        "K8",
+        "K16"
+      ],
+      "metrics": [
+        "gas",
+        "latency"
+      ],
+      "captionBoundary": "Candidate-count experiment uses fixed MAX_CANDIDATES=16 with runtime candidateCount. Gas differs by only 12 gas between K2 and K4/K8/K16; this is attributable to calldata zero-byte composition and must not be presented as isolated candidate-processing opcode cost."
+    },
+    {
+      "id": "T-PUB-04",
+      "title": "Eligible-set scaling: complete measured statistics",
+      "data": "table-data/T04_ELIGIBLE_SET_SCALING_FULL.tsv",
+      "rows": 20,
+      "profiles": [
+        "N10",
+        "N100",
+        "N1000",
+        "N10000"
+      ],
+      "metrics": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "captionBoundary": "All eligible-set profiles use fixed Merkle depth 17. N denotes occupied eligible leaves, not tree depth."
+    },
+    {
+      "id": "T-PUB-05",
+      "title": "Eligible-set scaling mean matrix",
+      "data": "table-data/T05_ELIGIBLE_SET_MEAN_MATRIX.tsv",
+      "rows": 4,
+      "fixedMerkleDepth": 17,
+      "purpose": "compact thesis/paper table and figure input"
+    }
+  ],
+  "noRecomputation": true,
+  "noInterpolation": true,
+  "noOutlierRemoval": true
+}

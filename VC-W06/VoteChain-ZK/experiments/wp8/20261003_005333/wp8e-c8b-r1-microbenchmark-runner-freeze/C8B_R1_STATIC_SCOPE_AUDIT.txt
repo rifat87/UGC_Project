@@ -1,0 +1,13 @@
+exactFixture001=YES
+finalModePresent=YES
+freshPlan20Measured=YES
+freshPlan5Warmup=YES
+importsFrozenRunnerV2=YES
+pilotModePresent=YES
+reusesV2ConfigureActivate=YES
+reusesV2Deploy=YES
+reusesV2ReceiptParser=YES
+reusesV2StartAnvil=YES
+reusesV2StopAnvil=YES
+usesPerfCounterNs=YES
+STATIC_SCOPE_AUDIT=PASS

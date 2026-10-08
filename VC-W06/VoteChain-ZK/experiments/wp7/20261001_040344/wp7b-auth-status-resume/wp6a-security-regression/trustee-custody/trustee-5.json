@@ -1,0 +1,28 @@
+{
+  "version": "VoteChain-ZK-WP6-Trustee-Custody-v1",
+  "trusteeId": 5,
+  "transportPrivateKeyCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "kHHsz+gNh/j42fh62xDS3A==",
+    "iv": "N8QKcmp0mTdY2HaV",
+    "aad": "VoteChain-ZK/WP6/20261001_040344_WP7B|transport-private|5",
+    "ciphertext": "oxge5AYn928xtEXr9V3e0b+7kRx9QeLPzLdQVIzhSO3DJ4UGfrjbmFDOiaA=",
+    "authTag": "tExRFRCctEE3DA3znB8Q3A=="
+  },
+  "decryptionShareCustody": {
+    "version": 1,
+    "kdf": "scrypt-N16384-r8-p1",
+    "contentEncryption": "AES-256-GCM",
+    "salt": "Py2xO01EPHa+doBmREzBmQ==",
+    "iv": "/NZ6h2UpvDPQ+6/K",
+    "aad": "VoteChain-ZK/WP6/20261001_040344_WP7B|final-decryption-share|5",
+    "ciphertext": "PnMliOkTm/S20FpzSAWFVtOjZLyonCaIjPHoOIOqHSK0awFeLL6M+elQE10cMkwAZGzKAm/b6jK2QH+5TP9eog7BK78o6no/Q7bYkw==",
+    "authTag": "tzJLjW0O3Z9Qh69eiUNEdA=="
+  },
+  "publicShare": [
+    "6376224173232278360719928397177999841671235906708428704028164863307874661229",
+    "18971303121069101250006520046142405959729589403069575123352596830028767150273"
+  ]
+}

@@ -1,0 +1,364 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:7:    const candidateRecords = await Candidate.find({ candidateId: { $exists: true } }).sort({ candidateId: 1 }).lean()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js:11:    console.error('Error fetching public election data:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:15:    console.log(`[Serial] Initializing serial connection on ${serialPortPath}...`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:20:      console.log(`[Serial] Serial port ${serialPortPath} opened successfully.`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:24:      console.error("[Serial] Serial port error:", err.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:34:    console.log(`[Serial] Sending ${obj.cmd || 'UNKNOWN'} command`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:38:      console.log('[Serial] Received device response')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:45:        console.warn("[Serial] Ignored non-JSON data")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:54:        console.error("[Serial] Failed to write to serial port:", err.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:57:        console.log("[Serial] Command sent successfully.")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:67:  console.log("[API] /api/fingerprint/enroll called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:68:  const { nid } = req.body
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:75:    console.log(`[API] ENROLL result: ${response.status || 'unknown'}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:89:    console.error("[API] Enrollment error:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:96:  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:97:  const candidateId = Number(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:98:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:99:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:104:    console.log(`[API] DETECT result: ${response.status || 'unknown'}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:107:      const voter = await Voter.findOne({ nationalId: response.nid })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:112:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:122:    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:129:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:134:    req.body?.credentialPublicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:153:        nationalId: response.nid,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:184:    console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:199:  console.log("[API] /api/fingerprint/format called")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:202:    console.log(`[API] FORMAT result: ${response.status || 'unknown'}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js:210:    console.error("[API] Format error:", error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:12:function parseCandidateId(value) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:13:  const candidateId = Number(value)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:14:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) return null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:15:  return candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:19:  const candidateId = parseCandidateId(req.body?.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:20:  if (!candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:21:    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:25:    console.log('[VoteController] Starting biometric-gated ZK proof preparation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:40:      console.error('[VoteController] face-recognition process reported an error')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:59:        const voter = await Voter.findOne({ nationalId: matchedNid })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:62:        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:69:        console.error('[VoteController] ZK proof preparation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:75:      console.error('[VoteController] Failed to start face recognition:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js:79:    console.error('[VoteController] verifyFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:18:    console.log('[Train Face] Starting face training for submitted voter record')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:38:    console.log(`[Train Face] Found ${imageFiles.length} face images for training`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:50:      console.log(`[Train Face] Training process finished with code: ${code}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:67:      console.error('[Train Face] Failed to start training process')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:74:    console.error('[Train Face] Unexpected training endpoint error')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:93:    const { nationalId, name, dateOfBirth, location } = req.body
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:106:    const existingVoter = await Voter.findOne({ nationalId })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:118:      nationalId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:142:    console.error('Voter ZK enrollment failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:168:    const { identityCommitment, registrationStatus, transactionHash } = req.body
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:211:    console.error('Voter ZK registration reconciliation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:223:    const { nationalId, name, dateOfBirth, location } = req.body
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:225:    voter.nationalId = nationalId || voter.nationalId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:237:    console.error('Voter update failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js:258:    console.error('Voter deletion failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:15:  return req.body?.credentialPublicKey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:25:    console.error('[WP5] public config failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:44:    console.log('[WP5] Starting candidate-blind face authorization')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:72:      console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:116:          nationalId: matchedNid,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:139:        console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:156:      console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js:167:    console.error('[WP5] authorizeFace error:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validate.js:6:        console.log('Validation errors:', errors.array());
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validators/voterValidator.js:5:  body('nationalId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validators/voterValidator.js:38:  body('nationalId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:6:  candidateId: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:16:  nationalId: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:65:  { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:67:    name: 'candidateId_unique_valid',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:69:    partialFilterExpression: { candidateId: { $type: 'number', $gte: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Candidate.js:72:candidateSchema.index({ nationalId: 1 }, { unique: true })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:4:  nationalId: {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/models/Voter.js:118:voterSchema.index({ nationalId: 1 })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:18:    const { nid } = req.body;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:35:            console.log('Face capture process produced output');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:40:            console.error('Face capture process reported an error');
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:44:            console.log(`Python process exited with code ${code}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:63:            console.error('Failed to start Python process:', err);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js:75:        console.error('Error in face capture:', error);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:19:  body('nationalId').isString().matches(/^\d{10}$/).withMessage('National ID must be exactly 10 digits'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:28:    const candidate = await createCandidate(req.body)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:48:    console.error('Candidate creation failed:', error.message)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:53:router.patch('/:candidateId/registration-status', [
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:54:  param('candidateId').isInt({ min: 1 }).withMessage('candidateId must be a positive integer'),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:59:      Number(req.params.candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:60:      req.body.registrationStatus,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:66:        candidateId: candidate.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:82:  body('nationalId').optional().matches(/^\d{10}$/),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:87:    const allowed = ['name', 'party', 'nationalId', 'age', 'location']
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js:88:    const update = Object.fromEntries(Object.entries(req.body).filter(([key]) => allowed.includes(key)))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:25://             console.error(`Dataset directory not found: ${datasetPath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:34://             console.error(`No face images found in directory: ${datasetPath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:38://         console.log(`Found ${imageFiles.length} face images in ${datasetPath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:43://                 console.log(`Reading image: ${filePath}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:49://         console.log(`Generated face ID: ${faceId}`);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js:52://         console.error('Error generating face ID:', error);
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/markLegacyVotersForZkMigration.js:8:  console.error('Refusing to run: set MIGRATION_ALLOW_RUN=true only for the intended database migration.')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/markLegacyVotersForZkMigration.js:12:  console.error('Refusing to run: MONGO_URI must explicitly identify the intended database.')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/markLegacyVotersForZkMigration.js:31:  console.log(`Marked ${result.modifiedCount} legacy voter records for ZK re-enrollment.`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:5:import { migrateCandidateIdsWithModels } from '../services/candidateMigration.js'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:9:async function migrateCandidateIds() {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:20:  const result = await migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:25:  console.log(`Candidate ID migration complete. Records migrated: ${result.migrated}; skipped: ${result.skipped}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:26:  console.log(`Candidate ID index: ${result.indexName}; highest pre-existing candidateId: ${result.highestExistingCandidateId}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:29:migrateCandidateIds()
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/migrateCandidateIds.js:31:    console.error(`Candidate ID migration failed: ${error.message}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:454:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:458:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:462:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:466:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:812:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:816:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:820:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:824:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:828:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:832:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/scripts/wp6b-onchain-runtime.mjs:836:  console.log(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:47:  .then(() => console.log('MongoDB connected'))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:48:  .catch((error) => console.error('MongoDB connection error:', error.message))
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:59:  console.error(error.stack)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js:64:  console.log(`Server running on port ${port}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:1:export const CANDIDATE_COUNTER_ID = 'candidateId'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:3:export async function allocateCandidateIdWithModel(CounterModel) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:10:  const candidateId = Number(counter.seq)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:11:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:14:  return candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:19:    nationalId: input.nationalId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:29:  const existingCandidate = await CandidateModel.findOne({ nationalId: cleanMetadata.nationalId })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:36:  const candidateId = await allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:39:    candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:46:export async function setCandidateRegistrationStatusWithModel(candidateId, registrationStatus, CandidateModel) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateCore.js:52:    { candidateId: Number(candidateId) },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:2:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:6:export const CANDIDATE_ID_INDEX_NAME = 'candidateId_unique_valid'
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:8:  candidateId: { $type: 'number', $gte: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:11:function isCandidateIdOnlyIndex(index) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:12:  return index?.key?.candidateId === 1 && Object.keys(index.key).length === 1
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:15:function isSafeCandidateIdIndex(index) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:16:  const filter = index?.partialFilterExpression?.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:17:  return isCandidateIdOnlyIndex(index)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:23:async function inspectExistingCandidateIds(candidateCollection) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:25:    { candidateId: { $exists: true, $ne: null } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:26:    { projection: { _id: 1, candidateId: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:33:    const candidateId = Number(record.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:34:    if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:35:      throw new Error(`Existing candidate record ${record._id} has an invalid candidateId`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:37:    if (seen.has(candidateId)) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:38:      throw new Error(`Duplicate existing candidateId ${candidateId}; migration stopped before index changes`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:40:    seen.add(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:41:    highest = Math.max(highest, candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:47:export async function ensureSafeCandidateIdIndex(candidateCollection) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:48:  const inspection = await inspectExistingCandidateIds(candidateCollection)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:50:  const candidateIndexes = indexes.filter(isCandidateIdOnlyIndex)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:51:  const safeExisting = candidateIndexes.find(isSafeCandidateIdIndex)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:57:  // Replace only indexes whose entire key is candidateId. This removes the
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:64:    { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:75:export async function migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:81:  const indexResult = await ensureSafeCandidateIdIndex(candidateCollection)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:90:        { candidateId: { $exists: false } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:91:        { candidateId: null },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:101:    const candidateId = await allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:106:          { candidateId: { $exists: false } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:107:          { candidateId: null },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:110:      { $set: { candidateId, registrationStatus: 'pending' } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:115:      logger.info(`Migrated candidate record ${candidate._id} -> candidateId ${candidateId}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:118:      logger.info(`Skipped candidate record ${candidate._id}; candidateId was already assigned`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateMigration.js:126:    highestExistingCandidateId: indexResult.highest,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:4:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:13:export async function allocateCandidateId({ CounterModel = Counter } = {}) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:14:  return allocateCandidateIdWithModel(CounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:24:export async function setCandidateRegistrationStatus(candidateId, registrationStatus, {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/candidateService.js:27:  return setCandidateRegistrationStatusWithModel(candidateId, registrationStatus, CandidateModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:8:    if (!Number.isSafeInteger(Number(candidate.candidateId)) || Number(candidate.candidateId) <= 0) continue
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:10:    const chainCandidate = await contract.candidates(candidate.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/electionDataService.js:16:      candidateId: Number(candidate.candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/privacyProjection.js:4:    candidateId: candidate.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:9:  candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/biometricProofGate.js:22:  return proofGenerator(voter, candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:4:function validateCandidateId(candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:5:  const value = Number(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:6:  if (!Number.isSafeInteger(value) || value <= 0) throw new Error('A positive candidateId is required')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:10:export async function generateBoundSemaphoreProof({ runtime, voter, candidateId, electionId, group, chainRegistered, secret, snarkArtifacts }) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:15:  const selectedCandidateId = validateCandidateId(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:27:    BigInt(selectedCandidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:34:  if (BigInt(normalized.message) !== BigInt(selectedCandidateId)) throw new Error('Generated proof message does not match candidateId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofCore.js:42:    candidateId: selectedCandidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:7:export async function generateVoteProofForVoter(voter, candidateId, options = {}) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:10:  const normalizedCandidateId = Number(candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:12:  if (!Number.isSafeInteger(normalizedCandidateId) || normalizedCandidateId <= 0) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:13:    throw new Error('A positive candidateId is required before ZK proof generation')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:24:    contract.candidates(BigInt(normalizedCandidateId)),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/proofService.js:38:    candidateId: normalizedCandidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:274:export async function hashCandidateManifest(candidateIds) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:275:  const ids = candidateIds.map(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:276:    (candidateId) => BigInt(candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:331:      candidateId: { $exists: true },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:333:    .sort({ candidateId: 1 })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:335:      candidateId: 1,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:343:    candidateId: Number(candidate.candidateId),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:523:  const credentialEnvelope =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:538:    credentialEnvelope,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:573:  const candidateIds =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:574:    candidates.map((candidate) => candidate.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:577:    await hashCandidateManifest(candidateIds)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js:581:      BigInt(candidateCount) !== BigInt(candidateIds.length) ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/voterHash.js:60:export function generateVoterHash(nationalId, salt) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/utils/voterHash.js:65:      .update(`${nationalId}:${salt}`)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:5:  allocateCandidateIdWithModel,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:20:    return this.records.find((candidate) => candidate.nationalId === filter.nationalId) || null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:33:  const first = await allocateCandidateIdWithModel(FakeCounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:34:  const second = await allocateCandidateIdWithModel(FakeCounterModel)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:41:test('client supplied candidateId cannot override backend allocation', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:44:    candidateId: 999,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:46:    nationalId: '1234567890',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:53:  assert.equal(candidate.candidateId, 1)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:59:  const metadata = { nationalId: '1234567890', name: 'Alice Example', party: 'Example Party', location: 'Dhaka', age: 40 }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:67:test('Candidate schema keeps candidateId immutable and uses a partial unique index for valid IDs', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:69:  assert.match(source, /candidateId:\s*\{[\s\S]*?immutable:\s*true[\s\S]*?min:\s*\[1,/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:70:  assert.match(source, /name:\s*'candidateId_unique_valid'/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/candidateService.test.js:72:  assert.match(source, /partialFilterExpression:\s*\{\s*candidateId:\s*\{\s*\$type:\s*'number',\s*\$gte:\s*1/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:7:    { candidateId: 1, nationalId: '1234567890', name: 'Alice Example', party: 'Example Party', location: 'Dhaka', registrationStatus: 'pending' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:8:    { candidateId: 2, nationalId: '9876543210', name: 'Bob Example', party: 'Other Party', location: 'Chattogram', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:12:    async candidates(candidateId) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:13:      if (candidateId === 1) return { exists: true, voteCount: 7n }
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:21:  assert.deepEqual(data.candidates, [{ candidateId: 1, name: 'Alice Example', party: 'Example Party', location: 'Dhaka', voteCount: 7 }])
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/electionController.test.js:22:  assert.equal('nationalId' in data.candidates[0], false)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:5:  migrateCandidateIdsWithModels,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:9:  return record.candidateId === undefined || record.candidateId === null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:37:      { name: 'candidateId_1', key: { candidateId: 1 }, unique: true },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:47:    } else if (filter.candidateId?.$exists === true) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:99:    { _id: 'a', candidateId: 2, nationalId: '1111111111', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:100:    { _id: 'b', nationalId: '2222222222' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:101:    { _id: 'c', candidateId: null, nationalId: '3333333333', registrationStatus: 'failed' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:102:    { _id: 'd', candidateId: 5, nationalId: '4444444444', registrationStatus: 'registered' },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:108:  const result = await migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:116:  assert.equal(byId.get('a').candidateId, 2)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:117:  assert.equal(byId.get('d').candidateId, 5)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:118:  assert.equal(byId.get('b').candidateId, 6)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:119:  assert.equal(byId.get('c').candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:124:  assert.equal(result.highestExistingCandidateId, 5)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:126:  assert.deepEqual(collection.droppedIndexes, ['candidateId_1'])
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:129:    key: { candidateId: 1 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:132:    partialFilterExpression: { candidateId: { $type: 'number', $gte: 1 } },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:140:    { _id: 'a', candidateId: 4 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:141:    { _id: 'b', candidateId: 4 },
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:148:    () => migrateCandidateIdsWithModels({
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/migrationSafety.test.js:153:    /Duplicate existing candidateId 4/,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:11:  'nationalId',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:35:    candidateId: 9,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:36:    nationalId: '1234567890',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:46:    candidateId: 9,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:59:    nationalId: '1234567890',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/privacyProjection.test.js:81:    nationalId: '1234567890',
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/wp5Compatibility.test.js:26:    const candidateIds =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/wp5Compatibility.test.js:35:        candidateIds,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:14:test('ZK ABI exposes candidateId/commitment/proof lifecycle', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:29:  for (const forbidden of ['voterHash', 'nationalId', 'dateOfBirth', 'birthDate', 'encryptedSalt', 'biometric']) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkAbiCompatibility.test.js:34:  assert.equal(castVote.inputs[0].name, 'candidateId')
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:28:test('active voter flow sends candidateId plus Semaphore proof and keeps wallet identity separate', () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:30:  assert.match(hook, /castVote\(candidateId,\s*proof\)/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkActivePath.test.js:43:  assert.match(proofService, /contract\.candidates\(BigInt\(normalizedCandidateId\)\)/)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:11:    candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:12:    proofGenerator: async (receivedVoter, candidateId) => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:15:      assert.equal(candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkBiometricGate.test.js:30:      candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:42:test('biometric-authorized proof core binds candidateId as message and electionId as scope', async () => {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:46:    candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:53:  assert.equal(result.candidateId, 7)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:68:      candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/__tests__/zkProofCore.test.js:85:      candidateId: 7,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:20:  nationalId: string
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:30:  const [formData, setFormData] = useState<FormData>({ name: "", party: "", nationalId: "", age: 18, location: "" })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:55:    let candidateId: number | null = null
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:60:      candidateId = candidate.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:63:        await registerCandidate(candidate.candidateId)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:67:          await updateCandidateRegistrationStatus(candidate.candidateId, "failed")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:69:          console.error("Failed to mark candidate registration as failed", statusError)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:74:      await updateCandidateRegistrationStatus(candidate.candidateId, "registered")
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:75:      toast({ title: "Success", description: `Candidate #${candidate.candidateId} registered on-chain successfully.` })
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:78:      console.error("Candidate registration error", registrationError)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:79:      const message = chainRegistered && candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:80:        ? `Candidate #${candidateId} exists on-chain, but the database status could not be synchronized. Reconciliation is required.`
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterCandidate.tsx:102:              <div className="space-y-2"><Label htmlFor="nationalId">National ID</Label><Input id="nationalId" value={formData.nationalId} onChange={(event) => setFormData({ ...formData, nationalId: event.target.value.trim() })} required pattern="^\d{10}$" title="National ID must be exactly 10 digits" /></div>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:23:  nationalId: string
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:35:    nationalId: "",
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:56:    if (!formData.nationalId.trim() || !biometricStatus.faceCaptured) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:63:      const response = await fetch(apiUrl(`/api/voters/train-face/${formData.nationalId}`), {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:110:        nationalId: formData.nationalId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:147:              <div className="space-y-2"><Label htmlFor="nationalId">National ID</Label><Input id="nationalId" value={formData.nationalId} onChange={(event) => setFormData({ ...formData, nationalId: event.target.value.trim() })} required pattern="^\d{10}$" /></div>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:164:            <FaceCapture nid={formData.nationalId} onCaptureComplete={(success) => setBiometricStatus((previous) => ({ ...previous, faceCaptured: success }))} />
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Admin/RegisterVoter.tsx:171:              nid={formData.nationalId}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Biometric/fingerprint/FingerprintCapture.tsx:41:      console.error("Fingerprint error:", err)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:8:  onVote?: (candidateId: number) => void
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:24:          <Card key={candidate.candidateId}>
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:28:                Candidate #{candidate.candidateId} · {candidate.party} · {candidate.location}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/CandidateList.tsx:42:                    onClick={() => onVote(candidate.candidateId)}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Dashboard/PublicDashboard.tsx:20:      console.error("Failed to load public election data", requestError)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:158:          console.error('Error determining role:', contractError)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:164:      console.error('Error connecting to MetaMask:', error)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/ui/wallet-provider.tsx:194:      console.error('Error disconnecting wallet:', error)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:108:    selectedCandidate,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:109:    setSelectedCandidate,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:199:      setSelectedCandidate(null)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:204:      candidateId:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:261:        candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:284:      const candidateId =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:290:            item.candidateId ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:291:            candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:296:        setSelectedCandidate(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:297:          candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:306:            candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:343:        console.error(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:363:        setSelectedCandidate(null)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:574:                    selectedCandidate ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:575:                      candidate.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:580:                        candidate.candidateId
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:594:                              {candidate.candidateId}
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:617:                              candidate.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/components/Voter/VoterDashboard.tsx:22:      console.error("Failed to fetch voter dashboard data", requestError)
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:341:        candidateId:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:350:              candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:536:        candidateId:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/hooks/useContract.ts:545:              candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:225:  candidateIds: number[],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:228:    candidateIds.length < 1 ||
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:229:    candidateIds.length > MAX
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:251:        candidateIds.length,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:257:    index < candidateIds.length;
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:265:          candidateIds[index],
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:360:      .credentialEnvelope
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:544:  candidateId: number,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:552:  const randomness:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:562:        candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:564:      candidateId <= 0
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:611:              .candidateId ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:612:            candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:625:    const candidateIds =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:631:              .candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:636:        candidateIds,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:834:      randomness[slot] =
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:911:      randomness:
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:912:        randomness.map(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1198:    randomness.fill(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1215:    candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1250:            message.candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5PrivacyClient.ts:173:  candidateId: number,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5PrivacyClient.ts:182:    candidateId,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:6:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:47:  nationalId: string
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:56:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:73:  candidateId: number,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:76:  return request<{ candidateId: number; registrationStatus: string }>(
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:77:    `/api/candidates/${candidateId}/registration-status`,
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:87:  nationalId: string
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:107:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:141:export async function prepareZkVote(path: string, candidateId: number) {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:145:    body: JSON.stringify({ candidateId }),
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:161:  candidateId: number
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:196:export interface Wp5CredentialEnvelope {
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/services/api.ts:213:  credentialEnvelope: Wp5CredentialEnvelope

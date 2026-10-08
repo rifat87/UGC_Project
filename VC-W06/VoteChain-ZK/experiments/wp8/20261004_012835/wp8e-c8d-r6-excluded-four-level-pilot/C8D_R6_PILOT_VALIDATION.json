@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "classification": "EXCLUDED_PILOT_VALIDATION",
+  "pilotObservationCount": 4,
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "allObservationsPass": true,
+  "allPublicBindings73Of73": true,
+  "allEligibleRootsMatchFrozenFixtures": true,
+  "allSuccessfulWitnessesRemoved": true,
+  "automaticRetry": false,
+  "excludedFromFinalStatistics": true,
+  "finalRepetitionMatrixFrozen": false,
+  "records": [
+    {
+      "observationId": "PILOT-N10",
+      "N": 10,
+      "phase": "PILOT_EXCLUDED",
+      "status": "PASS",
+      "wtnsCheckRc": 0,
+      "verifyRc": 0,
+      "semanticVerifyOk": true,
+      "publicSignalCount": 73,
+      "publicSignalBinding": "PASS",
+      "witnessRemoved": true,
+      "eligibleRootMatchesFrozenFixture": true
+    },
+    {
+      "observationId": "PILOT-N100",
+      "N": 100,
+      "phase": "PILOT_EXCLUDED",
+      "status": "PASS",
+      "wtnsCheckRc": 0,
+      "verifyRc": 0,
+      "semanticVerifyOk": true,
+      "publicSignalCount": 73,
+      "publicSignalBinding": "PASS",
+      "witnessRemoved": true,
+      "eligibleRootMatchesFrozenFixture": true
+    },
+    {
+      "observationId": "PILOT-N1000",
+      "N": 1000,
+      "phase": "PILOT_EXCLUDED",
+      "status": "PASS",
+      "wtnsCheckRc": 0,
+      "verifyRc": 0,
+      "semanticVerifyOk": true,
+      "publicSignalCount": 73,
+      "publicSignalBinding": "PASS",
+      "witnessRemoved": true,
+      "eligibleRootMatchesFrozenFixture": true
+    },
+    {
+      "observationId": "PILOT-N10000",
+      "N": 10000,
+      "phase": "PILOT_EXCLUDED",
+      "status": "PASS",
+      "wtnsCheckRc": 0,
+      "verifyRc": 0,
+      "semanticVerifyOk": true,
+      "publicSignalCount": 73,
+      "publicSignalBinding": "PASS",
+      "witnessRemoved": true,
+      "eligibleRootMatchesFrozenFixture": true
+    }
+  ]
+}

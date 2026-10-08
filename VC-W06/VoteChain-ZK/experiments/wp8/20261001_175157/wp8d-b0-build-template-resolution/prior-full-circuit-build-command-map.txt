@@ -1,0 +1,502 @@
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp3/20260930_170614/results/WP3_SHA256SUMS.txt
+======================================================================
+2:bd2bcf6748f67f1f2c48373fa444ca44274eb08c559389e2b918bf600710da14 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom
+3:f60c16403a0cff4888e0d5f40f1b98ec848efd94b325b5e07e4f93da99641280 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp3-generate-profile.mjs
+4:87d9094fb52345312a8dfe1db4b7a3c9e2624495aa3c968e7533b46026939592 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+5:8323685caa5149d98dab9790ffae9e00b10e3e6098ae7b626df748901e99c66e */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom
+6:3f94130ac229b0df3ee14f1bd54b15035610091e08d8b752a3a92f95440d314b */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom
+12:11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs
+13:352454d3ca78bf450a4745012ebddc49f7a621294c297bf2787269f9ea733a0a */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.sym
+14:02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm
+15:867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey
+19:55b31cad6c02422bf22073abf482516d576d3f3eec0b964d4fecaf4effff7eba */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol
+20:a2ab1c1881f1dcf8e7f4804f3668a6a6d9f88a4cf85034053a49dd659fe0eb43 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/poseidon/VoteChainVoteDigest.r1cs
+21:6431fbd0e8d78a8181ec474dda81a79258227ec005ca30dc66967ac4207209f2 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/poseidon/VoteChainVoteDigest.sym
+22:620d1d26adacd99edac521965e1ac4dcba76d03470dbef1414fd5d3b1cca929b */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/build/wp3/20260930_170614/poseidon/VoteChainVoteDigest_js/VoteChainVoteDigest.wasm
+23:ec8d0f356b68cb01f6ab436a811f1be3445853ac07509b439dcb3829f45a8c62 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/poseidon/VoteChainVoteDigest_final.zkey
+27:3b9e18dc543bdcd772e260865442570998a07c953e075716757e9e35da6de6e9 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/artifacts/wp3/20260930_170614/poseidon/VoteChainVoteDigestVerifier.sol
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP3_FullCircuit.sh
+======================================================================
+6:# WP3 — Full Custom Circom Voting Circuit
+56:parse_r1cs() {
+102:PTAU="$ROOT/circuits/poc/dev-groth16-finalmetrics/pot18_final.ptau"
+104:[ -f "$PTAU" ] || \
+105:    fail "WP2 DEV pot18_final.ptau missing." 10
+108:    node npm circom snarkjs \
+149:CIRCOM_VERSION="$(circom --version 2>&1 | tr -d '\r' | sed -n '1p')"
+152:CIRCOMLIBJS_VERSION="$(
+154:    node -p "require('./node_modules/circomlibjs/package.json').version"
+157:CIRCOMLIB_VERSION="$(
+159:    node -p "require('./node_modules/circomlib/package.json').version"
+162:PTAU_SHA="$(sha "$PTAU")"
+174:section "VOTECHAIN-ZK — WP3 FULL CUSTOM CIRCOM CIRCUIT"
+180:echo "Circom          : $CIRCOM_VERSION"
+182:echo "circomlibjs     : $CIRCOMLIBJS_VERSION"
+183:echo "circomlib       : $CIRCOMLIB_VERSION"
+190:echo "DEV PTAU SHA256 : $PTAU_SHA"
+204:PROFILE_CIRCOM="$CIRCUIT_CONFIG/VoteChainBuildProfile.circom"
+205:PROFILE_GENERATOR="$SCRIPT_DIR/wp3-generate-profile.mjs"
+215:    circomPath
+218:if (!jsonPath || !circomPath) {
+220:        "Usage: node wp3-generate-profile.mjs profile.json profile.circom"
+268:        "Circom-2",
+370:const circom = `pragma circom 2.2.0;
+428:    circomPath,
+429:    circom
+440:    "$PROFILE_CIRCOM" || \
+446:[ -f "$PROFILE_CIRCOM" ] || \
+447:    fail "WP3 Circom profile missing." 22
+451:echo "       Circom : $PROFILE_CIRCOM"
+459:CORE_CIRCUIT="$CIRCUIT_LIB/VoteChainVoteCore.circom"
+461:cat > "$CORE_CIRCUIT" <<'CORE_CIRCOM'
+462:pragma circom 2.2.0;
+464:include "../config/VoteChainBuildProfile.circom";
+466:include "circomlib/circuits/poseidon.circom";
+467:include "circomlib/circuits/bitify.circom";
+468:include "circomlib/circuits/comparators.circom";
+469:include "circomlib/circuits/compconstant.circom";
+470:include "circomlib/circuits/gates.circom";
+471:include "circomlib/circuits/babyjub.circom";
+472:include "circomlib/circuits/escalarmulfix.circom";
+473:include "circomlib/circuits/escalarmulany.circom";
+950:CORE_CIRCOM
+956:DIRECT_CIRCUIT="$ROOT/circuits/VoteChainVoteDirect.circom"
+958:cat > "$DIRECT_CIRCUIT" <<'DIRECT_CIRCOM'
+959:pragma circom 2.2.0;
+961:include "./lib/VoteChainVoteCore.circom";
+969:template VoteChainVoteDirect(
+1048:     * Circom component rule:
+1098:} = VoteChainVoteDirect(
+1102:DIRECT_CIRCOM
+1108:DIGEST_CIRCUIT="$ROOT/circuits/VoteChainVoteDigest.circom"
+1110:cat > "$DIGEST_CIRCUIT" <<'DIGEST_CIRCOM'
+1111:pragma circom 2.2.0;
+1113:include "./lib/VoteChainVoteCore.circom";
+1123:template VoteChainVoteDigest(
+1261:} = VoteChainVoteDigest(
+1265:DIGEST_CIRCOM
+1282:    await import("circomlibjs");
+1297:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+1810: * Prefer circomlibjs' full-order Generator as a
+1819:    "CIRCOMLIB_GENERATOR";
+2629:"variant,constraints,public_inputs,private_inputs,outputs,public_signals,compile_ms,r1cs_bytes,wasm_bytes" \
+2645:    BASE_NAME="$(basename "$CIRCUIT" .circom)"
+2648:    local INFO_LOG="$LOG/wp3-${RUN_ID}-${LOWER}-r1cs.txt"
+2659:    circom \
+2661:        --r1cs \
+2662:        --wasm \
+2681:    local R1CS="$BUILD/${BASE_NAME}.r1cs"
+2682:    local WASM="$BUILD/${BASE_NAME}_js/${BASE_NAME}.wasm"
+2685:    [ -f "$R1CS" ] || \
+2686:        fail "$VARIANT R1CS missing." 41
+2688:    [ -f "$WASM" ] || \
+2689:        fail "$VARIANT WASM missing." 42
+2694:    snarkjs r1cs info \
+2695:        "$R1CS" \
+2698:        fail "$VARIANT r1cs info failed." 44
+2707:        parse_r1cs \
+2713:        parse_r1cs \
+2719:        parse_r1cs \
+2725:        parse_r1cs \
+2752:"$VARIANT,$CONSTRAINTS,$PUBLIC_INPUTS,$PRIVATE_INPUTS,$OUTPUTS,$PUBLIC_SIGNALS,$COMPILE_MS,$(file_bytes "$R1CS"),$(file_bytes "$WASM")" \
+2797:    local WASM="$BUILD/${BASE_NAME}_js/${BASE_NAME}.wasm"
+2798:    local R1CS="$BUILD/${BASE_NAME}.r1cs"
+2813:        "$WASM" \
+2826:        "$R1CS" \
+2830:        fail "$VARIANT valid witness did not satisfy R1CS." 51
+2864:            "$WASM" \
+2901:        "$WASM" \
+2928:    "VoteChainVoteDirect" \
+2933:    "VoteChainVoteDigest" \
+2943:# 7. DEV GROTH16 SETUP / PROOF / VERIFIER
+2946:section "6. DEV GROTH16 SETUP + REAL PROOFS + SOLIDITY VERIFIERS"
+2951:"variant,constraints,public_inputs,private_inputs,outputs,compile_ms,witness_ms,setup_ms,zkey_contribute_ms,prove_ms,verify_ms,r1cs_bytes,wasm_bytes,zkey_bytes,vkey_bytes,proof_json_bytes,public_json_bytes,solidity_verifier_bytes" \
+3012:    local R1CS="$BUILD/${BASE_NAME}.r1cs"
+3013:    local WASM="$BUILD/${BASE_NAME}_js/${BASE_NAME}.wasm"
+3015:    local INFO_LOG="$LOG/wp3-${RUN_ID}-${LOWER}-r1cs.txt"
+3017:    local ZKEY0="$ART/${BASE_NAME}_0000.zkey"
+3018:    local ZKEY="$ART/${BASE_NAME}_final.zkey"
+3027:    local CONTRIB_LOG="$LOG/wp3-${RUN_ID}-${LOWER}-zkey-contribute.txt"
+3028:    local ZKEY_VERIFY_LOG="$LOG/wp3-${RUN_ID}-${LOWER}-zkey-verify.txt"
+3031:    echo "[RUNNING] $VARIANT Groth16 setup..."
+3039:    snarkjs groth16 setup \
+3040:        "$R1CS" \
+3041:        "$PTAU" \
+3042:        "$ZKEY0" \
+3052:        fail "$VARIANT Groth16 setup failed." 62
+3057:    echo "[PASS] $VARIANT Groth16 setup"
+3059:    echo "[RUNNING] $VARIANT DEV zkey contribution..."
+3063:    snarkjs zkey contribute \
+3064:        "$ZKEY0" \
+3065:        "$ZKEY" \
+3077:        fail "$VARIANT zkey contribution failed." 63
+3082:    rm -f "$ZKEY0"
+3084:    snarkjs zkey verify \
+3085:        "$R1CS" \
+3086:        "$PTAU" \
+3087:        "$ZKEY" \
+3088:        > "$ZKEY_VERIFY_LOG" \
+3090:            cat "$ZKEY_VERIFY_LOG"
+3091:            fail "$VARIANT zkey verification failed." 64
+3094:    snarkjs zkey export verificationkey \
+3095:        "$ZKEY" \
+3101:    echo "[PASS] $VARIANT zkey verified"
+3108:        "$ZKEY" \
+3140:    snarkjs zkey export solidityverifier \
+3141:        "$ZKEY" \
+3150:        CONTRACT_NAME="VoteChainVoteDirectVerifier"
+3152:        CONTRACT_NAME="VoteChainVoteDigestVerifier"
+3178:        parse_r1cs \
+3184:        parse_r1cs \
+3190:        parse_r1cs \
+3196:        parse_r1cs \
+3213:"$VARIANT,$CONSTRAINTS,$PUBLIC_INPUTS,$PRIVATE_INPUTS,$OUTPUTS,$COMPILE_MS,$WITNESS_MS,$SETUP_MS,$CONTRIB_MS,$PROVE_MS,$VERIFY_MS,$(file_bytes "$R1CS"),$(file_bytes "$WASM"),$(file_bytes "$ZKEY"),$(file_bytes "$VKEY"),$(file_bytes "$PROOF"),$(file_bytes "$PUBLIC"),$(file_bytes "$VERIFIER")" \
+3219:    "VoteChainVoteDirect"
+3223:    "VoteChainVoteDigest"
+3416:    "VoteChainVoteDirect"
+3420:    "VoteChainVoteDigest"
+3543:Circuit language = Circom 2
+3558:The generated Circom registry is:
+3560:$PROFILE_CIRCOM
+3675:- compiled R1CS
+3676:- WASM witness generator
+3678:- DEV-only contributed zkey
+3742:hash_if_exists "$PROFILE_CIRCOM"
+3758:        BASE_NAME="VoteChainVoteDirect"
+3760:        BASE_NAME="VoteChainVoteDigest"
+3766:    hash_if_exists "$BUILD/${BASE_NAME}.r1cs"
+3768:    hash_if_exists "$BUILD/${BASE_NAME}_js/${BASE_NAME}.wasm"
+3770:    hash_if_exists "$ART/${BASE_NAME}_final.zkey"
+3793:DIRECT_R1CS_SHA="$(
+3794:    sha "$BUILD_ROOT/direct/VoteChainVoteDirect.r1cs"
+3797:POSEIDON_R1CS_SHA="$(
+3798:    sha "$BUILD_ROOT/poseidon/VoteChainVoteDigest.r1cs"
+3801:DIRECT_ZKEY_SHA="$(
+3802:    sha "$ARTIFACT_ROOT/direct/VoteChainVoteDirect_final.zkey"
+3805:POSEIDON_ZKEY_SHA="$(
+3806:    sha "$ARTIFACT_ROOT/poseidon/VoteChainVoteDigest_final.zkey"
+3889:    echo "DEV_PTAU_SHA256=$PTAU_SHA"
+3906:    echo "DIRECT_R1CS_SHA256=$DIRECT_R1CS_SHA"
+3907:    echo "POSEIDON_R1CS_SHA256=$POSEIDON_R1CS_SHA"
+3908:    echo "DIRECT_DEV_ZKEY_SHA256=$DIRECT_ZKEY_SHA"
+3909:    echo "POSEIDON_DEV_ZKEY_SHA256=$POSEIDON_ZKEY_SHA"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_Freeze_WP5_Preflight.sh
+======================================================================
+216:            "VoteChainVoteDirectVerifier"
+286:- Circom 2
+495:        -o -name 'VoteChainVoteDirectVerifier.sol' \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP4_PrivateVoting_GasGate.sh
+======================================================================
+9:# Consumes frozen WP3 circuit/verifier/zkey artifacts.
+82:DIRECT_BASE="VoteChainVoteDirect"
+83:DIGEST_BASE="VoteChainVoteDigest"
+85:DIRECT_WASM="$WP3_BUILD/direct/${DIRECT_BASE}_js/${DIRECT_BASE}.wasm"
+87:DIRECT_R1CS="$WP3_BUILD/direct/${DIRECT_BASE}.r1cs"
+88:DIRECT_ZKEY="$WP3_ART/direct/${DIRECT_BASE}_final.zkey"
+92:DIGEST_WASM="$WP3_BUILD/poseidon/${DIGEST_BASE}_js/${DIGEST_BASE}.wasm"
+94:DIGEST_R1CS="$WP3_BUILD/poseidon/${DIGEST_BASE}.r1cs"
+95:DIGEST_ZKEY="$WP3_ART/poseidon/${DIGEST_BASE}_final.zkey"
+101:    "$DIRECT_WASM" \
+103:    "$DIRECT_R1CS" \
+104:    "$DIRECT_ZKEY" \
+107:    "$DIGEST_WASM" \
+109:    "$DIGEST_R1CS" \
+110:    "$DIGEST_ZKEY" \
+198:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol"
+202:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol"
+204:grep -q 'contract VoteChainVoteDirectVerifier' \
+205:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol" || \
+208:grep -q 'contract VoteChainVoteDigestVerifier' \
+209:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol" || \
+226:const pkg = await import("circomlibjs");
+238:        "circomlibjs buildBabyjub/buildPoseidon unavailable"
+922:    local WASM
+923:    local ZKEY
+929:        WASM="$DIRECT_WASM"
+930:        ZKEY="$DIRECT_ZKEY"
+935:        WASM="$DIGEST_WASM"
+936:        ZKEY="$DIGEST_ZKEY"
+949:        "$WASM" \
+959:        "$ZKEY" \
+979:    snarkjs zkey export soliditycalldata \
+1008:    await import("circomlibjs");
+1020:        "circomlibjs poseidonContract API unavailable"
+2571:import "../src/verifiers/VoteChainVoteDirectVerifier.sol";
+2572:import "../src/verifiers/VoteChainVoteDigestVerifier.sol";
+2686:            VoteChainVoteDirectVerifier v
+2690:            new VoteChainVoteDirectVerifier();
+2717:            VoteChainVoteDigestVerifier v,
+2722:            new VoteChainVoteDigestVerifier();
+2958:     * the exact WP3/Circom hash vector.
+3466:        VoteChainVoteDirectVerifier v =
+3467:            new VoteChainVoteDirectVerifier();
+3591:        VoteChainVoteDirectVerifier dv =
+3592:            new VoteChainVoteDirectVerifier();
+3601:        VoteChainVoteDigestVerifier pv =
+3602:            new VoteChainVoteDigestVerifier();
+4370:    "$SRC/verifiers/VoteChainVoteDirectVerifier.sol" \
+4371:    "$SRC/verifiers/VoteChainVoteDigestVerifier.sol" \
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5B_Compatibility_Freeze.sh
+======================================================================
+16:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+17:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+19:VERIFIER="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol"
+20:WP4_VERIFIER="$ROOT/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol"
+56:    "$WASM" \
+57:    "$ZKEY" \
+123:    circomlibjs@0.1.7
+128:  import("circomlibjs"),
+129:]).then(([snark, circom]) => {
+135:    circom.buildPoseidon ??
+136:    circom.default?.buildPoseidon
+143:    throw new Error("circomlibjs.buildPoseidon unavailable")
+147:  console.log("FRONTEND_CIRCOMLIBJS_IMPORT=PASS")
+163:EXPECTED_DIRECT_ZKEY_SHA256="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+165:WASM_SHA256="$(sha256sum "$WASM" | awk '{print $1}')"
+166:ZKEY_SHA256="$(sha256sum "$ZKEY" | awk '{print $1}')"
+171:echo "DIRECT_WASM_SHA256=$WASM_SHA256"
+172:echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+177:if [ "$ZKEY_SHA256" != "$EXPECTED_DIRECT_ZKEY_SHA256" ]; then
+178:    echo "ERROR: DIRECT zkey does not match accepted WP3 run."
+187:echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+203:import * as circomlibPkg from "circomlibjs"
+207:  circomlibPkg.buildPoseidon ??
+208:  circomlibPkg.default?.buildPoseidon
+216:    "Required circomlibjs/snarkjs runtime unavailable",
+226:  wasmPath,
+227:  zkeyPath,
+236:  !wasmPath ||
+237:  !zkeyPath ||
+527:    wasmPath,
+528:    zkeyPath,
+598:  wasm: sha256(wasmPath),
+599:  zkey: sha256(zkeyPath),
+666:    wasmUrl:
+667:      "/zk/wp5/direct/VoteChainVoteDirect.wasm",
+669:    zkeyUrl:
+670:      "/zk/wp5/direct/VoteChainVoteDirect_final.zkey",
+789:    "$WASM" \
+790:    "$ZKEY" \
+1003:cp "$WASM" \
+1004:   "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+1006:cp "$ZKEY" \
+1007:   "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+1016:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm" \
+1017:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey" \
+1030:cmp "$WASM" \
+1031:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+1033:cmp "$ZKEY" \
+1034:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+1185:    echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+1188:    echo "DIRECT_WASM_SHA256=$WASM_SHA256"
+1189:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+1197:    echo "FRONTEND_CIRCOMLIBJS=0.1.7"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5B_Resume_195059.sh
+======================================================================
+19:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+20:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+22:VERIFIER="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirectVerifier.sol"
+23:WP4_VERIFIER="$ROOT/contracts/wp4-foundry/src/verifiers/VoteChainVoteDirectVerifier.sol"
+59:    "$WASM" \
+60:    "$ZKEY" \
+162:EXPECTED_ZKEY="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+164:WASM_SHA256="$(sha256sum "$WASM" | awk '{print $1}')"
+165:ZKEY_SHA256="$(sha256sum "$ZKEY" | awk '{print $1}')"
+169:echo "DIRECT_WASM_SHA256=$WASM_SHA256"
+170:echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+174:if [ "$ZKEY_SHA256" != "$EXPECTED_ZKEY" ]; then
+175:    echo "ERROR: accepted WP3 DIRECT zkey hash changed."
+181:echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+483:cp "$WASM" \
+484:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+486:cp "$ZKEY" \
+487:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+496:    "$WASM" \
+497:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm"
+500:    "$ZKEY" \
+501:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey"
+510:    "$PUBLIC_ZK/VoteChainVoteDirect.wasm" \
+511:    "$PUBLIC_ZK/VoteChainVoteDirect_final.zkey" \
+539:const circomlibjs =
+540:  pkg.dependencies?.circomlibjs ??
+541:  pkg.devDependencies?.circomlibjs
+549:  "CIRCOMLIBJS_DECLARED=" +
+550:  String(circomlibjs),
+559:if (circomlibjs !== "0.1.7") {
+561:    "circomlibjs is not pinned to 0.1.7",
+749:    echo "DIRECT_ZKEY_ACCEPTED_HASH=PASS"
+752:    echo "DIRECT_WASM_SHA256=$WASM_SHA256"
+753:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA256"
+761:    echo "FRONTEND_CIRCOMLIBJS=0.1.7"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_LocalPrivacyWorker.sh
+======================================================================
+393:declare module "circomlibjs"
+409:import * as circomlibjs from "circomlibjs"
+419:  (circomlibjs as any).buildPoseidon ??
+420:  (circomlibjs as any).default?.buildPoseidon
+423:  (circomlibjs as any).buildBabyjub ??
+424:  (circomlibjs as any).default?.buildBabyjub
+1333:          .wasmUrl,
+1336:          .zkeyUrl,
+3729:const circom =
+3730:  pkg.dependencies?.circomlibjs ??
+3731:  pkg.devDependencies?.circomlibjs
+3739:if (circom !== "0.1.7") {
+3741:    `Expected circomlibjs 0.1.7, got ${circom}`,
+3775:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+3776:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+3787:    "$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm" \
+3788:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+3791:    "$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey" \
+3792:    "$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume2_201827.sh
+======================================================================
+25:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+26:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+224:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+225:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+229:    "$DIST_WASM" \
+230:    "$DIST_ZKEY" \
+240:cmp "$WASM" "$DIST_WASM"
+241:cmp "$ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume_201827.sh
+======================================================================
+22:WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+23:ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+140:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+141:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+145:    "$DIST_WASM" \
+146:    "$DIST_ZKEY" \
+156:cmp "$WASM" "$DIST_WASM"
+157:cmp "$ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_ES_Worker_Fix.sh
+======================================================================
+235:    '^import .* from ["'"'"']circomlibjs["'"'"']' \
+238:    echo "ERROR: static circomlibjs import returned."
+330:      -name '*circomlibjs*.js' \
+360:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+361:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+364:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+365:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+368:cmp "$SOURCE_WASM" "$DIST_WASM"
+369:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_ES_Worker_Fix_Resume.sh
+======================================================================
+317:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+318:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+321:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+322:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+325:cmp "$SOURCE_WASM" "$DIST_WASM"
+326:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_No_TLA_Fix.sh
+======================================================================
+120:    '"circomlibjs"'
+139:  const circomlib: any =
+141:      "circomlibjs"
+144:  return circomlib.buildPoseidon()
+148:  const circomlib: any =
+150:      "circomlibjs"
+153:  return circomlib.buildBabyjub()
+315:  /from\s+["']circomlibjs["']/.test(
+336:  "STATIC_CIRCOMLIBJS_IMPORT=NO",
+478:SOURCE_WASM="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm"
+479:SOURCE_ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+482:DIST_WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+483:DIST_ZKEY="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect_final.zkey"
+486:cmp "$SOURCE_WASM" "$DIST_WASM"
+487:cmp "$SOURCE_ZKEY" "$DIST_ZKEY"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_Synthetic_Runtime.sh
+======================================================================
+18:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+81:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+82:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+205:} from "circomlibjs"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_v2_CDP_Runtime.sh
+======================================================================
+18:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+114:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+115:    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+155:    "wasmUrl",
+156:    "zkeyUrl",
+182:  "WASM_URL=" +
+183:  p.directArtifacts.wasmUrl
+187:  "ZKEY_URL=" +
+188:  p.directArtifacts.zkeyUrl
+380:} from "circomlibjs"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Auth_Network_Runtime.sh
+======================================================================
+16:VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+262:} from "circomlibjs"
+
+======================================================================
+FILE=../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP8C_C_Fresh_Input_Encryption_Pilot.sh
+======================================================================
+23:    EXPECTED_R1CS_SHA="11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0"
+24:    EXPECTED_ZKEY_SHA="867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+25:    EXPECTED_WASM_SHA="02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a"
+47:    R1CS="$ROOT/circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs"
+49:    ZKEY="$ROOT/circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey"
+51:    WASM="$FRONT/dist/zk/wp5/direct/VoteChainVoteDirect.wasm"
+99:                -o -name '*.circom' \
+191:    R1CS_SHA="$(
+192:        sha256sum "$R1CS" |
+196:    ZKEY_SHA="$(
+197:        sha256sum "$ZKEY" |
+201:    WASM_SHA="$(
+202:        sha256sum "$WASM" |
+206:    echo "DIRECT_R1CS_SHA256=$R1CS_SHA"
+207:    echo "DIRECT_ZKEY_SHA256=$ZKEY_SHA"
+208:    echo "DIRECT_WASM_SHA256=$WASM_SHA"
+210:    if [ "$R1CS_SHA" != "$EXPECTED_R1CS_SHA" ]; then
+211:        hold "DIRECT_R1CS_HASH_DRIFT"
+214:    if [ "$ZKEY_SHA" != "$EXPECTED_ZKEY_SHA" ]; then
+215:        hold "DIRECT_ZKEY_HASH_DRIFT"
+218:    if [ "$WASM_SHA" != "$EXPECTED_WASM_SHA" ]; then
+219:        hold "DIRECT_WASM_HASH_DRIFT"
+319:        wasmFile,
+320:        zkeyFile,
+335:    const circomlib =
+337:            "circomlibjs"
+564:            circomlib
+566:            circomlib
+1192:                wasmFile,
+1242:                    zkeyFile,
+1720:        WASM_NATIVE="$(
+1721:            native_path "$WASM"
+1724:        ZKEY_NATIVE="$(
+1725:            native_path "$ZKEY"
+1743:            "$WASM_NATIVE" \
+1744:            "$ZKEY_NATIVE" \
+2428:        echo "DIRECT_R1CS_SHA256=$EXPECTED_R1CS_SHA"
+2429:        echo "DIRECT_ZKEY_SHA256=$EXPECTED_ZKEY_SHA"
+2430:        echo "DIRECT_WASM_SHA256=$EXPECTED_WASM_SHA"

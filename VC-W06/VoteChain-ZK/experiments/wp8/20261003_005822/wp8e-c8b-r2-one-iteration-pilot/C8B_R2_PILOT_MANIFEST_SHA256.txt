@@ -1,0 +1,8 @@
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/pilot-01/anvil.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/pilot-01/cast-send-stderr.txt
+6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/pilot-01/direct-deploy.json
+33818430939032390a14271cafdfc5a9982de87be3cb8166c64ec5dcb5654678 *./iterations/pilot-01/iteration-summary.json
+8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/pilot-01/verifier-deploy.json
+402f63c2dee722ef5238f7095744835dfe4f3be98fa8c110fdd62a6ed43992dc *./microbenchmark-complete.json
+a00a2680304fe838ad54e75f725e7a7701a833e408642007c8cc388378d75a9c *./raw-microbenchmark.tsv
+72868023aec7b2197d8119b929cdb0b22a3b13d0e1a1381519c2eae74c9cb58f *./receipts/pilot-01.json

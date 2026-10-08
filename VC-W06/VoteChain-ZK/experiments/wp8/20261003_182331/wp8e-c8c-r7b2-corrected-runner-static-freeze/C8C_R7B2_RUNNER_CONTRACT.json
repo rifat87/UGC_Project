@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "classification": "CORRECTED_VERSIONED_BEHAVIORALLY_RECONSTRUCTED_FRESH_CHAIN_RUNNER",
+  "bytewisePriorRunnerReuseClaimed": false,
+  "correctedAbiIssue": "configure receives exactly one ElectionConfig tuple containing eight uint256 components.",
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "singleObservationRunner": true,
+  "freshAnvilPerObservation": true,
+  "configureTupleOrder": [
+    "eligibleRoot",
+    "electionId",
+    "candidateManifestHash",
+    "candidateCount",
+    "contractDomain",
+    "Yx",
+    "Yy",
+    "electionContextHash"
+  ],
+  "configureSignature": "configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+  "activateSignature": "activate()",
+  "proofPolicy": "Use frozen R6 proof/public fixture matching runtime candidateCount.",
+  "proofGenerationDuringObservation": false,
+  "timingBoundary": {
+    "start": "Immediately before local cast-send subprocess invocation.",
+    "end": "Immediately after local cast-send subprocess returns."
+  },
+  "requiredCorrectness": [
+    "configured true",
+    "configuration exact before cast",
+    "phase Active before cast",
+    "acceptedBallotCount zero before cast",
+    "receipt success",
+    "acceptedBallotCount one after cast",
+    "usedNullifier true",
+    "phase remains Active",
+    "configuration exact after cast",
+    "all 16 tally slots equal frozen ciphertext",
+    "Anvil successfully stopped before PASS summary"
+  ],
+  "failurePolicy": {
+    "silentRetry": false,
+    "silentDeletion": false,
+    "replacement": false,
+    "reconstruction": false,
+    "measuredFailure": "PARTIAL_HOLD"
+  },
+  "deploymentParser": "Decode first leading JSON object and preserve trailing diagnostic text.",
+  "receiptParser": "strict JSON",
+  "calldataBytesExpected": 2340,
+  "finalCampaign": {
+    "warmupsPerLevel": 5,
+    "measuredPerLevel": 20,
+    "totalWarmups": 20,
+    "totalMeasured": 80,
+    "totalObservations": 100,
+    "matrixRows": 100,
+    "matrixPath": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_130543/wp8e-c8c-r4c2-runtime-candidatecount-supplement/C8C_RUNTIME_EXECUTION_MATRIX.tsv",
+    "pilotsExcluded": true,
+    "warmupsExcludedFromFinalStats": true
+  }
+}

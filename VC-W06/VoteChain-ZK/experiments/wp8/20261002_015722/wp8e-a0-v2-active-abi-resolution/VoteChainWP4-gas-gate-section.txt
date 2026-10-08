@@ -1,0 +1,326 @@
+                variant,
+                ",",
+                vm.toString(
+                    value
+                ),
+                ",",
+                unit
+            )
+        );
+    }
+
+    function testZZGasGate()
+        public
+    {
+        vm.writeFile(
+            "gas/wp4-gas.csv",
+            "metric,variant,value,unit\n"
+        );
+
+        /*
+         * Verifier deployments.
+         */
+        uint256 g0 =
+            gasleft();
+
+        VoteChainVoteDirectVerifier dv =
+            new VoteChainVoteDirectVerifier();
+
+        uint256 directVerifierDeploy =
+            g0 -
+            gasleft();
+
+        g0 =
+            gasleft();
+
+        VoteChainVoteDigestVerifier pv =
+            new VoteChainVoteDigestVerifier();
+
+        uint256 poseidonVerifierDeploy =
+            g0 -
+            gasleft();
+
+        /*
+         * Poseidon raw creation-code deployment.
+         */
+        bytes memory poseidonCode =
+            vm.readFileBinary(
+                "testdata/poseidon5.creation.bin"
+            );
+
+        g0 =
+            gasleft();
+
+        address poseidon5 =
+            _deployRaw(
+                poseidonCode
+            );
+
+        uint256 poseidonDeploy =
+            g0 -
+            gasleft();
+
+        /*
+         * Voting contracts.
+         */
+        g0 =
+            gasleft();
+
+        VoteChainDirect d =
+            new VoteChainDirect(
+                address(dv)
+            );
+
+        uint256 directContractDeploy =
+            g0 -
+            gasleft();
+
+        g0 =
+            gasleft();
+
+        VoteChainPoseidon p =
+            new VoteChainPoseidon(
+                address(pv),
+                poseidon5
+            );
+
+        uint256 poseidonContractDeploy =
+            g0 -
+            gasleft();
+
+        VoteChainBase
+            .ElectionConfig
+            memory cfg =
+                _config();
+
+        d.configure(
+            cfg
+        );
+
+        p.configure(
+            cfg
+        );
+
+        d.activate();
+        p.activate();
+
+        uint256[2] memory da;
+        uint256[2][2] memory db;
+        uint256[2] memory dc;
+        uint256[73] memory directPublic;
+
+        (
+            da,
+            db,
+            dc,
+            directPublic
+        ) =
+            WP4Fixture.directA();
+
+        uint256[2] memory pa;
+        uint256[2][2] memory pb;
+        uint256[2] memory pc;
+        uint256[10] memory poseidonPublic;
+
+        (
+            pa,
+            pb,
+            pc,
+            poseidonPublic
+        ) =
+            WP4Fixture.digestA();
+
+        (
+            uint256 nullifier,
+            uint256[16] memory rx,
+            uint256[16] memory ry,
+            uint256[16] memory sx,
+            uint256[16] memory sy
+        ) =
+            WP4Fixture.ballotA();
+
+        /*
+         * M12 engineering proxy: verifier execution.
+         */
+        g0 =
+            gasleft();
+
+        bool directVerified =
+            dv.verifyProof(
+                da,
+                db,
+                dc,
+                directPublic
+            );
+
+        uint256 directVerifierGas =
+            g0 -
+            gasleft();
+
+        require(
+            directVerified,
+            "DIRECT_GAS_PROOF"
+        );
+
+        g0 =
+            gasleft();
+
+        bool poseidonVerified =
+            pv.verifyProof(
+                pa,
+                pb,
+                pc,
+                poseidonPublic
+            );
+
+        uint256 poseidonVerifierGas =
+            g0 -
+            gasleft();
+
+        require(
+            poseidonVerified,
+            "POSEIDON_GAS_PROOF"
+        );
+
+        /*
+         * M13 engineering proxy:
+         * Poseidon ciphertext-binding recomputation.
+         *
+         * DIRECT has no separate hash stage; its binding
+         * cost is represented by the larger verifier input.
+         */
+        g0 =
+            gasleft();
+
+        uint256 digest =
+            p.previewBindingDigest(
+                rx,
+                ry,
+                sx,
+                sy
+            );
+
+        uint256 poseidonBindingGas =
+            g0 -
+            gasleft();
+
+        require(
+            digest ==
+                WP4Fixture.bindingA(),
+            "BINDING_GAS_DIGEST"
+        );
+
+        /*
+         * M14 execution proxy: complete accepted vote call.
+         */
+        g0 =
+            gasleft();
+
+        d.castVote(
+            da,
+            db,
+            dc,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+
+        uint256 directCastGas =
+            g0 -
+            gasleft();
+
+        g0 =
+            gasleft();
+
+        p.castVote(
+            pa,
+            pb,
+            pc,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+
+        uint256 poseidonCastGas =
+            g0 -
+            gasleft();
+
+        /*
+         * M15 deterministic ABI calldata sizes.
+         */
+        bytes memory directCalldata =
+            abi.encodeCall(
+                VoteChainDirect.castVote,
+                (
+                    da,
+                    db,
+                    dc,
+                    nullifier,
+                    rx,
+                    ry,
+                    sx,
+                    sy
+                )
+            );
+
+        bytes memory poseidonCalldata =
+            abi.encodeCall(
+                VoteChainPoseidon.castVote,
+                (
+                    pa,
+                    pb,
+                    pc,
+                    nullifier,
+                    rx,
+                    ry,
+                    sx,
+                    sy
+                )
+            );
+
+        /*
+         * M18 tally update engineering proxy.
+         */
+        BabyJubTallyHarness th =
+            new BabyJubTallyHarness();
+
+        g0 =
+            gasleft();
+
+        th.applyBallot(
+            rx,
+            ry,
+            sx,
+            sy
+        );
+
+        uint256 tallyGas =
+            g0 -
+            gasleft();
+
+        _gasLine(
+            "M12_VERIFIER_EXECUTION_GAS_PROXY",
+            "DIRECT",
+            directVerifierGas,
+            "gas"
+        );
+
+        _gasLine(
+            "M12_VERIFIER_EXECUTION_GAS_PROXY",
+            "POSEIDON",
+            poseidonVerifierGas,
+            "gas"
+        );
+
+        _gasLine(
+            "M13_BINDING_HASH_GAS_PROXY",
+            "DIRECT",
+            0,
+            "gas_no_separate_hash_stage"
+        );
+
+        _gasLine(

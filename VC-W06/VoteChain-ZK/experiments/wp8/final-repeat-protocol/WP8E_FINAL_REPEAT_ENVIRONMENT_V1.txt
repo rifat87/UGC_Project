@@ -1,0 +1,18 @@
+WP8E_FINAL_REPEAT_ENVIRONMENT_V1
+CAPTURED_AT=2026-10-02T11:20:22Z
+PWD=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK
+
+=== OS ===
+MINGW64_NT-10.0-26200 Rifat87 3.4.9-be826601.x86_64 2023-09-07 12:36 UTC x86_64 Msys
+
+=== ACTIVE ARTIFACT HASHES ===
+c833a70e832ce15cfe9d17c2ca71f202fc8806519514cd6846ba292804904d77 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainWP4.sol
+sha256sum: /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/src/VoteChainVoteDirectVerifier.sol: No such file or directory
+0e420c63cdcf820b368836eaa38e038fda4c1aae8bb78728f989618f69226f9f */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/testdata/vectors/direct-A.json
+7ca937d13d728a9c9a2b25309d9c1315ac3bf18a39a68da61bd97cd35baeb0eb */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/contracts/wp4-foundry/test/WP4Fixture.sol
+
+=== A1B FROZEN SUMMARY HASH ===
+0b313604a0ca805e5b1853d2f0541044915982d7cba47e80510d5ff99d4dd7bb *../VoteChain_VC-W03_FinalZK/Output/VC-W07/VC-W07_WP8E_A1B_V1_HEX_CALLDATA_RPC_RECOVERY_SUMMARY.txt
+
+=== A1B EVIDENCE MANIFEST ===
+d93313546a822a911a8a7def0b69206c4a4a938a53db9324de926e7106a47f8d

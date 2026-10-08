@@ -1,0 +1,67 @@
+--- /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261002_223739/wp8e-c6c-r2-runner-v2-freeze/runner-v2/wp8e-final-scaling-runner-v2.py	2026-10-02 22:37:42.980873800 +0600
++++ /d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_014132/wp8e-c8b-r3f2-deploy-parser-amendment/runner-v3/wp8e-final-scaling-runner-v3.py	2026-10-03 01:41:36.644585200 +0600
+@@ -280,8 +280,49 @@
+ 
+ 
+ def extract_address(text):
++    stripped = text.lstrip()
++
++    decoder = json.JSONDecoder()
++
+     try:
+-        obj = json.loads(text)
++        obj, end = decoder.raw_decode(
++            stripped
++        )
++    except json.JSONDecodeError:
++        obj = None
++        end = None
++
++    if obj is not None:
++
++        if not isinstance(
++            obj,
++            dict,
++        ):
++            raise RuntimeError(
++                "leading deployment JSON "
++                "is not an object"
++            )
++
++        trailing = stripped[end:]
++
++        trailing_nonws = (
++            trailing.lstrip()
++        )
++
++        if trailing_nonws.startswith(
++            ("{", "[")
++        ):
++            try:
++                decoder.raw_decode(
++                    trailing_nonws
++                )
++            except json.JSONDecodeError:
++                pass
++            else:
++                raise RuntimeError(
++                    "multiple top-level JSON values "
++                    "in deployment stdout"
++                )
+ 
+         for key in (
+             "deployedTo",
+@@ -303,8 +344,11 @@
+                 )
+             ):
+                 return value
+-    except Exception:
+-        pass
++
++        raise RuntimeError(
++            "leading deployment JSON "
++            "contains no deployed address"
++        )
+ 
+     m = re.search(
+         r"0x[a-fA-F0-9]{40}",

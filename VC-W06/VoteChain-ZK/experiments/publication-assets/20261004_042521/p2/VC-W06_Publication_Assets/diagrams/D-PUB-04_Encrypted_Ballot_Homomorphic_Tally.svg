@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="680" viewBox="0 0 1600 680">
+<title>Encrypted ballot, homomorphic tally, and threshold-decryption flow</title>
+<metadata>{&quot;candidateSlots&quot;: 16, &quot;diagramId&quot;: &quot;D-PUB-04&quot;}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800" y="52" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="bold" text-anchor="middle" fill="#111">Encrypted ballot, homomorphic tally, and threshold-decryption flow</text>
+<rect x="45" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="155.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Private one-hot choice</text>
+<text x="155.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Exactly one selected candidate</text>
+<rect x="300" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="410.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">16 encrypted slots</text>
+<text x="410.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">BabyJub exponential-ElGamal</text>
+<rect x="555" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="665.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Accepted ciphertext</text>
+<text x="665.0" y="366" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">ballots</text>
+<text x="665.0" y="400" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">No plaintext vote stored on-</text>
+<text x="665.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">chain</text>
+<rect x="810" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="920.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Homomorphic aggregation</text>
+<text x="920.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Component-wise encrypted tally</text>
+<rect x="1065" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1175.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Threshold decryption</text>
+<text x="1175.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Trustees recover final totals</text>
+<rect x="1320" y="300" width="220" height="170" rx="14" fill="#ffffff" stroke="#111111" stroke-width="3"/>
+<text x="1430.0" y="338" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Plaintext candidate</text>
+<text x="1430.0" y="366" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">totals</text>
+<text x="1430.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Final public result</text>
+<line x1="265" y1="385" x2="300" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="288.3792505067069" y1="392.80757204347987" x2="300" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="288.3792505067069" y1="377.19242795652013" x2="300" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="520" y1="385" x2="555" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="392.80757204347987" x2="555" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="543.3792505067069" y1="377.19242795652013" x2="555" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="775" y1="385" x2="810" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="798.3792505067069" y1="392.80757204347987" x2="810" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="798.3792505067069" y1="377.19242795652013" x2="810" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1030" y1="385" x2="1065" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1053.379250506707" y1="392.80757204347987" x2="1065" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1053.379250506707" y1="377.19242795652013" x2="1065" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1285" y1="385" x2="1320" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1308.379250506707" y1="392.80757204347987" x2="1320" y2="385" stroke="#111" stroke-width="3"/>
+<line x1="1308.379250506707" y1="377.19242795652013" x2="1320" y2="385" stroke="#111" stroke-width="3"/>
+<text x="800" y="585" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#111">The contract accepts encrypted ballot components; plaintext votes are not stored on-chain.</text>
+</svg>

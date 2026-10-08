@@ -1,0 +1,6 @@
+{"event":"config_response","status":200}
+{"event":"auth_request","method":"POST","path":"/api/wp5/authorize/face","bodyKeys":["credentialPublicKey"],"forbiddenFieldCount":0}
+{"event":"auth_success","status":200,"responseKeys":["credentialEnvelope","electionId","expiresAt","membership","version"]}
+{"event":"config_response","status":200}
+{"event":"auth_request","method":"POST","path":"/api/wp5/authorize/face","bodyKeys":["credentialPublicKey"],"forbiddenFieldCount":0}
+{"event":"auth_success","status":200,"responseKeys":["credentialEnvelope","electionId","expiresAt","membership","version"]}

@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "project": "VC-W06 VoteChain-ZK",
+  "classification": "PUBLICATION_ASSET_BUNDLE",
+  "generationRun": "20261004_042521",
+  "authoritativePubP1Run": "20261004_041714",
+  "frozenPublicationResultRows": 32,
+  "tables": 5,
+  "tableFormats": [
+    "Markdown",
+    "LaTeX",
+    "TSV backing data"
+  ],
+  "benchmarkFigures": 6,
+  "benchmarkFigureFormat": "SVG",
+  "systemDiagrams": 5,
+  "systemDiagramFormat": "SVG",
+  "captions": 16,
+  "provenanceRows": 16,
+  "tableValuesRecomputed": false,
+  "benchmarkDataRecomputed": false,
+  "benchmarkReexecuted": false,
+  "architectureChanged": false,
+  "cryptographyChanged": false,
+  "finalSubmissionZipModified": false,
+  "finalSubmissionZipSha256": "afd8484c2ec70c2b01198cd6431e0ec328b7c45e7d6cc702312ea2dbfd802db2",
+  "publicationGuardrailRules": 14
+}

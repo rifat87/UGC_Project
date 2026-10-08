@@ -1,0 +1,13 @@
+VoteChainVoteDigestVerifier	src\verifiers\VoteChainVoteDigestVerifier.sol
+VoteChainVoteDirectVerifier	src\verifiers\VoteChainVoteDirectVerifier.sol
+IVerifierDirect	src\VoteChainWP4.sol
+IVerifierDigest	src\VoteChainWP4.sol
+BabyJubAffine	src\VoteChainWP4.sol
+VoteChainBase	src\VoteChainWP4.sol
+VoteChainDirect	src\VoteChainWP4.sol
+VoteChainPoseidon	src\VoteChainWP4.sol
+BabyJubTallyHarness	src\VoteChainWP4.sol
+Vm	test\VoteChainWP4.t.sol
+VoteChainWP4Test	test\VoteChainWP4.t.sol
+WP6BMockVerifier	test\VoteChainWP6B.t.sol
+VoteChainWP6BTest	test\VoteChainWP6B.t.sol

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720">
+<title>Accepted-ballot gas summary</title>
+<metadata>{&quot;render&quot;: &quot;range-marker-summary&quot;, &quot;source&quot;: &quot;T01_ACCEPTED_BALLOT_OVERALL.tsv&quot;, &quot;statisticsRecomputed&quot;: false}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800.0" y="62" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" fill="#111">Accepted-ballot gas summary</text>
+<text x="800.0" y="104" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="normal" text-anchor="middle" fill="#111">n=2000 measured observations</text>
+<line x1="150" y1="370" x2="1450" y2="370" stroke="#111" stroke-width="4"/>
+<line x1="150.0" y1="358" x2="150.0" y2="382" stroke="#111" stroke-width="2"/>
+<text x="150.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,306,506</text>
+<line x1="410.0000000000002" y1="358" x2="410.0000000000002" y2="382" stroke="#111" stroke-width="2"/>
+<text x="410.0000000000002" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,418,487.600</text>
+<line x1="669.9999999999999" y1="358" x2="669.9999999999999" y2="382" stroke="#111" stroke-width="2"/>
+<text x="669.9999999999999" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,530,469.200</text>
+<line x1="930.0000000000001" y1="358" x2="930.0000000000001" y2="382" stroke="#111" stroke-width="2"/>
+<text x="930.0000000000001" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,642,450.800</text>
+<line x1="1189.9999999999998" y1="358" x2="1189.9999999999998" y2="382" stroke="#111" stroke-width="2"/>
+<text x="1189.9999999999998" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,754,432.400</text>
+<line x1="1450.0" y1="358" x2="1450.0" y2="382" stroke="#111" stroke-width="2"/>
+<text x="1450.0" y="422" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">1,866,414</text>
+<line x1="150.0" y1="305" x2="150.0" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="150.0" cy="370" r="8" fill="#111111"/>
+<text x="150.0" y="225" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Min: 1,306,506</text>
+<line x1="151.9712166998864" y1="305" x2="151.9712166998864" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="151.9712166998864" cy="370" r="8" fill="#111111"/>
+<text x="151.9712166998864" y="180" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Median: 1,307,355</text>
+<line x1="168.1127243225674" y1="305" x2="168.1127243225674" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="168.1127243225674" cy="370" r="8" fill="#111111"/>
+<text x="168.1127243225674" y="135" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Mean: 1,314,307.123</text>
+<line x1="152.96495138487037" y1="305" x2="152.96495138487037" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="152.96495138487037" cy="370" r="8" fill="#111111"/>
+<text x="152.96495138487037" y="510" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">P95: 1,307,783</text>
+<line x1="1450.0" y1="305" x2="1450.0" y2="435" stroke="#111" stroke-width="3"/>
+<circle cx="1450.0" cy="370" r="8" fill="#111111"/>
+<text x="1450.0" y="555" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Max: 1,866,414</text>
+<text x="800.0" y="660" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" fill="#111">Gas | Frozen source: T01_ACCEPTED_BALLOT_OVERALL.tsv</text>
+</svg>

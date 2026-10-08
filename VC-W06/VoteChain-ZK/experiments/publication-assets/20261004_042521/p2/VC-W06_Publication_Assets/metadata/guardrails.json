@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "classification": "PUBLICATION_ASSET_CLAIM_GUARDRAILS",
+  "rules": [
+    "Do not call the difference between the pre-ZKP castVote gas and DIRECT castVote gas an isolated ZKP overhead; protocol and contract logic differ.",
+    "Do not directly compare the published 10-15 second end-to-end biometric/IoT workflow with local subsecond cast/proof stages as if they were the same measurement.",
+    "Gas is the primary on-chain cost metric; local latency includes process/RPC behavior under instant Anvil mining.",
+    "Synthetic deterministic fixtures are nonproduction.",
+    "Warmups, pilots, failed campaigns, and aborted observations remain excluded exactly as frozen.",
+    "No silent outlier deletion or retry-based replacement is permitted.",
+    "No inferential regression or complexity fit is authorized by these publication assets.",
+    "Fresh-chain first vote is a distinct condition from the general accepted-ballot distribution.",
+    "Candidate-count gas difference of 12 gas is linked to calldata zero-byte composition, not isolated candidate-processing opcode cost.",
+    "Candidate-count latency means are non-monotonic.",
+    "Eligible-set N denotes occupied leaves; Merkle depth is fixed at 17.",
+    "M2 integrates Merkle snapshot, root, and target path; no isolated path-extraction timing claim.",
+    "M3-M5 include child-process overhead and fixed-depth effects; variation is descriptive, not N-dependent complexity.",
+    "The ZK vote circuit does not prove biometric matching; the pre-existing biometric subsystem remains an authorization subsystem."
+  ]
+}

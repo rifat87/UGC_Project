@@ -1,0 +1,8 @@
+{
+  "repetitionId": "measured-r1-n50-e07",
+  "kind": "measured",
+  "measuredRound": 1,
+  "scale": 50,
+  "error": "Extra data: line 2 column 1 (char 1634)",
+  "status": "HOLD"
+}

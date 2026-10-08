@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "classification": "PUBLICATION_ASSET_SOURCE_INVENTORY",
+  "finalSubmissionPayloadFiles": 776,
+  "primaryFrozenWp8ValueSources": 2,
+  "publicationSupportSources": 4,
+  "existingVisualFilesInFinalScope": 285,
+  "mermaidSourceFilesInFinalScope": 0,
+  "dedicatedPublicationAssetsDirectoryAlreadyPackaged": false,
+  "finalReportInventory": {
+    "status": "PASS",
+    "classification": "FINAL_REPORT_VISUAL_TABLE_INVENTORY",
+    "report": "VC-W06_Final_Report.md",
+    "markdownImageReferences": 0,
+    "mermaidBlocks": 0,
+    "markdownTableLines": 36,
+    "figureWordOccurrences": 0,
+    "tableWordOccurrences": 0,
+    "mentionsWp8": false,
+    "mentionsAcceptedBallot": false,
+    "mentionsCandidateCount": false,
+    "mentionsEligibleSet": false,
+    "publicationAssetsDirectoryReferenced": false
+  },
+  "gapClassification": "FROZEN_VALUES_PRESENT_BUT_DEDICATED_PUBLICATION_ASSET_EXPORT_MISSING",
+  "nextGate": "PUB_P1_FREEZE_TABLE_VALUE_EXTRACTION_AND_FIGURE_TABLE_SPEC"
+}

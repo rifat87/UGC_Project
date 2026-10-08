@@ -1,0 +1,32 @@
+WP8E C8C-R1 CANDIDATE-COUNT PROFILE RESOLUTION FACTS
+====================================================
+
+ACTIVE_PROFILE
+--------------
+Active DIRECT Solidity/verifier/circuit deployment remains frozen.
+Active DIRECT public-signal dimension is 73.
+Runtime candidateCount is bound as public signal index 3.
+
+COMPILE_TIME_DIRECT_DIMENSIONS
+------------------------------
+For DIRECT compiled with MAX_CANDIDATES=K:
+K=2  -> derived public signals = 17
+K=4  -> derived public signals = 25
+K=8  -> derived public signals = 41
+K=16 -> derived public signals = 73
+
+Therefore profile-specific K2/K4/K8 proofs cannot be assumed
+ABI/verifier-compatible with the active K16 73-public-signal verifier.
+
+PRIOR_ARTIFACT_POLICY
+---------------------
+Prior WP8D K-profile compatibility artifacts are historical evidence.
+They must be inspected and classified before any new candidate-count
+proof generation or benchmark execution.
+
+EXECUTION_POLICY
+----------------
+CANDIDATE_MATRIX_EXECUTION_STARTED=NO
+PROOF_GENERATION_STARTED=NO
+ANVIL_STARTED=NO
+TRANSACTION_SUBMITTED=NO

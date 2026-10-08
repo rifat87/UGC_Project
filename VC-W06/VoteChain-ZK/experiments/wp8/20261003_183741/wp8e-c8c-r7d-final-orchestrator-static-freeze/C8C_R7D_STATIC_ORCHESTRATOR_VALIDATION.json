@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "checks": {
+    "pythonAstParse": true,
+    "planRows100": true,
+    "warmups20": true,
+    "measured80": true,
+    "runtimeLevels": true,
+    "usesFrozenRunnerHash": true,
+    "usesFrozenPlanHash": true,
+    "refusesExistingCampaignDirectory": true,
+    "checksPortBeforeEachObservation": true,
+    "invokesFrozenObservationRunner": true,
+    "validatesEverySummary": true,
+    "requires2340Calldata": true,
+    "validatesAcceptedCount": true,
+    "validatesUsedNullifier": true,
+    "validatesTally16": true,
+    "requiresRunnerCleanup": true,
+    "persistsIndexAfterEachPass": true,
+    "stopsOnRunnerFailure": true,
+    "noSilentRetry": true,
+    "warmupStatsExcluded": true,
+    "completionRequires100": true,
+    "configPass": true,
+    "contractPass": true,
+    "automaticResumeForbidden": true,
+    "finalStatsNotComputedHere": true
+  },
+  "orchestratorExecuted": false,
+  "finalCampaignExecutionStarted": false,
+  "finalObservationExecuted": false
+}

@@ -1,0 +1,474 @@
+
+========================================================================
+REGION=receipt_info LINES=167-250
+========================================================================
+0167:     return ""
+0168: 
+0169: 
+0170: def receipt_info(text):
+0171:     decoder = json.JSONDecoder()
+0172: 
+0173:     stripped = text.lstrip()
+0174: 
+0175:     if not stripped:
+0176:         raise RuntimeError(
+0177:             "empty cast receipt stdout"
+0178:         )
+0179: 
+0180:     try:
+0181:         obj, end = decoder.raw_decode(
+0182:             stripped
+0183:         )
+0184:     except json.JSONDecodeError as exc:
+0185:         raise RuntimeError(
+0186:             "could not decode leading "
+0187:             "cast receipt JSON"
+0188:         ) from exc
+0189: 
+0190:     if not isinstance(
+0191:         obj,
+0192:         dict,
+0193:     ):
+0194:         raise RuntimeError(
+0195:             "leading cast receipt JSON "
+0196:             "is not an object"
+0197:         )
+0198: 
+0199:     trailing = stripped[end:]
+0200: 
+0201:     # Full raw stdout is preserved separately in the receipt
+0202:     # artifact before this parser is called.  A sporadic Foundry/
+0203:     # Alloy diagnostic may therefore follow a valid receipt JSON.
+0204:     #
+0205:     # Do not interpret a second JSON object as harmless log text.
+0206:     trailing_nonws = trailing.lstrip()
+0207: 
+0208:     if trailing_nonws.startswith(
+0209:         ("{", "[")
+0210:     ):
+0211:         try:
+0212:             decoder.raw_decode(
+0213:                 trailing_nonws
+0214:             )
+0215:         except json.JSONDecodeError:
+0216:             pass
+0217:         else:
+0218:             raise RuntimeError(
+0219:                 "multiple top-level JSON values "
+0220:                 "in cast receipt stdout"
+0221:             )
+0222: 
+0223:     status = obj.get(
+0224:         "status"
+0225:     )
+0226: 
+0227:     if isinstance(
+0228:         status,
+0229:         str,
+0230:     ):
+0231:         ok = (
+0232:             status.lower()
+0233:             in {
+0234:                 "0x1",
+0235:                 "1",
+0236:                 "success",
+0237:             }
+0238:         )
+0239:     else:
+0240:         ok = status == 1
+0241: 
+0242:     tx = (
+0243:         obj.get(
+0244:             "transactionHash"
+0245:         )
+0246:         or obj.get(
+0247:             "transaction_hash"
+0248:         )
+0249:         or ""
+0250:     )
+
+========================================================================
+REGION=stop_anvil,start_anvil,deploy_contracts LINES=597-802
+========================================================================
+0597:     )
+0598: 
+0599: 
+0600: def stop_anvil(
+0601:     process,
+0602:     cast,
+0603:     rpc,
+0604: ):
+0605:     if (
+0606:         process
+0607:         and process.poll()
+0608:         is None
+0609:     ):
+0610:         process.terminate()
+0611: 
+0612:         try:
+0613:             process.wait(
+0614:                 timeout=5
+0615:             )
+0616:         except subprocess.TimeoutExpired:
+0617:             process.kill()
+0618:             process.wait(
+0619:                 timeout=5
+0620:             )
+0621: 
+0622:     for _ in range(30):
+0623:         cp = run(
+0624:             [
+0625:                 cast,
+0626:                 "block-number",
+0627:                 "--rpc-url",
+0628:                 rpc,
+0629:             ],
+0630:             check=False,
+0631:         )
+0632: 
+0633:         if cp.returncode != 0:
+0634:             return
+0635: 
+0636:         time.sleep(0.1)
+0637: 
+0638: 
+0639: def start_anvil(
+0640:     anvil,
+0641:     cast,
+0642:     port,
+0643:     log_file,
+0644: ):
+0645:     rpc = (
+0646:         f"http://127.0.0.1:{port}"
+0647:     )
+0648: 
+0649:     pre = run(
+0650:         [
+0651:             cast,
+0652:             "block-number",
+0653:             "--rpc-url",
+0654:             rpc,
+0655:         ],
+0656:         check=False,
+0657:     )
+0658: 
+0659:     if pre.returncode == 0:
+0660:         raise RuntimeError(
+0661:             f"RPC port {port} already in use"
+0662:         )
+0663: 
+0664:     log_handle = open(
+0665:         log_file,
+0666:         "w",
+0667:         encoding="utf-8",
+0668:         newline="\n",
+0669:     )
+0670: 
+0671:     process = subprocess.Popen(
+0672:         [
+0673:             anvil,
+0674:             "--silent",
+0675:             "--port",
+0676:             str(port),
+0677:             "--chain-id",
+0678:             "31337",
+0679:         ],
+0680:         stdout=log_handle,
+0681:         stderr=subprocess.STDOUT,
+0682:         text=True,
+0683:     )
+0684: 
+0685:     for _ in range(100):
+0686:         cp = run(
+0687:             [
+0688:                 cast,
+0689:                 "block-number",
+0690:                 "--rpc-url",
+0691:                 rpc,
+0692:             ],
+0693:             check=False,
+0694:         )
+0695: 
+0696:         if cp.returncode == 0:
+0697:             return (
+0698:                 process,
+0699:                 log_handle,
+0700:                 rpc,
+0701:             )
+0702: 
+0703:         if process.poll() is not None:
+0704:             break
+0705: 
+0706:         time.sleep(0.1)
+0707: 
+0708:     try:
+0709:         stop_anvil(
+0710:             process,
+0711:             cast,
+0712:             rpc,
+0713:         )
+0714:     finally:
+0715:         log_handle.close()
+0716: 
+0717:     raise RuntimeError(
+0718:         "Anvil failed to start"
+0719:     )
+0720: 
+0721: 
+0722: def deploy_contracts(
+0723:     root,
+0724:     forge,
+0725:     cast,
+0726:     rpc,
+0727:     election_dir,
+0728: ):
+0729:     foundry = (
+0730:         root
+0731:         / "contracts/wp4-foundry"
+0732:     )
+0733: 
+0734:     verifier_cp = run(
+0735:         [
+0736:             forge,
+0737:             "create",
+0738:             (
+0739:                 "src/verifiers/"
+0740:                 "VoteChainVoteDirectVerifier.sol:"
+0741:                 "VoteChainVoteDirectVerifier"
+0742:             ),
+0743:             "--rpc-url",
+0744:             rpc,
+0745:             "--private-key",
+0746:             PRIVATE_KEY,
+0747:             "--broadcast",
+0748:             "--json",
+0749:         ],
+0750:         cwd=foundry,
+0751:     )
+0752: 
+0753:     (
+0754:         election_dir
+0755:         / "verifier-deploy.json"
+0756:     ).write_text(
+0757:         verifier_cp.stdout,
+0758:         encoding="utf-8",
+0759:         newline="\n",
+0760:     )
+0761: 
+0762:     verifier = extract_address(
+0763:         verifier_cp.stdout
+0764:     )
+0765: 
+0766:     direct_cp = run(
+0767:         [
+0768:             forge,
+0769:             "create",
+0770:             (
+0771:                 "src/VoteChainWP4.sol:"
+0772:                 "VoteChainDirect"
+0773:             ),
+0774:             "--rpc-url",
+0775:             rpc,
+0776:             "--private-key",
+0777:             PRIVATE_KEY,
+0778:             "--broadcast",
+0779:             "--json",
+0780:             "--constructor-args",
+0781:             verifier,
+0782:         ],
+0783:         cwd=foundry,
+0784:     )
+0785: 
+0786:     (
+0787:         election_dir
+0788:         / "direct-deploy.json"
+0789:     ).write_text(
+0790:         direct_cp.stdout,
+0791:         encoding="utf-8",
+0792:         newline="\n",
+0793:     )
+0794: 
+0795:     direct = extract_address(
+0796:         direct_cp.stdout
+0797:     )
+0798: 
+0799:     linked = first_token(
+0800:         run(
+0801:             [
+0802:                 cast,
+
+========================================================================
+REGION=configure_and_activate LINES=823-906
+========================================================================
+0823:     )
+0824: 
+0825: 
+0826: def configure_and_activate(
+0827:     root,
+0828:     cast,
+0829:     rpc,
+0830:     direct,
+0831: ):
+0832:     config_path = (
+0833:         root
+0834:         / "experiments/wp8"
+0835:         / "20261002_175126"
+0836:         / "wp8e-c2-150-ballot-input-corpus"
+0837:         / "corpus/corpus-config.json"
+0838:     )
+0839: 
+0840:     cfg = load_json(
+0841:         config_path
+0842:     )["config"]
+0843: 
+0844:     keys = (
+0845:         "eligibleRoot",
+0846:         "electionId",
+0847:         "candidateManifestHash",
+0848:         "candidateCount",
+0849:         "contractDomain",
+0850:         "Yx",
+0851:         "Yy",
+0852:         "electionContextHash",
+0853:     )
+0854: 
+0855:     config_arg = (
+0856:         "("
+0857:         + ",".join(
+0858:             str(cfg[k])
+0859:             for k in keys
+0860:         )
+0861:         + ")"
+0862:     )
+0863: 
+0864:     admin = first_token(
+0865:         run(
+0866:             [
+0867:                 cast,
+0868:                 "wallet",
+0869:                 "address",
+0870:                 "--private-key",
+0871:                 PRIVATE_KEY,
+0872:             ]
+0873:         ).stdout
+0874:     )
+0875: 
+0876:     run(
+0877:         [
+0878:             cast,
+0879:             "call",
+0880:             direct,
+0881:             CONFIG_SIG,
+0882:             config_arg,
+0883:             "--from",
+0884:             admin,
+0885:             "--rpc-url",
+0886:             rpc,
+0887:         ]
+0888:     )
+0889: 
+0890:     run(
+0891:         [
+0892:             cast,
+0893:             "send",
+0894:             direct,
+0895:             CONFIG_SIG,
+0896:             config_arg,
+0897:             "--private-key",
+0898:             PRIVATE_KEY,
+0899:             "--rpc-url",
+0900:             rpc,
+0901:             "--json",
+0902:         ]
+0903:     )
+0904: 
+0905:     configured = first_token(
+0906:         run(
+
+========================================================================
+REGION=execute_campaign LINES=1164-1247
+========================================================================
+1164:     }
+1165: 
+1166: 
+1167: def execute_campaign(
+1168:     root,
+1169:     bundle,
+1170:     output,
+1171:     port,
+1172: ):
+1173:     forge = shutil.which(
+1174:         "forge"
+1175:     )
+1176: 
+1177:     cast = shutil.which(
+1178:         "cast"
+1179:     )
+1180: 
+1181:     anvil = shutil.which(
+1182:         "anvil"
+1183:     )
+1184: 
+1185:     if not all(
+1186:         [forge, cast, anvil]
+1187:     ):
+1188:         raise RuntimeError(
+1189:             "Foundry toolchain missing"
+1190:         )
+1191: 
+1192:     output.mkdir(
+1193:         parents=True,
+1194:         exist_ok=False,
+1195:     )
+1196: 
+1197:     receipts_root = (
+1198:         output
+1199:         / "receipts"
+1200:     )
+1201: 
+1202:     elections_root = (
+1203:         output
+1204:         / "elections"
+1205:     )
+1206: 
+1207:     receipts_root.mkdir()
+1208:     elections_root.mkdir()
+1209: 
+1210:     plan, warmup_total, measured_total = (
+1211:         validate_plan()
+1212:     )
+1213: 
+1214:     raw_path = (
+1215:         output
+1216:         / "raw-transactions.tsv"
+1217:     )
+1218: 
+1219:     headers = [
+1220:         "kind",
+1221:         "measured_round",
+1222:         "election_sequence",
+1223:         "repetition_id",
+1224:         "scale",
+1225:         "ballot_position",
+1226:         "ballot_id",
+1227:         "candidate_index",
+1228:         "tx_hash",
+1229:         "receipt_status",
+1230:         "gas_used",
+1231:         "calldata_bytes",
+1232:         "latency_ms",
+1233:     ]
+1234: 
+1235:     with open(
+1236:         raw_path,
+1237:         "w",
+1238:         encoding="utf-8",
+1239:         newline="",
+1240:     ) as raw_file:
+1241: 
+1242:         writer = csv.DictWriter(
+1243:             raw_file,
+1244:             fieldnames=headers,
+1245:             delimiter="\t",
+1246:             lineterminator="\n",
+1247:         )

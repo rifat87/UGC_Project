@@ -1,0 +1,60 @@
+WP8E C8C-R7F1 — FINAL RUNTIME CANDIDATE-COUNT SYNTHESIS
+==========================================================
+
+SCOPE
+-----
+Statistics use only the 80 measured R7E accepted-vote observations: 20 each at runtime candidateCount K={2,4,8,16}.
+
+The 20 warmups and all four R7C pilots are excluded.
+
+Each observation used a fresh local Anvil chain, the same active fixed-K16 circuit/verifier interface, the frozen R6 proof fixture corresponding to its runtime configuration, and the frozen R7B2 observation runner.
+
+FINAL DESCRIPTIVE RESULTS
+-------------------------
+
+K2: n=20; gas mean/median/min/max/p95=1866402.000/1866402.000/1866402/1866402/1866402; gas sample SD=0.000000; latency mean=865.021110 ms; median=858.926450 ms; min=844.793900 ms; max=948.718700 ms; sample SD=23.340039 ms; nearest-rank p95=899.420000 ms.
+K4: n=20; gas mean/median/min/max/p95=1866414.000/1866414.000/1866414/1866414/1866414; gas sample SD=0.000000; latency mean=874.816695 ms; median=862.990950 ms; min=836.827900 ms; max=991.140000 ms; sample SD=43.828458 ms; nearest-rank p95=966.283100 ms.
+K8: n=20; gas mean/median/min/max/p95=1866414.000/1866414.000/1866414/1866414/1866414; gas sample SD=0.000000; latency mean=864.572260 ms; median=858.495800 ms; min=844.033600 ms; max=954.673500 ms; sample SD=23.813503 ms; nearest-rank p95=884.174800 ms.
+K16: n=20; gas mean/median/min/max/p95=1866414.000/1866414.000/1866414/1866414/1866414; gas sample SD=0.000000; latency mean=863.063140 ms; median=858.423750 ms; min=841.805300 ms; max=975.367900 ms; sample SD=28.150422 ms; nearest-rank p95=881.923200 ms.
+
+GAS INTERPRETATION
+------------------
+K2 used 1,866,402 gas for every measured observation. K4, K8, and K16 each used 1,866,414 gas for every measured observation.
+
+Therefore the full range across per-level mean gas values is 12 gas, and within-level gas sample SD is zero at every runtime level.
+
+K2 calldata contained 10 zero bytes and 2,330 nonzero bytes; K4, K8, and K16 each contained 9 zero bytes and 2,331 nonzero bytes, while total calldata remained 2,340 bytes.
+
+The only observed gas separation is therefore a 12-gas difference that coincides with the one-byte zero/nonzero calldata-composition difference. This benchmark does not establish that 12 gas as an isolated candidateCount opcode cost.
+
+No additional transaction-gas separation is visible among K4, K8, and K16 despite their different runtime candidateCount values.
+
+LOCAL LATENCY INTERPRETATION
+----------------------------
+Per-level mean local receipt latencies were: K2=865.021110 ms, K4=874.816695 ms, K8=864.572260 ms, and K16=863.063140 ms.
+
+The range across these four means is 11.753555 ms. The means are neither monotonically increasing nor monotonically decreasing with runtime candidateCount.
+
+Execution-position mean latencies ranged from 861.128355 ms to 873.424150 ms, a 12.295795 ms range. These position diagnostics are descriptive only.
+
+The latency metric is local-process/RPC/instant-Anvil receipt latency. It includes local cast-process startup, RPC, instant mining, and receipt return. It excludes deployment, configure/activate, proof generation, calldata precomputation, and post-receipt reads.
+
+PUBLICATION-SAFE CONCLUSION
+---------------------------
+In this controlled local fresh-chain benchmark, increasing runtime candidateCount from 2 to 16 did not produce a monotonic increase in accepted-vote gas or local receipt latency.
+
+Gas was identical at K=4, K=8, and K=16 and was 12 gas lower at K=2; that K2 gas difference coincided with one additional zero calldata byte. Local mean latency varied non-monotonically within an 11.753555 ms range.
+
+These measurements characterize transaction-level sensitivity under four frozen runtime election configurations. They do not isolate the cost of candidateCount itself because changing K also changes the indexed candidate-manifest hash, election-context hash, proof/public values, and calldata byte composition, while the active vote path continues to carry fixed-size 16-slot ciphertext arrays.
+
+GUARDRAILS
+----------
+No inferential regression or causal candidateCount-opcode estimate was performed.
+
+No outlier deletion, silent retry, replacement observation, pilot reuse, or warmup inclusion was used.
+
+These local latency figures must not be compared directly with the published biometric/IoT end-to-end 10–15 second timing because the measurement scopes and environments differ.
+
+The gas figures must not be presented as isolated ZKP overhead relative to the pre-ZKP system because the transaction protocol and contract logic differ.
+
+STATUS=PASS_WP8E_C8C_R7F1_FINAL_MEASURED_STATISTICS_AND_SYNTHESIS

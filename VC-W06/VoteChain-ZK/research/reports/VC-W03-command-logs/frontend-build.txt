@@ -1,0 +1,12 @@
+
+> votechain-frontend-ts@0.0.0 build
+> tsc -b && vite build
+
+vite.config.ts(1,39): error TS2307: Cannot find module 'vite' or its corresponding type declarations.
+vite.config.ts(2,19): error TS2307: Cannot find module '@vitejs/plugin-react' or its corresponding type declarations.
+vite.config.ts(3,18): error TS2307: Cannot find module 'path' or its corresponding type declarations.
+vite.config.ts(6,29): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+vite.config.ts(13,43): error TS2304: Cannot find name '__dirname'.
+error TS2688: Cannot find type definition file for 'react-router-dom'.
+  The file is in the program because:
+    Entry point of type library 'react-router-dom' specified in compilerOptions

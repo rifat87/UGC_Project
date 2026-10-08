@@ -1,0 +1,184 @@
+{
+  "status": "PASS",
+  "receiptCount": 25,
+  "receiptStatusField": "status",
+  "receiptGasField": "gasUsed",
+  "receiptTransactionField": "transactionHash",
+  "records": [
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-01.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-02.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-03.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-04.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-05.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-06.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-07.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-08.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-09.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-10.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-11.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-12.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-13.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-14.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-15.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-16.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-17.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-18.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-19.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-20.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-01.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-02.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-03.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-04.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    },
+    {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-05.json",
+      "status": "0x1",
+      "gasUsedHex": "0x1c7aae",
+      "gasUsed": 1866414,
+      "transactionHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "profile": "VoteChain-ZK-WP4-Freeze-v1",
+  "sourceRun": "20260930_174305",
+  "ciphertextBinding": {
+    "active": "DIRECT_PUBLIC_CIPHERTEXT_COORDINATES",
+    "poseidonVariant": "REFERENCE_AND_MEASURED_ALTERNATIVE_ONLY",
+    "rationale": {
+      "directExecutionPlusCalldataGasProxy": 1913245,
+      "poseidonExecutionPlusCalldataGasProxy": 3051205,
+      "relativeDeltaPercent": 59.47800725991706,
+      "directCalldataBytes": 2340,
+      "poseidonCalldataBytes": 2340
+    }
+  },
+  "circuit": {
+    "maxCandidates": 16,
+    "merkleDepth": 17,
+    "eligibleCapacity": 131072
+  },
+  "encryption": {
+    "scheme": "EXPONENTIAL_ELGAMAL",
+    "curve": "BABYJUBJUB",
+    "status": "FROZEN_FOR_ACTIVE_PROTOTYPE",
+    "evmRepresentation": "ABI_UINT256_AFFINE_XY_CANONICAL_FIELD_ELEMENTS",
+    "tallyUpdateGasProxy": 1099826,
+    "productionCostOptimization": "NOT_CLAIMED"
+  },
+  "proofSystem": {
+    "system": "GROTH16",
+    "activeVerifier": "VoteChainVoteDirectVerifier"
+  },
+  "applicationPrivacy": {
+    "candidatePlaintext": "LOCAL_PRIVACY_WORKER_ONLY",
+    "backendCandidatePlaintext": "PROHIBITED",
+    "blockchainCandidatePlaintext": "PROHIBITED",
+    "walletIdentityRole": "TRANSACTION_INFRASTRUCTURE_NOT_VOTER_IDENTITY"
+  },
+  "benchmarkStatus": "ENGINEERING_FREEZE_ONLY_FINAL_WP8_MEASUREMENT_PENDING",
+  "reopenConditions": [
+    "target EVM deployment cannot accommodate measured BabyJub gas",
+    "WP7 identifies a critical implementation defect",
+    "WP8 repeated measurements materially invalidate the engineering gate"
+  ]
+}

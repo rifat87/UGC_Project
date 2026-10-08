@@ -1,0 +1,72 @@
+1-import express from 'express'
+2-import mongoose from 'mongoose'
+3:import cors from 'cors'
+4:import helmet from 'helmet'
+5:import rateLimit from 'express-rate-limit'
+6-import voterRoutes from './routes/voterRoutes.js'
+7-import candidateRoutes from './routes/candidateRoutes.js'
+8-import electionRoutes from './routes/electionRoutes.js'
+9-import voteRoutes from './routes/voteRoutes.js'
+10-import biometricRoutes from './routes/biometricRoutes.js'
+11-import blockchainRoutes from './routes/blockchainRoutes.js'
+12-import wp5Routes from './routes/wp5Routes.js'
+13-import { getServerConfig } from './config/env.js'
+14-
+15-const { port, mongoUri, frontendOrigins } = getServerConfig()
+16-const app = express()
+17-
+18:app.use(helmet({
+19-  contentSecurityPolicy: {
+20-    directives: {
+21-      defaultSrc: ["'self'"],
+22-      connectSrc: ["'self'", ...frontendOrigins],
+23-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+24-      styleSrc: ["'self'", "'unsafe-inline'"],
+25-      imgSrc: ["'self'", 'data:', 'https:'],
+26-      fontSrc: ["'self'"],
+27-    },
+28-  },
+29-}))
+30-
+31:app.use(rateLimit({
+32-  windowMs: 15 * 60 * 1000,
+33-  max: 100,
+34-}))
+35-
+36:app.use(cors({
+37-  origin: frontendOrigins.length > 0 ? frontendOrigins : false,
+38-  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+39-  allowedHeaders: ['Content-Type', 'Authorization'],
+40-  credentials: true,
+41-}))
+42-
+43:app.use(express.json({
+44-  limit: '16kb',
+45-  strict: true,
+46-}))
+47:app.use(express.urlencoded({
+48-  extended: true,
+49-  limit: '16kb',
+50-  parameterLimit: 50,
+51-}))
+52-
+53-mongoose.connect(mongoUri)
+54-  .then(() => console.log('MongoDB connected'))
+55:  .catch((error) => console.error('MongoDB connection error:', error.message))
+56-
+57:app.use('/api/voters', voterRoutes)
+58:app.use('/api/candidates', candidateRoutes)
+59:app.use('/api/elections', electionRoutes)
+60:app.use('/api/votes', voteRoutes)
+61:app.use('/api/biometric', biometricRoutes)
+62:app.use('/api/blockchain', blockchainRoutes)
+63:app.use('/api/wp5', wp5Routes)
+64-
+65:app.use((error, _req, res, _next) => {
+66:  console.error(error.stack)
+67-  res.status(500).json({ success: false, message: 'Something went wrong!' })
+68-})
+69-
+70-app.listen(port, () => {
+71-  console.log(`Server running on port ${port}`)
+72-})

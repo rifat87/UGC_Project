@@ -1,0 +1,17 @@
+role	relative_path	line	key	value_class	value_length	value_printed
+SERVER	votechain-central-server/.env.example	1	PORT	OTHER_LITERAL	4	NO
+SERVER	votechain-central-server/.env.example	2	MONGO_URI	PLACEHOLDER_OR_LOCAL_EXAMPLE	40	NO
+SERVER	votechain-central-server/.env.example	3	FRONTEND_ORIGINS	PLACEHOLDER_OR_LOCAL_EXAMPLE	21	NO
+SERVER	votechain-central-server/.env.example	4	RPC_URL	PLACEHOLDER_OR_LOCAL_EXAMPLE	21	NO
+SERVER	votechain-central-server/.env.example	6	CONTRACT_ADDRESS	LONG_LITERAL	42	NO
+SERVER	votechain-central-server/.env.example	8	ZK_CREDENTIAL_SECRET_KEY	LONG_LITERAL	32	NO
+SERVER	votechain-central-server/.env.example	10	VOTER_SALT_SECRET_KEY	LONG_LITERAL	32	NO
+SERVER	votechain-central-server/.env.example	11	MIGRATION_ALLOW_RUN	OTHER_LITERAL	5	NO
+SERVER	votechain-central-server/.env.example	17	ZK_CONTRACT_DEPLOYMENT_BLOCK	OTHER_LITERAL	1	NO
+SERVER	votechain-central-server/.env.example	20	FINGERPRINT_SERIAL_PORT	OTHER_LITERAL	4	NO
+SERVER	votechain-central-server/.env.example	24	WP5_CONTRACT_ADDRESS	LONG_LITERAL	42	NO
+SERVER	votechain-central-server/.env.example	27	WP5_CREDENTIAL_SECRET_KEY	OTHER_LITERAL	31	NO
+FRONTEND	votechain-frontend-ts/.env.example	1	VITE_API_BASE_URL	PLACEHOLDER_OR_LOCAL_EXAMPLE	21	NO
+FRONTEND	votechain-frontend-ts/.env.example	3	VITE_CONTRACT_ADDRESS	LONG_LITERAL	42	NO
+FRONTEND	votechain-frontend-ts/.env.example	4	VITE_RPC_URL	PLACEHOLDER_OR_LOCAL_EXAMPLE	21	NO
+FRONTEND	votechain-frontend-ts/.env.example	7	VITE_WP5_CONTRACT_ADDRESS	LONG_LITERAL	42	NO

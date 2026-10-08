@@ -1,0 +1,1723 @@
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-c8b-r3f4-final-v2-control/C8B_R3F4_FINAL_V2_POSTVALIDATION.json
+================================================================================
+23-  "allPhasesActive": true,
+24-  "all16SlotTalliesMatch": true,
+25-  "verifierDeployTrailingDiagnosticCount": 1,
+26-  "verifierDeployTrailingDiagnosticRepetitions": [
+27-    "measured-15"
+28-  ],
+29-  "directDeployTrailingDiagnosticCount": 0,
+30-  "directDeployTrailingDiagnosticRepetitions": [],
+31-  "receiptTrailingDiagnosticCount": 0,
+32-  "receiptTrailingDiagnosticRepetitions": [],
+33-  "gasMinAll25": 1866414,
+34-  "gasMaxAll25": 1866414,
+35:  "latencyMinMsAll25": 707.3267,
+36:  "latencyMaxMsAll25": 749.324,
+37-  "abortedCampaignReused": false,
+38-  "abortedCampaignFinalStatsEligible": false,
+39-  "pilotReused": false,
+40-  "pilotFinalStatsEligible": false
+41-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-c8b-r3f4-final-v2-control/c8b-r3f4-postvalidate.py
+================================================================================
+261-            raise RuntimeError(
+262-                f"{path}: multiple "
+263-                "top-level JSON values"
+264-            )
+265-
+266-    return (
+267-        obj,
+268-        trailing,
+269-    )
+270-
+271-
+272-gas_values = []
+273:latency_values = []
+274-
+275-receipt_trailing = []
+276-verifier_deploy_trailing = []
+277-direct_deploy_trailing = []
+278-
+279-
+280-for row in rows:
+281-
+282-    rep = row[
+283-        "repetition_id"
+284-    ]
+285-
+--
+316-        row["tx_hash"],
+317-    ):
+318-        raise RuntimeError(
+319-            f"{rep}: invalid tx hash"
+320-        )
+321-
+322-    gas = int(
+323-        row[
+324-            "gas_used"
+325-        ]
+326-    )
+327-
+328:    latency = float(
+329-        row[
+330:            "latency_ms"
+331-        ]
+332-    )
+333-
+334-    if gas <= 0:
+335-        raise RuntimeError(
+336-            f"{rep}: gas <= 0"
+337-        )
+338-
+339-    if (
+340-        not math.isfinite(
+341:            latency
+342-        )
+343:        or latency <= 0
+344-    ):
+345-        raise RuntimeError(
+346:            f"{rep}: invalid latency"
+347-        )
+348-
+349-    gas_values.append(
+350-        gas
+351-    )
+352-
+353:    latency_values.append(
+354:        latency
+355-    )
+356-
+357-    iteration_dir = (
+358-        iteration_root
+359-        / rep
+360-    )
+361-
+362-    verifier_obj, verifier_tail = (
+363-        leading_json(
+364-            iteration_dir
+365-            / "verifier-deploy.json"
+366-        )
+367-    )
+368-
+369-    direct_obj, direct_tail = (
+370-        leading_json(
+371-            iteration_dir
+372-            / "direct-deploy.json"
+373-        )
+374-    )
+375-
+376-    verifier_address = (
+377-        verifier_obj.get(
+378:            "deployedTo"
+379-        )
+380-        or verifier_obj.get(
+381:            "contractAddress"
+382-        )
+383-        or verifier_obj.get(
+384-            "address"
+385-        )
+386-    )
+387-
+388-    direct_address = (
+389-        direct_obj.get(
+390:            "deployedTo"
+391-        )
+392-        or direct_obj.get(
+393:            "contractAddress"
+394-        )
+395-        or direct_obj.get(
+396-            "address"
+397-        )
+398-    )
+399-
+400-    if (
+401-        not verifier_address
+402-        or verifier_address.lower()
+403-        != EXPECTED_VERIFIER
+404-    ):
+405-        raise RuntimeError(
+406:            f"{rep}: verifier deployedTo mismatch"
+407-        )
+408-
+409-    if (
+410-        not direct_address
+411-        or direct_address.lower()
+412-        != EXPECTED_DIRECT
+413-    ):
+414-        raise RuntimeError(
+415:            f"{rep}: DIRECT deployedTo mismatch"
+416-        )
+417-
+418-    if verifier_tail.strip():
+419-        verifier_deploy_trailing.append(
+420-            rep
+421-        )
+422-
+423-    if direct_tail.strip():
+424-        direct_deploy_trailing.append(
+425-            rep
+426-        )
+427-
+--
+476-    if (
+477-        receipt_tx.lower()
+478-        != row[
+479-            "tx_hash"
+480-        ].lower()
+481-    ):
+482-        raise RuntimeError(
+483-            f"{rep}: receipt/raw tx mismatch"
+484-        )
+485-
+486-    receipt_gas_value = (
+487-        receipt_obj.get(
+488:            "gasUsed"
+489-        )
+490-        or receipt_obj.get(
+491-            "gas_used"
+492-        )
+493-    )
+494-
+495-    if receipt_gas_value is None:
+496-        raise RuntimeError(
+497-            f"{rep}: receipt gas missing"
+498-        )
+499-
+500-    if isinstance(
+--
+627-            )
+628-        ).lower()
+629-        != row[
+630-            "tx_hash"
+631-        ].lower()
+632-    ):
+633-        raise RuntimeError(
+634-            f"{rep}: summary/raw tx mismatch"
+635-        )
+636-
+637-    if int(
+638-        summary.get(
+639:            "gasUsed"
+640-        )
+641-    ) != gas:
+642-        raise RuntimeError(
+643-            f"{rep}: summary/raw gas mismatch"
+644-        )
+645-
+646-    if int(
+647-        summary.get(
+648-            "calldataBytes"
+649-        )
+650-    ) != 2340:
+651-        raise RuntimeError(
+652-            f"{rep}: summary calldata mismatch"
+653-        )
+654-
+655:    summary_latency = float(
+656-        summary.get(
+657:            "latencyMs"
+658-        )
+659-    )
+660-
+661-    if abs(
+662:        summary_latency
+663:        - latency
+664-    ) > 0.001:
+665-        raise RuntimeError(
+666:            f"{rep}: summary/raw latency mismatch"
+667-        )
+668-
+669-    correctness = summary.get(
+670-        "correctness",
+671-        {}
+672-    )
+673-
+674-    required = {
+675:        "acceptedBallotCount":
+676-            1,
+677:        "usedNullifier":
+678-            True,
+679-        "phase":
+680-            1,
+681-        "tallySlotsChecked":
+682-            16,
+683-        "encryptedTallyMatch":
+684-            True,
+685-    }
+686-
+687-    for key, expected in (
+688-        required.items()
+689-    ):
+--
+833-            receipt_trailing
+834-        ),
+835-    "receiptTrailingDiagnosticRepetitions":
+836-        receipt_trailing,
+837-    "gasMinAll25":
+838-        min(
+839-            gas_values
+840-        ),
+841-    "gasMaxAll25":
+842-        max(
+843-            gas_values
+844-        ),
+845:    "latencyMinMsAll25":
+846-        min(
+847:            latency_values
+848-        ),
+849:    "latencyMaxMsAll25":
+850-        max(
+851:            latency_values
+852-        ),
+853-    "abortedCampaignReused":
+854-        False,
+855-    "abortedCampaignFinalStatsEligible":
+856-        False,
+857-    "pilotReused":
+858-        False,
+859-    "pilotFinalStatsEligible":
+860-        False,
+861-}
+862-
+863-
+--
+982-
+983-print(
+984-    "FINAL_V2_GAS_MAX_ALL25="
+985-    + str(
+986-        max(
+987-            gas_values
+988-        )
+989-    )
+990-)
+991-
+992-print(
+993-    "FINAL_V2_LATENCY_MIN_MS_ALL25="
+994:    + f"{min(latency_values):.6f}"
+995-)
+996-
+997-print(
+998-    "FINAL_V2_LATENCY_MAX_MS_ALL25="
+999:    + f"{max(latency_values):.6f}"
+1000-)
+1001-
+1002-print(
+1003-    "ABORTED_CAMPAIGN_REUSED=NO"
+1004-)
+1005-
+1006-print(
+1007-    "ABORTED_CAMPAIGN_FINAL_STATS_ELIGIBLE=NO"
+1008-)
+1009-
+1010-print(
+1011-    "R3F3_PILOT_REUSED=NO"
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/C8B_R3F4_FINAL_V2_CAMPAIGN_MANIFEST_SHA256.txt
+================================================================================
+1:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-01/anvil.log
+2-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-01/cast-send-stderr.txt
+3-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-01/direct-deploy.json
+4-ab92da09d4bfd0829c5a1c2007c7d98a93cdfb25fa0ede76e7a929a33a8e9acd *./iterations/measured-01/iteration-summary.json
+5-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-01/verifier-deploy.json
+6:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-02/anvil.log
+7-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-02/cast-send-stderr.txt
+8-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-02/direct-deploy.json
+9-bde821c56705b67376b647a6c5c08683dffc65b291eb67fc95dadc5f27620225 *./iterations/measured-02/iteration-summary.json
+10-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-02/verifier-deploy.json
+11:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-03/anvil.log
+12-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-03/cast-send-stderr.txt
+13-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-03/direct-deploy.json
+14-994bfee50f4916c6886b78aa06202909327cfbdb6197c4282f43bb54417e6d92 *./iterations/measured-03/iteration-summary.json
+15-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-03/verifier-deploy.json
+16:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-04/anvil.log
+17-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-04/cast-send-stderr.txt
+18-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-04/direct-deploy.json
+19-283ab73d6d85d7bcf7ba86c1e828c70dab286ad70b8fd248f9a4778965cd3231 *./iterations/measured-04/iteration-summary.json
+20-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-04/verifier-deploy.json
+21:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-05/anvil.log
+22-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-05/cast-send-stderr.txt
+23-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-05/direct-deploy.json
+24-16b8bc5ce210ce63a1b8580d3a79b9e154b0b93ca6ddc6c39fd26f9f7308d442 *./iterations/measured-05/iteration-summary.json
+25-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-05/verifier-deploy.json
+26:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-06/anvil.log
+27-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-06/cast-send-stderr.txt
+28-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-06/direct-deploy.json
+29-183c7a82e5f941218df8e27876920938a82c3ea0e85b542d2fd75326511fd66b *./iterations/measured-06/iteration-summary.json
+30-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-06/verifier-deploy.json
+31:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-07/anvil.log
+32-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-07/cast-send-stderr.txt
+33-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-07/direct-deploy.json
+34-cfed91025563ffb65007c8cb7351a294ef0f8967e90d68b8d73cf06741105d8b *./iterations/measured-07/iteration-summary.json
+35-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-07/verifier-deploy.json
+36:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-08/anvil.log
+37-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-08/cast-send-stderr.txt
+38-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-08/direct-deploy.json
+39-2d30a30fdb6d05fb7c7c7d91816dbc52abf89799b94b9f5cf260f6ba23c1e22b *./iterations/measured-08/iteration-summary.json
+40-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-08/verifier-deploy.json
+41:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-09/anvil.log
+42-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-09/cast-send-stderr.txt
+43-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-09/direct-deploy.json
+44-cd3a8f9fa9948329f98cea684f5d1f1e6b52d2cfc81088fda88e4d549cb5f910 *./iterations/measured-09/iteration-summary.json
+45-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-09/verifier-deploy.json
+46:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-10/anvil.log
+47-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-10/cast-send-stderr.txt
+48-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-10/direct-deploy.json
+49-96f93ca44bedfa5caf2fe731ba5ce741c35a3bdae490df6471d2b31825154cb9 *./iterations/measured-10/iteration-summary.json
+50-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-10/verifier-deploy.json
+51:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-11/anvil.log
+52-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-11/cast-send-stderr.txt
+53-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-11/direct-deploy.json
+54-bf022448373aeb2134f71bd5bdbbc0f68a7b93dcdddb4cace4aa91402bfa93fc *./iterations/measured-11/iteration-summary.json
+55-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-11/verifier-deploy.json
+56:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-12/anvil.log
+57-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-12/cast-send-stderr.txt
+58-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-12/direct-deploy.json
+59-3f0372b0049ba6677f09b9009c20f155e3dc7214bf2967313b041775cc45d8d4 *./iterations/measured-12/iteration-summary.json
+60-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-12/verifier-deploy.json
+61:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-13/anvil.log
+62-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-13/cast-send-stderr.txt
+63-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-13/direct-deploy.json
+64-1a0318a4057d2c28f533faad51f8ceba5c11ebb389e42c223ca19aaf0b55faf2 *./iterations/measured-13/iteration-summary.json
+65-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-13/verifier-deploy.json
+66:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-14/anvil.log
+67-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-14/cast-send-stderr.txt
+68-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-14/direct-deploy.json
+69-048f63790318b0229928912fdf781c65dbccece391d67ba9cd17fdfe524d8eda *./iterations/measured-14/iteration-summary.json
+70-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-14/verifier-deploy.json
+71:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-15/anvil.log
+72-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-15/cast-send-stderr.txt
+73-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-15/direct-deploy.json
+74-585c02e6fa83449fc3e5e7f9f0ea49c9c5349b2afef1a96063d69ef9addf04f0 *./iterations/measured-15/iteration-summary.json
+75-3a70ef158fd1e63a780d79060aaf1b880887cc9005ec3d125e913faac28aad88 *./iterations/measured-15/verifier-deploy.json
+76:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-16/anvil.log
+77-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-16/cast-send-stderr.txt
+78-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-16/direct-deploy.json
+79-309277cf530a37414c70b3900ea76b62a47360857f18c5090aa69b6f949ce07b *./iterations/measured-16/iteration-summary.json
+80-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-16/verifier-deploy.json
+81:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-17/anvil.log
+82-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-17/cast-send-stderr.txt
+83-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-17/direct-deploy.json
+84-ff7f6e7fc9d2edcb5201938b625c33fe9093b9097811a50d8dcd33e2329ba034 *./iterations/measured-17/iteration-summary.json
+85-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-17/verifier-deploy.json
+86:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-18/anvil.log
+87-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-18/cast-send-stderr.txt
+88-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-18/direct-deploy.json
+89-48ff68653e23039a3b3e2c0f92b68fa9cdd0eb5265a842d22ca246c5f0b6837f *./iterations/measured-18/iteration-summary.json
+90-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-18/verifier-deploy.json
+91:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-19/anvil.log
+92-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-19/cast-send-stderr.txt
+93-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-19/direct-deploy.json
+94-b9dff327bc05e9f25304e893c0b84b46f84eb33ae8b36243441b0facbde1dc1f *./iterations/measured-19/iteration-summary.json
+95-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-19/verifier-deploy.json
+96:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-20/anvil.log
+97-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/measured-20/cast-send-stderr.txt
+98-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/measured-20/direct-deploy.json
+99-f17d52969470db7f3bef4b9fa05784976bd456b7940e526a8dfa20c5438db644 *./iterations/measured-20/iteration-summary.json
+100-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/measured-20/verifier-deploy.json
+101:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-01/anvil.log
+102-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-01/cast-send-stderr.txt
+103-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/warmup-01/direct-deploy.json
+104-23d37a754a1438853510709a2936c3551cddd47013885e7ff8d6a1dd46ff7d65 *./iterations/warmup-01/iteration-summary.json
+105-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/warmup-01/verifier-deploy.json
+106:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-02/anvil.log
+107-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-02/cast-send-stderr.txt
+108-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/warmup-02/direct-deploy.json
+109-1c1f38f247a4fdb22e19a4237065b247ee2d698ac9d7c304820123822bb8499f *./iterations/warmup-02/iteration-summary.json
+110-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/warmup-02/verifier-deploy.json
+111:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-03/anvil.log
+112-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-03/cast-send-stderr.txt
+113-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/warmup-03/direct-deploy.json
+114-51321b248e545b077f5aa7689e1dfa485e321692cf524d1bd382bc0bd45ed0fa *./iterations/warmup-03/iteration-summary.json
+115-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/warmup-03/verifier-deploy.json
+116:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-04/anvil.log
+117-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-04/cast-send-stderr.txt
+118-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/warmup-04/direct-deploy.json
+119-5469696f5636d4a8a1985b492dcef5acb44f1debd4c52b5077fc49955ef9f0ac *./iterations/warmup-04/iteration-summary.json
+120-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/warmup-04/verifier-deploy.json
+121:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-05/anvil.log
+122-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 *./iterations/warmup-05/cast-send-stderr.txt
+123-6c78e959c4d3901f4db46a77f47dddce4e3ece7a120efbd7ea4cad1d5aa07e6a *./iterations/warmup-05/direct-deploy.json
+124-224f3c297093a3ced00632718050c23319552cb728b1b003db00c20b594055da *./iterations/warmup-05/iteration-summary.json
+125-8ddbddb34eb706b46971b29a5d672dc26ca342cc073e468f246a1eb5196791fe *./iterations/warmup-05/verifier-deploy.json
+126-feec671816d55669cfd4bfbf1525c89facf8388abcd7adb39e9cdfb168b2f7fa *./microbenchmark-complete.json
+127-507b3f933d4f701ee00d582ce6f47f5997b737b558e5791f9abe57a28f04e847 *./raw-microbenchmark.tsv
+128-1096136c7217a5659648a20d4141ac55eac271d13a9d19420ddd95ac7bbe1998 *./receipts/measured-01.json
+129-f42859de5c07c633c1430615fc6b157c4c14a19846ab6820114eb3e5ad81d98c *./receipts/measured-02.json
+130-91914a24a8adc7e127ba5ec7b6588cfb5152d4c205d9e3febd04e1b724ac3e6c *./receipts/measured-03.json
+131-15fd16cc7120ca1f97740d911a31799db2b6382fa5164f2aa38a3cc93d0fc054 *./receipts/measured-04.json
+132-907529b91ce61a3a928d2154a15831b190bb373408b9d45cc80a1c156c179af0 *./receipts/measured-05.json
+133-6dfe0b5e971434bd72743d7ec51a2147cb9bd4d663d20c435aebcdbadb67111d *./receipts/measured-06.json
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-01/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-01/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 1,
+6-  "repetitionId": "measured-01",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 741.5839,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-01/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-02/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-02/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 2,
+6-  "repetitionId": "measured-02",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 725.554,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-02/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-03/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-03/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 3,
+6-  "repetitionId": "measured-03",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 713.2343,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-03/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-04/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-04/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 4,
+6-  "repetitionId": "measured-04",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 722.6815,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-04/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-05/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-05/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 5,
+6-  "repetitionId": "measured-05",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 737.3878,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-05/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-06/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-06/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 6,
+6-  "repetitionId": "measured-06",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 721.6,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-06/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-07/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-07/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 7,
+6-  "repetitionId": "measured-07",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 714.1624,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-07/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-08/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-08/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 8,
+6-  "repetitionId": "measured-08",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 723.4478,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-08/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-09/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-09/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 9,
+6-  "repetitionId": "measured-09",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 732.2516,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-09/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-10/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-10/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 10,
+6-  "repetitionId": "measured-10",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 708.1314,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-10/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-11/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-11/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 11,
+6-  "repetitionId": "measured-11",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 707.3267,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-11/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-12/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-12/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 12,
+6-  "repetitionId": "measured-12",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 723.1551,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-12/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-13/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-13/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 13,
+6-  "repetitionId": "measured-13",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 724.1566,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-13/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-14/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-14/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 14,
+6-  "repetitionId": "measured-14",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 717.8612,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-14/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 15,
+6-  "repetitionId": "measured-15",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 741.1692,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-15/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+6-[2m2026-10-02T19:54:08.497002Z[0m [31mERROR[0m [2malloy_provider::blocks[0m[2m:[0m failed to fetch block [3mnumber[0m[2m=[0m0 [3merr[0m[2m=[0merror sending request for url (http://127.0.0.1:8558/)
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-16/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-16/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 16,
+6-  "repetitionId": "measured-16",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 718.359,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-16/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-17/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-17/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 17,
+6-  "repetitionId": "measured-17",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 724.1198,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-17/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-18/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-18/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 18,
+6-  "repetitionId": "measured-18",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 734.0626,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-18/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-19/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-19/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 19,
+6-  "repetitionId": "measured-19",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 717.3695,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-19/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-20/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-20/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "measured",
+5-  "iteration": 20,
+6-  "repetitionId": "measured-20",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 732.9908,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/measured-20/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-01/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-01/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "warmup",
+5-  "iteration": 1,
+6-  "repetitionId": "warmup-01",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 749.324,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-01/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-02/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-02/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "warmup",
+5-  "iteration": 2,
+6-  "repetitionId": "warmup-02",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 724.9727,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-02/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-03/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-03/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "warmup",
+5-  "iteration": 3,
+6-  "repetitionId": "warmup-03",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 746.5372,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-03/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-04/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-04/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "warmup",
+5-  "iteration": 4,
+6-  "repetitionId": "warmup-04",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 740.5749,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-04/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-05/direct-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+4-  "transactionHash": "0x77fb21445d0884f26e7b02e370032acebe8dffaf17e5a5e8e9389a6118524828"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-05/iteration-summary.json
+================================================================================
+2-  "status": "PASS",
+3-  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+4-  "kind": "warmup",
+5-  "iteration": 5,
+6-  "repetitionId": "warmup-05",
+7-  "freshChain": true,
+8-  "ballotId": "001",
+9-  "candidateIndex": 0,
+10-  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+11-  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+12-  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+13-  "receiptStatus": 1,
+14:  "gasUsed": 1866414,
+15-  "calldataBytes": 2340,
+16:  "latencyMs": 714.0196,
+17-  "correctness": {
+18:    "acceptedBallotCount": 1,
+19:    "usedNullifier": true,
+20-    "phase": 1,
+21-    "tallySlotsChecked": 16,
+22-    "encryptedTallyMatch": true
+23-  }
+24-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/iterations/warmup-05/verifier-deploy.json
+================================================================================
+1-{
+2-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+3:  "deployedTo": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+4-  "transactionHash": "0xbb73acfd7179670b0f77189ec51cc337d9eef0aed57916adb81dbfd049bbfb6d"
+5-}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/raw-microbenchmark.tsv
+================================================================================
+1:kind	iteration	repetition_id	ballot_id	candidate_index	tx_hash	receipt_status	gas_used	calldata_bytes	latency_ms
+2-warmup	1	warmup-01	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	749.324000
+3-warmup	2	warmup-02	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	724.972700
+4-warmup	3	warmup-03	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	746.537200
+5-warmup	4	warmup-04	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	740.574900
+6-warmup	5	warmup-05	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	714.019600
+7-measured	1	measured-01	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	741.583900
+8-measured	2	measured-02	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	725.554000
+9-measured	3	measured-03	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	713.234300
+10-measured	4	measured-04	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	722.681500
+11-measured	5	measured-05	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	737.387800
+12-measured	6	measured-06	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	721.600000
+13-measured	7	measured-07	001	0	0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a	1	1866414	2340	714.162400
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-01.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x0432459acc6525ce660dec8e82160c35bf0fdee4d9a5c6c181110d9597db88ab","blockNumber":"0x5","blockTimestamp":"0x6ac00b6d","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x0432459acc6525ce660dec8e82160c35bf0fdee4d9a5c6c181110d9597db88ab","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-02.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x8162eeffefa4ce1e977fe52493cfd390dbf0fdf058d0ebf932e15a42e08121cd","blockNumber":"0x5","blockTimestamp":"0x6ac00b76","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x8162eeffefa4ce1e977fe52493cfd390dbf0fdf058d0ebf932e15a42e08121cd","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-03.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x75c5f6f601ee04dc356e8392631dc6690de8da2f4f77093b5aa98b97184ea373","blockNumber":"0x5","blockTimestamp":"0x6ac00b7e","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x75c5f6f601ee04dc356e8392631dc6690de8da2f4f77093b5aa98b97184ea373","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-04.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x8784b241e159778694429b49496a7a7b1b23174396a9820fcc3bbcfb52a5daaa","blockNumber":"0x5","blockTimestamp":"0x6ac00b86","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x8784b241e159778694429b49496a7a7b1b23174396a9820fcc3bbcfb52a5daaa","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-05.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x02a23fd643b209b9541f2db7ab6451d6ad0b517cced3483a05893e4f91a73131","blockNumber":"0x5","blockTimestamp":"0x6ac00b8f","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x02a23fd643b209b9541f2db7ab6451d6ad0b517cced3483a05893e4f91a73131","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-06.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xb603fba4e025105cde7c69c33f96d54835ff7306290b27a1237c53ee547c2459","blockNumber":"0x5","blockTimestamp":"0x6ac00b97","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xb603fba4e025105cde7c69c33f96d54835ff7306290b27a1237c53ee547c2459","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-07.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x7c29e02b56a4133bf7c4677d82d8b0e110cd7f4f1929f2108c6d6fd929847ca2","blockNumber":"0x5","blockTimestamp":"0x6ac00b9f","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x7c29e02b56a4133bf7c4677d82d8b0e110cd7f4f1929f2108c6d6fd929847ca2","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-08.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x958cae5a82b86bc37de4cf7f8cfd2bbcb2dc69b62a1085997793b351cd891cc5","blockNumber":"0x5","blockTimestamp":"0x6ac00ba8","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x958cae5a82b86bc37de4cf7f8cfd2bbcb2dc69b62a1085997793b351cd891cc5","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-09.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x5055d4f6b665b90da5d42744a8eeb802f737324383803beb0dd76222a1386c4a","blockNumber":"0x5","blockTimestamp":"0x6ac00bb0","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x5055d4f6b665b90da5d42744a8eeb802f737324383803beb0dd76222a1386c4a","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-10.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xc308e3737f1b2288eafdedf5505801b60492fa691157fb407a7fe290f8346c51","blockNumber":"0x5","blockTimestamp":"0x6ac00bb8","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xc308e3737f1b2288eafdedf5505801b60492fa691157fb407a7fe290f8346c51","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-11.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x97571d13039f3074fe4dfb70ff78d727f1675ecee4ca5b26310b0f84c69ea709","blockNumber":"0x5","blockTimestamp":"0x6ac00bc1","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x97571d13039f3074fe4dfb70ff78d727f1675ecee4ca5b26310b0f84c69ea709","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-12.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xe0c8e8df4b2c293559f5d164ea5530f0ca23846f09e653b29c15cdae952785d7","blockNumber":"0x5","blockTimestamp":"0x6ac00bc9","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xe0c8e8df4b2c293559f5d164ea5530f0ca23846f09e653b29c15cdae952785d7","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-13.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xff9bafb082cc157d6b1a60fea10a575e0d932f646af6b797ef03b6a2c8349433","blockNumber":"0x5","blockTimestamp":"0x6ac00bd1","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xff9bafb082cc157d6b1a60fea10a575e0d932f646af6b797ef03b6a2c8349433","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-14.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x9bfb64e9516fd2a6ded9908f3c1a7fa0fd231bae854536009253cf6300041bd7","blockNumber":"0x5","blockTimestamp":"0x6ac00bda","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x9bfb64e9516fd2a6ded9908f3c1a7fa0fd231bae854536009253cf6300041bd7","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-15.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xd06c6c2254c16334a913348baf5cf5d8b26d1862dd5c6092d17911a284733ffb","blockNumber":"0x5","blockTimestamp":"0x6ac00be2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xd06c6c2254c16334a913348baf5cf5d8b26d1862dd5c6092d17911a284733ffb","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-16.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x34ba320de5de52716a15e1d30edac9796a7bec64f28bdbc98b61ae513b296daf","blockNumber":"0x5","blockTimestamp":"0x6ac00bea","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x34ba320de5de52716a15e1d30edac9796a7bec64f28bdbc98b61ae513b296daf","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-17.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xf4be606eb1462e51098f7f5528080319f6ea80bf098a2f57bbdf9e165364abd0","blockNumber":"0x5","blockTimestamp":"0x6ac00bf3","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xf4be606eb1462e51098f7f5528080319f6ea80bf098a2f57bbdf9e165364abd0","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-18.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x41e2f8b8e8ddd58569e9e5e0d37ce73647afb145dc4e57244faf03f096d302e9","blockNumber":"0x5","blockTimestamp":"0x6ac00bfb","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x41e2f8b8e8ddd58569e9e5e0d37ce73647afb145dc4e57244faf03f096d302e9","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-19.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xc43c943fa552b0204f793706702724f82e3422036f8ef907b1208abe273b9c2f","blockNumber":"0x5","blockTimestamp":"0x6ac00c03","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xc43c943fa552b0204f793706702724f82e3422036f8ef907b1208abe273b9c2f","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/measured-20.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x387b03dcf702efea1b4dcead196ef876f5ba4627cab2bdc7cf0f17bf4bc356e3","blockNumber":"0x5","blockTimestamp":"0x6ac00c0c","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x387b03dcf702efea1b4dcead196ef876f5ba4627cab2bdc7cf0f17bf4bc356e3","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-01.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x2f90c9e400c936fb219b6e9d6601d3748a8bd15063205e4e174a507ed634f97f","blockNumber":"0x5","blockTimestamp":"0x6ac00b43","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x2f90c9e400c936fb219b6e9d6601d3748a8bd15063205e4e174a507ed634f97f","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-02.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x603f73b2e0e2d13f6ae422b2b1d86acae682f08dbd3622958ce3d0814e54477a","blockNumber":"0x5","blockTimestamp":"0x6ac00b4c","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x603f73b2e0e2d13f6ae422b2b1d86acae682f08dbd3622958ce3d0814e54477a","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-03.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0xb76954ed73d6f016eb554bed67396894854d8aec2780f7c8496ab2a7f5c12bdf","blockNumber":"0x5","blockTimestamp":"0x6ac00b54","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0xb76954ed73d6f016eb554bed67396894854d8aec2780f7c8496ab2a7f5c12bdf","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-04.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x03058ed704b5d63a55f9c51c87540c4e8817fbdbd71768bb9c3836233139d5af","blockNumber":"0x5","blockTimestamp":"0x6ac00b5c","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x03058ed704b5d63a55f9c51c87540c4e8817fbdbd71768bb9c3836233139d5af","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+
+================================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp8/20261003_015120/wp8e-final-fresh-chain-microbenchmark-v2/receipts/warmup-05.json
+================================================================================
+1:{"status":"0x1","cumulativeGasUsed":"0x1c7aae","logs":[{"address":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","topics":["0x453e9bcf48f6fd9232417d2a37a22af3f776b005782993be6dd7ecd6cef7e4fa","0x2b4f1f4525a325ec64b40a49b73591884e9889dc7b76a6fd9089856377636fae"],"data":"0x8e0e654a4b5857d23286e25c9bcb5c0a5ca96ebc3c9261969047822398c22bff0000000000000000000000000000000000000000000000000000000000000001","blockHash":"0x990fa9b82753bf7e6e0dba1d3d050b3e3139aa094cf43cca98575c0a0e9e7b39","blockNumber":"0x5","blockTimestamp":"0x6ac00b65","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000000000000000000000000000000000000000000000000001000000000000000000400000000000800000000000000000","type":"0x2","transactionHash":"0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a","transactionIndex":"0x0","blockHash":"0x990fa9b82753bf7e6e0dba1d3d050b3e3139aa094cf43cca98575c0a0e9e7b39","blockNumber":"0x5","gasUsed":"0x1c7aae","effectiveGasPrice":"0x24b0d836","blobGasPrice":"0x1","from":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","to":"0xe7f1725e7734ce288f8367e1bb143e90bb3f0512","contractAddress":null}
+

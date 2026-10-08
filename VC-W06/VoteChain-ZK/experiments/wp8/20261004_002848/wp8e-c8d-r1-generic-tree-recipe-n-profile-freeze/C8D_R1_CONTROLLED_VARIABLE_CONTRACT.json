@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "configuredMerkleDepth": 17,
+  "capacity": 131072,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "varyOnlyAtFixtureInputLayer": [
+    "eligibleRoot",
+    "siblings"
+  ],
+  "frozenAcrossProfiles": [
+    "secret",
+    "pathBits",
+    "electionId",
+    "candidateManifestHash",
+    "candidateCount",
+    "contractDomain",
+    "Yx",
+    "Yy",
+    "electionContextHash",
+    "nullifier",
+    "bit",
+    "randomness",
+    "Rx",
+    "Ry",
+    "Sx",
+    "Sy"
+  ],
+  "treePopulationVariables": [
+    "N",
+    "additional synthetic eligible voter secrets",
+    "derived eligible leaves",
+    "derived sparse-tree internal nodes",
+    "derived eligibleRoot",
+    "derived siblings for target leaf 0"
+  ],
+  "doNotVary": [
+    "configured Merkle depth",
+    "candidate count",
+    "selected voter",
+    "ballot selection",
+    "ElGamal randomness",
+    "election identifier",
+    "contract domain",
+    "candidate manifest",
+    "election context"
+  ],
+  "fixtureGenerationStarted": false
+}

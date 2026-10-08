@@ -1,0 +1,11 @@
+{
+  "corpusSize": 150,
+  "allMerklePathsRecomputed": true,
+  "sharedMerkleRoot": true,
+  "distinctNullifiers": true,
+  "oneCommonElection": true,
+  "deterministicBalancedCandidateSchedule": true,
+  "syntheticOnly": true,
+  "proofGenerated": false,
+  "transactionSubmitted": false
+}

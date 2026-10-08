@@ -1,0 +1,6 @@
+dimension	planned_values	final_status	evidence	final_observations	independent_measured_elections	publication_use	notes
+Accepted-ballot accumulation / state growth	N={25,50,75,100,150}	COMPLETE	C6C-R3 final campaign + C7 statistics + C7B interpretation + C7C publication figures	2000	25	YES	Five independent measured fresh-chain elections per scale; warm-ups excluded; no outlier deletion.
+Fresh-chain vote microbenchmark	5 warm-ups + 20 measured fresh chains	PENDING_FINAL	Earlier A1A/A1B and C5B work is validation/pilot evidence, not the preregistered final microbenchmark.	0	0	NOT_YET	Must not promote pilot timings/gas into final microbenchmark statistics.
+Candidate-count matrix	candidateCount={2,4,8,16}	PENDING_FINAL	Current completed final campaign fixes candidateCount=4.	0	0	NOT_YET	Accepted-ballot scaling must not be substituted for candidate-count scaling.
+Eligible-set-size matrix	eligibleSet={10,100,1000,10000}	PENDING_FINAL	Current completed final campaign uses one frozen eligibility corpus/root profile.	0	0	NOT_YET	Accepted-ballot scaling must not be substituted for eligible-set-size scaling.
+Historical pre-ZKP comparison	published LocalVoting historical baseline	REFERENCE_ONLY	Published 2026 paper + canonical pre-ZKP manual.	0	0	QUALIFIED_ONLY	Useful historical anchor, but not a controlled A/B estimate of DIRECT ZKP overhead.

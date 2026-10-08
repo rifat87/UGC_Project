@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "levels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "publicSignalCount": 73,
+  "differingIndices": [
+    0
+  ],
+  "differingSignalNames": [
+    "eligibleRoot"
+  ],
+  "publicIndices1To72Identical": true,
+  "fourEligibleRootsDistinct": true
+}

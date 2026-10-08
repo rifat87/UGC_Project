@@ -1,0 +1,10 @@
+FIGURE_COUNT=4
+PNG_COUNT=4
+SVG_COUNT=4
+FIGURE_1=typical_gas_by_scale
+FIGURE_2=position_gas_n150
+FIGURE_3=local_latency_by_scale
+FIGURE_4=election_mean_latency
+REGRESSION_OR_TREND_MODEL_ADDED=NO
+OUTLIER_DELETION=NO
+FIGURE_GENERATION=PASS

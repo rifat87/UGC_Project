@@ -1,0 +1,12 @@
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/BitElGamalValidityFinal.circom
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/build-core-finalmetrics/BitElGamalValidityFinal.r1cs
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/build-core-finalmetrics/BitElGamalValidityFinal.sym
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/build-core-finalmetrics/BitElGamalValidityFinal_js/BitElGamalValidityFinal.wasm
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/elgamal_0000.zkey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/dev-groth16-finalmetrics/elgamal_final.zkey
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_bad_r_final.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_identity_key_final.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_invalid_bit_final.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_tampered_final.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_valid_final.json
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/poc/input_elgamal_zero_r_final.json

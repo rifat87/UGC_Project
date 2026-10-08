@@ -1,0 +1,27 @@
+PACKAGE=bfj
+SEVERITY=high
+DIRECT=False
+RANGE=7.1.0 - 9.1.2
+FIX_AVAILABLE=true
+NODES=node_modules/bfj
+
+PACKAGE=jsonpath
+SEVERITY=high
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=true
+NODES=node_modules/jsonpath
+
+PACKAGE=underscore
+SEVERITY=high
+DIRECT=False
+RANGE=<=1.13.7
+FIX_AVAILABLE=true
+NODES=node_modules/underscore
+
+PACKAGE=ws
+SEVERITY=high
+DIRECT=False
+RANGE=8.0.0 - 8.20.1
+FIX_AVAILABLE={"isSemVerMajor": true, "name": "wagmi", "version": "3.7.7"}
+NODES=node_modules/ws

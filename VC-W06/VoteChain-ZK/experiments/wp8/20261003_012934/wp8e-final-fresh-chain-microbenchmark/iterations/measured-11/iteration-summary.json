@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_FROZEN_FRESH_CHAIN_MICROBENCHMARK",
+  "kind": "measured",
+  "iteration": 11,
+  "repetitionId": "measured-11",
+  "freshChain": true,
+  "ballotId": "001",
+  "candidateIndex": 0,
+  "verifier": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "direct": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "txHash": "0x7ba1110507280f1e99de4bd37c640c1ab38f42d938436cf19480355cdd82e27a",
+  "receiptStatus": 1,
+  "gasUsed": 1866414,
+  "calldataBytes": 2340,
+  "latencyMs": 717.3291,
+  "correctness": {
+    "acceptedBallotCount": 1,
+    "usedNullifier": true,
+    "phase": 1,
+    "tallySlotsChecked": 16,
+    "encryptedTallyMatch": true
+  }
+}

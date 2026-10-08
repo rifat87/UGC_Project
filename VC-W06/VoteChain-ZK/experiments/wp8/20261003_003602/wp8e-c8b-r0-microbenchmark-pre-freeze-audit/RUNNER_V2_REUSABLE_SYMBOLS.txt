@@ -1,0 +1,86 @@
+1:import argparse
+29:    "fixture_bundle_manifest":
+31:    "fixture_index":
+66:    "castVote("
+93:def sha_file(path):
+108:def require_hash(
+122:def run(
+155:def first_token(text):
+170:def receipt_info(text):
+282:def extract_address(text):
+287:            "deployedTo",
+288:            "deployed_to",
+318:        "could not parse deployed address"
+322:def load_json(path):
+330:def validate_fixture_bundle(
+341:            "fixture_bundle_manifest"
+343:        "fixture bundle manifest",
+358:                f"missing fixture bundle file: "
+368:                f"fixture bundle content mismatch: "
+374:        / "fixture-index.json"
+385:            "fixture_index"
+387:        "fixture index",
+402:    if index["fixtureCount"] != 150:
+404:            "fixtureCount != 150"
+409:            "calldataBytesPerFixture"
+414:            "fixture calldata bytes != 2340"
+419:            "castVoteSelector"
+424:            "fixture selector mismatch"
+430:def validate_frozen_inputs(
+453:        / "wp8e-c2-150-ballot-input-corpus"
+514:    validate_fixture_bundle(
+519:def campaign_plan():
+545:def validate_plan():
+600:def stop_anvil(
+639:def start_anvil(
+709:        stop_anvil(
+722:def deploy_contracts(
+755:        / "verifier-deploy.json"
+788:        / "direct-deploy.json"
+826:def configure_and_activate(
+836:        / "wp8e-c2-150-ballot-input-corpus"
+1027:def verify_final_state(
+1060:        fixture = load_json(
+1062:            / "fixtures"
+1063:            / f"ballot-{n:03d}.json"
+1076:                    fixture["nullifier"],
+1167:def execute_campaign(
+1225:        "ballot_position",
+1226:        "ballot_id",
+1231:        "calldata_bytes",
+1232:        "latency_ms",
+1323:                ) = start_anvil(
+1332:                    deploy_contracts(
+1341:                configure_and_activate(
+1353:                    ballot_id = (
+1357:                    fixture = load_json(
+1359:                        / "fixtures"
+1361:                            f"ballot-"
+1362:                            f"{ballot_id}.json"
+1376:                            *fixture[
+1392:                    latency_ms = (
+1400:                            f"ballot-"
+1401:                            f"{ballot_id}.json"
+1415:                                f"ballot-"
+1416:                                f"{ballot_id}"
+1427:                            f"ballot {ballot_id} "
+1436:                    ) = receipt_info(
+1443:                            f"ballot {ballot_id} "
+1458:                        "ballot_position":
+1460:                        "ballot_id":
+1461:                            ballot_id,
+1463:                            fixture[
+1472:                        "calldata_bytes":
+1473:                            fixture[
+1474:                                "calldataBytes"
+1476:                        "latency_ms":
+1477:                            f"{latency_ms:.6f}",
+1561:                    stop_anvil(
+1598:def main():
+1599:    parser = argparse.ArgumentParser()
+1601:    parser.add_argument(
+1606:    parser.add_argument(
+1611:    parser.add_argument(
+1616:    parser.add_argument(
+1621:    parser.add_argument(
+1625:    parser.add_argument(

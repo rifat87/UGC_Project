@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "classification": "WP8_FINAL_PATH_SAFE_REPRODUCIBILITY_PACKAGE",
+  "authoritativeResultFamilies": 4,
+  "authoritativePublicationSources": 9,
+  "provenanceArtifacts": 16,
+  "publicationCoreResultRows": 32,
+  "acceptedBallotMeasuredRows": 2000,
+  "freshChainMeasuredRows": 20,
+  "candidateCountMeasuredRows": 80,
+  "eligibleSetMeasuredRows": 80,
+  "publicationSynthesisComplete": true,
+  "publicationGuardrailsValidated": true,
+  "rawHistoricalExperimentCorpusEmbedded": false,
+  "rawHistoricalExperimentCorpusPreservedInProjectTree": true,
+  "newBenchmarkExecution": false,
+  "newWitnessGeneration": false,
+  "newProofGeneration": false,
+  "onchainExecution": false
+}

@@ -1,0 +1,49 @@
+{
+  "status": "FAIL",
+  "files": {
+    "frontend": {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts",
+      "checks": {
+        "hasCandidateLength": true,
+        "hasLengthAsBigInt": false,
+        "hasZeroBasedIndex": true,
+        "hasIndexAsBigInt": true,
+        "hasIndexedCandidate": true,
+        "mentionsIndexedChainProfile": true,
+        "mentionsCandidateManifest": true
+      }
+    },
+    "server": {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js",
+      "checks": {
+        "hasCandidateLength": true,
+        "hasLengthAsBigInt": true,
+        "hasZeroBasedIndex": true,
+        "hasIndexAsBigInt": true,
+        "hasIndexedCandidate": false,
+        "mentionsIndexedChainProfile": true,
+        "mentionsCandidateManifest": true
+      }
+    },
+    "regression": {
+      "path": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs",
+      "checks": {
+        "hasCandidateLength": false,
+        "hasLengthAsBigInt": false,
+        "hasZeroBasedIndex": true,
+        "hasIndexAsBigInt": true,
+        "hasIndexedCandidate": false,
+        "mentionsIndexedChainProfile": true,
+        "mentionsCandidateManifest": true
+      }
+    }
+  },
+  "frontendRequiredChecks": [
+    "hasCandidateLength",
+    "hasLengthAsBigInt",
+    "hasZeroBasedIndex",
+    "hasIndexAsBigInt",
+    "hasIndexedCandidate",
+    "mentionsIndexedChainProfile"
+  ]
+}

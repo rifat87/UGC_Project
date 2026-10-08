@@ -1,0 +1,19 @@
+WP8_GENERATED_PROFILE_POLICY=FROZEN
+
+The active application implementation is not modified for scaling measurements.
+
+Runtime candidateCount measurements use the frozen active architecture.
+
+Any compile-time Merkle-depth or compile-profile scaling artifacts required
+for WP8 must be generated from frozen source templates into an experiment-only
+directory beneath experiments/wp8/.
+
+Generated benchmark wrappers/build outputs are evidence artifacts, not active
+application source.
+
+No generated benchmark artifact may overwrite the accepted WP3/WP4/WP5/WP6/WP7
+active artifacts.
+
+Any implementation-source, dependency, circuit-template, crypto-source, or
+contract-source change invalidates this WP8 protocol freeze and requires a new
+freeze before measurements resume.

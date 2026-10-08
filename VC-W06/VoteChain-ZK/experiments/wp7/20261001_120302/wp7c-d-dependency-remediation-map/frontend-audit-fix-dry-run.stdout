@@ -1,0 +1,692 @@
+add hono 4.13.12
+add unstorage 1.17.5
+add readdirp 5.1.1
+add lru-cache 11.5.3
+add chokidar 5.0.0
+add generator-function 2.0.1
+add typed-array-buffer 1.0.3
+add to-buffer 1.2.2
+add openapi-typescript-helpers 0.0.15
+add mime-db 1.52.0
+add is-buffer 1.1.6
+add crypt 0.0.2
+add charenc 0.0.2
+add agent-base 6.0.2
+add delayed-stream 1.0.0
+add mime-types 2.1.35
+add es-set-tostringtag 2.1.0
+add combined-stream 1.0.8
+add asynckit 0.4.0
+add is-retry-allowed 2.2.0
+add proxy-from-env 2.1.0
+add https-proxy-agent 5.0.1
+add form-data 4.0.6
+add follow-redirects 1.16.0
+add @reown/appkit-pay 1.7.8
+add @solana/subscribable 5.5.1
+add @solana/rpc-subscriptions-spec 5.5.1
+add @solana/rpc-subscriptions-channel-websocket 5.5.1
+add ws 8.22.0
+add @solana/rpc-subscriptions-api 5.5.1
+add @solana/rpc-transport-http 5.5.1
+add undici-types 7.30.0
+add @solana/rpc-transformers 5.5.1
+add @solana/fast-stable-stringify 5.5.1
+add @solana/promises 5.5.1
+add @solana/options 5.5.1
+add @solana/codecs-numbers 5.5.1
+add @solana/codecs-data-structures 5.5.1
+add @solana/nominal-types 5.5.1
+add @solana/assertions 5.5.1
+add @solana/rpc-spec 5.5.1
+add @solana/codecs-strings 5.5.1
+add @solana/codecs-core 5.5.1
+add @solana/transactions 5.5.1
+add @solana/transaction-messages 5.5.1
+add @solana/transaction-confirmation 5.5.1
+add @solana/sysvars 5.5.1
+add @solana/signers 5.5.1
+add @solana/rpc-types 5.5.1
+add @solana/rpc-subscriptions 5.5.1
+add @solana/rpc-spec-types 5.5.1
+add @solana/rpc-parsed-types 5.5.1
+add @solana/rpc-api 5.5.1
+add @solana/rpc 5.5.1
+add @solana/programs 5.5.1
+add @solana/plugin-core 5.5.1
+add @solana/offchain-messages 5.5.1
+add @solana/keys 5.5.1
+add @solana/instructions 5.5.1
+add @solana/instruction-plans 5.5.1
+add @solana/functional 5.5.1
+add @solana/errors 5.5.1
+add commander 14.0.2
+add chalk 5.6.2
+add @solana/codecs 5.5.1
+add @solana/addresses 5.5.1
+add @solana/accounts 5.5.1
+add lodash 4.18.1
+add @types/lodash 4.17.25
+add @metamask/scure-bip39 2.1.1
+add @scure/base 1.1.9
+add openapi-fetch 0.13.8
+add @metamask/sdk-analytics 0.0.5
+add md5 2.3.0
+add jose 6.2.12
+add axios-retry 4.5.0
+add axios 1.20.0
+add @solana-program/token 0.9.0
+add @solana/kit 5.5.1
+add @solana-program/system 0.10.0
+add @coinbase/cdp-sdk 1.57.1
+add zod 3.25.76
+add abitype 1.0.6
+add @gemini-wallet/core 0.3.2
+add @base-org/account 2.4.0
+add @noble/curves 1.9.7
+add @noble/hashes 1.8.0
+add ox 0.6.9
+add @noble/hashes 1.8.0
+add clsx 1.2.1
+add @noble/hashes 1.4.0
+add fsevents 2.3.3
+add @rollup/rollup-win32-ia32-msvc 4.37.0
+add @rollup/rollup-win32-arm64-msvc 4.37.0
+add @rollup/rollup-linux-x64-musl 4.37.0
+add @rollup/rollup-linux-x64-gnu 4.37.0
+add @rollup/rollup-linux-s390x-gnu 4.37.0
+add @rollup/rollup-linux-riscv64-musl 4.37.0
+add @rollup/rollup-linux-riscv64-gnu 4.37.0
+add @rollup/rollup-linux-powerpc64le-gnu 4.37.0
+add @rollup/rollup-linux-loongarch64-gnu 4.37.0
+add @rollup/rollup-linux-arm64-musl 4.37.0
+add @rollup/rollup-linux-arm64-gnu 4.37.0
+add @rollup/rollup-linux-arm-musleabihf 4.37.0
+add @rollup/rollup-linux-arm-gnueabihf 4.37.0
+add @rollup/rollup-freebsd-x64 4.37.0
+add @rollup/rollup-freebsd-arm64 4.37.0
+add @rollup/rollup-darwin-x64 4.37.0
+add @rollup/rollup-darwin-arm64 4.37.0
+add @rollup/rollup-android-arm64 4.37.0
+add @rollup/rollup-android-arm-eabi 4.37.0
+add @esbuild/win32-ia32 0.25.2
+add @esbuild/win32-arm64 0.25.2
+add @esbuild/sunos-x64 0.25.2
+add @esbuild/openbsd-x64 0.25.2
+add @esbuild/openbsd-arm64 0.25.2
+add @esbuild/netbsd-x64 0.25.2
+add @esbuild/netbsd-arm64 0.25.2
+add @esbuild/linux-x64 0.25.2
+add @esbuild/linux-s390x 0.25.2
+add @esbuild/linux-riscv64 0.25.2
+add @esbuild/linux-ppc64 0.25.2
+add @esbuild/linux-mips64el 0.25.2
+add @esbuild/linux-loong64 0.25.2
+add @esbuild/linux-ia32 0.25.2
+add @esbuild/linux-arm64 0.25.2
+add @esbuild/linux-arm 0.25.2
+add @esbuild/freebsd-x64 0.25.2
+add @esbuild/freebsd-arm64 0.25.2
+add @esbuild/darwin-x64 0.25.2
+add @esbuild/darwin-arm64 0.25.2
+add @esbuild/android-x64 0.25.2
+add @esbuild/android-arm64 0.25.2
+add @esbuild/android-arm 0.25.2
+add @esbuild/aix-ppc64 0.25.2
+change @wagmi/connectors 5.8.2 => 6.2.0
+add @noble/hashes 1.8.0
+add @noble/curves 1.9.1
+add zod 4.6.5
+add ox 0.9.17
+add porto 0.2.35
+change @wagmi/core 2.17.2 => 2.22.1
+add zustand 5.0.0
+change @walletconnect/utils 2.20.0 => 2.21.1
+add isows 1.0.6
+add abitype 1.0.8
+add @scure/bip39 1.5.4
+add @scure/bip32 1.6.2
+add @noble/ciphers 1.2.1
+remove ws 8.18.0
+remove unstorage 1.16.0
+remove lru-cache 10.4.3
+remove readdirp 4.1.2
+remove chokidar 4.0.3
+change @walletconnect/universal-provider 2.20.0 => 2.21.1
+remove unstorage 1.16.0
+remove readdirp 4.1.2
+remove lru-cache 10.4.3
+remove chokidar 4.0.3
+change @walletconnect/types 2.20.0 => 2.21.1
+remove unstorage 1.16.0
+remove readdirp 4.1.2
+remove chokidar 4.0.3
+remove lru-cache 10.4.3
+change @walletconnect/sign-client 2.20.0 => 2.21.1
+change ws 7.5.10 => 7.5.13
+change @walletconnect/ethereum-provider 2.20.0 => 2.21.1
+remove readdirp 4.1.2
+remove lru-cache 10.4.3
+remove chokidar 4.0.3
+remove unstorage 1.16.0
+change @walletconnect/core 2.20.0 => 2.21.1
+remove lru-cache 10.4.3
+remove unstorage 1.16.0
+remove readdirp 4.1.2
+remove chokidar 4.0.3
+change @types/debug 4.1.12 => 4.1.13
+change @scure/bip39 1.5.4 => 1.6.0
+change @noble/hashes 1.7.2 => 1.8.0
+change @reown/appkit-utils 1.7.3 => 1.7.8
+add isows 1.0.6
+add abitype 1.0.8
+add @scure/bip39 1.5.4
+add @scure/bip32 1.6.2
+add @noble/ciphers 1.2.1
+change @walletconnect/sign-client 2.19.2 => 2.21.0
+change @walletconnect/utils 2.19.2 => 2.21.0
+change @walletconnect/universal-provider 2.19.2 => 2.21.0
+change @walletconnect/core 2.19.2 => 2.21.0
+change @walletconnect/types 2.19.2 => 2.21.0
+remove readdirp 4.1.2
+remove ws 8.18.0
+remove unstorage 1.16.0
+remove chokidar 4.0.3
+remove lru-cache 10.4.3
+change @remix-run/router 1.15.1 => 1.23.4
+change @scure/bip32 1.6.2 => 1.7.0
+change @noble/hashes 1.7.2 => 1.8.0
+change @noble/curves 1.8.2 => 1.9.7
+change @scure/base 1.2.5 => 1.2.6
+change @reown/appkit-wallet 1.7.3 => 1.7.8
+change @reown/appkit-ui 1.7.3 => 1.7.8
+change @reown/appkit-controllers 1.7.3 => 1.7.8
+add isows 1.0.6
+add abitype 1.0.8
+add @scure/bip39 1.5.4
+add @scure/bip32 1.6.2
+add @noble/ciphers 1.2.1
+change @walletconnect/utils 2.19.2 => 2.21.0
+change @walletconnect/types 2.19.2 => 2.21.0
+change @walletconnect/universal-provider 2.19.2 => 2.21.0
+change @walletconnect/core 2.19.2 => 2.21.0
+change @walletconnect/sign-client 2.19.2 => 2.21.0
+remove ws 8.18.0
+remove unstorage 1.16.0
+remove readdirp 4.1.2
+remove lru-cache 10.4.3
+remove chokidar 4.0.3
+change @reown/appkit-scaffold-ui 1.7.3 => 1.7.8
+change @reown/appkit-common 1.7.3 => 1.7.8
+change @reown/appkit-polyfills 1.7.3 => 1.7.8
+change @reown/appkit 1.7.3 => 1.7.8
+add isows 1.0.6
+add abitype 1.0.8
+add @scure/bip39 1.5.4
+add @scure/bip32 1.6.2
+add @noble/ciphers 1.2.1
+change @walletconnect/utils 2.19.2 => 2.21.0
+change @walletconnect/types 2.19.2 => 2.21.0
+change @walletconnect/universal-provider 2.19.2 => 2.21.0
+change @walletconnect/sign-client 2.19.2 => 2.21.0
+change @walletconnect/core 2.19.2 => 2.21.0
+remove ws 8.18.0
+remove unstorage 1.16.0
+remove readdirp 4.1.2
+remove chokidar 4.0.3
+remove lru-cache 10.4.3
+change @metamask/sdk-communication-layer 0.32.0 => 0.33.1
+add ms 2.1.2
+add debug 4.3.4
+change @noble/ciphers 1.2.1 => 1.3.0
+change @lit/reactive-element 2.1.0 => 2.1.2
+change @metamask/utils 8.5.0 => 11.12.1
+change semver 7.7.2 => 7.8.5
+change @metamask/superstruct 3.2.1 => 3.4.1
+change @metamask/sdk-install-modal-web 0.32.0 => 0.32.1
+change @metamask/rpc-errors 6.4.0 => 7.0.2
+remove @metamask/utils 9.3.0
+remove uuid 9.0.1
+remove semver 7.7.2
+change @metamask/sdk 0.32.0 => 0.33.1
+add ms 2.1.2
+add debug 4.3.4
+change @metamask/safe-event-emitter 3.1.2 => 3.1.3
+add semver 7.8.5
+add @metamask/utils 8.3.0
+add @metamask/rpc-errors 6.3.0
+add semver 7.8.5
+add @metamask/utils 8.3.0
+add @metamask/rpc-errors 6.3.0
+add @metamask/utils 8.3.0
+change @metamask/utils 8.5.0 => 8.3.0
+remove uuid 9.0.1
+change semver 7.7.2 => 7.8.5
+add semver 7.8.5
+add @metamask/utils 8.3.0
+add @metamask/rpc-errors 6.3.0
+change @lit-labs/ssr-dom-shim 1.3.0 => 1.6.0
+remove ws 8.18.0
+change @ecies/ciphers 0.2.3 => 0.2.6
+change @coinbase/wallet-sdk 4.3.0 => 4.3.6
+add @noble/curves 1.9.7
+add @noble/hashes 1.8.0
+add ox 0.6.9
+add @noble/hashes 1.8.0
+change @noble/hashes 1.8.0 => 1.4.0
+change @babel/runtime 7.27.1 => 7.29.7
+change zustand 5.0.0 => 5.0.3
+change @adraffy/ens-normalize 1.10.1 => 1.11.1
+change yaml 2.7.0 => 2.9.1
+change ws 8.17.1 => 8.18.0
+change which-typed-array 1.1.19 => 1.1.24
+change wagmi 2.15.3 => 2.19.5
+change viem 2.29.2 => 2.57.2
+change @noble/hashes 1.7.2 => 1.8.0
+change @noble/curves 1.8.2 => 1.9.1
+change ws 8.18.1 => 8.21.0
+change ufo 1.6.1 => 1.6.4
+change minimatch 9.0.5 => 9.0.9
+change glob 10.4.5 => 10.5.0
+change brace-expansion 2.0.1 => 2.1.7
+change socket.io-parser 4.2.4 => 4.2.7
+remove debug 4.3.7
+change socket.io-client 4.8.1 => 4.8.4
+remove debug 4.3.7
+change sha.js 2.4.11 => 2.4.12
+change react-router-dom 6.22.1 => 6.30.6
+change react-router 6.22.1 => 6.30.6
+change pump 3.0.2 => 3.0.4
+change postcss-selector-parser 6.1.2 => 6.1.4
+change preact 10.26.6 => 10.24.2
+change postcss 8.5.3 => 8.5.28
+change picomatch 2.3.1 => 2.3.2
+change ox 0.6.9 => 0.14.45
+change ofetch 1.4.1 => 1.5.1
+add isarray 1.0.0
+change node-fetch-native 1.6.6 => 1.6.7
+change node-mock-http 1.0.0 => 1.0.5
+change nanoid 3.3.11 => 3.3.19
+change lit-element 4.2.0 => 4.2.2
+change lit-html 3.3.0 => 3.3.3
+change lit 3.1.0 => 3.3.0
+change isows 1.0.6 => 1.0.7
+change isarray 1.0.0 => 2.0.5
+change is-generator-function 1.1.0 => 1.1.2
+change idb-keyval 6.2.2 => 6.2.1
+change hasown 2.0.2 => 2.0.4
+change h3 1.15.3 => 1.15.11
+change ethers 6.13.5 => 6.17.0
+add ws 8.21.0
+change semver 7.7.2 => 7.8.5
+change es-object-atoms 1.1.1 => 1.1.2
+change eciesjs 0.4.14 => 0.4.18
+change @noble/curves 1.9.1 => 1.9.7
+change engine.io-client 6.6.3 => 6.6.7
+add ws 8.21.3
+remove debug 4.3.7
+change end-of-stream 1.4.4 => 1.4.5
+change defu 6.1.4 => 6.1.7
+change debug 4.4.0 => 4.4.3
+change cookie-es 1.2.2 => 1.2.3
+change call-bind 1.0.8 => 1.0.9
+change bowser 2.11.0 => 2.14.1
+change bn.js 5.2.2 => 5.2.5
+change abitype 1.0.8 => 1.2.3
+
+added 182 packages, removed 44 packages, changed 109 packages, and audited 964 packages in 36s
+
+176 packages are looking for funding
+  run `npm fund` for details
+
+# npm audit report
+
+@metamask/sdk  *
+Severity: moderate
+Depends on vulnerable versions of @metamask/sdk-communication-layer
+MetaMask SDK indirectly exposed via malicious debug@4.4.2 dependency - https://github.com/advisories/GHSA-qj3p-xc97-xw74
+Depends on vulnerable versions of uuid
+fix available via `npm audit fix`
+
+  @wagmi/connectors  <=0.0.0-wc-links-20240926225814 || 4.1.27 - 4.3.10 || 5.0.1 - 6.2.0
+  Depends on vulnerable versions of @metamask/sdk
+  Depends on vulnerable versions of @walletconnect/ethereum-provider
+  
+    wagmi  <=0.0.0-wc-links-20240926225814 || 2.5.21 - 2.7.1 || 2.8.1 - 2.8.8 || 2.9.1 - 2.17.0
+    Depends on vulnerable versions of @wagmi/connectors
+    
+
+@metamask/sdk-communication-layer  *
+Severity: moderate
+MetaMask SDK indirectly exposed via malicious debug@4.4.2 dependency - https://github.com/advisories/GHSA-qj3p-xc97-xw74
+Depends on vulnerable versions of uuid
+fix available via `npm audit fix`
+
+
+@remix-run/router  <=1.23.2
+Severity: high
+React Router vulnerable to XSS via Open Redirects - https://github.com/advisories/GHSA-2w69-qvjg-hvjx
+React Router's same-origin redirect with path starting // causes open redirect via protocol-relative URL reinterpretation - https://github.com/advisories/GHSA-2j2x-hqr9-3h42
+fix available via `npm audit fix`
+
+  react-router  6.0.0 - 7.17.0
+  Depends on vulnerable versions of @remix-run/router
+  
+    react-router-dom  6.0.0-alpha.0 - 6.30.2
+    Depends on vulnerable versions of @remix-run/router
+    Depends on vulnerable versions of react-router
+    
+
+bn.js  5.0.0 - 5.2.2
+Severity: moderate
+bn.js affected by an infinite loop - https://github.com/advisories/GHSA-378v-28hj-76wf
+fix available via `npm audit fix`
+
+
+brace-expansion  2.0.0 - 2.1.6
+Severity: high
+brace-expansion Regular Expression Denial of Service vulnerability - https://github.com/advisories/GHSA-v6h2-p8h4-qcjw
+brace-expansion: Zero-step sequence causes process hang and memory exhaustion - https://github.com/advisories/GHSA-f886-m6hf-6m8v
+brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups - https://github.com/advisories/GHSA-3jxr-9vmj-r5cp
+brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash - https://github.com/advisories/GHSA-mh99-v99m-4gvg
+brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation - https://github.com/advisories/GHSA-rgw5-rvv9-x895
+brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service - https://github.com/advisories/GHSA-q2hr-2g5m-vwhr
+brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion - https://github.com/advisories/GHSA-qhr7-859c-m2p7
+brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion - https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+fix available via `npm audit fix`
+
+
+decode-uri-component  <=0.4.2
+Severity: moderate
+decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input - https://github.com/advisories/GHSA-vcc3-ghjq-m6fr
+fix available via `npm audit fix`
+
+  query-string  5.0.0 - 9.4.1
+  Depends on vulnerable versions of decode-uri-component
+  
+  node_modules/query-string
+    @walletconnect/utils  1.2.3-1.3.0-rc.0.0 - 2.17.5-rc-1 || 2.18.0-canary-ell-1 - 2.21.9
+    Depends on vulnerable versions of query-string
+    Depends on vulnerable versions of viem
+    
+    
+    
+    
+    node_modules/@reown/appkit-controllers/node_modules/@walletconnect/utils
+    node_modules/@reown/appkit-utils/node_modules/@walletconnect/utils
+    node_modules/@reown/appkit/node_modules/@walletconnect/utils
+    node_modules/@walletconnect/utils
+      @walletconnect/core  2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+      Depends on vulnerable versions of @walletconnect/utils
+      
+      
+      
+      
+      @walletconnect/ethereum-provider  2.17.1-canary-0 - 2.17.1-canary-appkit.0 || 2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.22.4
+      Depends on vulnerable versions of @reown/appkit
+      Depends on vulnerable versions of @walletconnect/sign-client
+      Depends on vulnerable versions of @walletconnect/universal-provider
+      Depends on vulnerable versions of @walletconnect/utils
+      
+      @walletconnect/sign-client  2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+      Depends on vulnerable versions of @walletconnect/core
+      Depends on vulnerable versions of @walletconnect/utils
+      
+      
+      
+      
+      node_modules/@walletconnect/sign-client
+      @walletconnect/universal-provider  2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+      Depends on vulnerable versions of @walletconnect/sign-client
+      Depends on vulnerable versions of @walletconnect/utils
+      
+      
+      
+      
+        @reown/appkit  1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+        Depends on vulnerable versions of @reown/appkit-controllers
+        Depends on vulnerable versions of @reown/appkit-scaffold-ui
+        Depends on vulnerable versions of @reown/appkit-ui
+        Depends on vulnerable versions of @reown/appkit-utils
+        Depends on vulnerable versions of @walletconnect/universal-provider
+        
+        @reown/appkit-controllers  <=1.8.10-wallet-button-fix.0
+        Depends on vulnerable versions of @walletconnect/universal-provider
+        
+        node_modules/@reown/appkit-controllers
+          @reown/appkit-ui  1.7.1-449657bc8f95adcfd295a2e883c4bcd439045044.0 - 1.8.10-wallet-button-fix.0
+          Depends on vulnerable versions of @reown/appkit-controllers
+          
+          node_modules/@reown/appkit-ui
+            @reown/appkit-scaffold-ui  1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+            Depends on vulnerable versions of @reown/appkit-controllers
+            Depends on vulnerable versions of @reown/appkit-ui
+            Depends on vulnerable versions of @reown/appkit-utils
+            
+        @reown/appkit-utils  1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+        Depends on vulnerable versions of @reown/appkit-controllers
+        Depends on vulnerable versions of @walletconnect/universal-provider
+        
+        node_modules/@reown/appkit-utils
+
+defu  <=6.1.4
+Severity: high
+defu: Prototype pollution via `__proto__` key in defaults argument - https://github.com/advisories/GHSA-737v-mqg7-c878
+fix available via `npm audit fix`
+
+
+elliptic  *
+Elliptic Uses a Cryptographic Primitive with a Risky Implementation - https://github.com/advisories/GHSA-848j-6mx2-7j84
+fix available via `npm audit fix`
+node_modules/elliptic
+  @ethersproject/signing-key  <=5.8.0
+  Depends on vulnerable versions of elliptic
+  node_modules/@ethersproject/signing-key
+    @ethersproject/hdnode  *
+    Depends on vulnerable versions of @ethersproject/abstract-signer
+    Depends on vulnerable versions of @ethersproject/signing-key
+    Depends on vulnerable versions of @ethersproject/transactions
+    Depends on vulnerable versions of @ethersproject/wordlists
+    node_modules/@ethersproject/hdnode
+    @ethersproject/transactions  <=5.8.0
+    Depends on vulnerable versions of @ethersproject/signing-key
+    node_modules/@ethersproject/transactions
+      @ethersproject/abstract-provider  *
+      Depends on vulnerable versions of @ethersproject/transactions
+      node_modules/@ethersproject/abstract-provider
+        @ethersproject/abstract-signer  *
+        Depends on vulnerable versions of @ethersproject/abstract-provider
+        node_modules/@ethersproject/abstract-signer
+          @ethersproject/hash  5.0.6 - 5.8.0
+          Depends on vulnerable versions of @ethersproject/abstract-signer
+          node_modules/@ethersproject/hash
+            @ethersproject/abi  5.0.10 - 5.8.0
+            Depends on vulnerable versions of @ethersproject/hash
+            node_modules/@ethersproject/abi
+              @ethersproject/contracts  *
+              Depends on vulnerable versions of @ethersproject/abi
+              Depends on vulnerable versions of @ethersproject/abstract-provider
+              Depends on vulnerable versions of @ethersproject/abstract-signer
+              Depends on vulnerable versions of @ethersproject/transactions
+              node_modules/@ethersproject/contracts
+                ethers  5.0.0-beta.119 - 6.16.0
+                Depends on vulnerable versions of @ethersproject/abi
+                Depends on vulnerable versions of @ethersproject/abstract-provider
+                Depends on vulnerable versions of @ethersproject/abstract-signer
+                Depends on vulnerable versions of @ethersproject/contracts
+                Depends on vulnerable versions of @ethersproject/hash
+                Depends on vulnerable versions of @ethersproject/hdnode
+                Depends on vulnerable versions of @ethersproject/json-wallets
+                Depends on vulnerable versions of @ethersproject/providers
+                Depends on vulnerable versions of @ethersproject/signing-key
+                Depends on vulnerable versions of @ethersproject/transactions
+                Depends on vulnerable versions of @ethersproject/wallet
+                Depends on vulnerable versions of @ethersproject/wordlists
+                Depends on vulnerable versions of ws
+                
+                node_modules/circomlibjs/node_modules/ethers
+            @ethersproject/providers  *
+            Depends on vulnerable versions of @ethersproject/abstract-provider
+            Depends on vulnerable versions of @ethersproject/abstract-signer
+            Depends on vulnerable versions of @ethersproject/hash
+            Depends on vulnerable versions of @ethersproject/transactions
+            Depends on vulnerable versions of ws
+            node_modules/@ethersproject/providers
+            @ethersproject/wallet  <=5.8.0
+            Depends on vulnerable versions of @ethersproject/abstract-provider
+            Depends on vulnerable versions of @ethersproject/abstract-signer
+            Depends on vulnerable versions of @ethersproject/hash
+            Depends on vulnerable versions of @ethersproject/hdnode
+            Depends on vulnerable versions of @ethersproject/json-wallets
+            Depends on vulnerable versions of @ethersproject/signing-key
+            Depends on vulnerable versions of @ethersproject/transactions
+            Depends on vulnerable versions of @ethersproject/wordlists
+            node_modules/@ethersproject/wallet
+            @ethersproject/wordlists  5.0.8 - 5.8.0
+            Depends on vulnerable versions of @ethersproject/hash
+            node_modules/@ethersproject/wordlists
+      @ethersproject/json-wallets  *
+      Depends on vulnerable versions of @ethersproject/abstract-signer
+      Depends on vulnerable versions of @ethersproject/hdnode
+      Depends on vulnerable versions of @ethersproject/transactions
+      node_modules/@ethersproject/json-wallets
+
+glob  10.2.0 - 10.4.5
+Severity: high
+glob CLI: Command injection via -c/--cmd executes matches with shell:true - https://github.com/advisories/GHSA-5j98-mcp5-4vw2
+fix available via `npm audit fix`
+
+
+h3  <=1.15.8
+Severity: high
+h3 has a Path Traversal via Percent-Encoded Dot Segments in serveStatic Allows Arbitrary File Read - https://github.com/advisories/GHSA-wr4h-v87w-p3r7
+h3: SSE Event Injection via Unsanitized Carriage Return (`\r`) in EventStream Data and Comment Fields (Bypass of CVE Fix) - https://github.com/advisories/GHSA-4hxc-9384-m385
+h3: Double Decoding in `serveStatic` Bypasses `resolveDotSegments` Path Traversal Protection via `%252e%252e` - https://github.com/advisories/GHSA-72gr-qfp7-vwhw
+h3 has a Server-Sent Events Injection via Unsanitized Newlines in Event Stream Fields - https://github.com/advisories/GHSA-22cc-p3c6-wpvm
+h3 v1 has Request Smuggling (TE.TE) issue - https://github.com/advisories/GHSA-mp2g-9vg9-f4cg
+fix available via `npm audit fix`
+
+
+minimatch  9.0.0 - 9.0.6
+Severity: high
+minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern - https://github.com/advisories/GHSA-3ppc-4f35-3m26
+minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments - https://github.com/advisories/GHSA-7r86-cg39-jmmj
+minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions - https://github.com/advisories/GHSA-23c5-xmqv-rm74
+fix available via `npm audit fix`
+
+
+nanoid  <=3.3.17
+Severity: high
+nanoid: non-secure generators can loop indefinitely with negative size - https://github.com/advisories/GHSA-28wg-ghj8-5hjv
+nanoid: custom generators can loop indefinitely when size is zero - https://github.com/advisories/GHSA-2v37-7h3g-55p8
+nanoid: Integer Overflow or Wraparound - https://github.com/advisories/GHSA-xwg4-73v4-xw9w
+fix available via `npm audit fix`
+
+
+picomatch  <=2.3.1
+Severity: high
+Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching - https://github.com/advisories/GHSA-3v7f-55p6-f55p
+Picomatch has a ReDoS vulnerability via extglob quantifiers - https://github.com/advisories/GHSA-c2c7-rcm5-vvqj
+fix available via `npm audit fix`
+
+
+postcss  <=8.5.22
+Severity: high
+PostCSS has XSS via Unescaped </style> in its CSS Stringify Output - https://github.com/advisories/GHSA-qx2v-qp2m-jg93
+PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments - https://github.com/advisories/GHSA-6g55-p6wh-862q
+PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset - https://github.com/advisories/GHSA-fxqj-rqcc-2cmp
+PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure - https://github.com/advisories/GHSA-r28c-9q8g-f849
+fix available via `npm audit fix`
+
+
+postcss-selector-parser  6.1.0 - 6.1.2
+postcss-selector-parser allows denial of service through uncontrolled AST recursion - https://github.com/advisories/GHSA-w9m9-85wc-3x92
+fix available via `npm audit fix`
+
+
+preact  10.26.5 - 10.26.9
+Severity: high
+Preact has JSON VNode Injection issue - https://github.com/advisories/GHSA-36hm-qxxp-pg3m
+fix available via `npm audit fix`
+
+
+
+sha.js  <=2.4.11
+Severity: critical
+sha.js is missing type checks leading to hash rewind and passing on crafted data - https://github.com/advisories/GHSA-95m3-7q98-8xr5
+fix available via `npm audit fix`
+
+
+socket.io-parser  4.0.0 - 4.2.6
+Severity: high
+socket.io allows an unbounded number of binary attachments - https://github.com/advisories/GHSA-677m-j7p3-52f9
+Socket.IO: Zero-attachment Memory Exhaustion - https://github.com/advisories/GHSA-2m8v-j782-fhvr
+fix available via `npm audit fix`
+
+
+underscore  <=1.13.7
+Severity: high
+Underscore has unlimited recursion in _.flatten and _.isEqual, potential for DoS attack - https://github.com/advisories/GHSA-qpx9-hpmf-5gmw
+fix available via `npm audit fix`
+node_modules/underscore
+  jsonpath  *
+  Depends on vulnerable versions of underscore
+  node_modules/jsonpath
+    bfj  7.1.0 - 9.1.2
+    Depends on vulnerable versions of jsonpath
+    node_modules/bfj
+
+uuid  <11.1.1
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix`
+
+
+
+
+node_modules/uuid
+  @metamask/utils  >=8.4.0
+  Depends on vulnerable versions of uuid
+  
+  
+  
+    @metamask/rpc-errors  >=6.3.1
+    Depends on vulnerable versions of @metamask/utils
+    
+
+ws  7.0.0 - 7.5.10 || 8.0.0 - 8.20.1
+Severity: high
+ws: Uninitialized memory disclosure - https://github.com/advisories/GHSA-58qx-3vcg-4xpx
+ws: Memory exhaustion DoS from tiny fragments and data chunks - https://github.com/advisories/GHSA-96hv-2xvq-fx4p
+ws: Memory exhaustion DoS from tiny fragments and data chunks - https://github.com/advisories/GHSA-96hv-2xvq-fx4p
+fix available via `npm audit fix`
+
+
+
+
+
+
+
+
+node_modules/ws
+  engine.io-client  0.7.0 || 0.7.8 - 0.7.9 || 6.0.0 - 6.6.4
+  Depends on vulnerable versions of ws
+  
+  viem  <=0.0.0-wagmiv2-20230628182101 || 0.2.2 - 2.49.3
+  Depends on vulnerable versions of ws
+  
+  
+  
+  
+  
+
+yaml  2.0.0 - 2.8.2
+Severity: moderate
+yaml is vulnerable to Stack Overflow via deeply nested YAML collections - https://github.com/advisories/GHSA-48c2-rrv3-qjmp
+fix available via `npm audit fix`
+
+
+56 vulnerabilities (13 low, 25 moderate, 17 high, 1 critical)
+
+To address all issues, run:
+  npm audit fix

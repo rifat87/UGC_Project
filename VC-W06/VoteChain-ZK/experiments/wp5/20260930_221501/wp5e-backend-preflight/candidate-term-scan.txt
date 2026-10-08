@@ -1,0 +1,14 @@
+----- votechain-central-server/routes/wp5Routes.js -----
+----- votechain-central-server/controllers/wp5Controller.js -----
+----- votechain-central-server/services/zk/wp5PrivacyService.js -----
+274:export async function hashCandidateManifest(candidateIds) {
+275:  const ids = candidateIds.map(
+276:    (candidateId) => BigInt(candidateId),
+331:      candidateId: { $exists: true },
+333:    .sort({ candidateId: 1 })
+335:      candidateId: 1,
+343:    candidateId: Number(candidate.candidateId),
+573:  const candidateIds =
+574:    candidates.map((candidate) => candidate.candidateId)
+577:    await hashCandidateManifest(candidateIds)
+581:      BigInt(candidateCount) !== BigInt(candidateIds.length) ||

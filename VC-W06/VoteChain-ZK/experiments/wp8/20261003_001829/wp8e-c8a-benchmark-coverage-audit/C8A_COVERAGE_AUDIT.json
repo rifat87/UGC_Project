@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "finalCampaignRun": "20261002_224441",
+  "finalRawRows": 2400,
+  "warmupRows": 400,
+  "measuredRows": 2000,
+  "coverage": [
+    {
+      "dimension": "Accepted-ballot accumulation / state growth",
+      "planned_values": "N={25,50,75,100,150}",
+      "final_status": "COMPLETE",
+      "evidence": "C6C-R3 final campaign + C7 statistics + C7B interpretation + C7C publication figures",
+      "final_observations": 2000,
+      "independent_measured_elections": 25,
+      "publication_use": "YES",
+      "notes": "Five independent measured fresh-chain elections per scale; warm-ups excluded; no outlier deletion."
+    },
+    {
+      "dimension": "Fresh-chain vote microbenchmark",
+      "planned_values": "5 warm-ups + 20 measured fresh chains",
+      "final_status": "PENDING_FINAL",
+      "evidence": "Earlier A1A/A1B and C5B work is validation/pilot evidence, not the preregistered final microbenchmark.",
+      "final_observations": 0,
+      "independent_measured_elections": 0,
+      "publication_use": "NOT_YET",
+      "notes": "Must not promote pilot timings/gas into final microbenchmark statistics."
+    },
+    {
+      "dimension": "Candidate-count matrix",
+      "planned_values": "candidateCount={2,4,8,16}",
+      "final_status": "PENDING_FINAL",
+      "evidence": "Current completed final campaign fixes candidateCount=4.",
+      "final_observations": 0,
+      "independent_measured_elections": 0,
+      "publication_use": "NOT_YET",
+      "notes": "Accepted-ballot scaling must not be substituted for candidate-count scaling."
+    },
+    {
+      "dimension": "Eligible-set-size matrix",
+      "planned_values": "eligibleSet={10,100,1000,10000}",
+      "final_status": "PENDING_FINAL",
+      "evidence": "Current completed final campaign uses one frozen eligibility corpus/root profile.",
+      "final_observations": 0,
+      "independent_measured_elections": 0,
+      "publication_use": "NOT_YET",
+      "notes": "Accepted-ballot scaling must not be substituted for eligible-set-size scaling."
+    },
+    {
+      "dimension": "Historical pre-ZKP comparison",
+      "planned_values": "published LocalVoting historical baseline",
+      "final_status": "REFERENCE_ONLY",
+      "evidence": "Published 2026 paper + canonical pre-ZKP manual.",
+      "final_observations": 0,
+      "independent_measured_elections": 0,
+      "publication_use": "QUALIFIED_ONLY",
+      "notes": "Useful historical anchor, but not a controlled A/B estimate of DIRECT ZKP overhead."
+    }
+  ],
+  "environmentAudit": {
+    "fileExists": true,
+    "nonEmpty": true,
+    "containsPotentialOsField": true,
+    "containsPotentialCpuField": true,
+    "containsPotentialRamField": true,
+    "containsPotentialFoundryField": true,
+    "containsPotentialAnvilField": true,
+    "containsPotentialCastField": true,
+    "containsPotentialPythonField": true,
+    "containsPotentialNodeField": true,
+    "reportingMetadataCompleteByKeywordAudit": true
+  },
+  "coverageConclusions": {
+    "acceptedBallotScalingComplete": true,
+    "freshChainMicrobenchmarkComplete": false,
+    "candidateCountMatrixComplete": false,
+    "eligibleSetMatrixComplete": false,
+    "entireWp8BenchmarkSuiteComplete": false
+  }
+}

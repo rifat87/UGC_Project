@@ -1,0 +1,33 @@
+{
+  "activeContract": "VoteChainDirect",
+  "activeVerifier": "VoteChainVoteDirectVerifier",
+  "referenceContract": "VoteChainPoseidon",
+  "referenceVerifier": "VoteChainVoteDigestVerifier",
+  "tallyHarness": "BabyJubTallyHarness",
+  "active": {
+    "creationBytecodeBytes": 6259,
+    "deployedBytecodeBytes": 5971,
+    "abiFunctions": 24
+  },
+  "reference": {
+    "creationBytecodeBytes": 7460,
+    "deployedBytecodeBytes": 7047,
+    "abiFunctions": 26
+  },
+  "tallyHarnessMeta": {
+    "creationBytecodeBytes": 1441,
+    "deployedBytecodeBytes": 1383,
+    "abiFunctions": 1
+  },
+  "directVerifier": {
+    "creationBytecodeBytes": 13111,
+    "deployedBytecodeBytes": 13085,
+    "abiFunctions": 1
+  },
+  "digestVerifier": {
+    "creationBytecodeBytes": 2588,
+    "deployedBytecodeBytes": 2562,
+    "abiFunctions": 1
+  },
+  "castVoteSignature": "castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])"
+}

@@ -1,0 +1,4 @@
+metric_id,metric,n,mean_ms,median_ms,min_ms,max_ms,sample_stddev_ms,p95_ms
+M03,witness_generation,20,264.6,259,238,335,19.60236290805135,288
+M04,groth16_proving,20,1714.6,1712,1659,1780,27.056276633401684,1762
+M05,groth16_verification,20,1263.4,1250,1224,1492,58.45682167206835,1302

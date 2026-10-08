@@ -1,0 +1,166 @@
+{
+  "activeArchitecture": {
+    "activeMerkleCapacity": 131072,
+    "activeMerkleDepth": 17,
+    "ciphertextBinding": "DIRECT",
+    "circuitLanguage": "Circom2",
+    "curve": "BabyJubJub",
+    "maxCandidates": 16,
+    "poseidonBinding": "REFERENCE_ONLY_WHERE_SPECIFIED",
+    "proofSystem": "Groth16",
+    "thresholdDefault": {
+      "n": 5,
+      "t": 3
+    }
+  },
+  "biometricPolicy": {
+    "WP8CryptoCampaignUsesRealBiometric": false,
+    "doNotReuseOld10To15SecondTimingAsZKE2E": true,
+    "publishedBiometricAccuracyMayBeCitedWhereUnchanged": true,
+    "realBiometricManualShowcaseSeparate": true
+  },
+  "blockchainPolicy": {
+    "fiatCostPrimaryMetric": false,
+    "localChain": "Anvil",
+    "primaryCostMetric": "gas",
+    "recordCalldataBytes": true,
+    "recordTransactionLatencySeparately": true
+  },
+  "candidateCounts": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "candidateSlotPolicy": {
+    "K=2": [
+      {
+        "role": "first",
+        "slot": 0
+      },
+      {
+        "role": "last",
+        "slot": 1
+      }
+    ],
+    "K>=4": [
+      {
+        "expression": "0",
+        "role": "first"
+      },
+      {
+        "expression": "floor(K/2)",
+        "role": "middle"
+      },
+      {
+        "expression": "K-1",
+        "role": "last"
+      }
+    ]
+  },
+  "classification": "CONTROLLED_RESEARCH_MEASUREMENT_PROTOCOL",
+  "freezeRules": {
+    "benchmarkGeneratedProfilesMustLiveUnderExperiments": true,
+    "implementationChangeRequiresInvalidateAndRefreeze": true,
+    "noCircuitSourceChangeAfterFreeze": true,
+    "noContractSourceChangeAfterFreeze": true,
+    "noCryptoSourceChangeAfterFreeze": true,
+    "noDependencyChangeAfterFreeze": true
+  },
+  "freezeRunId": "20261001_154147",
+  "merkleProfiles": [
+    {
+      "capacity": 16,
+      "depth": 4
+    },
+    {
+      "capacity": 128,
+      "depth": 7
+    },
+    {
+      "capacity": 1024,
+      "depth": 10
+    },
+    {
+      "capacity": 16384,
+      "depth": 14
+    },
+    {
+      "capacity": 131072,
+      "depth": 17
+    }
+  ],
+  "negativeCasePolicy": {
+    "functionalGateOnly": true,
+    "notIncludedInPositiveTimingMeans": true,
+    "recordPassFailAndFailureClass": true
+  },
+  "protocolVersion": "WP8-1.0",
+  "randomization": {
+    "deriveUniqueEncryptionRandomnessPerSlotPerTrial": true,
+    "deriveUniqueSyntheticVoterPerTrial": true,
+    "masterSyntheticSeed": "4e92a1941313acb358a8ca51633f27eeccb1affd008639e108ece5c43dd42833",
+    "recordDerivedTrialIdentifier": true,
+    "reuseMeasuredTrialRandomness": false,
+    "seedClassification": "PUBLIC_SYNTHETIC_REPRODUCIBILITY_SEED",
+    "varyMerkleLeafPositionPerTrial": true
+  },
+  "repetitions": {
+    "measuredTrialsPerCell": 20,
+    "preserveEveryMeasuredObservation": true,
+    "silentOutlierDeletion": false,
+    "warmupTrialsPerCell": 5
+  },
+  "statistics": [
+    "n",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sample_standard_deviation",
+    "nearest_rank_p95"
+  ],
+  "thresholdPolicy": {
+    "individualBallotsRemainEncrypted": true,
+    "mandatory": [
+      {
+        "n": 5,
+        "t": 3
+      }
+    ],
+    "measure": [
+      "DKG",
+      "partial_decryption",
+      "DLEQ_generation",
+      "DLEQ_verification",
+      "combine",
+      "bounded_decode"
+    ],
+    "supplementalIfRunnerSupportsWithoutImplementationChange": [
+      {
+        "n": 3,
+        "t": 2
+      },
+      {
+        "n": 5,
+        "t": 4
+      }
+    ]
+  },
+  "timingPolicy": {
+    "clock": "HIGH_RESOLUTION_MONOTONIC",
+    "doNotMixBiometricTimeIntoSyntheticCryptoRuns": true,
+    "measureStagesSeparately": true,
+    "units": "milliseconds"
+  },
+  "variants": {
+    "DIRECT": {
+      "matrix": "ALL_CANDIDATE_COUNTS_X_ALL_DEPTHS",
+      "status": "PRIMARY"
+    },
+    "POSEIDON": {
+      "matrix": "ALL_CANDIDATE_COUNTS_AT_DEPTH_17",
+      "status": "REFERENCE_ONLY"
+    }
+  }
+}

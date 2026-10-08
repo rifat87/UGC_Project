@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_PRE_ARCHIVE_SUBMISSION_SCOPE_FREEZE",
+  "payloadPlanRows": 776,
+  "payloadTotalBytes": 111348512,
+  "payloadTotalMiB": 106.19,
+  "requiredPackageItems": 14,
+  "sanitizedEnvironmentReplacements": 2,
+  "sanitizedScriptReplacements": 1,
+  "finalWp8CompactArchives": 1,
+  "rawHistoricalExperimentCorpusIncluded": false,
+  "frozenP2SupportFiles": 2,
+  "p2ExpectedManifestRows": 778,
+  "p2ExpectedArchiveFileEntries": 779,
+  "submissionArchiveCreated": false,
+  "checks": {
+    "payloadRows776": true,
+    "requiredItems14": true,
+    "sourceRehashPass": true,
+    "securityPrivacyPass": true,
+    "sanitizedEnvironmentRows2": true,
+    "sanitizedScriptRows1": true,
+    "wp8ArchiveRows1": true,
+    "p2ContractPass": true,
+    "submissionArchiveNotYetCreated": true
+  },
+  "nextGate": "SUB_P2_BUILD_AND_VERIFY_FINAL_SUBMISSION_ARCHIVE"
+}

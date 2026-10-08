@@ -1,0 +1,259 @@
+0248:         Finalized
+0249:     }
+0250: 
+0251:     struct ElectionConfig {
+0252:         uint256 eligibleRoot;
+0253: 
+0254:         uint256 electionId;
+0255: 
+0256:         uint256 candidateManifestHash;
+0257: 
+0258:         uint256 candidateCount;
+0259: 
+0260:         uint256 contractDomain;
+0261: 
+0262:         uint256 Yx;
+0263:         uint256 Yy;
+0264: 
+0265:         uint256 electionContextHash;
+0266:     }
+0267: 
+0268:     address public immutable admin;
+0269: 
+0270:     Phase public phase;
+0271: 
+0272:     bool public configured;
+0273: 
+0274:     uint256 public eligibleRoot;
+0275: 
+0276:     uint256 public electionId;
+0277: 
+0278:     uint256 public candidateManifestHash;
+0279: 
+0280:     uint256 public candidateCount;
+0281: 
+0282:     uint256 public contractDomain;
+0283: 
+0284:     uint256 public Yx;
+0285:     uint256 public Yy;
+0286: 
+0287:     uint256 public electionContextHash;
+0288: 
+0289:     uint256 public acceptedBallotCount;
+0290: 
+0291:     /*
+0292:      * WP6 threshold-finalization evidence.
+0293:      *
+0294:      * trusteeTranscriptHash is pinned during Registration.
+
+------------------------------------------------------------------------
+0309: 
+0310:     uint256[16] internal tallyRx;
+0311:     uint256[16] internal tallyRy;
+0312:     uint256[16] internal tallySx;
+0313:     uint256[16] internal tallySy;
+0314: 
+0315:     event ElectionConfigured(
+0316:         uint256 indexed electionId,
+0317:         uint256 eligibleRoot,
+0318:         uint256 candidateManifestHash,
+0319:         uint256 candidateCount
+0320:     );
+0321: 
+0322:     event ElectionActivated(
+0323:         uint256 indexed electionId
+0324:     );
+0325: 
+0326:     event ElectionEnded(
+0327:         uint256 indexed electionId
+0328:     );
+0329: 
+0330:     event TrusteeTranscriptPinned(
+0331:         bytes32 indexed transcriptHash
+0332:     );
+0333: 
+
+------------------------------------------------------------------------
+0390:         inPhase(
+0391:             Phase.Registration
+0392:         )
+0393:     {
+0394:         require(
+0395:             !configured,
+0396:             "ALREADY_CONFIGURED"
+0397:         );
+0398: 
+0399:         require(
+0400:             cfg.candidateCount >= 1 &&
+0401:             cfg.candidateCount <= MAX,
+0402:             "BAD_CANDIDATE_COUNT"
+0403:         );
+0404: 
+0405:         require(
+0406:             cfg.eligibleRoot < P &&
+0407:             cfg.candidateManifestHash < P &&
+0408:             cfg.contractDomain < P &&
+0409:             cfg.Yx < P &&
+0410:             cfg.Yy < P &&
+0411:             cfg.electionContextHash < P,
+0412:             "NON_CANONICAL_CONFIG"
+0413:         );
+0414: 
+0415:         require(
+
+------------------------------------------------------------------------
+0419: 
+0420:         eligibleRoot =
+0421:             cfg.eligibleRoot;
+0422: 
+0423:         electionId =
+0424:             cfg.electionId;
+0425: 
+0426:         candidateManifestHash =
+0427:             cfg.candidateManifestHash;
+0428: 
+0429:         candidateCount =
+0430:             cfg.candidateCount;
+0431: 
+0432:         contractDomain =
+0433:             cfg.contractDomain;
+0434: 
+0435:         Yx =
+0436:             cfg.Yx;
+0437: 
+0438:         Yy =
+0439:             cfg.Yy;
+0440: 
+0441:         electionContextHash =
+0442:             cfg.electionContextHash;
+0443: 
+0444:         configured =
+0445:             true;
+0446: 
+0447:         emit ElectionConfigured(
+0448:             electionId,
+0449:             eligibleRoot,
+0450:             candidateManifestHash,
+0451:             candidateCount
+0452:         );
+0453:     }
+0454: 
+0455:     /*
+0456:      * Pin the public DKG ceremony transcript before Active.
+0457:      *
+0458:      * The transcript verifier independently checks that the
+0459:      * committed trustee public shares derive the configured Y.
+0460:      * Existing WP4/WP5 deployment flows remain ABI-compatible:
+0461:      * this is an additional registration-stage call.
+0462:      */
+0463:     function setTrusteeTranscriptHash(
+0464:         bytes32 transcriptHash
+0465:     )
+
+------------------------------------------------------------------------
+0569: 
+0570:         uint256 activeSum;
+0571: 
+0572:         for (
+0573:             uint256 i = 0;
+0574:             i < MAX;
+0575:             i++
+0576:         ) {
+0577:             if (
+0578:                 i <
+0579:                 candidateCount
+0580:             ) {
+0581:                 require(
+0582:                     totals[i] <=
+0583:                         acceptedBallotCount,
+0584:                     "RESULT_EXCEEDS_BALLOTS"
+0585:                 );
+0586: 
+0587:                 activeSum +=
+0588:                     totals[i];
+0589:             } else {
+0590:                 require(
+0591:                     totals[i] == 0,
+0592:                     "NONZERO_PADDED_RESULT"
+0593:                 );
+
+------------------------------------------------------------------------
+0623:         returns (uint256)
+0624:     {
+0625:         require(
+0626:             phase ==
+0627:                 Phase.Finalized,
+0628:             "NOT_FINALIZED"
+0629:         );
+0630: 
+0631:         require(
+0632:             slot <
+0633:                 candidateCount,
+0634:             "BAD_FINAL_RESULT_SLOT"
+0635:         );
+0636: 
+0637:         return
+0638:             finalResults[slot];
+0639:     }
+0640: 
+0641:     function getTally(
+0642:         uint256 slot
+0643:     )
+0644:         external
+0645:         view
+0646:         returns (
+0647:             uint256 rx,
+
+------------------------------------------------------------------------
+0838:         input[0] =
+0839:             eligibleRoot;
+0840: 
+0841:         input[1] =
+0842:             electionId;
+0843: 
+0844:         input[2] =
+0845:             candidateManifestHash;
+0846: 
+0847:         input[3] =
+0848:             candidateCount;
+0849: 
+0850:         input[4] =
+0851:             contractDomain;
+0852: 
+0853:         input[5] =
+0854:             Yx;
+0855: 
+0856:         input[6] =
+0857:             Yy;
+0858: 
+0859:         input[7] =
+0860:             electionContextHash;
+0861: 
+0862:         input[8] =
+
+------------------------------------------------------------------------
+1154:         input[0] =
+1155:             eligibleRoot;
+1156: 
+1157:         input[1] =
+1158:             electionId;
+1159: 
+1160:         input[2] =
+1161:             candidateManifestHash;
+1162: 
+1163:         input[3] =
+1164:             candidateCount;
+1165: 
+1166:         input[4] =
+1167:             contractDomain;
+1168: 
+1169:         input[5] =
+1170:             Yx;
+1171: 
+1172:         input[6] =
+1173:             Yy;
+1174: 
+1175:         input[7] =
+1176:             electionContextHash;
+1177: 
+1178:         input[8] =

@@ -1,0 +1,125 @@
+{
+  "classification": "WP8C_C_PILOT_ONLY_NOT_FINAL_BENCHMARK",
+  "generationPolicy": "FROZEN_PUBLIC_SEED_DETERMINISTIC",
+  "measuredCount": 3,
+  "statistics": {
+    "ballotEncryptionMs": {
+      "max": 453.7968,
+      "mean": 453.26576666666665,
+      "median": 453.0688,
+      "min": 452.9317,
+      "n": 3,
+      "nearestRankP95": 453.7968,
+      "sampleStandardDeviation": 0.46496924987933197
+    },
+    "ciphertextCompactJsonBytes": {
+      "max": 5115.0,
+      "mean": 5113.333333333333,
+      "median": 5114.0,
+      "min": 5111.0,
+      "n": 3,
+      "nearestRankP95": 5115.0,
+      "sampleStandardDeviation": 2.0816659994661326
+    },
+    "ciphertextCoordinatePayloadBytes": {
+      "max": 2048.0,
+      "mean": 2048.0,
+      "median": 2048.0,
+      "min": 2048.0,
+      "n": 3,
+      "nearestRankP95": 2048.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "encryptionPerSlotMs": {
+      "max": 28.3623,
+      "mean": 28.329110416666666,
+      "median": 28.3168,
+      "min": 28.30823125,
+      "n": 3,
+      "nearestRankP95": 28.3623,
+      "sampleStandardDeviation": 0.029060578117458248
+    },
+    "inputPreparationMs": {
+      "max": 2.8221,
+      "mean": 2.7140999999999997,
+      "median": 2.779,
+      "min": 2.5412,
+      "n": 3,
+      "nearestRankP95": 2.8221,
+      "sampleStandardDeviation": 0.15127858407586975
+    },
+    "localCryptoTotalMs": {
+      "max": 3171.1739,
+      "mean": 3128.7268,
+      "median": 3134.9692999999997,
+      "min": 3080.0372,
+      "n": 3,
+      "nearestRankP95": 3171.1739,
+      "sampleStandardDeviation": 45.88791917716447
+    },
+    "proofCompactJsonBytes": {
+      "max": 724.0,
+      "mean": 722.6666666666666,
+      "median": 723.0,
+      "min": 721.0,
+      "n": 3,
+      "nearestRankP95": 724.0,
+      "sampleStandardDeviation": 1.5275252316519468
+    },
+    "proofCoordinatePayloadBytes": {
+      "max": 256.0,
+      "mean": 256.0,
+      "median": 256.0,
+      "min": 256.0,
+      "n": 3,
+      "nearestRankP95": 256.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "proveMs": {
+      "max": 2167.6906,
+      "mean": 2126.569433333333,
+      "median": 2140.7677,
+      "min": 2071.25,
+      "n": 3,
+      "nearestRankP95": 2167.6906,
+      "sampleStandardDeviation": 49.763344083203734
+    },
+    "rssSampleHighWaterBytes": {
+      "max": 966569984.0,
+      "mean": 939163648.0,
+      "median": 966533120.0,
+      "min": 884387840.0,
+      "n": 3,
+      "nearestRankP95": 966569984.0,
+      "sampleStandardDeviation": 47437244.821746044
+    },
+    "verifyMs": {
+      "max": 15.764,
+      "mean": 13.879533333333333,
+      "median": 13.4886,
+      "min": 12.386,
+      "n": 3,
+      "nearestRankP95": 15.764,
+      "sampleStandardDeviation": 1.7225976469661548
+    },
+    "witnessBytes": {
+      "max": 1957708.0,
+      "mean": 1957708.0,
+      "median": 1957708.0,
+      "min": 1957708.0,
+      "n": 3,
+      "nearestRankP95": 1957708.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "witnessMs": {
+      "max": 539.4508,
+      "mean": 532.2979666666666,
+      "median": 531.1004,
+      "min": 526.3427,
+      "n": 3,
+      "nearestRankP95": 539.4508,
+      "sampleStandardDeviation": 6.635600639228733
+    }
+  },
+  "warmupCount": 1
+}

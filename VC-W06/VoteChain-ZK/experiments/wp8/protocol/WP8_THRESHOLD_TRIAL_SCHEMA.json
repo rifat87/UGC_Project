@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "WP8-v1",
+  "classification": "INDIVIDUAL_THRESHOLD_TRIAL",
+  "requiredFields": [
+    "campaignId",
+    "runId",
+    "trialIndex",
+    "warmup",
+    "threshold",
+    "trusteeCount",
+    "candidateCount",
+    "acceptedBallotCount",
+    "dkgMs",
+    "partialDecryptMs",
+    "dleqGenerateMs",
+    "dleqVerifyMs",
+    "combineMs",
+    "boundedDecodeMs",
+    "peakMemoryBytes",
+    "result"
+  ],
+  "optionalFields": [
+    "publicTranscriptBytes",
+    "trusteePublicArtifactBytes",
+    "shareArtifactBytes",
+    "errorClass",
+    "notes"
+  ],
+  "preserveFailedTrials": true,
+  "preserveWarmups": true,
+  "includeWarmupsInReportedStatistics": false
+}

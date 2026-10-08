@@ -1,0 +1,21 @@
+{
+  "status": "HOLD",
+  "classification": "INDEPENDENT_FINAL_SUBMISSION_PACKAGE_PLAN_SECURITY_PRIVACY_AUDIT",
+  "packagePlanFiles": 776,
+  "sanitizedEnvironmentReplacementTargets": 2,
+  "originalEnvironmentExamplesIncluded": false,
+  "rawHistoricalExperimentCorpusIncluded": false,
+  "secretValuesPrinted": false,
+  "unresolvedIssues": [
+    "scripts/start-local-chain.ps1:18:UNRESOLVED_SECRET_LIKE_LITERAL"
+  ],
+  "literalHitsWithoutValues": [
+    {
+      "package_path": "scripts/start-local-chain.ps1",
+      "line": 18,
+      "rule": "UNRESOLVED_SECRET_LIKE_LITERAL",
+      "valuePrinted": false
+    }
+  ],
+  "warnings": []
+}

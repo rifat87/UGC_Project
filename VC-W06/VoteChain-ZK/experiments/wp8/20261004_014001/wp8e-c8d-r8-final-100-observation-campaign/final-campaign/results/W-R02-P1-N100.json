@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "observationId": "W-R02-P1-N100",
+  "phase": "WARMUP",
+  "N": 100,
+  "orderPosition": 1,
+  "configuredMerkleDepth": 17,
+  "selectedVoterIndex": 0,
+  "metricsMs": {
+    "M1": 9.6461,
+    "M2": 10.6364,
+    "M3": 1043.0022,
+    "M4": 5507.4148,
+    "M5": 1023.3969
+  },
+  "automaticRetry": false,
+  "wtnsCalculateRc": 0,
+  "witnessSha256": "03ad97ef4f7e70a06b553855c6b5cfc5c9ab8800271429502bedb91ad69f3dcc",
+  "wtnsCheckRc": 0,
+  "proveRc": 0,
+  "proofSha256": "890559d9b17ca9389cd5563f9cfdfd4e215782c8242901c46d064145ddba65f2",
+  "publicSha256": "82cdbbb158d5fa58802234e2295c309b96411ea5650d1823dcdcb197a30d2631",
+  "verifyRc": 0,
+  "semanticVerifyOk": true,
+  "publicSignalCount": 73,
+  "publicSignalBinding": "PASS",
+  "eligibleRoot": "15966971221913887048395438206170922964811009876860962930096006795624024547697",
+  "witnessRemoved": true
+}

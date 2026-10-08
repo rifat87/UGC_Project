@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "campaignCompleteStatus": "PASS",
+  "elections": 30,
+  "warmupElections": 5,
+  "measuredElections": 25,
+  "rawTransactionRows": 2400,
+  "uniqueObservationIdentities": 2400,
+  "warmupTransactionRows": 400,
+  "measuredTransactionRows": 2000,
+  "receiptFiles": 2400,
+  "receiptToRawCrosschecks": 2400,
+  "failureFiles": 0,
+  "calldataBytes": 2340,
+  "allReceiptsSuccessful": true,
+  "allElectionCorrectnessGatesPass": true,
+  "warmupRowsByScale": {
+    "25": 25,
+    "50": 50,
+    "75": 75,
+    "100": 100,
+    "150": 150
+  },
+  "measuredRowsByScale": {
+    "25": 125,
+    "50": 250,
+    "75": 375,
+    "100": 500,
+    "150": 750
+  },
+  "receiptFilesWithTrailingDiagnostic": 2,
+  "trailingDiagnosticReceipts": [
+    {
+      "repetitionId": "measured-r1-n75-e08",
+      "ballotId": "033",
+      "trailingBytes": 215,
+      "preview": "'\\n\\x1b[2m2026-10-02T16:52:45.451113Z\\x1b[0m \\x1b[31mERROR\\x1b[0m \\x1b[2malloy_provider::blocks\\x1b[0m\\x1b[2m:\\x1b[0m failed to fetch block \\x1b[3mnumber\\x1b[0m\\x1b[2m=\\x1b[0m37 \\x1b[3merr\\x1b[0m\\x1b[2m=\\x1b[0merror sending request for url (http://127.0.0.1:8557/)\\n'"
+    },
+    {
+      "repetitionId": "measured-r4-n150-e22",
+      "ballotId": "048",
+      "trailingBytes": 215,
+      "preview": "'\\n\\x1b[2m2026-10-02T17:11:45.076859Z\\x1b[0m \\x1b[31mERROR\\x1b[0m \\x1b[2malloy_provider::blocks\\x1b[0m\\x1b[2m:\\x1b[0m failed to fetch block \\x1b[3mnumber\\x1b[0m\\x1b[2m=\\x1b[0m52 \\x1b[3merr\\x1b[0m\\x1b[2m=\\x1b[0merror sending request for url (http://127.0.0.1:8557/)\\n'"
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+========================================================================
+PACKAGE=express
+SEVERITY=high
+DIRECT=True
+RANGE=4.0.0-rc1 - 4.22.2 || 5.0.0-alpha.1 - 5.0.1
+FIX_AVAILABLE=True
+NODES=node_modules/express
+VIA=body-parser || path-to-regexp || qs
+========================================================================
+PACKAGE=ip-address
+SEVERITY=high
+DIRECT=False
+RANGE=<=10.7.0
+FIX_AVAILABLE=True
+NODES=node_modules/ip-address
+VIA=1118827 | ip-address has XSS in Address6 HTML-emitting methods | https://github.com/advisories/GHSA-v2v4-37r5-5v8g || 1130722 | ip-address: Address4 decodes leading-zero octets as decimal while resolvers decode them as octal, allowing SSRF and trust-boundary bypass | https://github.com/advisories/GHSA-mwp4-54f8-5fhr || 1239948 | ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts | https://github.com/advisories/GHSA-rpw4-54j3-4h4q || 1240097 | ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range | https://github.com/advisories/GHSA-j6r3-76f7-8jcv || 1240098 | ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process | https://github.com/advisories/GHSA-h3mg-xc3c-68pw
+========================================================================
+PACKAGE=jws
+SEVERITY=high
+DIRECT=False
+RANGE=<3.2.3
+FIX_AVAILABLE=True
+NODES=node_modules/jws
+VIA=1111244 | auth0/node-jws Improperly Verifies HMAC Signature | https://github.com/advisories/GHSA-869p-cjfg-cm3x
+========================================================================
+PACKAGE=lodash
+SEVERITY=high
+DIRECT=False
+RANGE=<=4.17.23
+FIX_AVAILABLE=True
+NODES=node_modules/lodash
+VIA=1115806 | lodash vulnerable to Code Injection via `_.template` imports key names | https://github.com/advisories/GHSA-r5fr-rjxr-66jc || 1115810 | lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit` | https://github.com/advisories/GHSA-f23m-r3pf-42rh || 1120370 | Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions | https://github.com/advisories/GHSA-xxjr-mmjv-4gpg
+========================================================================
+PACKAGE=mongoose
+SEVERITY=high
+DIRECT=True
+RANGE=7.0.0 - 7.8.9
+FIX_AVAILABLE=True
+NODES=node_modules/mongoose
+VIA=1118998 | Mongoose's Improper Sanitization of $nor in sanitizeFilter May Allow NoSQL Injection | https://github.com/advisories/GHSA-wpg9-53fq-2r8h || 1139505 | Mongoose: Prototype pollution in mongoose update casting via __proto__-prefixed dotted path (Schema._getSchema/path getter) | https://github.com/advisories/GHSA-664h-wqgq-64gw
+========================================================================
+PACKAGE=path-to-regexp
+SEVERITY=high
+DIRECT=False
+RANGE=<0.1.13
+FIX_AVAILABLE=True
+NODES=node_modules/path-to-regexp
+VIA=1115527 | path-to-regexp vulnerable to Regular Expression Denial of Service via multiple route parameters | https://github.com/advisories/GHSA-37ch-88jc-xwx2
+========================================================================
+PACKAGE=validator
+SEVERITY=high
+DIRECT=True
+RANGE=<=13.15.20
+FIX_AVAILABLE=True
+NODES=node_modules/express-validator/node_modules/validator,node_modules/validator
+VIA=1109241 | validator.js has a URL validation bypass vulnerability in its isURL function | https://github.com/advisories/GHSA-9965-vmph-33xx || 1112713 | Validator is Vulnerable to Incomplete Filtering of One or More Instances of Special Elements | https://github.com/advisories/GHSA-vghf-hv5q-vc2g
+========================================================================
+PACKAGE=ws
+SEVERITY=high
+DIRECT=False
+RANGE=8.0.0 - 8.20.1
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/providers/node_modules/ws,node_modules/ws
+VIA=1119108 | ws: Uninitialized memory disclosure | https://github.com/advisories/GHSA-58qx-3vcg-4xpx || 1123259 | ws: Memory exhaustion DoS from tiny fragments and data chunks | https://github.com/advisories/GHSA-96hv-2xvq-fx4p
+========================================================================
+PACKAGE=@ethersproject/providers
+SEVERITY=moderate
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/providers
+VIA=@ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/hash || @ethersproject/transactions || ws
+========================================================================
+PACKAGE=body-parser
+SEVERITY=moderate
+DIRECT=False
+RANGE=<=1.20.6 || 2.0.0-beta.1 - 2.0.2
+FIX_AVAILABLE=True
+NODES=node_modules/body-parser
+VIA=1123977 | body-parser vulnerable to denial of service when invalid limit value silently disables size enforcement | https://github.com/advisories/GHSA-v422-hmwv-36x6 || qs
+========================================================================
+PACKAGE=ethers
+SEVERITY=moderate
+DIRECT=True
+RANGE=5.0.0-beta.119 - 6.16.0
+FIX_AVAILABLE=True
+NODES=node_modules/circomlibjs/node_modules/ethers,node_modules/ethers
+VIA=@ethersproject/abi || @ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/contracts || @ethersproject/hash || @ethersproject/hdnode || @ethersproject/json-wallets || @ethersproject/providers || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wallet || @ethersproject/wordlists || ws
+========================================================================
+PACKAGE=express-validator
+SEVERITY=moderate
+DIRECT=True
+RANGE=0.2.0 - 6.4.1 || 7.1.0 - 7.2.1
+FIX_AVAILABLE=True
+NODES=node_modules/express-validator
+VIA=validator
+========================================================================
+PACKAGE=qs
+SEVERITY=moderate
+DIRECT=False
+RANGE=<=6.15.3
+FIX_AVAILABLE=True
+NODES=node_modules/qs
+VIA=1113161 | qs's arrayLimit bypass in comma parsing allows denial of service | https://github.com/advisories/GHSA-w7fw-mjwx-w883 || 1113719 | qs's arrayLimit bypass in its bracket notation allows DoS via memory exhaustion | https://github.com/advisories/GHSA-6rw7-vpxm-498p || 1119502 | qs has a remotely triggerable DoS: qs.stringify crashes with TypeError on null/undefined entries in comma-format arrays when encodeValuesOnly is set | https://github.com/advisories/GHSA-q8mj-m7cp-5q26 || 1158507 | qs: Denial of Service via Attacker Controlled isBuffer | https://github.com/advisories/GHSA-4mjr-xmp4-gh2g
+========================================================================
+PACKAGE=socks
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.7.2 - 2.8.6
+FIX_AVAILABLE=True
+NODES=node_modules/socks
+VIA=ip-address
+========================================================================
+PACKAGE=uuid
+SEVERITY=moderate
+DIRECT=True
+RANGE=<11.1.1
+FIX_AVAILABLE=True
+NODES=node_modules/uuid
+VIA=1119441 | uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided | https://github.com/advisories/GHSA-w5hq-g745-h8pq
+========================================================================
+PACKAGE=@ethersproject/abi
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.10 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abi
+VIA=@ethersproject/hash
+========================================================================
+PACKAGE=@ethersproject/abstract-provider
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abstract-provider
+VIA=@ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/abstract-signer
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abstract-signer
+VIA=@ethersproject/abstract-provider
+========================================================================
+PACKAGE=@ethersproject/contracts
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/contracts
+VIA=@ethersproject/abi || @ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/hash
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.6 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/hash
+VIA=@ethersproject/abstract-signer
+========================================================================
+PACKAGE=@ethersproject/hdnode
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/hdnode
+VIA=@ethersproject/abstract-signer || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wordlists
+========================================================================
+PACKAGE=@ethersproject/json-wallets
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/json-wallets
+VIA=@ethersproject/abstract-signer || @ethersproject/hdnode || @ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/signing-key
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/signing-key
+VIA=elliptic
+========================================================================
+PACKAGE=@ethersproject/transactions
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/transactions
+VIA=@ethersproject/signing-key
+========================================================================
+PACKAGE=@ethersproject/wallet
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/wallet
+VIA=@ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/hash || @ethersproject/hdnode || @ethersproject/json-wallets || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wordlists
+========================================================================
+PACKAGE=@ethersproject/wordlists
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.8 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/wordlists
+VIA=@ethersproject/hash
+========================================================================
+PACKAGE=elliptic
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/elliptic
+VIA=1112030 | Elliptic Uses a Cryptographic Primitive with a Risky Implementation | https://github.com/advisories/GHSA-848j-6mx2-7j84

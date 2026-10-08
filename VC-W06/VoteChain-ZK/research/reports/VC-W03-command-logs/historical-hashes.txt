@@ -1,0 +1,4 @@
+b5718b72b0ef3762c84c611234bc376d49b76bd09c139a9886fd91e1dd19133a  src/LocalVoting.sol
+a74ebea5402b6fcdc07a5a0a79fe8c3a7add6199cf17c472cc36d1c24c97ee90  test/LocalVotingTest.t.sol
+e28c54d0ce1627f4ea317298db6717af8f6f73a338be98c917a7f66b42f423db  script/LocalDeployVoting.s.sol
+293d244052efb22060f6133a8821a6356de89eea2a1e5c89198b0a44beb72bdc  research/gas/VC-W01-clean-baseline-gas.txt

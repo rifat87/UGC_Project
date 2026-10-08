@@ -1,0 +1,448 @@
+========================================================================
+PACKAGE=sha.js
+SEVERITY=critical
+DIRECT=False
+RANGE=<=2.4.11
+FIX_AVAILABLE=True
+NODES=node_modules/sha.js
+VIA=1109535 | sha.js is missing type checks leading to hash rewind and passing on crafted data | https://github.com/advisories/GHSA-95m3-7q98-8xr5
+========================================================================
+PACKAGE=@remix-run/router
+SEVERITY=high
+DIRECT=False
+RANGE=<=1.23.2
+FIX_AVAILABLE=True
+NODES=node_modules/@remix-run/router
+VIA=1112052 | React Router vulnerable to XSS via Open Redirects | https://github.com/advisories/GHSA-2w69-qvjg-hvjx || 1136293 | React Router's same-origin redirect with path starting // causes open redirect via protocol-relative URL reinterpretation | https://github.com/advisories/GHSA-2j2x-hqr9-3h42
+========================================================================
+PACKAGE=bfj
+SEVERITY=high
+DIRECT=False
+RANGE=7.1.0 - 9.1.2
+FIX_AVAILABLE=True
+NODES=node_modules/bfj
+VIA=jsonpath
+========================================================================
+PACKAGE=brace-expansion
+SEVERITY=high
+DIRECT=False
+RANGE=2.0.0 - 2.1.6
+FIX_AVAILABLE=True
+NODES=node_modules/sucrase/node_modules/brace-expansion
+VIA=1105444 | brace-expansion Regular Expression Denial of Service vulnerability | https://github.com/advisories/GHSA-v6h2-p8h4-qcjw || 1115541 | brace-expansion: Zero-step sequence causes process hang and memory exhaustion | https://github.com/advisories/GHSA-f886-m6hf-6m8v || 1123896 | brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups | https://github.com/advisories/GHSA-3jxr-9vmj-r5cp || 1130589 | brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash | https://github.com/advisories/GHSA-mh99-v99m-4gvg || 1130736 | brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation | https://github.com/advisories/GHSA-rgw5-rvv9-x895 || 1240101 | brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service | https://github.com/advisories/GHSA-q2hr-2g5m-vwhr || 1240105 | brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion | https://github.com/advisories/GHSA-qhr7-859c-m2p7 || 1240109 | brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion | https://github.com/advisories/GHSA-6j4f-fj2g-mc7p
+========================================================================
+PACKAGE=defu
+SEVERITY=high
+DIRECT=False
+RANGE=<=6.1.4
+FIX_AVAILABLE=True
+NODES=node_modules/defu
+VIA=1116102 | defu: Prototype pollution via `__proto__` key in defaults argument | https://github.com/advisories/GHSA-737v-mqg7-c878
+========================================================================
+PACKAGE=glob
+SEVERITY=high
+DIRECT=False
+RANGE=10.2.0 - 10.4.5
+FIX_AVAILABLE=True
+NODES=node_modules/sucrase/node_modules/glob
+VIA=1109842 | glob CLI: Command injection via -c/--cmd executes matches with shell:true | https://github.com/advisories/GHSA-5j98-mcp5-4vw2
+========================================================================
+PACKAGE=h3
+SEVERITY=high
+DIRECT=False
+RANGE=<=1.15.8
+FIX_AVAILABLE=True
+NODES=node_modules/h3
+VIA=1114875 | h3 has a Path Traversal via Percent-Encoded Dot Segments in serveStatic Allows Arbitrary File Read | https://github.com/advisories/GHSA-wr4h-v87w-p3r7 || 1115114 | h3: SSE Event Injection via Unsanitized Carriage Return (`\r`) in EventStream Data and Comment Fields (Bypass of CVE Fix) | https://github.com/advisories/GHSA-4hxc-9384-m385 || 1115117 | h3: Double Decoding in `serveStatic` Bypasses `resolveDotSegments` Path Traversal Protection via `%252e%252e` | https://github.com/advisories/GHSA-72gr-qfp7-vwhw || 1115161 | h3 has a Server-Sent Events Injection via Unsanitized Newlines in Event Stream Fields | https://github.com/advisories/GHSA-22cc-p3c6-wpvm || 1116543 | h3 v1 has Request Smuggling (TE.TE) issue | https://github.com/advisories/GHSA-mp2g-9vg9-f4cg
+========================================================================
+PACKAGE=jsonpath
+SEVERITY=high
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/jsonpath
+VIA=underscore
+========================================================================
+PACKAGE=minimatch
+SEVERITY=high
+DIRECT=False
+RANGE=9.0.0 - 9.0.6
+FIX_AVAILABLE=True
+NODES=node_modules/sucrase/node_modules/minimatch
+VIA=1113465 | minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern | https://github.com/advisories/GHSA-3ppc-4f35-3m26 || 1113544 | minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments | https://github.com/advisories/GHSA-7r86-cg39-jmmj || 1113552 | minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions | https://github.com/advisories/GHSA-23c5-xmqv-rm74
+========================================================================
+PACKAGE=nanoid
+SEVERITY=high
+DIRECT=False
+RANGE=<=3.3.17
+FIX_AVAILABLE=True
+NODES=node_modules/nanoid
+VIA=1138811 | nanoid: non-secure generators can loop indefinitely with negative size | https://github.com/advisories/GHSA-28wg-ghj8-5hjv || 1139427 | nanoid: custom generators can loop indefinitely when size is zero | https://github.com/advisories/GHSA-2v37-7h3g-55p8 || 1153189 | nanoid: Integer Overflow or Wraparound | https://github.com/advisories/GHSA-xwg4-73v4-xw9w
+========================================================================
+PACKAGE=picomatch
+SEVERITY=high
+DIRECT=False
+RANGE=<=2.3.1
+FIX_AVAILABLE=True
+NODES=node_modules/picomatch
+VIA=1115549 | Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching | https://github.com/advisories/GHSA-3v7f-55p6-f55p || 1115552 | Picomatch has a ReDoS vulnerability via extglob quantifiers | https://github.com/advisories/GHSA-c2c7-rcm5-vvqj
+========================================================================
+PACKAGE=postcss
+SEVERITY=high
+DIRECT=True
+RANGE=<=8.5.22
+FIX_AVAILABLE=True
+NODES=node_modules/postcss
+VIA=1117015 | PostCSS has XSS via Unescaped </style> in its CSS Stringify Output | https://github.com/advisories/GHSA-qx2v-qp2m-jg93 || 1124252 | PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments | https://github.com/advisories/GHSA-6g55-p6wh-862q || 1130709 | PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset | https://github.com/advisories/GHSA-fxqj-rqcc-2cmp || 1139510 | PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure | https://github.com/advisories/GHSA-r28c-9q8g-f849
+========================================================================
+PACKAGE=preact
+SEVERITY=high
+DIRECT=False
+RANGE=10.26.5 - 10.26.9
+FIX_AVAILABLE=True
+NODES=node_modules/preact
+VIA=1111984 | Preact has JSON VNode Injection issue | https://github.com/advisories/GHSA-36hm-qxxp-pg3m
+========================================================================
+PACKAGE=react-router
+SEVERITY=high
+DIRECT=False
+RANGE=6.0.0 - 7.17.0
+FIX_AVAILABLE=True
+NODES=node_modules/react-router
+VIA=@remix-run/router || 1112057 | React Router has unexpected external redirect via untrusted paths | https://github.com/advisories/GHSA-9jcx-v3wj-wh4m || 1124268 | React Router: Open redirect via backslash in <Link> and useNavigate (CVE-2025-68470 bypass) | https://github.com/advisories/GHSA-wrjc-x8rr-h8h6 || 1124272 | React Router: Arbitrary Constructor Injection via deserializeErrors() in React Router SSR Hydration | https://github.com/advisories/GHSA-337j-9hxr-rhxg || 1136303 | React Router's same-origin redirect with path starting // causes open redirect via protocol-relative URL reinterpretation | https://github.com/advisories/GHSA-2j2x-hqr9-3h42
+========================================================================
+PACKAGE=react-router-dom
+SEVERITY=high
+DIRECT=True
+RANGE=6.0.0-alpha.0 - 6.30.2
+FIX_AVAILABLE=True
+NODES=node_modules/react-router-dom
+VIA=@remix-run/router || react-router
+========================================================================
+PACKAGE=socket.io-parser
+SEVERITY=high
+DIRECT=False
+RANGE=4.0.0 - 4.2.6
+FIX_AVAILABLE=True
+NODES=node_modules/socket.io-parser
+VIA=1115154 | socket.io allows an unbounded number of binary attachments | https://github.com/advisories/GHSA-677m-j7p3-52f9 || 1130713 | Socket.IO: Zero-attachment Memory Exhaustion | https://github.com/advisories/GHSA-2m8v-j782-fhvr
+========================================================================
+PACKAGE=underscore
+SEVERITY=high
+DIRECT=False
+RANGE=<=1.13.7
+FIX_AVAILABLE=True
+NODES=node_modules/underscore
+VIA=1117689 | Underscore has unlimited recursion in _.flatten and _.isEqual, potential for DoS attack | https://github.com/advisories/GHSA-qpx9-hpmf-5gmw
+========================================================================
+PACKAGE=ws
+SEVERITY=high
+DIRECT=False
+RANGE=7.0.0 - 7.5.10 || 8.0.0 - 8.20.1
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/providers/node_modules/ws,node_modules/@reown/appkit-controllers/node_modules/ws,node_modules/@reown/appkit-utils/node_modules/ws,node_modules/@reown/appkit/node_modules/ws,node_modules/@walletconnect/jsonrpc-ws-connection/node_modules/ws,node_modules/@walletconnect/utils/node_modules/ws,node_modules/viem/node_modules/ws,node_modules/ws
+VIA=1119108 | ws: Uninitialized memory disclosure | https://github.com/advisories/GHSA-58qx-3vcg-4xpx || 1123259 | ws: Memory exhaustion DoS from tiny fragments and data chunks | https://github.com/advisories/GHSA-96hv-2xvq-fx4p || 1123260 | ws: Memory exhaustion DoS from tiny fragments and data chunks | https://github.com/advisories/GHSA-96hv-2xvq-fx4p
+========================================================================
+PACKAGE=@ethersproject/providers
+SEVERITY=moderate
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/providers
+VIA=@ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/hash || @ethersproject/transactions || ws
+========================================================================
+PACKAGE=@metamask/rpc-errors
+SEVERITY=moderate
+DIRECT=False
+RANGE=>=6.3.1
+FIX_AVAILABLE=True
+NODES=node_modules/@metamask/rpc-errors
+VIA=@metamask/utils
+========================================================================
+PACKAGE=@metamask/sdk
+SEVERITY=moderate
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@metamask/sdk
+VIA=@metamask/sdk-communication-layer || 1107594 | MetaMask SDK indirectly exposed via malicious debug@4.4.2 dependency | https://github.com/advisories/GHSA-qj3p-xc97-xw74 || uuid
+========================================================================
+PACKAGE=@metamask/sdk-communication-layer
+SEVERITY=moderate
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@metamask/sdk-communication-layer
+VIA=1107592 | MetaMask SDK indirectly exposed via malicious debug@4.4.2 dependency | https://github.com/advisories/GHSA-qj3p-xc97-xw74 || uuid
+========================================================================
+PACKAGE=@metamask/utils
+SEVERITY=moderate
+DIRECT=False
+RANGE=>=8.4.0
+FIX_AVAILABLE=True
+NODES=node_modules/@metamask/eth-json-rpc-provider/node_modules/@metamask/json-rpc-engine/node_modules/@metamask/utils,node_modules/@metamask/rpc-errors/node_modules/@metamask/utils,node_modules/@metamask/utils
+VIA=uuid
+========================================================================
+PACKAGE=@reown/appkit
+SEVERITY=moderate
+DIRECT=False
+RANGE=1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit
+VIA=@reown/appkit-controllers || @reown/appkit-scaffold-ui || @reown/appkit-ui || @reown/appkit-utils || @walletconnect/universal-provider
+========================================================================
+PACKAGE=@reown/appkit-controllers
+SEVERITY=moderate
+DIRECT=False
+RANGE=<=1.8.10-wallet-button-fix.0
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers
+VIA=@walletconnect/universal-provider
+========================================================================
+PACKAGE=@reown/appkit-scaffold-ui
+SEVERITY=moderate
+DIRECT=False
+RANGE=1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-scaffold-ui
+VIA=@reown/appkit-controllers || @reown/appkit-ui || @reown/appkit-utils
+========================================================================
+PACKAGE=@reown/appkit-ui
+SEVERITY=moderate
+DIRECT=False
+RANGE=1.7.1-449657bc8f95adcfd295a2e883c4bcd439045044.0 - 1.8.10-wallet-button-fix.0
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-ui
+VIA=@reown/appkit-controllers
+========================================================================
+PACKAGE=@reown/appkit-utils
+SEVERITY=moderate
+DIRECT=False
+RANGE=1.7.0-alpha.0 - 1.8.10-wallet-button-fix.0
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-utils
+VIA=@reown/appkit-controllers || @walletconnect/universal-provider
+========================================================================
+PACKAGE=@wagmi/connectors
+SEVERITY=moderate
+DIRECT=False
+RANGE=<=0.0.0-wc-links-20240926225814 || 4.1.27 - 4.3.10 || 5.0.1 - 6.2.0
+FIX_AVAILABLE=True
+NODES=node_modules/@wagmi/connectors
+VIA=@metamask/sdk || @walletconnect/ethereum-provider
+========================================================================
+PACKAGE=@walletconnect/core
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers/node_modules/@walletconnect/core,node_modules/@reown/appkit-utils/node_modules/@walletconnect/core,node_modules/@reown/appkit/node_modules/@walletconnect/core,node_modules/@walletconnect/core
+VIA=@walletconnect/utils
+========================================================================
+PACKAGE=@walletconnect/ethereum-provider
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.17.1-canary-0 - 2.17.1-canary-appkit.0 || 2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.22.4
+FIX_AVAILABLE=True
+NODES=node_modules/@walletconnect/ethereum-provider
+VIA=@reown/appkit || @walletconnect/sign-client || @walletconnect/universal-provider || @walletconnect/utils
+========================================================================
+PACKAGE=@walletconnect/sign-client
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers/node_modules/@walletconnect/sign-client,node_modules/@reown/appkit-utils/node_modules/@walletconnect/sign-client,node_modules/@reown/appkit/node_modules/@walletconnect/sign-client,node_modules/@walletconnect/sign-client
+VIA=@walletconnect/core || @walletconnect/utils
+========================================================================
+PACKAGE=@walletconnect/universal-provider
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.18.1-canary-exp-1 - 2.18.1-rc-1 || 2.19.0-canary-ak-1 - 2.21.9
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers/node_modules/@walletconnect/universal-provider,node_modules/@reown/appkit-utils/node_modules/@walletconnect/universal-provider,node_modules/@reown/appkit/node_modules/@walletconnect/universal-provider,node_modules/@walletconnect/universal-provider
+VIA=@walletconnect/sign-client || @walletconnect/utils
+========================================================================
+PACKAGE=@walletconnect/utils
+SEVERITY=moderate
+DIRECT=False
+RANGE=1.2.3-1.3.0-rc.0.0 - 2.17.5-rc-1 || 2.18.0-canary-ell-1 - 2.21.9
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers/node_modules/@walletconnect/utils,node_modules/@reown/appkit-utils/node_modules/@walletconnect/utils,node_modules/@reown/appkit/node_modules/@walletconnect/utils,node_modules/@walletconnect/utils
+VIA=query-string || viem
+========================================================================
+PACKAGE=bn.js
+SEVERITY=moderate
+DIRECT=False
+RANGE=5.0.0 - 5.2.2
+FIX_AVAILABLE=True
+NODES=node_modules/bn.js
+VIA=1113441 | bn.js affected by an infinite loop | https://github.com/advisories/GHSA-378v-28hj-76wf
+========================================================================
+PACKAGE=decode-uri-component
+SEVERITY=moderate
+DIRECT=False
+RANGE=<=0.4.2
+FIX_AVAILABLE=True
+NODES=node_modules/decode-uri-component
+VIA=1147955 | decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input | https://github.com/advisories/GHSA-vcc3-ghjq-m6fr
+========================================================================
+PACKAGE=engine.io-client
+SEVERITY=moderate
+DIRECT=False
+RANGE=0.7.0 || 0.7.8 - 0.7.9 || 6.0.0 - 6.6.4
+FIX_AVAILABLE=True
+NODES=node_modules/engine.io-client
+VIA=ws
+========================================================================
+PACKAGE=ethers
+SEVERITY=moderate
+DIRECT=True
+RANGE=5.0.0-beta.119 - 6.16.0
+FIX_AVAILABLE=True
+NODES=node_modules/circomlibjs/node_modules/ethers,node_modules/ethers
+VIA=@ethersproject/abi || @ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/contracts || @ethersproject/hash || @ethersproject/hdnode || @ethersproject/json-wallets || @ethersproject/providers || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wallet || @ethersproject/wordlists || ws
+========================================================================
+PACKAGE=query-string
+SEVERITY=moderate
+DIRECT=False
+RANGE=5.0.0 - 9.4.1
+FIX_AVAILABLE=True
+NODES=node_modules/query-string
+VIA=decode-uri-component
+========================================================================
+PACKAGE=uuid
+SEVERITY=moderate
+DIRECT=False
+RANGE=<11.1.1
+FIX_AVAILABLE=True
+NODES=node_modules/@metamask/eth-json-rpc-provider/node_modules/uuid,node_modules/@metamask/rpc-errors/node_modules/uuid,node_modules/@metamask/utils/node_modules/uuid,node_modules/uuid
+VIA=1119441 | uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided | https://github.com/advisories/GHSA-w5hq-g745-h8pq
+========================================================================
+PACKAGE=viem
+SEVERITY=moderate
+DIRECT=True
+RANGE=<=0.0.0-wagmiv2-20230628182101 || 0.2.2 - 2.49.3
+FIX_AVAILABLE=True
+NODES=node_modules/@reown/appkit-controllers/node_modules/@walletconnect/utils/node_modules/viem,node_modules/@reown/appkit-utils/node_modules/@walletconnect/utils/node_modules/viem,node_modules/@reown/appkit/node_modules/@walletconnect/utils/node_modules/viem,node_modules/@walletconnect/utils/node_modules/viem,node_modules/viem
+VIA=ws
+========================================================================
+PACKAGE=wagmi
+SEVERITY=moderate
+DIRECT=True
+RANGE=<=0.0.0-wc-links-20240926225814 || 2.5.21 - 2.7.1 || 2.8.1 - 2.8.8 || 2.9.1 - 2.17.0
+FIX_AVAILABLE=True
+NODES=node_modules/wagmi
+VIA=@wagmi/connectors
+========================================================================
+PACKAGE=yaml
+SEVERITY=moderate
+DIRECT=False
+RANGE=2.0.0 - 2.8.2
+FIX_AVAILABLE=True
+NODES=node_modules/yaml
+VIA=1115556 | yaml is vulnerable to Stack Overflow via deeply nested YAML collections | https://github.com/advisories/GHSA-48c2-rrv3-qjmp
+========================================================================
+PACKAGE=@ethersproject/abi
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.10 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abi
+VIA=@ethersproject/hash
+========================================================================
+PACKAGE=@ethersproject/abstract-provider
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abstract-provider
+VIA=@ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/abstract-signer
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/abstract-signer
+VIA=@ethersproject/abstract-provider
+========================================================================
+PACKAGE=@ethersproject/contracts
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/contracts
+VIA=@ethersproject/abi || @ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/hash
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.6 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/hash
+VIA=@ethersproject/abstract-signer
+========================================================================
+PACKAGE=@ethersproject/hdnode
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/hdnode
+VIA=@ethersproject/abstract-signer || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wordlists
+========================================================================
+PACKAGE=@ethersproject/json-wallets
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/json-wallets
+VIA=@ethersproject/abstract-signer || @ethersproject/hdnode || @ethersproject/transactions
+========================================================================
+PACKAGE=@ethersproject/signing-key
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/signing-key
+VIA=elliptic
+========================================================================
+PACKAGE=@ethersproject/transactions
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/transactions
+VIA=@ethersproject/signing-key
+========================================================================
+PACKAGE=@ethersproject/wallet
+SEVERITY=low
+DIRECT=False
+RANGE=<=5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/wallet
+VIA=@ethersproject/abstract-provider || @ethersproject/abstract-signer || @ethersproject/hash || @ethersproject/hdnode || @ethersproject/json-wallets || @ethersproject/signing-key || @ethersproject/transactions || @ethersproject/wordlists
+========================================================================
+PACKAGE=@ethersproject/wordlists
+SEVERITY=low
+DIRECT=False
+RANGE=5.0.8 - 5.8.0
+FIX_AVAILABLE=True
+NODES=node_modules/@ethersproject/wordlists
+VIA=@ethersproject/hash
+========================================================================
+PACKAGE=elliptic
+SEVERITY=low
+DIRECT=False
+RANGE=*
+FIX_AVAILABLE=True
+NODES=node_modules/elliptic
+VIA=1112030 | Elliptic Uses a Cryptographic Primitive with a Risky Implementation | https://github.com/advisories/GHSA-848j-6mx2-7j84
+========================================================================
+PACKAGE=postcss-selector-parser
+SEVERITY=low
+DIRECT=False
+RANGE=6.1.0 - 6.1.2
+FIX_AVAILABLE=True
+NODES=node_modules/postcss-selector-parser
+VIA=1153170 | postcss-selector-parser allows denial of service through uncontrolled AST recursion | https://github.com/advisories/GHSA-w9m9-85wc-3x92

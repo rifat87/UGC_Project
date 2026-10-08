@@ -1,0 +1,23 @@
+--- scripts whose filename contains WP5E ---
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Auth_Network_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Preflight.sh
+
+--- scripts containing WP5E status/runtime markers ---
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_LocalPrivacyWorker.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume_201827.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5C_Resume2_201827.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_Synthetic_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5D_v2_CDP_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Auth_Network_Runtime.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP5E_Backend_Preflight.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6_Threshold_Preflight.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP6B_Trustee_CLI_Contract_Finalization.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7A_Targeted_Hardening.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7B_Auth_Status_Fix_Resume.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7B_Privileged_Auth_Threshold_Hardening.sh
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/scripts/VoteChainZK_WP7C_Final_Callsite_Audit_Preflight.sh
+
+--- accepted WP5E summaries ---
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/VC-W07_WP5E_BACKEND_AUTH_NETWORK_SUMMARY.txt
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/VC-W07_WP5E_BACKEND_PREFLIGHT_SUMMARY.txt
+../VoteChain_VC-W03_FinalZK/Output/VC-W07/VC-W07_WP5E_CURRENT_BACKEND_SOURCE_CAPTURE.txt

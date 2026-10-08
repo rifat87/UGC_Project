@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261003_005333\wp8e-c8b-r1-microbenchmark-runner-freeze\runner\wp8e-final-fresh-chain-microbenchmark.py", line 1327, in <module>
+    main()
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261003_005333\wp8e-c8b-r1-microbenchmark-runner-freeze\runner\wp8e-final-fresh-chain-microbenchmark.py", line 1297, in main
+    execute_plan(
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261003_005333\wp8e-c8b-r1-microbenchmark-runner-freeze\runner\wp8e-final-fresh-chain-microbenchmark.py", line 806, in execute_plan
+    ) = v2.deploy_contracts(
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_223739\wp8e-c6c-r2-runner-v2-freeze\runner-v2\wp8e-final-scaling-runner-v2.py", line 800, in deploy_contracts
+    run(
+  File "D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_223739\wp8e-c6c-r2-runner-v2-freeze\runner-v2\wp8e-final-scaling-runner-v2.py", line 140, in run
+    raise RuntimeError(
+RuntimeError: COMMAND_FAILED
+C:\Users\88018\.foundry\bin\cast.EXE call 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 verifier()(address) --rpc-url http://127.0.0.1:8558
+STDOUT:
+
+STDERR:
+Error: contract 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 does not have any code
+

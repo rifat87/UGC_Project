@@ -1,0 +1,2664 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$PWD"
+
+if [ "$(basename "$ROOT")" != "VoteChain-ZK" ]; then
+    echo "ERROR: run from VoteChain-ZK root."
+    exit 2
+fi
+
+FRONT="$ROOT/votechain-frontend-ts"
+FOUNDRY="$ROOT/contracts/wp4-foundry"
+
+APP_PROFILE="$ROOT/crypto/config/wp5-application-profile.json"
+WP3_PROFILE="$ROOT/crypto/config/wp3-build-profile.json"
+
+DIRECT_ARTIFACT="$FOUNDRY/out/VoteChainWP4.sol/VoteChainDirect.json"
+VERIFIER_ARTIFACT="$FOUNDRY/out/VoteChainVoteDirectVerifier.sol/VoteChainVoteDirectVerifier.json"
+
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+EVIDENCE="$ROOT/experiments/wp5/$RUN_ID/wp5d-v2-runtime"
+
+OUTROOT="../VoteChain_VC-W03_FinalZK/Output/VC-W07"
+SUMMARY="$OUTROOT/VC-W07_WP5D_V2_SYNTHETIC_RUNTIME_SUMMARY.txt"
+
+ANVIL_PORT=8547
+VITE_PORT=4174
+CDP_PORT=9224
+
+RPC="http://127.0.0.1:$ANVIL_PORT"
+VITE_URL="http://127.0.0.1:$VITE_PORT"
+CDP_URL="http://127.0.0.1:$CDP_PORT"
+
+ANVIL_PID=""
+VITE_PID=""
+BROWSER_PID=""
+
+mkdir -p \
+    "$EVIDENCE" \
+    "$OUTROOT" \
+    "$FRONT/scripts"
+
+cleanup() {
+    echo
+    echo "=== CLEANUP ==="
+
+    if [ -n "${BROWSER_PID:-}" ]; then
+        kill "$BROWSER_PID" 2>/dev/null || true
+        wait "$BROWSER_PID" 2>/dev/null || true
+    fi
+
+    if [ -n "${VITE_PID:-}" ]; then
+        kill "$VITE_PID" 2>/dev/null || true
+        wait "$VITE_PID" 2>/dev/null || true
+    fi
+
+    if [ -n "${ANVIL_PID:-}" ]; then
+        kill "$ANVIL_PID" 2>/dev/null || true
+        wait "$ANVIL_PID" 2>/dev/null || true
+    fi
+
+    rm -f \
+        "$FRONT/wp5d-runtime.html" \
+        "$FRONT/src/wp5d-runtime.ts" \
+        "$FRONT/public/wp5d-runtime-fixture.json" \
+        "$FRONT/scripts/wp5d-v2-deploy.mjs" \
+        "$FRONT/scripts/wp5d-v2-submit.mjs"
+
+    echo "TEMPORARY_RUNTIME_FILES_REMOVED=YES"
+}
+
+trap cleanup EXIT INT TERM
+
+echo
+echo "======================================================================"
+echo "VOTECHAIN-ZK WP5D-v2 — CDP BROWSER RUNTIME / ONCHAIN CAST"
+echo "======================================================================"
+echo "RUN_ID=$RUN_ID"
+echo
+echo "Research functional gate only."
+echo "Synthetic voter only."
+echo "Synthetic candidate selection only."
+echo "No real biometric execution."
+echo "No MongoDB access."
+echo "No production trusted-setup claim."
+echo
+
+###############################################################################
+# 1. WP5C / PROFILE PRECONDITIONS
+###############################################################################
+
+echo "=== 1. PRECONDITIONS ==="
+
+WP5C_SUMMARY="$OUTROOT/VC-W07_WP5C_LOCAL_PRIVACY_WORKER_SUMMARY.txt"
+
+if [ ! -f "$WP5C_SUMMARY" ]; then
+    echo "ERROR: WP5C accepted summary not found."
+    exit 10
+fi
+
+if ! grep -q \
+    '^STATUS=PASS_WP5C_LOCAL_PRIVACY_WORKER_BUILD$' \
+    "$WP5C_SUMMARY"
+then
+    echo "ERROR: WP5C is not accepted."
+    exit 11
+fi
+
+for f in \
+    "$APP_PROFILE" \
+    "$WP3_PROFILE" \
+    "$FRONT/src/privacy/wp5Privacy.worker.ts" \
+    "$FRONT/src/privacy/wp5PrivacyClient.ts" \
+    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect.wasm" \
+    "$FRONT/public/zk/wp5/direct/VoteChainVoteDirect_final.zkey" \
+    "$FRONT/public/zk/wp5/direct/verification_key.json"
+do
+    if [ ! -f "$f" ]; then
+        echo "ERROR: missing required file:"
+        echo "$f"
+        exit 12
+    fi
+done
+
+node -e '
+const fs = require("fs");
+
+const p = JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+
+if (
+  p.candidateManifest?.algorithm !==
+  "POSEIDON_INDEXED_CHAIN_V1"
+) {
+  throw new Error(
+    "WP5 indexed manifest freeze missing"
+  );
+}
+
+if (
+  p.directArtifacts?.trustedSetup !==
+  "DEV_ONLY"
+) {
+  throw new Error(
+    "Expected DEV_ONLY setup classification"
+  );
+}
+
+for (
+  const key of [
+    "wasmUrl",
+    "zkeyUrl",
+    "verificationKeyUrl"
+  ]
+) {
+  if (!p.directArtifacts?.[key]) {
+    throw new Error(
+      `appProfile.directArtifacts.${key} missing`
+    );
+  }
+}
+
+console.log(
+  "WP5C_ACCEPTED=PASS"
+);
+
+console.log(
+  "MANIFEST_ALGORITHM=" +
+  p.candidateManifest.algorithm
+);
+
+console.log(
+  "TRUSTED_SETUP=" +
+  p.directArtifacts.trustedSetup
+);
+
+console.log(
+  "WASM_URL=" +
+  p.directArtifacts.wasmUrl
+);
+
+console.log(
+  "ZKEY_URL=" +
+  p.directArtifacts.zkeyUrl
+);
+
+console.log(
+  "VKEY_URL=" +
+  p.directArtifacts.verificationKeyUrl
+);
+' "$APP_PROFILE"
+
+###############################################################################
+# 2. TOOLING / PORT PREFLIGHT
+###############################################################################
+
+echo
+echo "=== 2. TOOLING / PORT PREFLIGHT ==="
+
+command -v forge >/dev/null 2>&1 || {
+    echo "ERROR: forge not found."
+    exit 20
+}
+
+command -v anvil >/dev/null 2>&1 || {
+    echo "ERROR: anvil not found."
+    exit 21
+}
+
+command -v cast >/dev/null 2>&1 || {
+    echo "ERROR: cast not found."
+    exit 22
+}
+
+command -v curl >/dev/null 2>&1 || {
+    echo "ERROR: curl not found."
+    exit 23
+}
+
+if cast chain-id \
+    --rpc-url "$RPC" \
+    >/dev/null 2>&1
+then
+    echo "ERROR: port $ANVIL_PORT already has an Ethereum RPC server."
+    echo "Stop it or change ANVIL_PORT in this research script."
+    exit 24
+fi
+
+if curl -fsS \
+    "$VITE_URL" \
+    >/dev/null 2>&1
+then
+    echo "ERROR: port $VITE_PORT is already in use."
+    exit 25
+fi
+
+if curl -fsS \
+    "$CDP_URL/json/version" \
+    >/dev/null 2>&1
+then
+    echo "ERROR: Chrome CDP port $CDP_PORT is already in use."
+    exit 26
+fi
+
+echo "PORT_PREFLIGHT=PASS"
+
+###############################################################################
+# 3. LOCATE CHROME / EDGE
+###############################################################################
+
+echo
+echo "=== 3. LOCATE CHROMIUM BROWSER ==="
+
+BROWSER=""
+
+BROWSER_CANDIDATES=(
+    "/c/Program Files/Google/Chrome/Application/chrome.exe"
+    "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+    "/c/Program Files/Microsoft/Edge/Application/msedge.exe"
+    "/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+)
+
+for candidate in "${BROWSER_CANDIDATES[@]}"; do
+    if [ -f "$candidate" ]; then
+        BROWSER="$candidate"
+        break
+    fi
+done
+
+if [ -z "$BROWSER" ]; then
+    for name in \
+        chrome.exe \
+        msedge.exe \
+        google-chrome \
+        chromium
+    do
+        if command -v "$name" >/dev/null 2>&1; then
+            BROWSER="$(command -v "$name")"
+            break
+        fi
+    done
+fi
+
+if [ -z "$BROWSER" ]; then
+    echo "ERROR: Chrome/Edge not found."
+    exit 30
+fi
+
+echo "BROWSER=$BROWSER"
+
+###############################################################################
+# 4. REBUILD FROZEN WP4 CONTRACTS
+###############################################################################
+
+echo
+echo "=== 4. FOUNDRY BUILD ==="
+
+cd "$FOUNDRY"
+
+forge build \
+    2>&1 |
+    tee "$EVIDENCE/forge-build.log"
+
+cd "$ROOT"
+
+for f in \
+    "$DIRECT_ARTIFACT" \
+    "$VERIFIER_ARTIFACT"
+do
+    if [ ! -f "$f" ]; then
+        echo "ERROR: expected Foundry artifact missing:"
+        echo "$f"
+        exit 40
+    fi
+done
+
+echo "FOUNDRY_BUILD=PASS"
+
+###############################################################################
+# 5. START ISOLATED ANVIL
+###############################################################################
+
+echo
+echo "=== 5. START ISOLATED ANVIL ==="
+
+anvil \
+    --host 127.0.0.1 \
+    --port "$ANVIL_PORT" \
+    --chain-id 31337 \
+    > "$EVIDENCE/anvil.log" \
+    2>&1 &
+
+ANVIL_PID=$!
+
+ANVIL_READY=0
+
+for _i in $(seq 1 30); do
+    if cast chain-id \
+        --rpc-url "$RPC" \
+        >/dev/null 2>&1
+    then
+        ANVIL_READY=1
+        break
+    fi
+
+    sleep 1
+done
+
+if [ "$ANVIL_READY" != "1" ]; then
+    echo "ERROR: Anvil did not become ready."
+    cat "$EVIDENCE/anvil.log"
+    exit 50
+fi
+
+echo "ANVIL_RUNTIME=PASS"
+echo "ANVIL_CHAIN_ID=$(cast chain-id --rpc-url "$RPC")"
+
+###############################################################################
+# 6. WRITE DEPLOY / CONFIGURE HARNESS
+###############################################################################
+
+echo
+echo "=== 6. WRITE DEPLOYMENT HARNESS ==="
+
+DEPLOY_SCRIPT="$FRONT/scripts/wp5d-v2-deploy.mjs"
+
+cat > "$DEPLOY_SCRIPT" <<'NODE'
+import fs from "node:fs"
+import {
+  ContractFactory,
+  JsonRpcProvider,
+} from "ethers"
+import {
+  buildBabyjub,
+  buildPoseidon,
+} from "circomlibjs"
+
+const [
+  ,
+  ,
+  rpcUrl,
+  appProfilePath,
+  wp3ProfilePath,
+  verifierArtifactPath,
+  directArtifactPath,
+  evidenceFixturePath,
+  publicFixturePath,
+] = process.argv
+
+function readJson(file) {
+  return JSON.parse(
+    fs.readFileSync(
+      file,
+      "utf8",
+    ),
+  )
+}
+
+function writeJson(
+  file,
+  value,
+) {
+  fs.writeFileSync(
+    file,
+    JSON.stringify(
+      value,
+      (_key, item) =>
+        typeof item === "bigint"
+          ? item.toString()
+          : item,
+      2,
+    ) + "\n",
+  )
+}
+
+const appProfile =
+  readJson(
+    appProfilePath,
+  )
+
+const wp3Profile =
+  readJson(
+    wp3ProfilePath,
+  )
+
+const verifierArtifact =
+  readJson(
+    verifierArtifactPath,
+  )
+
+const directArtifact =
+  readJson(
+    directArtifactPath,
+  )
+
+if (
+  appProfile
+    .candidateManifest
+    .algorithm !==
+  "POSEIDON_INDEXED_CHAIN_V1"
+) {
+  throw new Error(
+    "Unexpected WP5 manifest algorithm",
+  )
+}
+
+const provider =
+  new JsonRpcProvider(
+    rpcUrl,
+  )
+
+const signer =
+  await provider.getSigner(0)
+
+const deployer =
+  await signer.getAddress()
+
+const verifierFactory =
+  new ContractFactory(
+    verifierArtifact.abi,
+    verifierArtifact.bytecode.object,
+    signer,
+  )
+
+const verifier =
+  await verifierFactory.deploy()
+
+await verifier.waitForDeployment()
+
+const verifierAddress =
+  await verifier.getAddress()
+
+const directFactory =
+  new ContractFactory(
+    directArtifact.abi,
+    directArtifact.bytecode.object,
+    signer,
+  )
+
+const direct =
+  await directFactory.deploy(
+    verifierAddress,
+  )
+
+await direct.waitForDeployment()
+
+const contractAddress =
+  await direct.getAddress()
+
+const poseidon =
+  await buildPoseidon()
+
+const babyjub =
+  await buildBabyjub()
+
+const PF =
+  poseidon.F
+
+const BF =
+  babyjub.F
+
+function H(values) {
+  return BigInt(
+    PF.toObject(
+      poseidon(
+        values.map(
+          value =>
+            BigInt(value),
+        ),
+      ),
+    ),
+  )
+}
+
+function pointBig(point) {
+  return [
+    BigInt(
+      BF.toObject(
+        point[0],
+      ),
+    ),
+    BigInt(
+      BF.toObject(
+        point[1],
+      ),
+    ),
+  ]
+}
+
+const DEPTH =
+  Number(
+    appProfile.merkleDepth,
+  )
+
+const D_ID =
+  BigInt(
+    appProfile.domains.identity,
+  )
+
+const D_CTX =
+  BigInt(
+    appProfile
+      .domains
+      .electionContext,
+  )
+
+const D_MANIFEST =
+  BigInt(
+    appProfile
+      .domains
+      .candidateManifest,
+  )
+
+/*
+ * Synthetic research voter only.
+ */
+const secret =
+  42424242424242n
+
+const commitment =
+  H([
+    D_ID,
+    secret,
+  ])
+
+const siblings =
+  Array.from(
+    {
+      length:
+        DEPTH,
+    },
+    (
+      _unused,
+      index,
+    ) =>
+      (
+        3001n +
+        BigInt(index)
+      ).toString(),
+  )
+
+const pathBits =
+  Array.from(
+    {
+      length:
+        DEPTH,
+    },
+    (
+      _unused,
+      index,
+    ) =>
+      String(
+        index % 2,
+      ),
+  )
+
+let eligibleRoot =
+  commitment
+
+for (
+  let index = 0;
+  index < DEPTH;
+  index += 1
+) {
+  const sibling =
+    BigInt(
+      siblings[index],
+    )
+
+  const bit =
+    BigInt(
+      pathBits[index],
+    )
+
+  eligibleRoot =
+    bit === 0n
+      ? H([
+          eligibleRoot,
+          sibling,
+        ])
+      : H([
+          sibling,
+          eligibleRoot,
+        ])
+}
+
+const candidates = [
+  {
+    candidateId: 101,
+    name: "Synthetic Candidate 101",
+    party: "Synthetic Party A",
+    location: "Synthetic District",
+  },
+  {
+    candidateId: 102,
+    name: "Synthetic Candidate 102",
+    party: "Synthetic Party B",
+    location: "Synthetic District",
+  },
+  {
+    candidateId: 103,
+    name: "Synthetic Candidate 103",
+    party: "Synthetic Party C",
+    location: "Synthetic District",
+  },
+  {
+    candidateId: 104,
+    name: "Synthetic Candidate 104",
+    party: "Synthetic Party D",
+    location: "Synthetic District",
+  },
+]
+
+const candidateIds =
+  candidates.map(
+    candidate =>
+      BigInt(
+        candidate.candidateId,
+      ),
+  )
+
+const candidateCount =
+  candidateIds.length
+
+let manifest =
+  H([
+    D_MANIFEST,
+    BigInt(
+      candidateCount,
+    ),
+  ])
+
+for (
+  let index = 0;
+  index < candidateIds.length;
+  index += 1
+) {
+  manifest =
+    H([
+      manifest,
+      BigInt(index),
+      candidateIds[index],
+    ])
+}
+
+const electionId =
+  202609300005n
+
+const contractDomain =
+  BigInt(
+    wp3Profile
+      .testContractDomain,
+  )
+
+const electionSecretKey =
+  123456789n
+
+const Y =
+  babyjub
+    .mulPointEscalar(
+      babyjub.Base8,
+      electionSecretKey,
+    )
+
+const [
+  Yx,
+  Yy,
+] =
+  pointBig(Y)
+
+const electionContextHash =
+  H([
+    D_CTX,
+    electionId,
+    manifest,
+    BigInt(
+      candidateCount,
+    ),
+    contractDomain,
+    Yx,
+    Yy,
+  ])
+
+await (
+  await direct.configure([
+    eligibleRoot.toString(),
+    electionId.toString(),
+    manifest.toString(),
+    String(
+      candidateCount,
+    ),
+    contractDomain.toString(),
+    Yx.toString(),
+    Yy.toString(),
+    electionContextHash.toString(),
+  ])
+).wait()
+
+await (
+  await direct.activate()
+).wait()
+
+if (
+  await direct.configured() !==
+  true
+) {
+  throw new Error(
+    "DIRECT contract not configured",
+  )
+}
+
+if (
+  Number(
+    await direct.phase(),
+  ) !== 1
+) {
+  throw new Error(
+    "DIRECT contract not active",
+  )
+}
+
+const publicConfig = {
+  profile:
+    "VoteChain-ZK-WP5D-v2-Synthetic",
+
+  phase: 1,
+
+  configured: true,
+
+  acceptedBallotCount:
+    "0",
+
+  candidates,
+
+  manifestAlgorithm:
+    "POSEIDON_INDEXED_CHAIN_V1",
+
+  config: {
+    eligibleRoot:
+      eligibleRoot.toString(),
+
+    electionId:
+      electionId.toString(),
+
+    candidateManifestHash:
+      manifest.toString(),
+
+    candidateCount:
+      String(
+        candidateCount,
+      ),
+
+    contractDomain:
+      contractDomain.toString(),
+
+    Yx:
+      Yx.toString(),
+
+    Yy:
+      Yy.toString(),
+
+    electionContextHash:
+      electionContextHash.toString(),
+  },
+}
+
+const fixture = {
+  syntheticOnly:
+    true,
+
+  rpcUrl,
+
+  chainId:
+    "31337",
+
+  deployer,
+
+  verifierAddress,
+
+  contractAddress,
+
+  selectedCandidateId:
+    102,
+
+  secret:
+    secret.toString(),
+
+  membership: {
+    identityCommitment:
+      commitment.toString(),
+
+    index: 0,
+
+    eligibleRoot:
+      eligibleRoot.toString(),
+
+    siblings,
+
+    pathBits,
+  },
+
+  publicConfig,
+}
+
+writeJson(
+  evidenceFixturePath,
+  fixture,
+)
+
+writeJson(
+  publicFixturePath,
+  fixture,
+)
+
+console.log(
+  "SYNTHETIC_CONTRACT_DEPLOY=PASS",
+)
+
+console.log(
+  "SYNTHETIC_CONTRACT_CONFIGURE=PASS",
+)
+
+console.log(
+  "SYNTHETIC_CONTRACT_ACTIVATE=PASS",
+)
+
+console.log(
+  `VERIFIER_ADDRESS=${verifierAddress}`,
+)
+
+console.log(
+  `DIRECT_ADDRESS=${contractAddress}`,
+)
+
+console.log(
+  `ELIGIBLE_ROOT=${eligibleRoot}`,
+)
+
+console.log(
+  `CANDIDATE_MANIFEST_HASH=${manifest}`,
+)
+NODE
+
+###############################################################################
+# 7. DEPLOY / CONFIGURE
+###############################################################################
+
+echo
+echo "=== 7. DEPLOY / CONFIGURE DIRECT ==="
+
+FIXTURE="$EVIDENCE/wp5d-v2-fixture.json"
+PUBLIC_FIXTURE="$FRONT/public/wp5d-runtime-fixture.json"
+
+cd "$FRONT"
+
+node \
+    scripts/wp5d-v2-deploy.mjs \
+    "$RPC" \
+    "$APP_PROFILE" \
+    "$WP3_PROFILE" \
+    "$VERIFIER_ARTIFACT" \
+    "$DIRECT_ARTIFACT" \
+    "$FIXTURE" \
+    "$PUBLIC_FIXTURE" \
+    | tee "$EVIDENCE/deployment.log"
+
+cd "$ROOT"
+
+###############################################################################
+# 8. WRITE ACTUAL BROWSER TEST PAGE
+###############################################################################
+
+echo
+echo "=== 8. WRITE BROWSER RUNTIME PAGE ==="
+
+cat > "$FRONT/wp5d-runtime.html" <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VoteChain-ZK WP5D-v2 Runtime</title>
+</head>
+
+<body
+  data-wp5d-status="RUNNING"
+  data-wp5d-result=""
+>
+  <h1>VoteChain-ZK WP5D-v2</h1>
+  <pre id="status">RUNNING</pre>
+
+  <script
+    type="module"
+    src="/src/wp5d-runtime.ts"
+  ></script>
+</body>
+</html>
+HTML
+
+cat > "$FRONT/src/wp5d-runtime.ts" <<'TS'
+import {
+  beginWp5Authorization,
+  prepareWp5EncryptedBallot,
+  resetWp5PrivacySession,
+} from "./privacy/wp5PrivacyClient"
+
+function bytesToBase64(
+  bytes: Uint8Array,
+) {
+  let binary = ""
+
+  for (
+    let index = 0;
+    index < bytes.length;
+    index += 1
+  ) {
+    binary +=
+      String.fromCharCode(
+        bytes[index],
+      )
+  }
+
+  return btoa(binary)
+}
+
+function bufferToBase64(
+  buffer: ArrayBuffer,
+) {
+  return bytesToBase64(
+    new Uint8Array(
+      buffer,
+    ),
+  )
+}
+
+function resultToBase64(
+  value: unknown,
+) {
+  return bytesToBase64(
+    new TextEncoder()
+      .encode(
+        JSON.stringify(
+          value,
+        ),
+      ),
+  )
+}
+
+async function makeAuthorization(
+  fixture: any,
+  clientPublicKey:
+    JsonWebKey,
+) {
+  const serverKeyPair =
+    await crypto.subtle.generateKey(
+      {
+        name: "ECDH",
+        namedCurve: "P-256",
+      },
+      true,
+      ["deriveBits"],
+    )
+
+  const clientKey =
+    await crypto.subtle.importKey(
+      "jwk",
+      clientPublicKey,
+      {
+        name: "ECDH",
+        namedCurve: "P-256",
+      },
+      false,
+      [],
+    )
+
+  const sharedSecret =
+    await crypto.subtle.deriveBits(
+      {
+        name: "ECDH",
+        public:
+          clientKey,
+      },
+      serverKeyPair.privateKey,
+      256,
+    )
+
+  const hkdfInput =
+    await crypto.subtle.importKey(
+      "raw",
+      sharedSecret,
+      "HKDF",
+      false,
+      ["deriveKey"],
+    )
+
+  const salt =
+    crypto.getRandomValues(
+      new Uint8Array(32),
+    )
+
+  const iv =
+    crypto.getRandomValues(
+      new Uint8Array(12),
+    )
+
+  const expiresAt =
+    Date.now() +
+    120_000
+
+  const aadString =
+    [
+      "VoteChain-ZK/WP5/v1",
+      fixture
+        .membership
+        .identityCommitment,
+      fixture
+        .publicConfig
+        .config
+        .electionId,
+      String(
+        expiresAt,
+      ),
+    ].join("|")
+
+  const aad =
+    new TextEncoder()
+      .encode(
+        aadString,
+      )
+
+  const aesKey =
+    await crypto.subtle.deriveKey(
+      {
+        name: "HKDF",
+        hash: "SHA-256",
+        salt,
+        info:
+          new TextEncoder()
+            .encode(
+              "VoteChain-ZK/WP5/credential-release/v1",
+            ),
+      },
+      hkdfInput,
+      {
+        name: "AES-GCM",
+        length: 256,
+      },
+      false,
+      ["encrypt"],
+    )
+
+  const encryptedSecret =
+    await crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv,
+        additionalData:
+          aad,
+      },
+      aesKey,
+      new TextEncoder()
+        .encode(
+          fixture.secret,
+        ),
+    )
+
+  const serverPublicKey =
+    await crypto.subtle.exportKey(
+      "jwk",
+      serverKeyPair.publicKey,
+    )
+
+  return {
+    version:
+      "VoteChain-ZK-WP5-Authorization-v1",
+
+    electionId:
+      fixture
+        .publicConfig
+        .config
+        .electionId,
+
+    expiresAt,
+
+    membership:
+      fixture.membership,
+
+    credentialEnvelope: {
+      version: 1,
+
+      keyAgreement:
+        "ECDH-P256-HKDF-SHA256",
+
+      contentEncryption:
+        "AES-256-GCM",
+
+      serverPublicKey,
+
+      salt:
+        bytesToBase64(
+          salt,
+        ),
+
+      iv:
+        bytesToBase64(
+          iv,
+        ),
+
+      aad:
+        bytesToBase64(
+          aad,
+        ),
+
+      ciphertext:
+        bufferToBase64(
+          encryptedSecret,
+        ),
+
+      expiresAt,
+    },
+  }
+}
+
+async function run() {
+  const overallStart =
+    performance.now()
+
+  const fixtureResponse =
+    await fetch(
+      "/wp5d-runtime-fixture.json",
+      {
+        cache:
+          "no-store",
+      },
+    )
+
+  if (
+    !fixtureResponse.ok
+  ) {
+    throw new Error(
+      "Could not load WP5D fixture",
+    )
+  }
+
+  const fixture =
+    await fixtureResponse.json()
+
+  const authorizationStart =
+    performance.now()
+
+  const {
+    credentialPublicKey,
+  } =
+    await beginWp5Authorization()
+
+  const authorization =
+    await makeAuthorization(
+      fixture,
+      credentialPublicKey,
+    )
+
+  const authorizationMs =
+    performance.now() -
+    authorizationStart
+
+  const privacyStart =
+    performance.now()
+
+  const ballot =
+    await prepareWp5EncryptedBallot(
+      fixture.selectedCandidateId,
+      authorization,
+      fixture.publicConfig,
+    )
+
+  const privacyMs =
+    performance.now() -
+    privacyStart
+
+  const expectedKeys =
+    [
+      "a",
+      "b",
+      "c",
+      "nullifier",
+      "rx",
+      "ry",
+      "sx",
+      "sy",
+    ].sort()
+
+  const actualKeys =
+    Object.keys(ballot)
+      .sort()
+
+  if (
+    JSON.stringify(
+      expectedKeys,
+    ) !==
+    JSON.stringify(
+      actualKeys,
+    )
+  ) {
+    throw new Error(
+      "Unexpected encrypted-ballot object shape",
+    )
+  }
+
+  if (
+    actualKeys.some(
+      key =>
+        /candidate/i.test(
+          key,
+        ),
+    )
+  ) {
+    throw new Error(
+      "Candidate plaintext field reached ballot submission object",
+    )
+  }
+
+  if (
+    ballot.rx.length !== 16 ||
+    ballot.ry.length !== 16 ||
+    ballot.sx.length !== 16 ||
+    ballot.sy.length !== 16
+  ) {
+    throw new Error(
+      "Expected 16 encrypted candidate slots",
+    )
+  }
+
+  const result = {
+    status:
+      "PASS",
+
+    browserRuntime:
+      true,
+
+    syntheticAuthorizationEnvelope:
+      true,
+
+    candidatePlaintextInBallotObject:
+      false,
+
+    authorizationMs,
+
+    privacyMs,
+
+    overallMs:
+      performance.now() -
+      overallStart,
+
+    ballot,
+  }
+
+  /*
+   * Ballot is already copied into the result object.
+   * Terminate the privacy worker before reporting PASS.
+   */
+  resetWp5PrivacySession()
+
+  document.body.dataset.wp5dResult =
+    resultToBase64(
+      result,
+    )
+
+  document.body.dataset.wp5dStatus =
+    "PASS"
+
+  document
+    .getElementById(
+      "status",
+    )!
+    .textContent =
+      "PASS"
+}
+
+try {
+  await run()
+} catch (error) {
+  resetWp5PrivacySession()
+
+  const result = {
+    status:
+      "FAIL",
+
+    error:
+      error instanceof Error
+        ? error.message
+        : String(error),
+  }
+
+  document.body.dataset.wp5dResult =
+    resultToBase64(
+      result,
+    )
+
+  document.body.dataset.wp5dStatus =
+    "FAIL"
+
+  document
+    .getElementById(
+      "status",
+    )!
+    .textContent =
+      `FAIL: ${result.error}`
+}
+TS
+
+###############################################################################
+# 9. START VITE
+###############################################################################
+
+echo
+echo "=== 9. START VITE DEV SERVER ==="
+
+cd "$FRONT"
+
+node node_modules/vite/bin/vite.js \
+    --host 127.0.0.1 \
+    --port "$VITE_PORT" \
+    --strictPort \
+    > "$EVIDENCE/vite.log" \
+    2>&1 &
+
+VITE_PID=$!
+
+cd "$ROOT"
+
+VITE_READY=0
+
+for _i in $(seq 1 60); do
+    if curl -fsS \
+        "$VITE_URL/wp5d-runtime.html" \
+        >/dev/null 2>&1
+    then
+        VITE_READY=1
+        break
+    fi
+
+    sleep 1
+done
+
+if [ "$VITE_READY" != "1" ]; then
+    echo "ERROR: Vite did not become ready."
+    cat "$EVIDENCE/vite.log"
+    exit 60
+fi
+
+echo "VITE_RUNTIME_SERVER=PASS"
+
+###############################################################################
+# 10. START CHROME WITH DEVTOOLS PROTOCOL
+###############################################################################
+
+echo
+echo "=== 10. START HEADLESS CHROME WITH CDP ==="
+
+CHROME_PROFILE="$EVIDENCE/chrome-profile"
+
+rm -rf "$CHROME_PROFILE"
+
+"$BROWSER" \
+    --headless=new \
+    --disable-gpu \
+    --no-first-run \
+    --no-default-browser-check \
+    --disable-background-networking \
+    --disable-extensions \
+    --disable-sync \
+    --remote-debugging-address=127.0.0.1 \
+    --remote-debugging-port="$CDP_PORT" \
+    --user-data-dir="$CHROME_PROFILE" \
+    "$VITE_URL/wp5d-runtime.html" \
+    > "$EVIDENCE/chrome.log" \
+    2>&1 &
+
+BROWSER_PID=$!
+
+CDP_READY=0
+
+for _i in $(seq 1 60); do
+    if curl -fsS \
+        "$CDP_URL/json/version" \
+        >/dev/null 2>&1
+    then
+        CDP_READY=1
+        break
+    fi
+
+    sleep 1
+done
+
+if [ "$CDP_READY" != "1" ]; then
+    echo "ERROR: Chrome DevTools endpoint did not become ready."
+    tail -n 100 "$EVIDENCE/chrome.log" || true
+    exit 70
+fi
+
+echo "CHROME_CDP=PASS"
+
+###############################################################################
+# 11. WRITE CDP WAIT / RESULT COLLECTOR
+###############################################################################
+
+echo
+echo "=== 11. WRITE CDP RESULT COLLECTOR ==="
+
+CDP_RUNNER="$EVIDENCE/wp5d-cdp-runner.mjs"
+
+cat > "$CDP_RUNNER" <<'NODE'
+import fs from "node:fs"
+
+const [
+  ,
+  ,
+  cdpBaseUrl,
+  targetUrlFragment,
+  outputPath,
+] = process.argv
+
+const sleep =
+  milliseconds =>
+    new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          milliseconds,
+        ),
+    )
+
+async function findPageTarget() {
+  for (
+    let attempt = 0;
+    attempt < 120;
+    attempt += 1
+  ) {
+    try {
+      const response =
+        await fetch(
+          `${cdpBaseUrl}/json/list`,
+        )
+
+      if (response.ok) {
+        const targets =
+          await response.json()
+
+        const target =
+          targets.find(
+            item =>
+              item.type ===
+                "page" &&
+              String(
+                item.url,
+              ).includes(
+                targetUrlFragment,
+              ),
+          )
+
+        if (target) {
+          return target
+        }
+      }
+    } catch {
+      // Chrome may still be starting.
+    }
+
+    await sleep(500)
+  }
+
+  throw new Error(
+    "WP5D browser page target not found",
+  )
+}
+
+const target =
+  await findPageTarget()
+
+if (
+  typeof WebSocket !==
+  "function"
+) {
+  throw new Error(
+    "Node global WebSocket unavailable",
+  )
+}
+
+const ws =
+  new WebSocket(
+    target.webSocketDebuggerUrl,
+  )
+
+await new Promise(
+  (
+    resolve,
+    reject,
+  ) => {
+    ws.addEventListener(
+      "open",
+      resolve,
+      {
+        once: true,
+      },
+    )
+
+    ws.addEventListener(
+      "error",
+      () =>
+        reject(
+          new Error(
+            "CDP WebSocket connection failed",
+          ),
+        ),
+      {
+        once: true,
+      },
+    )
+  },
+)
+
+let messageId = 0
+
+const pending =
+  new Map()
+
+ws.addEventListener(
+  "message",
+  event => {
+    let text
+
+    if (
+      typeof event.data ===
+      "string"
+    ) {
+      text =
+        event.data
+    } else {
+      text =
+        Buffer.from(
+          event.data,
+        ).toString(
+          "utf8",
+        )
+    }
+
+    const message =
+      JSON.parse(text)
+
+    if (
+      !message.id ||
+      !pending.has(
+        message.id,
+      )
+    ) {
+      return
+    }
+
+    const {
+      resolve,
+      reject,
+    } =
+      pending.get(
+        message.id,
+      )
+
+    pending.delete(
+      message.id,
+    )
+
+    if (message.error) {
+      reject(
+        new Error(
+          JSON.stringify(
+            message.error,
+          ),
+        ),
+      )
+    } else {
+      resolve(
+        message.result,
+      )
+    }
+  },
+)
+
+function send(
+  method,
+  params = {},
+) {
+  messageId += 1
+
+  const id =
+    messageId
+
+  return new Promise(
+    (
+      resolve,
+      reject,
+    ) => {
+      pending.set(
+        id,
+        {
+          resolve,
+          reject,
+        },
+      )
+
+      ws.send(
+        JSON.stringify({
+          id,
+          method,
+          params,
+        }),
+      )
+    },
+  )
+}
+
+async function evaluate(
+  expression,
+) {
+  const response =
+    await send(
+      "Runtime.evaluate",
+      {
+        expression,
+        returnByValue:
+          true,
+        awaitPromise:
+          true,
+      },
+    )
+
+  if (
+    response
+      .exceptionDetails
+  ) {
+    throw new Error(
+      "Runtime.evaluate exception",
+    )
+  }
+
+  return response
+    .result
+    .value
+}
+
+await send(
+  "Runtime.enable",
+)
+
+await send(
+  "Page.enable",
+)
+
+let finalStatus =
+  null
+
+/*
+ * Maximum browser wait:
+ * 600 iterations × 1 second = 10 minutes.
+ *
+ * A Groth16 browser proof can take materially longer
+ * than ordinary UI work, so do not use DOM-dump timing.
+ */
+for (
+  let iteration = 0;
+  iteration < 600;
+  iteration += 1
+) {
+  const status =
+    await evaluate(`
+      document.body
+        ? (
+            document.body.dataset.wp5dStatus ||
+            "MISSING"
+          )
+        : "NO_BODY"
+    `)
+
+  if (
+    iteration % 10 === 0
+  ) {
+    console.log(
+      `CDP_STATUS_${iteration}=${status}`,
+    )
+  }
+
+  if (
+    status === "PASS" ||
+    status === "FAIL"
+  ) {
+    finalStatus =
+      status
+    break
+  }
+
+  await sleep(1000)
+}
+
+if (!finalStatus) {
+  const bodyText =
+    await evaluate(`
+      document.body
+        ? document.body.innerText
+        : "NO_BODY"
+    `)
+
+  throw new Error(
+    `Browser runtime timeout. Body: ${bodyText}`,
+  )
+}
+
+const encoded =
+  await evaluate(`
+    document.body.dataset.wp5dResult || ""
+  `)
+
+if (!encoded) {
+  throw new Error(
+    "Browser reached terminal state without wp5dResult",
+  )
+}
+
+const decoded =
+  Buffer.from(
+    encoded,
+    "base64",
+  ).toString(
+    "utf8",
+  )
+
+const result =
+  JSON.parse(
+    decoded,
+  )
+
+fs.writeFileSync(
+  outputPath,
+  JSON.stringify(
+    result,
+    null,
+    2,
+  ) + "\n",
+)
+
+console.log(
+  `BROWSER_RESULT_STATUS=${result.status}`,
+)
+
+if (
+  finalStatus !==
+    "PASS" ||
+  result.status !==
+    "PASS"
+) {
+  console.log(
+    `BROWSER_RESULT_ERROR=${result.error || "UNKNOWN"}`
+  )
+
+  ws.close()
+
+  process.exitCode = 3
+} else {
+  console.log(
+    "BROWSER_WORKER_RUNTIME=PASS",
+  )
+
+  console.log(
+    `BROWSER_AUTHORIZATION_MS=${result.authorizationMs}`,
+  )
+
+  console.log(
+    `BROWSER_LOCAL_PRIVACY_MS=${result.privacyMs}`,
+  )
+
+  console.log(
+    `BROWSER_OVERALL_MS=${result.overallMs}`,
+  )
+
+  console.log(
+    "CANDIDATE_PLAINTEXT_IN_BALLOT_OBJECT=FALSE",
+  )
+
+  ws.close()
+}
+NODE
+
+###############################################################################
+# 12. WAIT FOR REAL BROWSER WORKER
+###############################################################################
+
+echo
+echo "=== 12. WAIT FOR REAL BROWSER PRIVACY WORKER ==="
+
+BROWSER_RESULT="$EVIDENCE/browser-result.json"
+
+node \
+    "$CDP_RUNNER" \
+    "$CDP_URL" \
+    "wp5d-runtime.html" \
+    "$BROWSER_RESULT" \
+    | tee "$EVIDENCE/cdp-result.log"
+
+echo "CDP_BROWSER_GATE=PASS"
+
+###############################################################################
+# 13. WRITE ONCHAIN SUBMISSION HARNESS
+###############################################################################
+
+echo
+echo "=== 13. WRITE ONCHAIN SUBMISSION HARNESS ==="
+
+SUBMIT_SCRIPT="$FRONT/scripts/wp5d-v2-submit.mjs"
+
+cat > "$SUBMIT_SCRIPT" <<'NODE'
+import fs from "node:fs"
+import {
+  Contract,
+  JsonRpcProvider,
+} from "ethers"
+
+const [
+  ,
+  ,
+  fixturePath,
+  browserResultPath,
+  directArtifactPath,
+  outputPath,
+] = process.argv
+
+function readJson(file) {
+  return JSON.parse(
+    fs.readFileSync(
+      file,
+      "utf8",
+    ),
+  )
+}
+
+function writeJson(
+  file,
+  value,
+) {
+  fs.writeFileSync(
+    file,
+    JSON.stringify(
+      value,
+      (_key, item) =>
+        typeof item === "bigint"
+          ? item.toString()
+          : item,
+      2,
+    ) + "\n",
+  )
+}
+
+const fixture =
+  readJson(
+    fixturePath,
+  )
+
+const browserResult =
+  readJson(
+    browserResultPath,
+  )
+
+const artifact =
+  readJson(
+    directArtifactPath,
+  )
+
+if (
+  browserResult.status !==
+  "PASS"
+) {
+  throw new Error(
+    "Browser result is not PASS",
+  )
+}
+
+const ballot =
+  browserResult.ballot
+
+const keys =
+  Object.keys(ballot)
+    .sort()
+
+const expectedKeys =
+  [
+    "a",
+    "b",
+    "c",
+    "nullifier",
+    "rx",
+    "ry",
+    "sx",
+    "sy",
+  ].sort()
+
+if (
+  JSON.stringify(keys) !==
+  JSON.stringify(
+    expectedKeys,
+  )
+) {
+  throw new Error(
+    "Unexpected ballot submission shape",
+  )
+}
+
+if (
+  keys.some(
+    key =>
+      /candidate/i.test(
+        key,
+      ),
+  )
+) {
+  throw new Error(
+    "Candidate plaintext field reached transaction object",
+  )
+}
+
+const provider =
+  new JsonRpcProvider(
+    fixture.rpcUrl,
+  )
+
+const signer =
+  await provider.getSigner(0)
+
+const contract =
+  new Contract(
+    fixture.contractAddress,
+    artifact.abi,
+    signer,
+  )
+
+const acceptedBefore =
+  await contract
+    .acceptedBallotCount()
+
+if (
+  acceptedBefore !== 0n
+) {
+  throw new Error(
+    "Expected empty synthetic tally before cast",
+  )
+}
+
+const txStart =
+  performance.now()
+
+const tx =
+  await contract.castVote(
+    ballot.a,
+    ballot.b,
+    ballot.c,
+    ballot.nullifier,
+    ballot.rx,
+    ballot.ry,
+    ballot.sx,
+    ballot.sy,
+  )
+
+const receipt =
+  await tx.wait()
+
+const txLatencyMs =
+  performance.now() -
+  txStart
+
+if (
+  !receipt ||
+  receipt.status !== 1
+) {
+  throw new Error(
+    "DIRECT encrypted ballot transaction failed",
+  )
+}
+
+const acceptedAfter =
+  await contract
+    .acceptedBallotCount()
+
+if (
+  acceptedAfter !== 1n
+) {
+  throw new Error(
+    "Accepted ballot count did not increment",
+  )
+}
+
+const nullifierUsed =
+  await contract
+    .usedNullifier(
+      ballot.nullifier,
+    )
+
+if (
+  nullifierUsed !==
+  true
+) {
+  throw new Error(
+    "Nullifier not marked used",
+  )
+}
+
+/*
+ * Because this is the first ballot and the accumulator
+ * begins at BabyJub identity, each encrypted tally slot
+ * must exactly equal that ballot's ciphertext slot.
+ */
+for (
+  let slot = 0;
+  slot < 16;
+  slot += 1
+) {
+  const tally =
+    await contract
+      .getTally(slot)
+
+  const expected = [
+    BigInt(
+      ballot.rx[slot],
+    ),
+    BigInt(
+      ballot.ry[slot],
+    ),
+    BigInt(
+      ballot.sx[slot],
+    ),
+    BigInt(
+      ballot.sy[slot],
+    ),
+  ]
+
+  for (
+    let coordinate = 0;
+    coordinate < 4;
+    coordinate += 1
+  ) {
+    if (
+      BigInt(
+        tally[coordinate],
+      ) !==
+      expected[coordinate]
+    ) {
+      throw new Error(
+        `Tally mismatch slot=${slot} coordinate=${coordinate}`,
+      )
+    }
+  }
+}
+
+let duplicateRejected =
+  false
+
+try {
+  const duplicate =
+    await contract.castVote(
+      ballot.a,
+      ballot.b,
+      ballot.c,
+      ballot.nullifier,
+      ballot.rx,
+      ballot.ry,
+      ballot.sx,
+      ballot.sy,
+    )
+
+  await duplicate.wait()
+} catch {
+  duplicateRejected =
+    true
+}
+
+if (
+  !duplicateRejected
+) {
+  throw new Error(
+    "Duplicate nullifier was accepted",
+  )
+}
+
+const functionFragment =
+  contract.interface
+    .getFunction(
+      "castVote",
+    )
+
+const candidateNamedInputs =
+  functionFragment.inputs.filter(
+    input =>
+      /candidate/i.test(
+        input.name || "",
+      ),
+  )
+
+if (
+  candidateNamedInputs.length !==
+  0
+) {
+  throw new Error(
+    "DIRECT cast ABI exposes a candidate-named input",
+  )
+}
+
+const calldataBytes =
+  (
+    tx.data.length -
+    2
+  ) /
+  2
+
+const output = {
+  status:
+    "PASS",
+
+  txHash:
+    receipt.hash,
+
+  blockNumber:
+    receipt.blockNumber,
+
+  gasUsed:
+    receipt.gasUsed.toString(),
+
+  calldataBytes,
+
+  txLatencyMs,
+
+  acceptedBefore:
+    acceptedBefore.toString(),
+
+  acceptedAfter:
+    acceptedAfter.toString(),
+
+  nullifierUsed,
+
+  firstBallotTallyMatch:
+    true,
+
+  duplicateNullifierRejected:
+    true,
+
+  candidateNamedCastInputs:
+    candidateNamedInputs.length,
+
+  submissionKeys:
+    keys,
+}
+
+writeJson(
+  outputPath,
+  output,
+)
+
+console.log(
+  "ONCHAIN_DIRECT_CAST=PASS",
+)
+
+console.log(
+  "ONCHAIN_ACCEPTED_BALLOT_COUNT=1",
+)
+
+console.log(
+  "ONCHAIN_NULLIFIER_USED=PASS",
+)
+
+console.log(
+  "ONCHAIN_FIRST_BALLOT_TALLY_MATCH=PASS",
+)
+
+console.log(
+  "ONCHAIN_DUPLICATE_NULLIFIER_REJECTED=PASS",
+)
+
+console.log(
+  "ONCHAIN_CAST_CANDIDATE_NAMED_INPUTS=0",
+)
+
+console.log(
+  `ONCHAIN_CAST_GAS_USED=${receipt.gasUsed}`,
+)
+
+console.log(
+  `ONCHAIN_CAST_CALLDATA_BYTES=${calldataBytes}`,
+)
+
+console.log(
+  `ONCHAIN_TX_LATENCY_MS=${txLatencyMs}`,
+)
+NODE
+
+###############################################################################
+# 14. SUBMIT THE BROWSER-GENERATED BALLOT
+###############################################################################
+
+echo
+echo "=== 14. SUBMIT BROWSER-GENERATED BALLOT ==="
+
+ONCHAIN_RESULT="$EVIDENCE/onchain-result.json"
+
+cd "$FRONT"
+
+node \
+    scripts/wp5d-v2-submit.mjs \
+    "$FIXTURE" \
+    "$BROWSER_RESULT" \
+    "$DIRECT_ARTIFACT" \
+    "$ONCHAIN_RESULT" \
+    | tee "$EVIDENCE/onchain-result.log"
+
+cd "$ROOT"
+
+###############################################################################
+# 15. PRIVACY / SHAPE GATE
+###############################################################################
+
+echo
+echo "=== 15. FINAL PRIVACY SHAPE GATE ==="
+
+CHECKER="$EVIDENCE/wp5d-final-gate.mjs"
+
+cat > "$CHECKER" <<'NODE'
+import fs from "node:fs"
+
+const [
+  ,
+  ,
+  browserResultPath,
+  onchainResultPath,
+] = process.argv
+
+const browser =
+  JSON.parse(
+    fs.readFileSync(
+      browserResultPath,
+      "utf8",
+    ),
+  )
+
+const chain =
+  JSON.parse(
+    fs.readFileSync(
+      onchainResultPath,
+      "utf8",
+    ),
+  )
+
+if (
+  browser.status !==
+    "PASS" ||
+  chain.status !==
+    "PASS"
+) {
+  throw new Error(
+    "WP5D runtime result not PASS",
+  )
+}
+
+if (
+  browser
+    .candidatePlaintextInBallotObject !==
+  false
+) {
+  throw new Error(
+    "Candidate plaintext field found in encrypted ballot object",
+  )
+}
+
+if (
+  chain
+    .candidateNamedCastInputs !==
+  0
+) {
+  throw new Error(
+    "Candidate-named input found in DIRECT cast ABI",
+  )
+}
+
+if (
+  chain.acceptedAfter !==
+  "1"
+) {
+  throw new Error(
+    "Onchain ballot acceptance mismatch",
+  )
+}
+
+if (
+  chain.nullifierUsed !==
+  true
+) {
+  throw new Error(
+    "Nullifier state mismatch",
+  )
+}
+
+if (
+  chain
+    .firstBallotTallyMatch !==
+  true
+) {
+  throw new Error(
+    "Encrypted tally mismatch",
+  )
+}
+
+if (
+  chain
+    .duplicateNullifierRejected !==
+  true
+) {
+  throw new Error(
+    "Duplicate-nullifier negative case failed",
+  )
+}
+
+console.log(
+  "SYNTHETIC_SELECTED_CANDIDATE_LOCAL_ONLY=PASS",
+)
+
+console.log(
+  "SUBMISSION_OBJECT_CANDIDATE_PLAINTEXT=NO",
+)
+
+console.log(
+  "DIRECT_CALLDATA_CANDIDATE_ARGUMENT=NO",
+)
+
+console.log(
+  "BROWSER_TO_CONTRACT_ENCRYPTED_PATH=PASS",
+)
+NODE
+
+node \
+    "$CHECKER" \
+    "$BROWSER_RESULT" \
+    "$ONCHAIN_RESULT"
+
+###############################################################################
+# 16. EXTRACT SMOKE METRICS
+###############################################################################
+
+echo
+echo "=== 16. EXTRACT FUNCTIONAL SMOKE METRICS ==="
+
+METRICS="$EVIDENCE/wp5d-smoke-metrics.json"
+
+node -e '
+const fs = require("fs");
+
+const browser =
+  JSON.parse(
+    fs.readFileSync(
+      process.argv[1],
+      "utf8"
+    )
+  );
+
+const chain =
+  JSON.parse(
+    fs.readFileSync(
+      process.argv[2],
+      "utf8"
+    )
+  );
+
+const output = {
+  classification:
+    "FUNCTIONAL_SMOKE_ONLY_NOT_FINAL_BENCHMARK",
+
+  samples: 1,
+
+  authorizationMs:
+    browser.authorizationMs,
+
+  localPrivacyMs:
+    browser.privacyMs,
+
+  browserOverallMs:
+    browser.overallMs,
+
+  castGas:
+    chain.gasUsed,
+
+  calldataBytes:
+    chain.calldataBytes,
+
+  txLatencyMs:
+    chain.txLatencyMs
+};
+
+fs.writeFileSync(
+  process.argv[3],
+  JSON.stringify(
+    output,
+    null,
+    2
+  ) + "\n"
+);
+
+console.log(
+  "SMOKE_SAMPLE_COUNT=1"
+);
+
+console.log(
+  "FINAL_BENCHMARK=NO"
+);
+
+console.log(
+  "WP8_REPEATED_MEASUREMENTS=PENDING"
+);
+' \
+    "$BROWSER_RESULT" \
+    "$ONCHAIN_RESULT" \
+    "$METRICS"
+
+cat "$METRICS"
+
+###############################################################################
+# 17. EVIDENCE HASHES
+###############################################################################
+
+echo
+echo "=== 17. EVIDENCE HASHES ==="
+
+sha256sum \
+    "$FIXTURE" \
+    "$BROWSER_RESULT" \
+    "$ONCHAIN_RESULT" \
+    "$METRICS" \
+    "$EVIDENCE/deployment.log" \
+    "$EVIDENCE/cdp-result.log" \
+    "$EVIDENCE/onchain-result.log" \
+    > "$EVIDENCE/wp5d-v2-evidence.sha256"
+
+cat "$EVIDENCE/wp5d-v2-evidence.sha256"
+
+###############################################################################
+# 18. READ FINAL VALUES
+###############################################################################
+
+BROWSER_PRIVACY_MS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  String(x.privacyMs)
+);
+' "$BROWSER_RESULT"
+)"
+
+BROWSER_TOTAL_MS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  String(x.overallMs)
+);
+' "$BROWSER_RESULT"
+)"
+
+CAST_GAS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  String(x.gasUsed)
+);
+' "$ONCHAIN_RESULT"
+)"
+
+CALLDATA_BYTES="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  String(x.calldataBytes)
+);
+' "$ONCHAIN_RESULT"
+)"
+
+TX_LATENCY_MS="$(
+    node -e '
+const fs=require("fs");
+const x=JSON.parse(
+  fs.readFileSync(
+    process.argv[1],
+    "utf8"
+  )
+);
+process.stdout.write(
+  String(x.txLatencyMs)
+);
+' "$ONCHAIN_RESULT"
+)"
+
+###############################################################################
+# 19. REMOVE SYNTHETIC MATERIAL FROM ACTIVE FRONTEND
+###############################################################################
+
+echo
+echo "=== 19. CLEAN SYNTHETIC ACTIVE-TREE MATERIAL ==="
+
+rm -f \
+    "$FRONT/wp5d-runtime.html" \
+    "$FRONT/src/wp5d-runtime.ts" \
+    "$FRONT/public/wp5d-runtime-fixture.json" \
+    "$FRONT/scripts/wp5d-v2-deploy.mjs" \
+    "$FRONT/scripts/wp5d-v2-submit.mjs"
+
+echo "SYNTHETIC_SECRET_LEFT_IN_ACTIVE_FRONTEND_TREE=NO"
+
+###############################################################################
+# 20. SUMMARY
+###############################################################################
+
+echo
+echo "=== 20. WRITE WP5D-v2 SUMMARY ==="
+
+{
+    echo "======================================================================"
+    echo "VOTECHAIN-ZK WP5D-v2 — CDP BROWSER RUNTIME / ONCHAIN CAST"
+    echo "======================================================================"
+    echo
+    echo "STATUS=PASS_WP5D_V2_SYNTHETIC_RUNTIME"
+    echo "RUN_ID=$RUN_ID"
+    echo
+    echo "WP5C_LOCAL_PRIVACY_WORKER_BUILD=PASS"
+    echo "ACTIVE_BINDING=DIRECT"
+    echo "MANIFEST_ALGORITHM=POSEIDON_INDEXED_CHAIN_V1"
+    echo
+    echo "ANVIL_RUNTIME=PASS"
+    echo "FOUNDRY_BUILD=PASS"
+    echo "SYNTHETIC_CONTRACT_DEPLOY=PASS"
+    echo "SYNTHETIC_CONTRACT_CONFIGURE=PASS"
+    echo "SYNTHETIC_CONTRACT_ACTIVATE=PASS"
+    echo
+    echo "REAL_CHROMIUM_CDP_RUNTIME=PASS"
+    echo "BROWSER_WORKER_RUNTIME=PASS"
+    echo "SYNTHETIC_AUTHORIZATION_ENVELOPE=PASS"
+    echo "ECDH_P256_RUNTIME=PASS"
+    echo "HKDF_SHA256_RUNTIME=PASS"
+    echo "AES_256_GCM_CREDENTIAL_UNWRAP_RUNTIME=PASS"
+    echo
+    echo "BROWSER_POSEIDON_RUNTIME=PASS"
+    echo "BROWSER_BABYJUB_RUNTIME=PASS"
+    echo "BROWSER_DIRECT_GROTH16_RUNTIME=PASS"
+    echo "ASSERT_EXTERNALIZATION_RUNTIME=PASS"
+    echo
+    echo "ONCHAIN_DIRECT_CAST=PASS"
+    echo "ONCHAIN_ACCEPTED_BALLOT_COUNT=1"
+    echo "ONCHAIN_NULLIFIER_USED=PASS"
+    echo "ONCHAIN_FIRST_BALLOT_TALLY_MATCH=PASS"
+    echo "ONCHAIN_DUPLICATE_NULLIFIER_REJECTED=PASS"
+    echo
+    echo "SYNTHETIC_SELECTED_CANDIDATE_LOCAL_ONLY=PASS"
+    echo "SUBMISSION_OBJECT_CANDIDATE_PLAINTEXT=NO"
+    echo "DIRECT_CALLDATA_CANDIDATE_ARGUMENT=NO"
+    echo "BROWSER_TO_CONTRACT_ENCRYPTED_PATH=PASS"
+    echo
+    echo "FUNCTIONAL_SMOKE_SAMPLE_COUNT=1"
+    echo "FINAL_BENCHMARK=NO"
+    echo "WP8_REPEATED_MEASUREMENTS=PENDING"
+    echo
+    echo "BROWSER_LOCAL_PRIVACY_MS=$BROWSER_PRIVACY_MS"
+    echo "BROWSER_OVERALL_MS=$BROWSER_TOTAL_MS"
+    echo "ONCHAIN_CAST_GAS_USED=$CAST_GAS"
+    echo "ONCHAIN_CAST_CALLDATA_BYTES=$CALLDATA_BYTES"
+    echo "ONCHAIN_TX_LATENCY_MS=$TX_LATENCY_MS"
+    echo
+    echo "SYNTHETIC_SECRET_LEFT_IN_ACTIVE_FRONTEND_TREE=NO"
+    echo
+    echo "TRUSTED_SETUP=DEV_ONLY"
+    echo "PRODUCTION_TRUSTED_SETUP_CLAIM=NO"
+    echo
+    echo "REAL_BIOMETRIC_EXECUTION=NO"
+    echo "REAL_BIOMETRIC_DATA_USED=NO"
+    echo "MONGODB_ACCESSED=NO"
+    echo
+    echo "ACTUAL_BACKEND_AUTHORIZATION_HTTP_RUNTIME=NOT_YET_EXERCISED"
+    echo "WP5_FULL_GATE=NOT_YET_COMPLETE"
+    echo
+    echo "EVIDENCE=$EVIDENCE"
+    echo
+    echo "NEXT_ACTION=WP5E_BACKEND_AUTHORIZATION_AND_NETWORK_LEAKAGE_GATE"
+    echo "======================================================================"
+} | tee "$SUMMARY"
+
+echo
+echo "======================================================================"
+echo "WP5D-v2 COMPLETE"
+echo "======================================================================"
+echo
+echo "Send me:"
+echo "$SUMMARY"

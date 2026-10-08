@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "sourceRows": 100,
+  "warmupRowsExcluded": 20,
+  "measuredRowsIncluded": 80,
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "measuredPerLevel": {
+    "2": 20,
+    "4": 20,
+    "8": 20,
+    "16": 20
+  },
+  "positionBalance": {
+    "K2_P1": 5,
+    "K2_P2": 5,
+    "K2_P3": 5,
+    "K2_P4": 5,
+    "K4_P1": 5,
+    "K4_P2": 5,
+    "K4_P3": 5,
+    "K4_P4": 5,
+    "K8_P1": 5,
+    "K8_P2": 5,
+    "K8_P3": 5,
+    "K8_P4": 5,
+    "K16_P1": 5,
+    "K16_P2": 5,
+    "K16_P3": 5,
+    "K16_P4": 5
+  },
+  "pilotsIncluded": false,
+  "warmupsIncluded": false,
+  "measuredOnly": true,
+  "inferentialRegressionPerformed": false
+}

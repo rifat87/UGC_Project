@@ -1,0 +1,6 @@
+
+======================================================================
+PACKAGE=ws
+======================================================================
+npm error No dependencies found matching ws
+npm error A complete log of this run can be found in: C:\Users\88018\AppData\Local\npm-cache\_logs\2026-10-01T05_54_26_161Z-debug-0.log

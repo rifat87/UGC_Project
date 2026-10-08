@@ -1,0 +1,9 @@
+file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:15
+    throw new Error(`${label} is unavailable. Run the documented setup first. ${error.message}`)
+          ^
+
+Error: Backend ethers dependency is unavailable. Run the documented setup first. Cannot find module '/mnt/data/vc-w03-work/VoteChain/votechain-central-server/node_modules/ethers/lib.esm/index.js' imported from /mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs
+    at loadModule (file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:15:11)
+    at async file:///mnt/data/vc-w03-work/VoteChain/research/zkp/e2e/local-zk-e2e.mjs:51:22
+
+Node.js v22.16.0

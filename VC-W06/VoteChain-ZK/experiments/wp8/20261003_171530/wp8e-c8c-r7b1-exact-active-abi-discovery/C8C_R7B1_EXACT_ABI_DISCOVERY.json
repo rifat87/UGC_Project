@@ -1,0 +1,615 @@
+{
+  "status": "PASS",
+  "abiEntryCount": 31,
+  "functionCount": 24,
+  "constructorCount": 1,
+  "constructors": [
+    {
+      "inputNames": [
+        "verifierAddress"
+      ],
+      "inputTypes": [
+        "address"
+      ],
+      "stateMutability": "nonpayable"
+    }
+  ],
+  "allFunctions": [
+    {
+      "name": "Yx",
+      "signature": "Yx()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "Yy",
+      "signature": "Yy()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "acceptedBallotCount",
+      "signature": "acceptedBallotCount()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "activate",
+      "signature": "activate()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "admin",
+      "signature": "admin()",
+      "outputs": "(address)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "address"
+    },
+    {
+      "name": "candidateCount",
+      "signature": "candidateCount()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "candidateManifestHash",
+      "signature": "candidateManifestHash()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "castVote",
+      "signature": "castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 8,
+      "inputNames": "a,b,c,nullifier,rx,ry,sx,sy",
+      "inputTypes": "uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16]",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "configure",
+      "signature": "configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 1,
+      "inputNames": "cfg",
+      "inputTypes": "(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "configured",
+      "signature": "configured()",
+      "outputs": "(bool)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bool"
+    },
+    {
+      "name": "contractDomain",
+      "signature": "contractDomain()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "electionContextHash",
+      "signature": "electionContextHash()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "electionId",
+      "signature": "electionId()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "eligibleRoot",
+      "signature": "eligibleRoot()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "endElection",
+      "signature": "endElection()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "finalizationTranscriptHash",
+      "signature": "finalizationTranscriptHash()",
+      "outputs": "(bytes32)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bytes32"
+    },
+    {
+      "name": "finalizeTally",
+      "signature": "finalizeTally(uint256[16],bytes32)",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 2,
+      "inputNames": "totals,transcriptHash",
+      "inputTypes": "uint256[16],bytes32",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "getFinalResult",
+      "signature": "getFinalResult(uint256)",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 1,
+      "inputNames": "slot",
+      "inputTypes": "uint256",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "getTally",
+      "signature": "getTally(uint256)",
+      "outputs": "(uint256,uint256,uint256,uint256)",
+      "stateMutability": "view",
+      "inputCount": 1,
+      "inputNames": "slot",
+      "inputTypes": "uint256",
+      "outputNames": "rx,ry,sx,sy",
+      "outputTypes": "uint256,uint256,uint256,uint256"
+    },
+    {
+      "name": "phase",
+      "signature": "phase()",
+      "outputs": "(uint8)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint8"
+    },
+    {
+      "name": "setTrusteeTranscriptHash",
+      "signature": "setTrusteeTranscriptHash(bytes32)",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 1,
+      "inputNames": "transcriptHash",
+      "inputTypes": "bytes32",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "trusteeTranscriptHash",
+      "signature": "trusteeTranscriptHash()",
+      "outputs": "(bytes32)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bytes32"
+    },
+    {
+      "name": "usedNullifier",
+      "signature": "usedNullifier(uint256)",
+      "outputs": "(bool)",
+      "stateMutability": "view",
+      "inputCount": 1,
+      "inputNames": "",
+      "inputTypes": "uint256",
+      "outputNames": "",
+      "outputTypes": "bool"
+    },
+    {
+      "name": "verifier",
+      "signature": "verifier()",
+      "outputs": "(address)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "address"
+    }
+  ],
+  "mutatingFunctions": [
+    {
+      "name": "activate",
+      "signature": "activate()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "castVote",
+      "signature": "castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 8,
+      "inputNames": "a,b,c,nullifier,rx,ry,sx,sy",
+      "inputTypes": "uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16]",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "configure",
+      "signature": "configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 1,
+      "inputNames": "cfg",
+      "inputTypes": "(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "endElection",
+      "signature": "endElection()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "finalizeTally",
+      "signature": "finalizeTally(uint256[16],bytes32)",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 2,
+      "inputNames": "totals,transcriptHash",
+      "inputTypes": "uint256[16],bytes32",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "setTrusteeTranscriptHash",
+      "signature": "setTrusteeTranscriptHash(bytes32)",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 1,
+      "inputNames": "transcriptHash",
+      "inputTypes": "bytes32",
+      "outputNames": "",
+      "outputTypes": ""
+    }
+  ],
+  "setupCandidates": [
+    {
+      "name": "activate",
+      "signature": "activate()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "configure",
+      "signature": "configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 1,
+      "inputNames": "cfg",
+      "inputTypes": "(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    {
+      "name": "endElection",
+      "signature": "endElection()",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": ""
+    }
+  ],
+  "zeroArgumentGetters": [
+    {
+      "name": "Yx",
+      "signature": "Yx()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "Yy",
+      "signature": "Yy()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "acceptedBallotCount",
+      "signature": "acceptedBallotCount()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "admin",
+      "signature": "admin()",
+      "outputs": "(address)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "address"
+    },
+    {
+      "name": "candidateCount",
+      "signature": "candidateCount()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "candidateManifestHash",
+      "signature": "candidateManifestHash()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "configured",
+      "signature": "configured()",
+      "outputs": "(bool)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bool"
+    },
+    {
+      "name": "contractDomain",
+      "signature": "contractDomain()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "electionContextHash",
+      "signature": "electionContextHash()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "electionId",
+      "signature": "electionId()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "eligibleRoot",
+      "signature": "eligibleRoot()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    {
+      "name": "finalizationTranscriptHash",
+      "signature": "finalizationTranscriptHash()",
+      "outputs": "(bytes32)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bytes32"
+    },
+    {
+      "name": "phase",
+      "signature": "phase()",
+      "outputs": "(uint8)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint8"
+    },
+    {
+      "name": "trusteeTranscriptHash",
+      "signature": "trusteeTranscriptHash()",
+      "outputs": "(bytes32)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "bytes32"
+    },
+    {
+      "name": "verifier",
+      "signature": "verifier()",
+      "outputs": "(address)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "address"
+    }
+  ],
+  "requiredKnownFunctions": {
+    "castVote": {
+      "name": "castVote",
+      "signature": "castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])",
+      "outputs": "",
+      "stateMutability": "nonpayable",
+      "inputCount": 8,
+      "inputNames": "a,b,c,nullifier,rx,ry,sx,sy",
+      "inputTypes": "uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16]",
+      "outputNames": "",
+      "outputTypes": ""
+    },
+    "getTally": {
+      "name": "getTally",
+      "signature": "getTally(uint256)",
+      "outputs": "(uint256,uint256,uint256,uint256)",
+      "stateMutability": "view",
+      "inputCount": 1,
+      "inputNames": "slot",
+      "inputTypes": "uint256",
+      "outputNames": "rx,ry,sx,sy",
+      "outputTypes": "uint256,uint256,uint256,uint256"
+    },
+    "acceptedBallotCount": {
+      "name": "acceptedBallotCount",
+      "signature": "acceptedBallotCount()",
+      "outputs": "(uint256)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint256"
+    },
+    "usedNullifier": {
+      "name": "usedNullifier",
+      "signature": "usedNullifier(uint256)",
+      "outputs": "(bool)",
+      "stateMutability": "view",
+      "inputCount": 1,
+      "inputNames": "",
+      "inputTypes": "uint256",
+      "outputNames": "",
+      "outputTypes": "bool"
+    },
+    "phase": {
+      "name": "phase",
+      "signature": "phase()",
+      "outputs": "(uint8)",
+      "stateMutability": "view",
+      "inputCount": 0,
+      "inputNames": "",
+      "inputTypes": "",
+      "outputNames": "",
+      "outputTypes": "uint8"
+    }
+  },
+  "previousFailedAssumption": {
+    "configureMustHaveEightInputs": false,
+    "allConfigureInputsMustBeUint256": false,
+    "failureClass": "OVERSTRICT_ABI_SHAPE_ASSUMPTION"
+  }
+}

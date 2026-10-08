@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "classification": "CORRECTED_READ_ONLY_FINAL_SYNTHESIS_BASIS_RECOVERY",
+  "failedF0Run": "20261004_021657",
+  "failedF0Preserved": true,
+  "failedF0Rerun": false,
+  "failedF0HarnessClass": "FALSE_PASS_BAD_SUBSTITUTION_PLUS_MISSING_SEMANTIC_FAIL_GATE",
+  "passReceiptCount": 52,
+  "categoryCounts": {
+    "ACCEPTED_BALLOT_SCALING": 6,
+    "FRESH_CHAIN_MICROBENCHMARK": 12,
+    "CANDIDATE_COUNT_SCALING": 20,
+    "ELIGIBLE_SET_SCALING": 13
+  },
+  "hardChecks": {
+    "passReceiptCountPositive": true,
+    "acceptedBallotReceiptCandidatePresent": true,
+    "freshChainReceiptCandidatePresent": true,
+    "candidateCountReceiptCandidatePresent": true,
+    "eligibleSetReceiptCandidatePresent": true,
+    "c8dR9aFormalCloseoutRecovered": true,
+    "failedF0FalsePassNotUsedAsAuthoritativeCategory": true
+  },
+  "failedChecks": [],
+  "c8dR9aFormalCloseoutMatches": [
+    {
+      "run_directory": "20261004_021205",
+      "receipt_path": "experiments/wp8/20261004_021205/wp8e-c8d-r9a-statistics-revalidation-repair-closeout/C8D_R9A_FINAL_RECEIPT.txt",
+      "run_id": "20261004_021205",
+      "status": "PASS_WP8E_C8D_R9A_STATISTICS_REVALIDATION_REPAIR_AND_CLOSEOUT",
+      "next_gate": "WP8_FINAL_SYNTHESIS_REPORTING_AND_REPRODUCIBILITY_CLOSEOUT",
+      "category": "ELIGIBLE_SET_SCALING",
+      "sha256": "f7d9ab97fc0cfcdaa0263baf1ff7d356d5d576bc43ac7d82c529b43b2786bb9d",
+      "is_failed_f0_false_pass": "NO"
+    }
+  ],
+  "highValueArtifactCount": 355,
+  "benchmarkExecutionStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "onchainExecutionStarted": false,
+  "authoritativeResultSelectionPerformed": false,
+  "nextGate": "WP8_F1_AUTHORITATIVE_RESULT_SELECTION_AND_PUBLICATION_SYNTHESIS"
+}

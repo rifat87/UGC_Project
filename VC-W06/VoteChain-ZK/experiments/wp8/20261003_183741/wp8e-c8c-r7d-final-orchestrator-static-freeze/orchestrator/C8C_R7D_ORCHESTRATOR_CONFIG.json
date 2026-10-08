@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "classification": "C8C_FINAL_100_OBSERVATION_CAMPAIGN",
+  "planSha256": "c619a0749c8e091160cb39d0f5cc9361377e7e3ccf0a6dad04efe009e8cf78e4",
+  "observationRunnerSha256": "69f3e324147bdfd9af7ba513361bb04980e3ca8c52b81e27cdb2564032ab0ff0",
+  "executionAbiSha256": "dfc21e907898363360ce757439e9cf134c4607a2bbf88e0656fe850aa2adf746",
+  "activeSoliditySha256": "c833a70e832ce15cfe9d17c2ca71f202fc8806519514cd6846ba292804904d77",
+  "activeVerifierSha256": "55b31cad6c02422bf22073abf482516d576d3f3eec0b964d4fecaf4effff7eba",
+  "observationRunnerRelativePath": "experiments/wp8/20261003_182331/wp8e-c8c-r7b2-corrected-runner-static-freeze/runner/c8c-r7b2-observation-runner.py",
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "warmupObservations": 20,
+  "measuredObservations": 80,
+  "totalObservations": 100,
+  "freshAnvilPerObservation": true,
+  "port": 8557,
+  "warmupsFinalStatisticsEligible": false,
+  "measuredFinalStatisticsEligible": true,
+  "pilotObservationsIncluded": false,
+  "silentRetryAllowed": false,
+  "failurePolicy": "STOP_AND_PRESERVE_PARTIAL_CAMPAIGN",
+  "proofGenerationDuringCampaign": false
+}

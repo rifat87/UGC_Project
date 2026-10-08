@@ -1,0 +1,61 @@
+--- D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_220939\wp8e-c6b-final-runner-freeze\runner\wp8e-final-scaling-runner.py
++++ D:\University\4thYear2ndSemester\Capstone\UGC_Project\VC-W06\VoteChain-ZK\experiments\wp8\20261002_223739\wp8e-c6c-r2-runner-v2-freeze\runner-v2\wp8e-final-scaling-runner-v2.py
+@@ -168,7 +168,57 @@
+ 
+ 
+ def receipt_info(text):
+-    obj = json.loads(text)
++    decoder = json.JSONDecoder()
++
++    stripped = text.lstrip()
++
++    if not stripped:
++        raise RuntimeError(
++            "empty cast receipt stdout"
++        )
++
++    try:
++        obj, end = decoder.raw_decode(
++            stripped
++        )
++    except json.JSONDecodeError as exc:
++        raise RuntimeError(
++            "could not decode leading "
++            "cast receipt JSON"
++        ) from exc
++
++    if not isinstance(
++        obj,
++        dict,
++    ):
++        raise RuntimeError(
++            "leading cast receipt JSON "
++            "is not an object"
++        )
++
++    trailing = stripped[end:]
++
++    # Full raw stdout is preserved separately in the receipt
++    # artifact before this parser is called.  A sporadic Foundry/
++    # Alloy diagnostic may therefore follow a valid receipt JSON.
++    #
++    # Do not interpret a second JSON object as harmless log text.
++    trailing_nonws = trailing.lstrip()
++
++    if trailing_nonws.startswith(
++        ("{", "[")
++    ):
++        try:
++            decoder.raw_decode(
++                trailing_nonws
++            )
++        except json.JSONDecodeError:
++            pass
++        else:
++            raise RuntimeError(
++                "multiple top-level JSON values "
++                "in cast receipt stdout"
++            )
+ 
+     status = obj.get(
+         "status"

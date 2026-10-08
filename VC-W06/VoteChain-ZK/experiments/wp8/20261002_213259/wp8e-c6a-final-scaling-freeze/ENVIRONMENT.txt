@@ -1,0 +1,41 @@
+WP8E C6A FINAL SCALING ENVIRONMENT
+CAPTURE_RUN_ID=20261002_213259
+
+=== uname ===
+MINGW64_NT-10.0-26200 Rifat87 3.4.9-be826601.x86_64 2023-09-07 12:36 UTC x86_64 Msys
+
+=== bash ===
+GNU bash, version 5.2.21(1)-release (x86_64-pc-msys)
+
+=== python ===
+Python 3.10.11
+
+=== real node.exe ===
+NODE_BIN=/d/Software/node.exe
+v22.15.0
+
+=== forge ===
+forge Version: 1.5.1-stable
+
+=== cast ===
+cast Version: 1.5.1-stable
+
+=== anvil ===
+anvil 0.3.0 (5a8bd89 2024-12-20T08:45:46.447713600Z)
+
+=== snarkjs ===
+snarkjs@0.7.6
+        Copyright (C) 2018  0kims association
+        This program comes with ABSOLUTELY NO WARRANTY;
+
+=== circom ===
+circom compiler 2.2.3
+
+=== git bash path ===
+/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK
+
+=== powershell CPU/RAM capture ===
+CPU=AMD Ryzen 7 5700U with Radeon Graphics         
+RAM_GB=9.85
+OS=Microsoft Windows 11 Home Single Language
+OS_VERSION=10.0.26200

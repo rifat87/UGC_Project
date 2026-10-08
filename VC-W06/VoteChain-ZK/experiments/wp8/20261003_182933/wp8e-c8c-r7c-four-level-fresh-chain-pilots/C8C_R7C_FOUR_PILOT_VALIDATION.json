@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "runtimeLevels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "pilotAcceptedVoteCount": 4,
+  "freshChainPerPilot": true,
+  "pilotsFinalStatisticsEligible": false,
+  "candidateMatrixExecutionStarted": false,
+  "finalCampaignExecutionStarted": false,
+  "checks": {
+    "rowCount4": true,
+    "levelsExactly": true,
+    "allStatusPass": true,
+    "allCalldata2340": true,
+    "allCalldataPartition": true,
+    "allGasPositive": true,
+    "allLatencyPositive": true,
+    "summaryFileCount4": true,
+    "failureFileCount0": true
+  },
+  "rows": [
+    {
+      "candidate_count": "2",
+      "order_position": "1",
+      "repetition_id": "c8c-r7c-pilot-k2",
+      "status": "PASS",
+      "gas_used": "1866402",
+      "calldata_bytes": "2340",
+      "calldata_zero_bytes": "10",
+      "calldata_nonzero_bytes": "2330",
+      "latency_ms": "907.100300",
+      "tx_hash": "0x0b7c58ca6dffecdb66bc80ffbb1826a354648d0213e6e6dc3c50032540b79a6f"
+    },
+    {
+      "candidate_count": "4",
+      "order_position": "2",
+      "repetition_id": "c8c-r7c-pilot-k4",
+      "status": "PASS",
+      "gas_used": "1866414",
+      "calldata_bytes": "2340",
+      "calldata_zero_bytes": "9",
+      "calldata_nonzero_bytes": "2331",
+      "latency_ms": "864.385900",
+      "tx_hash": "0xd5eabbb3474d4071f72685419723e5f4f9139ca1b54366eb2c89f10d668e661d"
+    },
+    {
+      "candidate_count": "8",
+      "order_position": "3",
+      "repetition_id": "c8c-r7c-pilot-k8",
+      "status": "PASS",
+      "gas_used": "1866414",
+      "calldata_bytes": "2340",
+      "calldata_zero_bytes": "9",
+      "calldata_nonzero_bytes": "2331",
+      "latency_ms": "878.620600",
+      "tx_hash": "0xa06ef23cda764d59ca04ea4f1b28706cf73fa1bac6e980f3bad370817e03f864"
+    },
+    {
+      "candidate_count": "16",
+      "order_position": "4",
+      "repetition_id": "c8c-r7c-pilot-k16",
+      "status": "PASS",
+      "gas_used": "1866414",
+      "calldata_bytes": "2340",
+      "calldata_zero_bytes": "9",
+      "calldata_nonzero_bytes": "2331",
+      "latency_ms": "910.515000",
+      "tx_hash": "0xacdba7077e900b0794094ec23411938c75dd027e5227f2b913733eb08db18b27"
+    }
+  ]
+}

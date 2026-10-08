@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_READ_ONLY_MICROBENCHMARK_STATISTICAL_ANALYSIS",
+  "finalCampaignRun": "20261003_015120",
+  "rawRows": 25,
+  "warmupRows": 5,
+  "measuredRows": 20,
+  "warmupsIncludedInFinalStatistics": false,
+  "pilotIncludedInFinalStatistics": false,
+  "abortedCampaignIncludedInFinalStatistics": false,
+  "silentOutlierDeletion": false,
+  "latencyReconstruction": false,
+  "p95Method": "nearest-rank",
+  "standardDeviation": "sample",
+  "freshChainPerIteration": true,
+  "ballotId": "001",
+  "candidateIndex": 0,
+  "calldataBytes": 2340,
+  "timedInterval": "cast-send-start-to-receipt-return",
+  "setupInsideTimedInterval": false,
+  "postReceiptChecksInsideTimedInterval": false,
+  "measuredGasDeterministic": true,
+  "warmupSummary": {
+    "gas": {
+      "n": 5,
+      "mean": 1866414,
+      "median": 1866414,
+      "min": 1866414,
+      "max": 1866414,
+      "sampleSd": 0.0,
+      "nearestRankP95": 1866414
+    },
+    "latencyMs": {
+      "n": 5,
+      "mean": 735.08568,
+      "median": 740.5749,
+      "min": 714.0196,
+      "max": 749.324,
+      "sampleSd": 15.083523245482125,
+      "nearestRankP95": 749.324
+    }
+  },
+  "measuredSummary": {
+    "gas": {
+      "n": 20,
+      "mean": 1866414,
+      "median": 1866414.0,
+      "min": 1866414,
+      "max": 1866414,
+      "sampleSd": 0.0,
+      "nearestRankP95": 1866414
+    },
+    "latencyMs": {
+      "n": 20,
+      "mean": 724.03026,
+      "median": 723.3014499999999,
+      "min": 707.3267,
+      "max": 741.5839,
+      "sampleSd": 10.000788152593408,
+      "nearestRankP95": 741.1692
+    }
+  },
+  "diagnosticsFromFinalPostvalidation": {
+    "verifierDeployTrailingDiagnosticCount": 1,
+    "verifierDeployTrailingDiagnosticRepetitions": [
+      "measured-15"
+    ],
+    "directDeployTrailingDiagnosticCount": 0,
+    "directDeployTrailingDiagnosticRepetitions": [],
+    "receiptTrailingDiagnosticCount": 0,
+    "receiptTrailingDiagnosticRepetitions": []
+  }
+}

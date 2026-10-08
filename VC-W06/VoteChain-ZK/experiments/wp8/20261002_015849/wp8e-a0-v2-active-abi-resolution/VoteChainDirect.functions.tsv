@@ -1,0 +1,24 @@
+Yx	Yx()	view	uint256
+Yy	Yy()	view	uint256
+acceptedBallotCount	acceptedBallotCount()	view	uint256
+activate	activate()	nonpayable	
+admin	admin()	view	address
+candidateCount	candidateCount()	view	uint256
+candidateManifestHash	candidateManifestHash()	view	uint256
+castVote	castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])	nonpayable	
+configure	configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))	nonpayable	
+configured	configured()	view	bool
+contractDomain	contractDomain()	view	uint256
+electionContextHash	electionContextHash()	view	uint256
+electionId	electionId()	view	uint256
+eligibleRoot	eligibleRoot()	view	uint256
+endElection	endElection()	nonpayable	
+finalizationTranscriptHash	finalizationTranscriptHash()	view	bytes32
+finalizeTally	finalizeTally(uint256[16],bytes32)	nonpayable	
+getFinalResult	getFinalResult(uint256)	view	uint256
+getTally	getTally(uint256)	view	uint256,uint256,uint256,uint256
+phase	phase()	view	uint8
+setTrusteeTranscriptHash	setTrusteeTranscriptHash(bytes32)	nonpayable	
+trusteeTranscriptHash	trusteeTranscriptHash()	view	bytes32
+usedNullifier	usedNullifier(uint256)	view	bool
+verifier	verifier()	view	address

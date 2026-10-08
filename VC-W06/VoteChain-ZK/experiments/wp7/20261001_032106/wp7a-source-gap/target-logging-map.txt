@@ -1,0 +1,154 @@
+10: *   POST /api/wp5/authorize/face
+12:router.post('/verify-face', (_req, res) => {
+12:function parseCandidateId(value) {
+13:  const candidateId = Number(value)
+14:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) return null
+15:  return candidateId
+18:export const verifyFace = async (req, res) => {
+19:  const candidateId = parseCandidateId(req.body?.candidateId)
+20:  if (!candidateId) {
+21:    return res.status(400).json({ success: false, message: 'A positive candidateId is required before proof generation' })
+25:    console.log('[VoteController] Starting biometric-gated ZK proof preparation')
+26:    const faceRecPath = path.join(__dirname, '../../votechain-face-recognition', 'face_rec_demo.py')
+27:    const faceRecDir = path.dirname(faceRecPath)
+29:    if (!fs.existsSync(faceRecPath)) {
+30:      return res.status(500).json({ success: false, message: 'Face recognition script not found' })
+33:    const pythonProcess = spawn('python', [faceRecPath], { cwd: faceRecDir })
+40:      console.error('[VoteController] face-recognition process reported an error')
+46:          return res.status(500).json({ success: false, message: 'Face recognition process failed' })
+50:        const isSuccess = outputLower.includes('face recognition successful') || outputLower.includes('result = success')
+51:        if (!isSuccess) return res.json({ success: false, message: 'Face not recognised' })
+56:          return res.status(422).json({ success: false, message: 'Face verification did not return a usable voter identity' })
+59:        const voter = await Voter.findOne({ nationalId: matchedNid })
+62:        const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+65:          message: 'Face verification successful; anonymous eligibility proof prepared',
+69:        console.error('[VoteController] ZK proof preparation failed:', error.message)
+75:      console.error('[VoteController] Failed to start face recognition:', error.message)
+76:      return res.status(500).json({ success: false, message: 'Failed to launch face recognition' })
+79:    console.error('[VoteController] verifyFace error:', error.message)
+11:const serialPortPath = process.env.FINGERPRINT_SERIAL_PORT || 'COM3'
+15:    console.log(`[Serial] Initializing serial connection on ${serialPortPath}...`)
+20:      console.log(`[Serial] Serial port ${serialPortPath} opened successfully.`)
+24:      console.error("[Serial] Serial port error:", err.message)
+34:    console.log(`[Serial] Sending ${obj.cmd || 'UNKNOWN'} command`)
+38:      console.log('[Serial] Received device response')
+45:        console.warn("[Serial] Ignored non-JSON data")
+54:        console.error("[Serial] Failed to write to serial port:", err.message)
+57:        console.log("[Serial] Command sent successfully.")
+66:const captureFingerprint = async (req, res) => {
+67:  console.log("[API] /api/fingerprint/enroll called")
+68:  const { nid } = req.body
+75:    console.log(`[API] ENROLL result: ${response.status || 'unknown'}`)
+80:        message: "Fingerprint enrollment successful"
+89:    console.error("[API] Enrollment error:", error.message)
+90:    return res.status(500).json({ success: false, error: error.message })
+95:const detectFingerprint = async (req, res) => {
+96:  console.log("[API] /api/fingerprint/detect called for ZK proof preparation")
+97:  const candidateId = Number(req.body?.candidateId)
+98:  if (!Number.isSafeInteger(candidateId) || candidateId <= 0) {
+99:    return res.status(400).json({ success: false, message: "A positive candidateId is required before proof generation" })
+104:    console.log(`[API] DETECT result: ${response.status || 'unknown'}`)
+107:      const voter = await Voter.findOne({ nationalId: response.nid })
+109:        return res.status(404).json({ success: false, message: "Fingerprint matched, but voter is not enrolled" })
+112:      const proofPayload = await prepareProofAfterBiometricAuthentication({ biometricAccepted: true, voter, candidateId, proofGenerator: generateVoteProofForVoter })
+115:        message: "Fingerprint match successful; anonymous eligibility proof prepared",
+122:    console.error("[API] Fingerprint ZK proof preparation failed:", error.message)
+128:const detectWp5Fingerprint = async (req, res) => {
+129:  console.log(
+130:    '[WP5] fingerprint DETECT called for candidate-blind authorization',
+133:  const credentialPublicKey =
+134:    req.body?.credentialPublicKey
+136:  if (!credentialPublicKey) {
+139:      message: 'credentialPublicKey is required',
+153:        nationalId: response.nid,
+160:            'Fingerprint matched, but voter is not enrolled',
+168:            credentialPublicKey,
+174:          'Fingerprint match successful; candidate-blind authorization issued',
+184:    console.error(
+185:      '[WP5] fingerprint authorization failed:',
+186:      error.message,
+198:const formatFingerprintDatabase = async (req, res) => {
+199:  console.log("[API] /api/fingerprint/format called")
+202:    console.log(`[API] FORMAT result: ${response.status || 'unknown'}`)
+205:      return res.status(200).json({ success: true, message: "Fingerprint database cleared" })
+210:    console.error("[API] Format error:", error.message)
+211:    return res.status(500).json({ success: false, error: error.message })
+216:  captureFingerprint,
+217:  detectFingerprint,
+218:  detectWp5Fingerprint,
+219:  formatFingerprintDatabase,
+17:// // Helper function to generate face ID from captured images
+18:// function generateFaceId(nid) {
+19://     const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+20://     const datasetPath = path.join(faceRecognitionPath, 'dataset', nid);
+25://             console.error(`Dataset directory not found: ${datasetPath}`);
+29://         // Read all face images and create a hash
+34://             console.error(`No face images found in directory: ${datasetPath}`);
+38://         console.log(`Found ${imageFiles.length} face images in ${datasetPath}`);
+43://                 console.log(`Reading image: ${filePath}`);
+48://         const faceId = createHash('sha256').update(imageData).digest('hex');
+49://         console.log(`Generated face ID: ${faceId}`);
+50://         return faceId;
+52://         console.error('Error generating face ID:', error);
+74:// Get face hash by national ID
+75:// router.get('/face-hash/:nid', voterController.getFaceHash);
+77:// Train face by national ID
+78:router.post('/train-face/:nid', voterController.handleTrainFace);
+80:// DEMO: Face verification - will be deleted later
+81:// router.post('/verify-face-demo', voterController.handleVerifyFaceDemo);
+83:// router.get('/by-fingerprint/:fingerId', voterController.getVoterByFingerprint);
+10:import { createWp5Credential, allocateWp5GroupIndex } from '../services/zk/wp5PrivacyService.js'
+15:const handleTrainFace = async (req, res) => {
+18:    console.log('[Train Face] Starting face training for submitted voter record')
+20:    const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition')
+21:    const datasetPath = path.join(faceRecognitionPath, 'dataset', nid)
+26:        message: 'Face images not found. Please capture face images first.',
+34:        message: 'No face images found. Please capture face images first.',
+38:    console.log(`[Train Face] Found ${imageFiles.length} face images for training`)
+40:    const trainScript = path.join(faceRecognitionPath, 'train_faces.py')
+42:      cwd: faceRecognitionPath,
+50:      console.log(`[Train Face] Training process finished with code: ${code}`)
+55:          message: 'Face training failed',
+62:        message: 'Face training completed successfully',
+67:      console.error('[Train Face] Failed to start training process')
+74:    console.error('[Train Face] Unexpected training endpoint error')
+77:      message: 'Failed to train face model',
+93:    const { nationalId, name, dateOfBirth, location } = req.body
+95:    // Do not create fresh election credentials after the chain has left Registration.
+97:    // post-activation credentials from being created unnecessarily.
+106:    const existingVoter = await Voter.findOne({ nationalId })
+114:    const { identityCommitment, encryptedCredential } = await createEncryptedSemaphoreIdentity()
+115:    const wp5 = await createWp5Credential()
+118:      nationalId,
+123:      zkCredential: encryptedCredential,
+126:      wp5Credential: wp5.encryptedCredential,
+142:    console.error('Voter ZK enrollment failed:', error.message)
+168:    const { identityCommitment, registrationStatus, transactionHash } = req.body
+211:    console.error('Voter ZK registration reconciliation failed:', error.message)
+223:    const { nationalId, name, dateOfBirth, location } = req.body
+225:    voter.nationalId = nationalId || voter.nationalId
+237:    console.error('Voter update failed:', error.message)
+258:    console.error('Voter deletion failed:', error.message)
+268:  handleTrainFace,
+6:        console.log('Validation errors:', errors.array());
+5:import fingerprintController from '../controllers/fingerprintController.js';
+16:// Face capture
+17:router.post('/capture-face', async (req, res) => {
+18:    const { nid } = req.body;
+27:        const faceRecognitionPath = path.join(__dirname, '../../votechain-face-recognition');
+29:            cwd: faceRecognitionPath,
+35:            console.log('Face capture process produced output');
+40:            console.error('Face capture process reported an error');
+44:            console.log(`Python process exited with code ${code}`);
+50:                        message: 'Face captured successfully'
+55:                        message: 'Face capture failed'
+63:            console.error('Failed to start Python process:', err);
+67:                    message: 'Failed to start face capture process',
+75:        console.error('Error in face capture:', error);
+79:                message: 'Failed to start face capture process',
+80:                error: error.message
+87:// Fingerprint routes (JSON-based)
+88:router.post('/fingerprint/enroll', fingerprintController.captureFingerprint);
+89:router.post('/fingerprint/detect', (_req, res) => {
+92:        message: 'Legacy candidate-aware fingerprint vote preparation is disabled. Use /api/wp5/authorize/fingerprint.'
+95:router.post('/fingerprint/format', fingerprintController.formatFingerprintDatabase);

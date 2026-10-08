@@ -1,0 +1,46 @@
+WP8E C8B-R0 MICROBENCHMARK DESIGN QUESTIONS
+============================================
+
+This audit intentionally submits no transactions.
+
+Before freezing the final microbenchmark runner, resolve from the frozen
+protocol and existing V2 harness:
+
+1. Exact iteration count:
+   expected 5 warm-up + 20 measured.
+
+2. Freshness boundary:
+   confirm whether each iteration requires a completely fresh Anvil chain.
+
+3. Vote fixture:
+   identify the exact frozen ballot/proof fixture to use for every fresh-chain
+   single-vote iteration.
+
+4. Timed interval:
+   confirm the metric remains cast-send-start to receipt-return only.
+
+5. Excluded setup:
+   confirm deployment, configure, activate, fixture loading, and post-receipt
+   correctness reads are outside the timed interval.
+
+6. Required per-iteration raw fields:
+   warmup/measured identity, iteration number, transaction hash, receipt
+   status, gasUsed, calldata bytes, and wall-clock latency.
+
+7. Correctness gates:
+   acceptedBallotCount == 1,
+   usedNullifier == true,
+   expected encrypted tally state,
+   successful receipt.
+
+8. Parser:
+   reuse the frozen V2 leading-JSON receipt parser behavior, not the V1
+   json.loads(full_stdout) assumption.
+
+9. Statistics:
+   final report must use only the 20 measured iterations and preserve all
+   5 warm-ups separately.
+
+10. Failure policy:
+    preserve any partial attempted final campaign; do not silently restart or
+    delete observations.

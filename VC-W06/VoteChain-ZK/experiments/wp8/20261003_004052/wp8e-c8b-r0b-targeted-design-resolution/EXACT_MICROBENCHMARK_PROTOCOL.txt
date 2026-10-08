@@ -1,0 +1,44 @@
+     1	======================================================================
+     2	VOTECHAIN-ZK WP8E FINAL BENCHMARK DESIGN V2
+     3	======================================================================
+     4	
+     5	STATUS=PREREGISTERED_DESIGN_NOT_YET_EXECUTED
+     6	
+     7	SUPERSEDES_PROTOCOL=WP8E_FINAL_REPEAT_PROTOCOL_V1
+     8	SUPERSESSION_REASON=SCALABILITY_MATRIX_ADDED_BEFORE_FINAL_ONCHAIN_CAMPAIGN
+     9	V1_MEASUREMENT_DATA_EXISTS=NO
+    10	ACTIVE_ARCHITECTURE=DIRECT
+    11	
+    12	----------------------------------------------------------------------
+    13	A. SINGLE-VOTE REPEATABILITY MICROBENCHMARK
+    14	----------------------------------------------------------------------
+    15	
+    16	PURPOSE=CONTROLLED_COST_AND_LATENCY_REPEATABILITY
+    17	
+    18	WARMUP_ITERATIONS=5
+    19	MEASURED_ITERATIONS=20
+    20	
+    21	CHAIN_POLICY=FRESH_ANVIL_PER_ITERATION
+    22	ACCEPTED_VOTES_PER_ITERATION=1
+    23	
+    24	PRIMARY_METRICS:
+    25	- M12 verifier estimate gas
+    26	- M14 accepted cast receipt gas
+    27	- M15 calldata bytes
+    28	- M16 deployment gas
+    29	- M29 submission-to-receipt latency
+    30	
+    31	REPORT:
+    32	- mean
+    33	- median
+    34	- min
+    35	- max
+    36	- sample standard deviation
+    37	- nearest-rank p95
+    38	
+    39	----------------------------------------------------------------------
+    40	B. CUMULATIVE ELECTION STATE-GROWTH SCALING
+    41	----------------------------------------------------------------------
+    42	
+    43	PURPOSE=MEASURE_BEHAVIOR_AS_ACCEPTED_BALLOTS_ACCUMULATE
+    44	

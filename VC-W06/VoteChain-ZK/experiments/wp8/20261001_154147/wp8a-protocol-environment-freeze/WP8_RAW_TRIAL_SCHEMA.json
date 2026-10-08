@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "WP8-v1",
+  "classification": "INDIVIDUAL_CRYPTO_BALLOT_TRIAL",
+  "requiredFields": [
+    "campaignId",
+    "cellId",
+    "runId",
+    "trialIndex",
+    "warmup",
+    "variant",
+    "candidateCount",
+    "depth",
+    "capacity",
+    "candidateSlotRole",
+    "candidateSlot",
+    "syntheticVoterId",
+    "merkleLeafIndex",
+    "encryptionMs",
+    "witnessMs",
+    "proofMs",
+    "localVerifyMs",
+    "workerTotalMs",
+    "proofBytes",
+    "publicSignalCount",
+    "calldataBytes",
+    "castGas",
+    "txLatencyMs",
+    "peakMemoryBytes",
+    "result"
+  ],
+  "optionalFields": [
+    "ciphertextBytes",
+    "tallyUpdateMs",
+    "tallyGas",
+    "errorClass",
+    "artifactProfileHash",
+    "notes"
+  ],
+  "preserveFailedTrials": true,
+  "preserveWarmups": true,
+  "includeWarmupsInReportedStatistics": false
+}

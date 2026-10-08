@@ -1,0 +1,3363 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$PWD"
+
+if [ "$(basename "$ROOT")" != "VoteChain-ZK" ]; then
+    echo "ERROR: run from VoteChain-ZK root."
+    exit 2
+fi
+
+BACK="$ROOT/votechain-central-server"
+FRONT="$ROOT/votechain-frontend-ts"
+CRYPTO="$ROOT/crypto"
+FOUNDRY="$ROOT/contracts/wp4-foundry"
+
+OUTROOT="../VoteChain_VC-W03_FinalZK/Output/VC-W07"
+
+WP7A="$OUTROOT/VC-W07_WP7A_TARGETED_HARDENING_SUMMARY.txt"
+WP7B_CAPTURE="$OUTROOT/VC-W07_WP7B_PRIVILEGED_SURFACE_CAPTURE_SUMMARY.txt"
+WP6B="$OUTROOT/VC-W07_WP6B_TRUSTEE_CLI_CONTRACT_FINALIZATION_SUMMARY.txt"
+
+RUN_ID="$(date +%Y%m%d_%H%M%S)"
+EVIDENCE="$ROOT/experiments/wp7/$RUN_ID/wp7b-privileged-auth-threshold"
+BACKUP="$EVIDENCE/before"
+
+SUMMARY="$OUTROOT/VC-W07_WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING_SUMMARY.txt"
+
+ADMIN_MIDDLEWARE="$BACK/middleware/adminRequestSecurity.js"
+ADMIN_TEST="$BACK/scripts/wp7b-admin-auth-negative-tests.mjs"
+
+FRONT_ADMIN="$FRONT/src/services/adminAuth.ts"
+FRONT_API="$FRONT/src/services/api.ts"
+
+WP6_CORE="$CRYPTO/src/wp6-threshold.mjs"
+THRESHOLD_TEST="$CRYPTO/scripts/wp7b-threshold-artifact-negative-tests.mjs"
+
+CONTRACT="$FOUNDRY/src/VoteChainWP4.sol"
+WP6_PROFILE="$CRYPTO/config/wp6-threshold-profile.json"
+
+mkdir -p \
+    "$EVIDENCE" \
+    "$BACKUP" \
+    "$BACK/middleware" \
+    "$BACK/scripts" \
+    "$FRONT/src/services" \
+    "$CRYPTO/scripts" \
+    "$OUTROOT"
+
+echo
+echo "======================================================================"
+echo "VOTECHAIN-ZK WP7B — PRIVILEGED AUTH / THRESHOLD ARTIFACT HARDENING"
+echo "======================================================================"
+echo "RUN_ID=$RUN_ID"
+echo
+echo "SOURCE_MODIFICATION=YES"
+echo "DATABASE_ACCESS=NO"
+echo "BIOMETRIC_EXECUTION=NO"
+echo "REAL_CREDENTIALS_READ=NO"
+echo "FINAL_WP8_BENCHMARK=NO"
+echo
+
+###############################################################################
+# 1. REQUIRE ACCEPTED PREDECESSORS
+###############################################################################
+
+echo "=== 1. REQUIRE WP7A / WP7B CAPTURE / WP6B ==="
+
+grep -q \
+    '^STATUS=PASS_WP7A_TARGETED_HARDENING$' \
+    "$WP7A"
+
+grep -q \
+    '^STATUS=PASS_WP7B_PRIVILEGED_SURFACE_CAPTURE$' \
+    "$WP7B_CAPTURE"
+
+grep -q \
+    '^STATUS=PASS_WP6B_TRUSTEE_CLI_CONTRACT_FINALIZATION$' \
+    "$WP6B"
+
+echo "WP7A_TARGETED_HARDENING=PASS"
+echo "WP7B_PRIVILEGED_SURFACE_CAPTURE=PASS"
+echo "WP6_THRESHOLD_SUBSYSTEM_FUNCTIONAL_GATE=PASS"
+
+###############################################################################
+# 2. BASELINE / BACKUP
+###############################################################################
+
+echo
+echo "=== 2. BASELINE / BACKUP ==="
+
+CORE_BEFORE="$(
+    sha256sum "$WP6_CORE" |
+    awk '{print $1}'
+)"
+
+PROFILE_BEFORE="$(
+    sha256sum "$WP6_PROFILE" |
+    awk '{print $1}'
+)"
+
+CONTRACT_BEFORE="$(
+    sha256sum "$CONTRACT" |
+    awk '{print $1}'
+)"
+
+echo "WP6_CORE_BEFORE=$CORE_BEFORE"
+echo "WP6_PROFILE_BEFORE=$PROFILE_BEFORE"
+echo "CONTRACT_BEFORE=$CONTRACT_BEFORE"
+
+FILES=(
+    "$BACK/server.js"
+    "$BACK/routes/candidateRoutes.js"
+    "$BACK/routes/voterRoutes.js"
+    "$BACK/routes/biometricRoutes.js"
+    "$BACK/controllers/fingerprintController.js"
+    "$FRONT_API"
+    "$WP6_CORE"
+)
+
+for file in "${FILES[@]}"
+do
+    relative="${file#$ROOT/}"
+    mkdir -p "$BACKUP/$(dirname "$relative")"
+    cp "$file" "$BACKUP/$relative"
+done
+
+echo "WP7B_BACKUP=PASS"
+
+###############################################################################
+# 3. WRITE WALLET-SIGNED ADMIN REQUEST MIDDLEWARE
+###############################################################################
+
+echo
+echo "=== 3. WRITE ADMIN REQUEST SECURITY MIDDLEWARE ==="
+
+cat > "$ADMIN_MIDDLEWARE" <<'JS'
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs'
+
+import {
+  dirname,
+  join,
+  resolve,
+} from 'node:path'
+
+import {
+  createHash,
+} from 'node:crypto'
+
+import {
+  getAddress,
+  isAddress,
+  verifyMessage,
+} from 'ethers'
+
+import {
+  getWp5Contract,
+} from '../utils/wp5Contract.js'
+
+export const ADMIN_AUTH_SCHEME =
+  'VoteChainAdmin'
+
+export const ADMIN_AUTH_VERSION =
+  'VoteChain-ZK Admin Request v1'
+
+export const ADMIN_REQUEST_MAX_AGE_MS =
+  60_000
+
+export const ADMIN_REQUEST_MAX_FUTURE_MS =
+  10_000
+
+const NONCE_PATTERN =
+  /^[0-9a-f]{32}$/
+
+const SIGNATURE_PATTERN =
+  /^0x[0-9a-fA-F]{130}$/
+
+function normalizeJson(
+  value,
+) {
+  if (
+    Array.isArray(value)
+  ) {
+    return value.map(
+      normalizeJson,
+    )
+  }
+
+  if (
+    value &&
+    typeof value === 'object'
+  ) {
+    return Object.fromEntries(
+      Object
+        .keys(value)
+        .sort()
+        .map(
+          key => [
+            key,
+            normalizeJson(
+              value[key],
+            ),
+          ],
+        ),
+    )
+  }
+
+  return value
+}
+
+export function canonicalAdminJson(
+  value,
+) {
+  return JSON.stringify(
+    normalizeJson(
+      value === undefined
+        ? null
+        : value,
+    ),
+  )
+}
+
+export function hashAdminBody(
+  value,
+) {
+  return createHash(
+    'sha256',
+  )
+    .update(
+      canonicalAdminJson(
+        value,
+      ),
+      'utf8',
+    )
+    .digest(
+      'hex',
+    )
+}
+
+export function buildAdminRequestMessage({
+  audience,
+  address,
+  method,
+  path,
+  timestamp,
+  nonce,
+  bodyHash,
+}) {
+  return [
+    ADMIN_AUTH_VERSION,
+
+    `audience:${
+      String(
+        audience,
+      ).toLowerCase()
+    }`,
+
+    `address:${
+      String(
+        address,
+      ).toLowerCase()
+    }`,
+
+    `method:${
+      String(
+        method,
+      ).toUpperCase()
+    }`,
+
+    `path:${
+      String(path)
+    }`,
+
+    `timestamp:${
+      String(timestamp)
+    }`,
+
+    `nonce:${
+      String(
+        nonce,
+      ).toLowerCase()
+    }`,
+
+    `body-sha256:${
+      String(
+        bodyHash,
+      ).toLowerCase()
+    }`,
+  ].join('\n')
+}
+
+/*
+ * Persistent atomic replay store.
+ *
+ * A successful admin signature reserves one nonce by atomically creating
+ * a nonce file with flag "wx". This survives a backend restart and also
+ * prevents two server processes sharing the same directory from accepting
+ * the same nonce concurrently.
+ *
+ * Files contain only random nonce metadata and expiry time.
+ */
+export function createFileReplayStore(
+  directory =
+    process.env
+      .ADMIN_REPLAY_CACHE_DIR
+      ?.trim() ||
+    resolve(
+      process.cwd(),
+      '.runtime',
+      'admin-request-nonces',
+    ),
+) {
+  let cleaned = false
+
+  function ensureDirectory() {
+    mkdirSync(
+      directory,
+      {
+        recursive: true,
+      },
+    )
+  }
+
+  function cleanup(
+    now,
+  ) {
+    if (cleaned) {
+      return
+    }
+
+    cleaned = true
+    ensureDirectory()
+
+    /*
+     * Cleanup is deliberately opportunistic. We only need to remove a
+     * stale file when its random nonce happens to be reused.
+     * Random 128-bit nonces make that already negligible.
+     */
+    void now
+  }
+
+  function reserve(
+    nonce,
+    expiresAt,
+    now,
+  ) {
+    cleanup(now)
+
+    const file =
+      join(
+        directory,
+        `${nonce}.json`,
+      )
+
+    const payload =
+      JSON.stringify({
+        nonce,
+        expiresAt,
+      })
+
+    try {
+      writeFileSync(
+        file,
+        payload,
+        {
+          flag: 'wx',
+          mode: 0o600,
+        },
+      )
+
+      return true
+    } catch (error) {
+      if (
+        error?.code !==
+          'EEXIST'
+      ) {
+        throw error
+      }
+    }
+
+    /*
+     * An expired nonce artifact can be removed and retried. This is mostly
+     * maintenance hygiene; a legitimate 128-bit nonce collision is not
+     * expected in practice.
+     */
+    try {
+      const existing =
+        JSON.parse(
+          readFileSync(
+            file,
+            'utf8',
+          ),
+        )
+
+      if (
+        Number(
+          existing.expiresAt,
+        ) <
+        Number(now)
+      ) {
+        unlinkSync(
+          file,
+        )
+
+        writeFileSync(
+          file,
+          payload,
+          {
+            flag: 'wx',
+            mode: 0o600,
+          },
+        )
+
+        return true
+      }
+    } catch (error) {
+      if (
+        !existsSync(file)
+      ) {
+        throw error
+      }
+    }
+
+    return false
+  }
+
+  return {
+    directory,
+    reserve,
+  }
+}
+
+let cachedAdminContextPromise =
+  null
+
+async function resolveWp5AdminContext() {
+  if (
+    !cachedAdminContextPromise
+  ) {
+    cachedAdminContextPromise =
+      (
+        async () => {
+          const contract =
+            getWp5Contract()
+
+          const [
+            admin,
+            audience,
+          ] =
+            await Promise.all([
+              contract.admin(),
+              contract.getAddress(),
+            ])
+
+          return {
+            admin:
+              getAddress(
+                admin,
+              ),
+
+            audience:
+              getAddress(
+                audience,
+              ),
+          }
+        }
+      )()
+  }
+
+  try {
+    return await cachedAdminContextPromise
+  } catch (error) {
+    cachedAdminContextPromise =
+      null
+
+    throw error
+  }
+}
+
+function parseAuthorization(
+  header,
+) {
+  if (
+    typeof header !==
+      'string'
+  ) {
+    return null
+  }
+
+  const prefix =
+    `${ADMIN_AUTH_SCHEME} `
+
+  if (
+    !header.startsWith(
+      prefix,
+    )
+  ) {
+    return null
+  }
+
+  const token =
+    header
+      .slice(
+        prefix.length,
+      )
+      .trim()
+
+  const parts =
+    token.split('.')
+
+  if (
+    parts.length !==
+      4
+  ) {
+    return null
+  }
+
+  const [
+    address,
+    timestamp,
+    nonce,
+    signature,
+  ] = parts
+
+  if (
+    !isAddress(address) ||
+    !/^\d{10,16}$/.test(
+      timestamp,
+    ) ||
+    !NONCE_PATTERN.test(
+      nonce,
+    ) ||
+    !SIGNATURE_PATTERN.test(
+      signature,
+    )
+  ) {
+    return null
+  }
+
+  return {
+    address:
+      getAddress(
+        address,
+      ),
+
+    timestamp:
+      Number(
+        timestamp,
+      ),
+
+    nonce:
+      nonce.toLowerCase(),
+
+    signature,
+  }
+}
+
+export function createAdminRequestVerifier({
+  resolveAdminContext =
+    resolveWp5AdminContext,
+
+  replayStore =
+    createFileReplayStore(),
+
+  now =
+    () =>
+      Date.now(),
+
+  maxAgeMs =
+    ADMIN_REQUEST_MAX_AGE_MS,
+
+  maxFutureMs =
+    ADMIN_REQUEST_MAX_FUTURE_MS,
+} = {}) {
+  return async function requireAdminRequest(
+    req,
+    res,
+    next,
+  ) {
+    const parsed =
+      parseAuthorization(
+        req.get(
+          'authorization',
+        ),
+      )
+
+    if (!parsed) {
+      return res.status(401).json({
+        success: false,
+        message:
+          'A valid administrator wallet signature is required',
+      })
+    }
+
+    const current =
+      Number(
+        now(),
+      )
+
+    if (
+      !Number.isSafeInteger(
+        parsed.timestamp,
+      ) ||
+      parsed.timestamp <
+        current -
+          maxAgeMs ||
+      parsed.timestamp >
+        current +
+          maxFutureMs
+    ) {
+      return res.status(401).json({
+        success: false,
+        message:
+          'Administrator request signature is expired or not yet valid',
+      })
+    }
+
+    let context
+
+    try {
+      context =
+        await resolveAdminContext()
+    } catch {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator authority is temporarily unavailable',
+      })
+    }
+
+    if (
+      !context ||
+      !isAddress(
+        context.admin,
+      ) ||
+      !isAddress(
+        context.audience,
+      )
+    ) {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator authority is not configured correctly',
+      })
+    }
+
+    const expectedAdmin =
+      getAddress(
+        context.admin,
+      )
+
+    const audience =
+      getAddress(
+        context.audience,
+      )
+
+    if (
+      parsed.address
+        .toLowerCase() !==
+      expectedAdmin
+        .toLowerCase()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          'The signing wallet is not the election administrator',
+      })
+    }
+
+    const bodyHash =
+      hashAdminBody(
+        req.body,
+      )
+
+    const message =
+      buildAdminRequestMessage({
+        audience,
+        address:
+          parsed.address,
+        method:
+          req.method,
+        path:
+          req.originalUrl,
+        timestamp:
+          parsed.timestamp,
+        nonce:
+          parsed.nonce,
+        bodyHash,
+      })
+
+    let recovered
+
+    try {
+      recovered =
+        getAddress(
+          verifyMessage(
+            message,
+            parsed.signature,
+          ),
+        )
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message:
+          'Administrator request signature is invalid',
+      })
+    }
+
+    if (
+      recovered
+        .toLowerCase() !==
+      expectedAdmin
+        .toLowerCase()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          'Administrator request signature is not authorized',
+      })
+    }
+
+    const expiresAt =
+      parsed.timestamp +
+      maxAgeMs +
+      maxFutureMs
+
+    let reserved
+
+    try {
+      reserved =
+        replayStore.reserve(
+          parsed.nonce,
+          expiresAt,
+          current,
+        )
+    } catch {
+      return res.status(503).json({
+        success: false,
+        message:
+          'Administrator replay protection is temporarily unavailable',
+      })
+    }
+
+    if (!reserved) {
+      return res.status(409).json({
+        success: false,
+        message:
+          'Administrator request replay was rejected',
+      })
+    }
+
+    req.voteChainAdmin = {
+      address:
+        expectedAdmin,
+
+      audience,
+
+      timestamp:
+        parsed.timestamp,
+
+      nonce:
+        parsed.nonce,
+    }
+
+    return next()
+  }
+}
+
+export const requireWp5AdminRequest =
+  createAdminRequestVerifier()
+
+export function requireWp5AdminMutation(
+  req,
+  res,
+  next,
+) {
+  if (
+    req.method === 'GET' ||
+    req.method === 'HEAD' ||
+    req.method === 'OPTIONS'
+  ) {
+    return next()
+  }
+
+  return requireWp5AdminRequest(
+    req,
+    res,
+    next,
+  )
+}
+JS
+
+echo "ADMIN_WALLET_SIGNATURE_MIDDLEWARE=WRITTEN"
+
+###############################################################################
+# 4. WRITE FRONTEND ADMIN SIGNING HELPER
+###############################################################################
+
+echo
+echo "=== 4. WRITE FRONTEND WALLET-SIGNING HELPER ==="
+
+cat > "$FRONT_ADMIN" <<'TS'
+import {
+  BrowserProvider,
+  getAddress,
+} from "ethers"
+
+import {
+  apiUrl,
+} from "@/config/api"
+
+import {
+  wp5ContractAddress,
+} from "@/config/contract"
+
+const ADMIN_AUTH_SCHEME =
+  "VoteChainAdmin"
+
+const ADMIN_AUTH_VERSION =
+  "VoteChain-ZK Admin Request v1"
+
+function normalizeJson(
+  value: unknown,
+): unknown {
+  if (
+    Array.isArray(value)
+  ) {
+    return value.map(
+      normalizeJson,
+    )
+  }
+
+  if (
+    value &&
+    typeof value === "object"
+  ) {
+    const record =
+      value as Record<
+        string,
+        unknown
+      >
+
+    return Object.fromEntries(
+      Object
+        .keys(record)
+        .sort()
+        .map(
+          key => [
+            key,
+            normalizeJson(
+              record[key],
+            ),
+          ],
+        ),
+    )
+  }
+
+  return value
+}
+
+function canonicalJson(
+  value: unknown,
+) {
+  return JSON.stringify(
+    normalizeJson(
+      value === undefined
+        ? null
+        : value,
+    ),
+  )
+}
+
+async function sha256Hex(
+  text: string,
+) {
+  const bytes =
+    new TextEncoder()
+      .encode(text)
+
+  const digest =
+    await crypto.subtle.digest(
+      "SHA-256",
+      bytes,
+    )
+
+  return Array.from(
+    new Uint8Array(
+      digest,
+    ),
+    byte =>
+      byte
+        .toString(16)
+        .padStart(
+          2,
+          "0",
+        ),
+  ).join("")
+}
+
+function randomNonce() {
+  const bytes =
+    new Uint8Array(16)
+
+  crypto.getRandomValues(
+    bytes,
+  )
+
+  return Array.from(
+    bytes,
+    byte =>
+      byte
+        .toString(16)
+        .padStart(
+          2,
+          "0",
+        ),
+  ).join("")
+}
+
+function bodyValue(
+  body:
+    | BodyInit
+    | null
+    | undefined,
+) {
+  if (
+    body === undefined ||
+    body === null
+  ) {
+    return null
+  }
+
+  if (
+    typeof body !== "string"
+  ) {
+    throw new Error(
+      "Administrator API mutations must use a JSON string body",
+    )
+  }
+
+  if (
+    body.length === 0
+  ) {
+    return null
+  }
+
+  try {
+    return JSON.parse(
+      body,
+    )
+  } catch {
+    throw new Error(
+      "Administrator API mutation body must be valid JSON",
+    )
+  }
+}
+
+function buildMessage({
+  audience,
+  address,
+  method,
+  path,
+  timestamp,
+  nonce,
+  bodyHash,
+}: {
+  audience: string
+  address: string
+  method: string
+  path: string
+  timestamp: string
+  nonce: string
+  bodyHash: string
+}) {
+  return [
+    ADMIN_AUTH_VERSION,
+    `audience:${audience.toLowerCase()}`,
+    `address:${address.toLowerCase()}`,
+    `method:${method.toUpperCase()}`,
+    `path:${path}`,
+    `timestamp:${timestamp}`,
+    `nonce:${nonce.toLowerCase()}`,
+    `body-sha256:${bodyHash.toLowerCase()}`,
+  ].join("\n")
+}
+
+/*
+ * Sign one privileged REST mutation with the currently connected wallet.
+ *
+ * The backend independently reads admin() from the active WP5 Direct
+ * contract, so possessing an arbitrary wallet is insufficient.
+ */
+export async function adminFetch(
+  path: string,
+  init: RequestInit = {},
+) {
+  const injected =
+    (
+      window as unknown as {
+        ethereum?: unknown
+      }
+    ).ethereum
+
+  if (!injected) {
+    throw new Error(
+      "An injected wallet is required for administrator API mutations",
+    )
+  }
+
+  if (
+    !wp5ContractAddress
+  ) {
+    throw new Error(
+      "VITE_WP5_CONTRACT_ADDRESS is required for administrator API mutations",
+    )
+  }
+
+  const provider =
+    new BrowserProvider(
+      injected as never,
+    )
+
+  const signer =
+    await provider
+      .getSigner()
+
+  const address =
+    getAddress(
+      await signer
+        .getAddress(),
+    )
+
+  const audience =
+    getAddress(
+      wp5ContractAddress,
+    )
+
+  const method =
+    (
+      init.method ||
+      "GET"
+    ).toUpperCase()
+
+  const timestamp =
+    String(
+      Date.now(),
+    )
+
+  const nonce =
+    randomNonce()
+
+  const bodyHash =
+    await sha256Hex(
+      canonicalJson(
+        bodyValue(
+          init.body,
+        ),
+      ),
+    )
+
+  const message =
+    buildMessage({
+      audience,
+      address,
+      method,
+      path,
+      timestamp,
+      nonce,
+      bodyHash,
+    })
+
+  const signature =
+    await signer
+      .signMessage(
+        message,
+      )
+
+  const headers =
+    new Headers(
+      init.headers,
+    )
+
+  headers.set(
+    "Authorization",
+    `${ADMIN_AUTH_SCHEME} ${address}.${timestamp}.${nonce}.${signature}`,
+  )
+
+  return fetch(
+    apiUrl(path),
+    {
+      ...init,
+      method,
+      headers,
+    },
+  )
+}
+TS
+
+echo "FRONTEND_ADMIN_SIGNING_HELPER=WRITTEN"
+
+###############################################################################
+# 5. PATCH ACTIVE ROUTES / FRONTEND API / ERROR HYGIENE / WP6 VERIFIER
+###############################################################################
+
+echo
+echo "=== 5. APPLY WP7B PATCHES ==="
+
+PATCHER="$EVIDENCE/wp7b-patcher.py"
+
+cat > "$PATCHER" <<'PY'
+from pathlib import Path
+import sys
+
+root = Path(sys.argv[1])
+
+back = root / "votechain-central-server"
+front = root / "votechain-frontend-ts"
+crypto = root / "crypto"
+
+candidate = back / "routes/candidateRoutes.js"
+voter = back / "routes/voterRoutes.js"
+biometric = back / "routes/biometricRoutes.js"
+fingerprint = back / "controllers/fingerprintController.js"
+server = back / "server.js"
+api = front / "src/services/api.ts"
+core = crypto / "src/wp6-threshold.mjs"
+
+
+def replace_once(path, old, new, label, marker=None):
+    text = path.read_text(encoding="utf-8")
+
+    if marker and marker in text:
+        print(f"{label}=ALREADY_PATCHED")
+        return
+
+    if old not in text:
+        raise RuntimeError(
+            f"{label}: expected anchor missing in {path}"
+        )
+
+    text = text.replace(old, new, 1)
+    path.write_text(text, encoding="utf-8")
+    print(f"{label}=PATCHED")
+
+
+# ------------------------------------------------------------------
+# Candidate router: every mutation is privileged.
+# ------------------------------------------------------------------
+
+text = candidate.read_text(encoding="utf-8")
+
+if "requireWp5AdminMutation" not in text:
+    anchor = "import validate from '../middleware/validate.js'\n"
+
+    replacement = """import validate from '../middleware/validate.js'
+import {
+  requireWp5AdminMutation,
+} from '../middleware/adminRequestSecurity.js'
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "candidateRoutes validation import anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    anchor = "const router = express.Router()\n"
+
+    replacement = """const router = express.Router()
+
+router.use(
+  requireWp5AdminMutation,
+)
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "candidateRoutes router anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    candidate.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("CANDIDATE_ADMIN_GUARD=PATCHED")
+else:
+    print("CANDIDATE_ADMIN_GUARD=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# Voter router: every active mutation is privileged.
+# ------------------------------------------------------------------
+
+text = voter.read_text(encoding="utf-8")
+
+if "requireWp5AdminMutation" not in text:
+    anchor = "import validate from '../middleware/validate.js';\n"
+
+    replacement = """import validate from '../middleware/validate.js';
+import {
+  requireWp5AdminMutation,
+} from '../middleware/adminRequestSecurity.js';
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "voterRoutes validation import anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    anchor = "const router = express.Router();\n"
+
+    replacement = """const router = express.Router();
+
+router.use(
+  requireWp5AdminMutation,
+);
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "voterRoutes router anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    voter.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("VOTER_ADMIN_GUARD=PATCHED")
+else:
+    print("VOTER_ADMIN_GUARD=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# Biometric router: protect active enrollment/destructive operations,
+# while keeping the legacy DETECT endpoint reachable only to return 410.
+# ------------------------------------------------------------------
+
+text = biometric.read_text(encoding="utf-8")
+
+if "requireWp5AdminRequest" not in text:
+    anchor = "import fingerprintController from '../controllers/fingerprintController.js';\n"
+
+    replacement = """import fingerprintController from '../controllers/fingerprintController.js';
+import {
+    requireWp5AdminRequest,
+} from '../middleware/adminRequestSecurity.js';
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "biometricRoutes import anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    old = "router.post('/capture-face', async (req, res) => {"
+    new = "router.post('/capture-face', requireWp5AdminRequest, async (req, res) => {"
+
+    if old not in text:
+        raise RuntimeError(
+            "capture-face route anchor missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    old = "router.post('/fingerprint/enroll', fingerprintController.captureFingerprint);"
+    new = "router.post('/fingerprint/enroll', requireWp5AdminRequest, fingerprintController.captureFingerprint);"
+
+    if old not in text:
+        raise RuntimeError(
+            "fingerprint enroll route anchor missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    old = "router.post('/fingerprint/format', fingerprintController.formatFingerprintDatabase);"
+    new = "router.post('/fingerprint/format', requireWp5AdminRequest, fingerprintController.formatFingerprintDatabase);"
+
+    if old not in text:
+        raise RuntimeError(
+            "fingerprint format route anchor missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    biometric.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("BIOMETRIC_ADMIN_GUARDS=PATCHED")
+else:
+    print("BIOMETRIC_ADMIN_GUARDS=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# Remove device/internal exception strings from client responses.
+# ------------------------------------------------------------------
+
+text = fingerprint.read_text(
+    encoding="utf-8",
+)
+
+old = "return res.status(500).json({ success: false, error: error.message })"
+
+if old in text:
+    text = text.replace(
+        old,
+        """return res.status(500).json({
+      success: false,
+      message: "Fingerprint device operation failed",
+    })""",
+    )
+
+    fingerprint.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("FINGERPRINT_ERROR_RESPONSE_HYGIENE=PATCHED")
+else:
+    print("FINGERPRINT_ERROR_RESPONSE_HYGIENE=ALREADY_PATCHED_OR_NOT_NEEDED")
+
+
+text = biometric.read_text(
+    encoding="utf-8",
+)
+
+text = text.replace(
+    """message: 'Failed to start face capture process',
+                    error: err.message""",
+    """message: 'Failed to start face capture process'""",
+)
+
+text = text.replace(
+    """message: 'Failed to start face capture process',
+                error: error.message""",
+    """message: 'Failed to start face capture process'""",
+)
+
+biometric.write_text(
+    text,
+    encoding="utf-8",
+)
+
+print("BIOMETRIC_ERROR_RESPONSE_HYGIENE=PATCHED")
+
+
+# ------------------------------------------------------------------
+# Global body/parser error hygiene.
+# ------------------------------------------------------------------
+
+replace_once(
+    server,
+    """app.use((error, _req, res, _next) => {
+  console.error(error.stack)
+  res.status(500).json({ success: false, message: 'Something went wrong!' })
+})
+""",
+    """app.use((error, _req, res, _next) => {
+  if (
+    error?.type === 'entity.too.large' ||
+    Number(error?.status) === 413
+  ) {
+    return res.status(413).json({
+      success: false,
+      message: 'Request body is too large',
+    })
+  }
+
+  console.error(
+    '[Server] unhandled request error:',
+    error?.message || 'unknown error',
+  )
+
+  return res.status(500).json({
+    success: false,
+    message: 'Something went wrong!',
+  })
+})
+""",
+    "SERVER_ERROR_RESPONSE_HYGIENE",
+    marker="Request body is too large",
+)
+
+
+# ------------------------------------------------------------------
+# Frontend REST layer: administrator mutations sign through wallet.
+# ------------------------------------------------------------------
+
+text = api.read_text(
+    encoding="utf-8",
+)
+
+if 'from "@/services/adminAuth"' not in text:
+    anchor = 'import { apiUrl } from "@/config/api"\n'
+
+    replacement = """import { apiUrl } from "@/config/api"
+import {
+  adminFetch,
+} from "@/services/adminAuth"
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "frontend api import anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        replacement,
+        1,
+    )
+
+    old = """async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(apiUrl(path), init)
+"""
+
+    new = """async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const method =
+    (init?.method || "GET").toUpperCase()
+
+  const privileged =
+    ["POST", "PUT", "PATCH", "DELETE"].includes(method) &&
+    (
+      path.startsWith("/api/candidates") ||
+      path.startsWith("/api/voters") ||
+      path.startsWith("/api/biometric")
+    )
+
+  const response =
+    privileged
+      ? await adminFetch(path, init)
+      : await fetch(apiUrl(path), init)
+"""
+
+    if old not in text:
+        raise RuntimeError(
+            "frontend request helper anchor missing"
+        )
+
+    text = text.replace(
+        old,
+        new,
+        1,
+    )
+
+    text = text.replace(
+        'const response = await fetch(apiUrl("/api/voters"), {',
+        'const response = await adminFetch("/api/voters", {',
+        1,
+    )
+
+    text = text.replace(
+        'const response = await fetch(apiUrl("/api/voters/zk-registration-status"), {',
+        'const response = await adminFetch("/api/voters/zk-registration-status", {',
+        1,
+    )
+
+    api.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("FRONTEND_ADMIN_API_SIGNING=PATCHED")
+else:
+    print("FRONTEND_ADMIN_API_SIGNING=ALREADY_PATCHED")
+
+
+# ------------------------------------------------------------------
+# WP6 public transcript verifier hardening.
+#
+# This is an intentional WP7 security patch to the previously frozen WP6
+# implementation. The pre-WP7 core hash remains preserved in evidence.
+# ------------------------------------------------------------------
+
+text = core.read_text(
+    encoding="utf-8",
+)
+
+if "WP7_DKG_STRUCTURAL_BINDING" not in text:
+    anchor = """  if (
+    transcript
+      .participantCommitments
+      .length !==
+    transcript
+      .trusteeCount
+  ) {
+    throw new Error(
+      "incomplete participant commitments",
+    )
+  }
+
+  const derivedPublicKey =
+"""
+
+    insertion = """  if (
+    transcript
+      .participantCommitments
+      .length !==
+    transcript
+      .trusteeCount
+  ) {
+    throw new Error(
+      "incomplete participant commitments",
+    )
+  }
+
+  /*
+   * WP7_DKG_STRUCTURAL_BINDING
+   *
+   * The public ceremony transcript must contain exactly one polynomial
+   * commitment set for each trustee, exactly threshold commitments per
+   * participant, and a complete n*n matrix of encrypted-delivery hashes.
+   */
+  const participantIds =
+    transcript
+      .participantCommitments
+      .map(
+        contribution =>
+          Number(
+            contribution
+              .trusteeId,
+          ),
+      )
+
+  if (
+    participantIds.some(
+      id =>
+        !Number.isSafeInteger(id) ||
+        id < 1 ||
+        id >
+          transcript
+            .trusteeCount,
+    ) ||
+    new Set(
+      participantIds,
+    ).size !==
+      transcript
+        .trusteeCount
+  ) {
+    throw new Error(
+      "invalid or duplicate DKG participant id",
+    )
+  }
+
+  const orderedParticipantIds =
+    [...participantIds]
+      .sort(
+        (a, b) =>
+          a - b,
+      )
+
+  orderedParticipantIds
+    .forEach(
+      (
+        id,
+        index,
+      ) => {
+        if (
+          id !==
+          index + 1
+        ) {
+          throw new Error(
+            "incomplete DKG participant roster",
+          )
+        }
+      },
+    )
+
+  for (
+    const contribution
+    of transcript
+      .participantCommitments
+  ) {
+    if (
+      !Array.isArray(
+        contribution
+          .commitments,
+      ) ||
+      contribution
+        .commitments
+        .length !==
+          transcript
+            .threshold
+    ) {
+      throw new Error(
+        "invalid DKG commitment count",
+      )
+    }
+
+    for (
+      const commitment
+      of contribution
+        .commitments
+    ) {
+      pointFromSerialized(
+        c,
+        commitment,
+      )
+    }
+  }
+
+  if (
+    !Array.isArray(
+      transcript
+        .deliveryHashes,
+    ) ||
+    transcript
+      .deliveryHashes
+      .length !==
+        transcript
+          .trusteeCount *
+        transcript
+          .trusteeCount
+  ) {
+    throw new Error(
+      "incomplete DKG delivery hash matrix",
+    )
+  }
+
+  const deliveryPairs =
+    new Set()
+
+  for (
+    const delivery
+    of transcript
+      .deliveryHashes
+  ) {
+    const senderId =
+      Number(
+        delivery
+          .senderId,
+      )
+
+    const recipientId =
+      Number(
+        delivery
+          .recipientId,
+      )
+
+    if (
+      !Number.isSafeInteger(
+        senderId,
+      ) ||
+      !Number.isSafeInteger(
+        recipientId,
+      ) ||
+      senderId < 1 ||
+      senderId >
+        transcript
+          .trusteeCount ||
+      recipientId < 1 ||
+      recipientId >
+        transcript
+          .trusteeCount ||
+      !/^[0-9a-f]{64}$/i.test(
+        String(
+          delivery
+            .sha256 ||
+          "",
+        ),
+      )
+    ) {
+      throw new Error(
+        "invalid DKG delivery hash record",
+      )
+    }
+
+    const pair =
+      `${senderId}:${recipientId}`
+
+    if (
+      deliveryPairs.has(
+        pair,
+      )
+    ) {
+      throw new Error(
+        "duplicate DKG delivery hash pair",
+      )
+    }
+
+    deliveryPairs.add(
+      pair,
+    )
+  }
+
+  const derivedPublicKey =
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "WP6 verifyDkgTranscript anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        insertion,
+        1,
+    )
+
+    core.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("WP6_DKG_STRUCTURE_HARDENING=PATCHED")
+else:
+    print("WP6_DKG_STRUCTURE_HARDENING=ALREADY_PATCHED")
+
+
+text = core.read_text(
+    encoding="utf-8",
+)
+
+if "WP7_DKG_TRANSCRIPT_HASH_BINDING" not in text:
+    anchor = """  verifyDkgTranscript(
+    c,
+    transcript
+      .dkgTranscript,
+  )
+
+  const threshold =
+"""
+
+    insertion = """  /*
+   * WP7_DKG_TRANSCRIPT_HASH_BINDING
+   *
+   * A finalization transcript is valid only for the exact DKG transcript
+   * whose canonical SHA-256 hash was pinned for the election.
+   */
+  const statedDkgTranscriptHash =
+    String(
+      transcript
+        .dkgTranscriptHash ||
+      "",
+    )
+      .toLowerCase()
+
+  if (
+    !/^[0-9a-f]{64}$/.test(
+      statedDkgTranscriptHash,
+    )
+  ) {
+    throw new Error(
+      "invalid DKG transcript hash",
+    )
+  }
+
+  const computedDkgTranscriptHash =
+    canonicalSha256(
+      transcript
+        .dkgTranscript,
+    )
+
+  if (
+    computedDkgTranscriptHash !==
+      statedDkgTranscriptHash
+  ) {
+    throw new Error(
+      "DKG transcript hash mismatch",
+    )
+  }
+
+  verifyDkgTranscript(
+    c,
+    transcript
+      .dkgTranscript,
+  )
+
+  const threshold =
+"""
+
+    if anchor not in text:
+        raise RuntimeError(
+            "WP6 finalization verifier anchor missing"
+        )
+
+    text = text.replace(
+        anchor,
+        insertion,
+        1,
+    )
+
+    core.write_text(
+        text,
+        encoding="utf-8",
+    )
+
+    print("WP6_FINALIZATION_DKG_HASH_BINDING=PATCHED")
+else:
+    print("WP6_FINALIZATION_DKG_HASH_BINDING=ALREADY_PATCHED")
+PY
+
+python "$PATCHER" "$ROOT"
+
+###############################################################################
+# 6. WRITE ADMIN AUTH NEGATIVE TESTS
+###############################################################################
+
+echo
+echo "=== 6. WRITE ADMIN AUTH NEGATIVE TESTS ==="
+
+cat > "$ADMIN_TEST" <<'NODE'
+import assert from 'node:assert/strict'
+
+import {
+  mkdtemp,
+  rm,
+} from 'node:fs/promises'
+
+import {
+  tmpdir,
+} from 'node:os'
+
+import {
+  join,
+} from 'node:path'
+
+import express from 'express'
+import request from 'supertest'
+
+import {
+  Wallet,
+} from 'ethers'
+
+import {
+  buildAdminRequestMessage,
+  canonicalAdminJson,
+  createAdminRequestVerifier,
+  createFileReplayStore,
+  hashAdminBody,
+} from '../middleware/adminRequestSecurity.js'
+
+const fixedNow =
+  1_796_000_000_000
+
+const admin =
+  Wallet.createRandom()
+
+const attacker =
+  Wallet.createRandom()
+
+const audience =
+  Wallet.createRandom()
+    .address
+
+const temp =
+  await mkdtemp(
+    join(
+      tmpdir(),
+      'votechain-wp7b-admin-',
+    ),
+  )
+
+async function authHeader({
+  wallet = admin,
+  claimedAddress =
+    wallet.address,
+  path = '/protected',
+  method = 'POST',
+  body = {
+    value: 1,
+  },
+  timestamp =
+    fixedNow,
+  nonce =
+    '0123456789abcdef0123456789abcdef',
+}) {
+  const bodyHash =
+    hashAdminBody(
+      body,
+    )
+
+  const message =
+    buildAdminRequestMessage({
+      audience,
+      address:
+        claimedAddress,
+      method,
+      path,
+      timestamp:
+        String(
+          timestamp,
+        ),
+      nonce,
+      bodyHash,
+    })
+
+  const signature =
+    await wallet
+      .signMessage(
+        message,
+      )
+
+  return `VoteChainAdmin ${claimedAddress}.${timestamp}.${nonce}.${signature}`
+}
+
+function makeApp(
+  replayDirectory,
+) {
+  const app =
+    express()
+
+  app.use(
+    express.json({
+      limit: '16kb',
+      strict: true,
+    }),
+  )
+
+  const verifier =
+    createAdminRequestVerifier({
+      resolveAdminContext:
+        async () => ({
+          admin:
+            admin.address,
+          audience,
+        }),
+
+      replayStore:
+        createFileReplayStore(
+          replayDirectory,
+        ),
+
+      now:
+        () =>
+          fixedNow,
+    })
+
+  app.post(
+    '/protected',
+    verifier,
+    (
+      req,
+      res,
+    ) => {
+      assert.equal(
+        req.voteChainAdmin
+          .address
+          .toLowerCase(),
+        admin.address
+          .toLowerCase(),
+      )
+
+      res.status(204).end()
+    },
+  )
+
+  app.patch(
+    '/protected',
+    verifier,
+    (_req, res) =>
+      res.status(204).end(),
+  )
+
+  app.post(
+    '/other',
+    verifier,
+    (_req, res) =>
+      res.status(204).end(),
+  )
+
+  return app
+}
+
+function passed(
+  name,
+) {
+  console.log(
+    `[PASS] ${name}`,
+  )
+}
+
+try {
+  const replayDirectory =
+    join(
+      temp,
+      'replay',
+    )
+
+  const app =
+    makeApp(
+      replayDirectory,
+    )
+
+  await request(app)
+    .post('/protected')
+    .send({
+      value: 1,
+    })
+    .expect(401)
+
+  passed(
+    'unsigned privileged request rejected',
+  )
+
+  {
+    const header =
+      await authHeader({
+        wallet:
+          attacker,
+
+        nonce:
+          '11111111111111111111111111111111',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(403)
+
+    passed(
+      'non-admin wallet rejected',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        timestamp:
+          fixedNow -
+          61_000,
+
+        nonce:
+          '22222222222222222222222222222222',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(401)
+
+    passed(
+      'expired administrator signature rejected',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        timestamp:
+          fixedNow +
+          11_000,
+
+        nonce:
+          '33333333333333333333333333333333',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(401)
+
+    passed(
+      'far-future administrator signature rejected',
+    )
+  }
+
+  {
+    const body = {
+      nested: {
+        b: 2,
+        a: 1,
+      },
+      list: [
+        3,
+        4,
+      ],
+    }
+
+    const header =
+      await authHeader({
+        body,
+
+        nonce:
+          '44444444444444444444444444444444',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send(body)
+      .expect(204)
+
+    passed(
+      'valid admin wallet signature accepted',
+    )
+  }
+
+  /*
+   * Prove that canonical object-key sorting is deterministic.
+   */
+  assert.equal(
+    canonicalAdminJson({
+      b: 2,
+      a: {
+        d: 4,
+        c: 3,
+      },
+    }),
+    canonicalAdminJson({
+      a: {
+        c: 3,
+        d: 4,
+      },
+      b: 2,
+    }),
+  )
+
+  passed(
+    'canonical JSON signing representation deterministic',
+  )
+
+  {
+    const nonce =
+      '55555555555555555555555555555555'
+
+    const header =
+      await authHeader({
+        nonce,
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(204)
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(409)
+
+    passed(
+      'same-process replay rejected',
+    )
+
+    /*
+     * Construct a fresh middleware instance to model a backend restart.
+     * The atomic nonce file must still reject the already-used request.
+     */
+    const restarted =
+      makeApp(
+        replayDirectory,
+      )
+
+    await request(restarted)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(409)
+
+    passed(
+      'replay remains rejected after verifier restart',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        body: {
+          value: 1,
+        },
+
+        nonce:
+          '66666666666666666666666666666666',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 2,
+      })
+      .expect(401)
+
+    passed(
+      'signed body tampering rejected',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        path:
+          '/protected',
+
+        nonce:
+          '77777777777777777777777777777777',
+      })
+
+    await request(app)
+      .post('/other')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(401)
+
+    passed(
+      'signed path substitution rejected',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        method:
+          'POST',
+
+        nonce:
+          '88888888888888888888888888888888',
+      })
+
+    await request(app)
+      .patch('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(401)
+
+    passed(
+      'signed HTTP method substitution rejected',
+    )
+  }
+
+  {
+    const header =
+      await authHeader({
+        claimedAddress:
+          attacker.address,
+
+        wallet:
+          admin,
+
+        nonce:
+          '99999999999999999999999999999999',
+      })
+
+    await request(app)
+      .post('/protected')
+      .set(
+        'Authorization',
+        header,
+      )
+      .send({
+        value: 1,
+      })
+      .expect(403)
+
+    passed(
+      'claimed-wallet substitution rejected',
+    )
+  }
+
+  console.log()
+  console.log(
+    'STATUS=PASS_WP7B_ADMIN_AUTH_NEGATIVE_MATRIX',
+  )
+} finally {
+  await rm(
+    temp,
+    {
+      recursive: true,
+      force: true,
+    },
+  )
+}
+NODE
+
+###############################################################################
+# 7. WRITE THRESHOLD ARTIFACT NEGATIVE MATRIX
+###############################################################################
+
+echo
+echo "=== 7. WRITE THRESHOLD ARTIFACT NEGATIVE MATRIX ==="
+
+cat > "$THRESHOLD_TEST" <<'NODE'
+import assert from "node:assert/strict"
+
+import {
+  readFile,
+} from "node:fs/promises"
+
+import {
+  context,
+} from "../src/wp2-core-final.mjs"
+
+import {
+  canonicalSha256,
+  verifyDkgTranscript,
+  verifyFinalizationTranscript,
+} from "../src/wp6-threshold.mjs"
+
+const [
+  ,
+  ,
+  dkgFile,
+  finalizationFile,
+] = process.argv
+
+if (
+  !dkgFile ||
+  !finalizationFile
+) {
+  throw new Error(
+    "Usage: node wp7b-threshold-artifact-negative-tests.mjs <dkg-bundle> <finalization-transcript>",
+  )
+}
+
+const dkgBundle =
+  JSON.parse(
+    await readFile(
+      dkgFile,
+      "utf8",
+    ),
+  )
+
+const finalization =
+  JSON.parse(
+    await readFile(
+      finalizationFile,
+      "utf8",
+    ),
+  )
+
+const c =
+  await context()
+
+function pass(
+  name,
+) {
+  console.log(
+    `[PASS] ${name}`,
+  )
+}
+
+function clone(
+  value,
+) {
+  return structuredClone(
+    value,
+  )
+}
+
+assert.equal(
+  canonicalSha256(
+    dkgBundle
+      .transcript,
+  ),
+  dkgBundle
+    .transcriptHash,
+)
+
+assert.equal(
+  verifyDkgTranscript(
+    c,
+    dkgBundle
+      .transcript,
+  ),
+  true,
+)
+
+pass(
+  "accepted DKG transcript remains valid after WP7 hardening",
+)
+
+const baseline =
+  await verifyFinalizationTranscript({
+    c,
+    transcript:
+      finalization,
+  })
+
+assert.equal(
+  baseline
+    .transcriptHash
+    .length,
+  64,
+)
+
+pass(
+  "accepted WP6B finalization transcript remains valid",
+)
+
+/*
+ * DKG structural negatives.
+ */
+{
+  const bad =
+    clone(
+      dkgBundle
+        .transcript,
+    )
+
+  bad
+    .participantCommitments[1]
+    .trusteeId =
+      bad
+        .participantCommitments[0]
+        .trusteeId
+
+  assert.throws(
+    () =>
+      verifyDkgTranscript(
+        c,
+        bad,
+      ),
+  )
+
+  pass(
+    "duplicate DKG participant id rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      dkgBundle
+        .transcript,
+    )
+
+  bad
+    .participantCommitments[0]
+    .commitments
+    .pop()
+
+  assert.throws(
+    () =>
+      verifyDkgTranscript(
+        c,
+        bad,
+      ),
+  )
+
+  pass(
+    "wrong DKG polynomial commitment count rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      dkgBundle
+        .transcript,
+    )
+
+  bad.deliveryHashes =
+    bad
+      .deliveryHashes
+      .slice(
+        0,
+        -1,
+      )
+
+  assert.throws(
+    () =>
+      verifyDkgTranscript(
+        c,
+        bad,
+      ),
+  )
+
+  pass(
+    "incomplete DKG delivery-hash matrix rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      dkgBundle
+        .transcript,
+    )
+
+  bad
+    .deliveryHashes[1]
+    .senderId =
+      bad
+        .deliveryHashes[0]
+        .senderId
+
+  bad
+    .deliveryHashes[1]
+    .recipientId =
+      bad
+        .deliveryHashes[0]
+        .recipientId
+
+  assert.throws(
+    () =>
+      verifyDkgTranscript(
+        c,
+        bad,
+      ),
+  )
+
+  pass(
+    "duplicate DKG delivery-hash pair rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      dkgBundle
+        .transcript,
+    )
+
+  bad
+    .deliveryHashes[0]
+    .sha256 =
+      "not-a-sha256"
+
+  assert.throws(
+    () =>
+      verifyDkgTranscript(
+        c,
+        bad,
+      ),
+  )
+
+  pass(
+    "malformed DKG delivery hash rejected",
+  )
+}
+
+/*
+ * Finalization transcript / DLEQ negatives.
+ */
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.dkgTranscriptHash =
+    "00".repeat(
+      32,
+    )
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "mismatched embedded DKG transcript hash rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.partialsBySlot =
+    bad
+      .partialsBySlot
+      .map(
+        records =>
+          records.slice(
+            0,
+            2,
+          ),
+      )
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "fewer-than-threshold finalization rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad
+    .partialsBySlot[0][0]
+    .proof
+    .response =
+      (
+        BigInt(
+          bad
+            .partialsBySlot[0][0]
+            .proof
+            .response,
+        ) +
+        1n
+      ).toString()
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "tampered DLEQ response rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.electionId =
+    (
+      BigInt(
+        bad.electionId,
+      ) +
+      1n
+    ).toString()
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "cross-election share replay rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.partialsBySlot[0] = [
+    clone(
+      bad
+        .partialsBySlot[0][0],
+    ),
+
+    clone(
+      bad
+        .partialsBySlot[0][0],
+    ),
+
+    clone(
+      bad
+        .partialsBySlot[0][1],
+    ),
+  ]
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "duplicate trustee partial rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad
+    .aggregateCiphertexts[0]
+    .R =
+      clone(
+        bad
+          .aggregateCiphertexts[1]
+          .R,
+      )
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "aggregate-R substitution rejected by DLEQ binding",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.acceptedBallotCount =
+    0
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "tally outside accepted-ballot bound rejected",
+  )
+}
+
+{
+  const bad =
+    clone(
+      finalization,
+    )
+
+  bad.reportedTotals =
+    Array.from(
+      {
+        length: 16,
+      },
+      () => 0,
+    )
+
+  await assert.rejects(
+    () =>
+      verifyFinalizationTranscript({
+        c,
+        transcript:
+          bad,
+      }),
+  )
+
+  pass(
+    "reported plaintext tally mismatch rejected",
+  )
+}
+
+console.log()
+console.log(
+  "STATUS=PASS_WP7B_THRESHOLD_ARTIFACT_NEGATIVE_MATRIX",
+)
+NODE
+
+###############################################################################
+# 8. SYNTAX CHECK
+###############################################################################
+
+echo
+echo "=== 8. SYNTAX CHECK ==="
+
+node --check "$ADMIN_MIDDLEWARE"
+node --check "$ADMIN_TEST"
+node --check "$WP6_CORE"
+node --check "$THRESHOLD_TEST"
+
+echo "WP7B_NODE_SYNTAX=PASS"
+
+###############################################################################
+# 9. STATIC ROUTE / ABI SECURITY ASSERTIONS
+###############################################################################
+
+echo
+echo "=== 9. STATIC ROUTE / ABI ASSERTIONS ==="
+
+grep -q \
+    'requireWp5AdminMutation' \
+    "$BACK/routes/candidateRoutes.js"
+
+grep -q \
+    'requireWp5AdminMutation' \
+    "$BACK/routes/voterRoutes.js"
+
+grep -q \
+    "router.post('/capture-face', requireWp5AdminRequest" \
+    "$BACK/routes/biometricRoutes.js"
+
+grep -q \
+    "router.post('/fingerprint/enroll', requireWp5AdminRequest" \
+    "$BACK/routes/biometricRoutes.js"
+
+grep -q \
+    "router.post('/fingerprint/format', requireWp5AdminRequest" \
+    "$BACK/routes/biometricRoutes.js"
+
+grep -q \
+    "router.post('/fingerprint/detect', (_req, res)" \
+    "$BACK/routes/biometricRoutes.js"
+
+grep -q \
+    'adminFetch' \
+    "$FRONT_API"
+
+grep -q \
+    'WP7_DKG_STRUCTURAL_BINDING' \
+    "$WP6_CORE"
+
+grep -q \
+    'WP7_DKG_TRANSCRIPT_HASH_BINDING' \
+    "$WP6_CORE"
+
+echo "PRIVILEGED_ROUTE_GUARDS=PASS"
+echo "LEGACY_FINGERPRINT_410_ROUTE_PRESERVED=PASS"
+echo "FRONTEND_ADMIN_API_SIGNING_STATIC=PASS"
+echo "WP6_THRESHOLD_SECURITY_PATCH_STATIC=PASS"
+
+node - "$BACK/abi/VoteChainDirect.json" <<'NODE'
+const fs=require("fs")
+
+const abi=
+  JSON.parse(
+    fs.readFileSync(
+      process.argv[2],
+      "utf8"
+    )
+  )
+
+const hasAdmin=
+  abi.some(
+    item =>
+      item &&
+      item.type === "function" &&
+      item.name === "admin" &&
+      Array.isArray(item.inputs) &&
+      item.inputs.length === 0
+  )
+
+if (!hasAdmin) {
+  throw new Error(
+    "VoteChainDirect ABI does not expose admin()"
+  )
+}
+
+console.log(
+  "DIRECT_ABI_ADMIN_GETTER=PASS"
+)
+NODE
+
+###############################################################################
+# 10. RUN WALLET-SIGNED ADMIN NEGATIVE MATRIX
+###############################################################################
+
+echo
+echo "=== 10. ADMIN AUTH NEGATIVE MATRIX ==="
+
+cd "$BACK"
+
+node \
+    scripts/wp7b-admin-auth-negative-tests.mjs \
+    | tee "$EVIDENCE/admin-auth-negative-matrix.log"
+
+cd "$ROOT"
+
+grep -q \
+    '^STATUS=PASS_WP7B_ADMIN_AUTH_NEGATIVE_MATRIX$' \
+    "$EVIDENCE/admin-auth-negative-matrix.log"
+
+echo "ADMIN_AUTH_NEGATIVE_MATRIX=PASS"
+
+###############################################################################
+# 11. LOCATE ACCEPTED WP6B ARTIFACTS
+###############################################################################
+
+echo
+echo "=== 11. LOCATE ACCEPTED WP6B ARTIFACTS ==="
+
+WP6B_EVIDENCE="$(
+    grep '^EVIDENCE=' "$WP6B" |
+    head -n1 |
+    cut -d= -f2-
+)"
+
+DKG_BUNDLE="$WP6B_EVIDENCE/ceremony/dkg-bundle.json"
+FINAL_TRANSCRIPT="$WP6B_EVIDENCE/finalization-transcript.json"
+
+if [ ! -f "$DKG_BUNDLE" ]; then
+    echo "ERROR: accepted WP6B DKG bundle missing."
+    exit 40
+fi
+
+if [ ! -f "$FINAL_TRANSCRIPT" ]; then
+    echo "ERROR: accepted WP6B finalization transcript missing."
+    exit 41
+fi
+
+echo "ACCEPTED_WP6B_DKG_BUNDLE=FOUND"
+echo "ACCEPTED_WP6B_FINALIZATION_TRANSCRIPT=FOUND"
+
+###############################################################################
+# 12. THRESHOLD ARTIFACT NEGATIVE MATRIX
+###############################################################################
+
+echo
+echo "=== 12. THRESHOLD ARTIFACT NEGATIVE MATRIX ==="
+
+cd "$CRYPTO"
+
+node \
+    scripts/wp7b-threshold-artifact-negative-tests.mjs \
+    "$DKG_BUNDLE" \
+    "$FINAL_TRANSCRIPT" \
+    | tee "$EVIDENCE/threshold-negative-matrix.log"
+
+cd "$ROOT"
+
+grep -q \
+    '^STATUS=PASS_WP7B_THRESHOLD_ARTIFACT_NEGATIVE_MATRIX$' \
+    "$EVIDENCE/threshold-negative-matrix.log"
+
+echo "THRESHOLD_ARTIFACT_NEGATIVE_MATRIX=PASS"
+
+###############################################################################
+# 13. REVERIFY ACCEPTED WP6B TRANSCRIPTS WITH HARDENED CORE
+###############################################################################
+
+echo
+echo "=== 13. REVERIFY ACCEPTED WP6B TRANSCRIPTS ==="
+
+cd "$CRYPTO"
+
+node \
+    scripts/wp6-trustee-cli.mjs \
+    verify-dkg \
+    --input "$DKG_BUNDLE" \
+    | tee "$EVIDENCE/wp6b-dkg-reverify.log"
+
+node \
+    scripts/wp6-trustee-cli.mjs \
+    verify-finalization \
+    --input "$FINAL_TRANSCRIPT" \
+    --out "$EVIDENCE/wp6b-finalization-reverified.json" \
+    | tee "$EVIDENCE/wp6b-finalization-reverify.log"
+
+cd "$ROOT"
+
+grep -q \
+    '^DKG_TRANSCRIPT_VERIFY=PASS$' \
+    "$EVIDENCE/wp6b-dkg-reverify.log"
+
+grep -q \
+    '^FINALIZATION_TRANSCRIPT_VERIFY=PASS$' \
+    "$EVIDENCE/wp6b-finalization-reverify.log"
+
+echo "ACCEPTED_WP6B_TRANSCRIPTS_REVERIFY=PASS"
+
+###############################################################################
+# 14. WP6A FUNCTIONAL SECURITY REGRESSION
+###############################################################################
+
+echo
+echo "=== 14. WP6A FUNCTIONAL SECURITY REGRESSION ==="
+
+cd "$CRYPTO"
+
+node \
+    scripts/wp6a-threshold-functional-run.mjs \
+    "../experiments/wp7/$RUN_ID/wp7b-privileged-auth-threshold/wp6a-security-regression" \
+    "${RUN_ID}_WP7B" \
+    | tee "$EVIDENCE/wp6a-security-regression.log"
+
+cd "$ROOT"
+
+grep -q \
+    '^STATUS=PASS_WP6A_THRESHOLD_CORE_CUSTODY$' \
+    "$EVIDENCE/wp6a-security-regression.log"
+
+echo "WP6A_POST_SECURITY_PATCH_REGRESSION=PASS"
+
+###############################################################################
+# 15. FRONTEND BUILD
+###############################################################################
+
+echo
+echo "=== 15. FRONTEND BUILD ==="
+
+cd "$FRONT"
+
+npm run build \
+    > "$EVIDENCE/frontend-build.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FRONTEND_BUILD=PASS"
+
+###############################################################################
+# 16. FOUNDRY FULL REGRESSION
+###############################################################################
+
+echo
+echo "=== 16. FOUNDRY FULL REGRESSION ==="
+
+cd "$FOUNDRY"
+
+forge test \
+    -q \
+    > "$EVIDENCE/foundry-regression.log" \
+    2>&1
+
+cd "$ROOT"
+
+echo "FOUNDRY_FULL_REGRESSION=PASS"
+
+###############################################################################
+# 17. FRONTEND PRIVILEGED CALLSITE INVENTORY
+###############################################################################
+
+echo
+echo "=== 17. FRONTEND PRIVILEGED CALLSITE INVENTORY ==="
+
+CALLS="$EVIDENCE/frontend-privileged-calls.txt"
+
+grep -RniE \
+    --exclude-dir=node_modules \
+    --exclude-dir=dist \
+    --include='*.ts' \
+    --include='*.tsx' \
+    '/api/(voters|candidates|biometric)' \
+    "$FRONT/src" \
+    > "$CALLS" \
+    || true
+
+cat "$CALLS"
+
+CALL_COUNT="$(
+    wc -l < "$CALLS" |
+    tr -d ' '
+)"
+
+echo "FRONTEND_PRIVILEGED_API_STRING_MATCHES=$CALL_COUNT"
+echo "NOTE=Callsite count is an inventory, not a vulnerability count."
+
+###############################################################################
+# 18. VERIFY ERROR RESPONSE HYGIENE
+###############################################################################
+
+echo
+echo "=== 18. ERROR RESPONSE HYGIENE ==="
+
+if grep -nE \
+    'res\.status\(500\)\.json\(\{ success: false, error: error\.message \}\)' \
+    "$BACK/controllers/fingerprintController.js"
+then
+    echo "ERROR: fingerprint internal error leakage remains."
+    exit 50
+fi
+
+if grep -nE \
+    'error:[[:space:]]*(err|error)\.message' \
+    "$BACK/routes/biometricRoutes.js"
+then
+    echo "ERROR: biometric internal error leakage remains."
+    exit 51
+fi
+
+grep -q \
+    'Request body is too large' \
+    "$BACK/server.js"
+
+echo "FINGERPRINT_INTERNAL_ERROR_RESPONSE_LEAK=NO"
+echo "BIOMETRIC_INTERNAL_ERROR_RESPONSE_LEAK=NO"
+echo "BODY_LIMIT_ERROR_RESPONSE_HYGIENE=PASS"
+
+###############################################################################
+# 19. VERIFY CONTRACT / PROFILE UNCHANGED, RECORD INTENTIONAL WP6 CORE PATCH
+###############################################################################
+
+echo
+echo "=== 19. SOURCE INTEGRITY / INTENTIONAL SECURITY PATCH ==="
+
+PROFILE_AFTER="$(
+    sha256sum "$WP6_PROFILE" |
+    awk '{print $1}'
+)"
+
+CONTRACT_AFTER="$(
+    sha256sum "$CONTRACT" |
+    awk '{print $1}'
+)"
+
+CORE_AFTER="$(
+    sha256sum "$WP6_CORE" |
+    awk '{print $1}'
+)"
+
+if [ "$PROFILE_AFTER" != "$PROFILE_BEFORE" ]; then
+    echo "ERROR: WP6 profile changed unexpectedly."
+    exit 60
+fi
+
+if [ "$CONTRACT_AFTER" != "$CONTRACT_BEFORE" ]; then
+    echo "ERROR: voting contract changed unexpectedly."
+    exit 61
+fi
+
+if [ "$CORE_AFTER" = "$CORE_BEFORE" ]; then
+    echo "ERROR: expected WP7 threshold verifier hardening did not change WP6 core."
+    exit 62
+fi
+
+echo "WP6_PROFILE_CHANGED=NO"
+echo "VOTING_CONTRACT_CHANGED=NO"
+echo "WP6_CORE_SECURITY_PATCH=YES"
+echo "WP6_CORE_BEFORE_SHA256=$CORE_BEFORE"
+echo "WP6_CORE_AFTER_SHA256=$CORE_AFTER"
+
+###############################################################################
+# 20. HASH HARDENED ARTIFACTS
+###############################################################################
+
+echo
+echo "=== 20. HASH WP7B ARTIFACTS ==="
+
+HASHES="$EVIDENCE/wp7b-hardened.sha256"
+
+sha256sum \
+    "$ADMIN_MIDDLEWARE" \
+    "$ADMIN_TEST" \
+    "$BACK/routes/candidateRoutes.js" \
+    "$BACK/routes/voterRoutes.js" \
+    "$BACK/routes/biometricRoutes.js" \
+    "$BACK/controllers/fingerprintController.js" \
+    "$BACK/server.js" \
+    "$FRONT_ADMIN" \
+    "$FRONT_API" \
+    "$WP6_CORE" \
+    "$THRESHOLD_TEST" \
+    "$EVIDENCE/wp6b-finalization-reverified.json" \
+    > "$HASHES"
+
+cat "$HASHES"
+
+###############################################################################
+# 21. SUMMARY
+###############################################################################
+
+echo
+echo "=== 21. WRITE WP7B SUMMARY ==="
+
+{
+    echo "======================================================================"
+    echo "VOTECHAIN-ZK WP7B — PRIVILEGED AUTH / THRESHOLD ARTIFACT HARDENING"
+    echo "======================================================================"
+    echo
+    echo "STATUS=PASS_WP7B_PRIVILEGED_AUTH_THRESHOLD_HARDENING"
+    echo "RUN_ID=$RUN_ID"
+    echo
+    echo "WP7A_TARGETED_HARDENING=PASS"
+    echo "WP7B_PRIVILEGED_SURFACE_CAPTURE=PASS"
+    echo
+    echo "ADMIN_AUTH_MODEL=ONCHAIN_WP5_DIRECT_ADMIN_WALLET_SIGNATURE"
+    echo "ADMIN_AUTH_SHARED_PASSWORD=NO"
+    echo "ADMIN_API_KEY_IN_BROWSER=NO"
+    echo "ADMIN_PRIVATE_KEY_IN_BACKEND=NO"
+    echo
+    echo "ADMIN_SIGNATURE_BINDS_AUDIENCE=WP5_CONTRACT_ADDRESS"
+    echo "ADMIN_SIGNATURE_BINDS_METHOD=YES"
+    echo "ADMIN_SIGNATURE_BINDS_PATH_AND_QUERY=YES"
+    echo "ADMIN_SIGNATURE_BINDS_CANONICAL_BODY_SHA256=YES"
+    echo "ADMIN_SIGNATURE_BINDS_TIMESTAMP=YES"
+    echo "ADMIN_SIGNATURE_BINDS_RANDOM_NONCE=YES"
+    echo
+    echo "ADMIN_SIGNATURE_MAX_AGE_MS=60000"
+    echo "ADMIN_REPLAY_CACHE=PERSISTENT_ATOMIC_NONCE_FILES"
+    echo "ADMIN_REPLAY_SAME_PROCESS_REJECTED=PASS"
+    echo "ADMIN_REPLAY_AFTER_VERIFIER_RESTART_REJECTED=PASS"
+    echo
+    echo "UNSIGNED_PRIVILEGED_REQUEST_REJECTED=PASS"
+    echo "NON_ADMIN_WALLET_REJECTED=PASS"
+    echo "EXPIRED_ADMIN_SIGNATURE_REJECTED=PASS"
+    echo "FUTURE_ADMIN_SIGNATURE_REJECTED=PASS"
+    echo "BODY_TAMPER_REJECTED=PASS"
+    echo "PATH_SUBSTITUTION_REJECTED=PASS"
+    echo "METHOD_SUBSTITUTION_REJECTED=PASS"
+    echo
+    echo "CANDIDATE_MUTATION_AUTHORIZATION=PASS"
+    echo "VOTER_MUTATION_AUTHORIZATION=PASS"
+    echo "FACE_CAPTURE_ADMIN_AUTHORIZATION=PASS"
+    echo "FINGERPRINT_ENROLL_ADMIN_AUTHORIZATION=PASS"
+    echo "FINGERPRINT_FORMAT_ADMIN_AUTHORIZATION=PASS"
+    echo "LEGACY_FINGERPRINT_410_ROUTE_PRESERVED=PASS"
+    echo "WP5_VOTER_AUTHORIZATION_REMAINS_NON_ADMIN_PATH=YES"
+    echo
+    echo "FRONTEND_ADMIN_WALLET_SIGNING_HELPER=PASS"
+    echo "FRONTEND_CORE_CANDIDATE_VOTER_ADMIN_API_SIGNING=PASS"
+    echo "FRONTEND_PRIVILEGED_API_STRING_MATCHES=$CALL_COUNT"
+    echo
+    echo "FINGERPRINT_INTERNAL_ERROR_RESPONSE_LEAK=NO"
+    echo "BIOMETRIC_INTERNAL_ERROR_RESPONSE_LEAK=NO"
+    echo "BODY_LIMIT_ERROR_RESPONSE_HYGIENE=PASS"
+    echo
+    echo "WP6_CORE_SECURITY_PATCH=YES"
+    echo "WP6_CORE_BEFORE_SHA256=$CORE_BEFORE"
+    echo "WP6_CORE_AFTER_SHA256=$CORE_AFTER"
+    echo "WP6_DKG_PARTICIPANT_UNIQUENESS=PASS"
+    echo "WP6_DKG_COMMITMENT_COUNT_VALIDATION=PASS"
+    echo "WP6_DKG_DELIVERY_HASH_MATRIX_VALIDATION=PASS"
+    echo "WP6_FINALIZATION_DKG_HASH_BINDING=PASS"
+    echo
+    echo "THRESHOLD_ARTIFACT_NEGATIVE_MATRIX=PASS"
+    echo "INSUFFICIENT_THRESHOLD_REJECTED=PASS"
+    echo "TAMPERED_DLEQ_REJECTED=PASS"
+    echo "CROSS_ELECTION_SHARE_REPLAY_REJECTED=PASS"
+    echo "DUPLICATE_TRUSTEE_PARTIAL_REJECTED=PASS"
+    echo "AGGREGATE_R_SUBSTITUTION_REJECTED=PASS"
+    echo "TALLY_BOUND_VIOLATION_REJECTED=PASS"
+    echo "REPORTED_TOTAL_MISMATCH_REJECTED=PASS"
+    echo
+    echo "ACCEPTED_WP6B_TRANSCRIPTS_REVERIFY=PASS"
+    echo "WP6A_POST_SECURITY_PATCH_REGRESSION=PASS"
+    echo
+    echo "WP6_PROFILE_CHANGED=NO"
+    echo "VOTING_CONTRACT_CHANGED=NO"
+    echo "FRONTEND_BUILD=PASS"
+    echo "FOUNDRY_FULL_REGRESSION=PASS"
+    echo
+    echo "DATABASE_ACCESSED=NO"
+    echo "BIOMETRIC_EXECUTION=NO"
+    echo "REAL_CREDENTIALS_READ=NO"
+    echo
+    echo "POST_HARDENING_BROWSER_HTTP_GROTH16_ONCHAIN_RUNTIME=NOT_YET_WP7C"
+    echo "FRONTEND_ALL_ADMIN_CALLS_RUNTIME_VERIFIED=NOT_YET_WP7C"
+    echo "DEPENDENCY_AUDIT=NOT_YET_WP7C"
+    echo
+    echo "FINAL_SECURITY_VERDICT=NOT_YET"
+    echo "CRITICAL_HIGH_DEFECT_GATE=NOT_YET"
+    echo
+    echo "EVIDENCE=$EVIDENCE"
+    echo
+    echo "NEXT_ACTION=WP7C_POST_HARDENING_RUNTIME_DEPENDENCY_AUDIT_AND_FINAL_SECURITY_GATE"
+    echo "======================================================================"
+} | tee "$SUMMARY"
+
+echo
+echo "======================================================================"
+echo "WP7B HARDENING COMPLETE"
+echo "======================================================================"
+echo
+echo "Send me:"
+echo "$SUMMARY"
+echo
+echo "and the terminal output."

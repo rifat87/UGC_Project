@@ -1,0 +1,2 @@
+Filesystem      Size  Used Avail Use% Mounted on
+D:              206G  193G   13G  95% /d

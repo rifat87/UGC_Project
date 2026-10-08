@@ -1,0 +1,107 @@
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/config/VoteChainBuildProfile.circom
+SHA256=bd2bcf6748f67f1f2c48373fa444ca44274eb08c559389e2b918bf600710da14
+======================================================================
+1:pragma circom 2.2.0;
+13:function VC_MAX_CANDIDATES() {
+17:function VC_MERKLE_DEPTH() {
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/lib/VoteChainVoteCore.circom
+SHA256=87d9094fb52345312a8dfe1db4b7a3c9e2624495aa3c968e7533b46026939592
+======================================================================
+1:pragma circom 2.2.0;
+3:include "../config/VoteChainBuildProfile.circom";
+5:include "circomlib/circuits/poseidon.circom";
+6:include "circomlib/circuits/bitify.circom";
+7:include "circomlib/circuits/comparators.circom";
+8:include "circomlib/circuits/compconstant.circom";
+9:include "circomlib/circuits/gates.circom";
+10:include "circomlib/circuits/babyjub.circom";
+11:include "circomlib/circuits/escalarmulfix.circom";
+12:include "circomlib/circuits/escalarmulany.circom";
+48:template VoteChainVoteCore(
+49:    MAX_CANDIDATES,
+50:    MERKLE_DEPTH
+54:    signal input siblings[MERKLE_DEPTH];
+55:    signal input pathBits[MERKLE_DEPTH];
+57:    signal input bit[MAX_CANDIDATES];
+58:    signal input randomness[MAX_CANDIDATES];
+73:    signal output Rx[MAX_CANDIDATES];
+74:    signal output Ry[MAX_CANDIDATES];
+75:    signal output Sx[MAX_CANDIDATES];
+76:    signal output Sy[MAX_CANDIDATES];
+102:    signal current[MERKLE_DEPTH + 1];
+103:    signal left[MERKLE_DEPTH];
+104:    signal right[MERKLE_DEPTH];
+106:    component merkleHash[MERKLE_DEPTH];
+113:        level < MERKLE_DEPTH;
+150:    current[MERKLE_DEPTH] ===
+305:    signal bitSum[MAX_CANDIDATES + 1];
+309:    component active[MAX_CANDIDATES];
+311:    component zeroR[MAX_CANDIDATES];
+312:    component rBits[MAX_CANDIDATES];
+313:    component rRange[MAX_CANDIDATES];
+315:    component rG[MAX_CANDIDATES];
+316:    component rY[MAX_CANDIDATES];
+317:    component addPoint[MAX_CANDIDATES];
+319:    signal messageX[MAX_CANDIDATES];
+320:    signal messageY[MAX_CANDIDATES];
+324:        j < MAX_CANDIDATES;
+486:    bitSum[MAX_CANDIDATES] ===
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDigest.circom
+SHA256=3f94130ac229b0df3ee14f1bd54b15035610091e08d8b752a3a92f95440d314b
+======================================================================
+1:pragma circom 2.2.0;
+3:include "./lib/VoteChainVoteCore.circom";
+13:template VoteChainVoteDigest(
+14:    MAX_CANDIDATES,
+15:    MERKLE_DEPTH
+19:    signal input siblings[MERKLE_DEPTH];
+20:    signal input pathBits[MERKLE_DEPTH];
+22:    signal input bit[MAX_CANDIDATES];
+23:    signal input randomness[MAX_CANDIDATES];
+41:        VoteChainVoteCore(
+42:            MAX_CANDIDATES,
+43:            MERKLE_DEPTH
+78:        d < MERKLE_DEPTH;
+90:        j < MAX_CANDIDATES;
+100:    signal bindingState[MAX_CANDIDATES + 1];
+102:    component bindingHash[MAX_CANDIDATES];
+109:        k < MAX_CANDIDATES;
+134:    bindingState[MAX_CANDIDATES] ===
+138:component main {
+151:} = VoteChainVoteDigest(
+152:    VC_MAX_CANDIDATES(),
+153:    VC_MERKLE_DEPTH()
+
+======================================================================
+FILE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom
+SHA256=8323685caa5149d98dab9790ffae9e00b10e3e6098ae7b626df748901e99c66e
+======================================================================
+1:pragma circom 2.2.0;
+3:include "./lib/VoteChainVoteCore.circom";
+11:template VoteChainVoteDirect(
+12:    MAX_CANDIDATES,
+13:    MERKLE_DEPTH
+17:    signal input siblings[MERKLE_DEPTH];
+18:    signal input pathBits[MERKLE_DEPTH];
+20:    signal input bit[MAX_CANDIDATES];
+21:    signal input randomness[MAX_CANDIDATES];
+36:    signal input Rx[MAX_CANDIDATES];
+37:    signal input Ry[MAX_CANDIDATES];
+38:    signal input Sx[MAX_CANDIDATES];
+39:    signal input Sy[MAX_CANDIDATES];
+42:        VoteChainVoteCore(
+43:            MAX_CANDIDATES,
+44:            MERKLE_DEPTH
+79:        d < MERKLE_DEPTH;
+95:        j < MAX_CANDIDATES;
+107:        k < MAX_CANDIDATES;
+124:component main {
+140:} = VoteChainVoteDirect(
+141:    VC_MAX_CANDIDATES(),
+142:    VC_MERKLE_DEPTH()

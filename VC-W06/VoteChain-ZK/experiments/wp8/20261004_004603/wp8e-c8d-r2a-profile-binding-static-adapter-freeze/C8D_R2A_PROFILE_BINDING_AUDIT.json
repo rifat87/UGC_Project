@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "disambiguationMethod": "SOURCE_VARIABLE_BINDING_NOT_JSON_SHAPE",
+  "backendSourceRelativePath": "votechain-central-server/services/zk/wp5PrivacyService.js",
+  "backendSourceSha256": "386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7",
+  "profileBinding": {
+    "variable": "profile",
+    "literalRelativePath": "../../../crypto/config/wp3-build-profile.json",
+    "projectRelativePath": "crypto/config/wp3-build-profile.json",
+    "sha256": "3185dd6253f40fbda036fd733848f680d9f084f6cdc980f8ffddb2be0aeed00f",
+    "merkleDepth": 17,
+    "eligibleCapacity": 131072,
+    "maxCandidates": 16,
+    "identityDomain": "10304592805145852052914897443128100987694469729912842507111180023223117126083"
+  },
+  "appProfileBinding": {
+    "variable": "appProfile",
+    "literalRelativePath": "../../../crypto/config/wp5-application-profile.json",
+    "projectRelativePath": "crypto/config/wp5-application-profile.json",
+    "sha256": "2044785434439f8571c15aee7f2a85fecda91bcd9f4cc0ef6121377cab50dc86",
+    "candidateManifestAlgorithm": "POSEIDON_INDEXED_CHAIN_V1"
+  },
+  "bindingsDistinct": true,
+  "broadShapeSearchUsed": false
+}

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "checks": {
+    "allMutatingAbiNamesFoundInSource": true,
+    "castVoteFound": true,
+    "getTallyFound": true,
+    "acceptedBallotCountReferenced": true,
+    "usedNullifierReferenced": true
+  },
+  "mutatingAbiNames": [
+    "activate",
+    "castVote",
+    "configure",
+    "endElection",
+    "finalizeTally",
+    "setTrusteeTranscriptHash"
+  ],
+  "missingMutatingNamesInSource": []
+}

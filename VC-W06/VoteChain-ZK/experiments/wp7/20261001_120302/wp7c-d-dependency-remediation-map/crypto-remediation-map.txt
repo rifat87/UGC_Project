@@ -1,0 +1,16 @@
+======================================================================
+WORKSPACE=CRYPTO
+ROOT_PACKAGE=@votechain-zk/crypto-poc
+ROOT_VERSION=0.1.0
+======================================================================
+
+----------------------------------------------------------------------
+PACKAGE=ws
+SEVERITY=high
+DIRECT=false
+VULNERABLE_RANGE=8.0.0 - 8.20.1
+FIX_AVAILABLE={"name":"circomlibjs","version":"0.0.8","isSemVerMajor":true}
+AUDIT_NODE_COUNT=1
+NODE=node_modules/ws
+INSTALLED_VERSION=8.18.0
+ANCESTRY=@votechain-zk/crypto-poc@0.1.0 -> node_modules/circomlibjs@0.1.7 -> node_modules/ethers@5.8.0 -> node_modules/@ethersproject/providers@5.8.0 -> node_modules/ws@8.18.0

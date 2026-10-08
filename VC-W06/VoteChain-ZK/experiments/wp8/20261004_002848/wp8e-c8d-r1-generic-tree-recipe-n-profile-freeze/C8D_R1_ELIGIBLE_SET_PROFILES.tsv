@@ -1,0 +1,5 @@
+profile	eligible_set_size_n	configured_merkle_depth	configured_capacity	occupied_leaf_start	occupied_leaf_end	selected_voter_index	selected_path_length	candidate_count	fixture_status
+N10	10	17	131072	0	9	0	17	16	NOT_YET_GENERATED
+N100	100	17	131072	0	99	0	17	16	NOT_YET_GENERATED
+N1000	1000	17	131072	0	999	0	17	16	NOT_YET_GENERATED
+N10000	10000	17	131072	0	9999	0	17	16	NOT_YET_GENERATED

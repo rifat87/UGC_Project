@@ -1,0 +1,70 @@
+{
+  "classification": "WP8B_PILOT_ONLY_NOT_FINAL_BENCHMARK",
+  "measuredCount": 3,
+  "metrics": {
+    "backendAuthorizationMs": {
+      "max": 58.59999996423721,
+      "mean": 54.99999998013178,
+      "median": 54.10000002384186,
+      "min": 52.299999952316284,
+      "n": 3,
+      "nearestRankP95": 58.59999996423721,
+      "sampleStandardDeviation": 3.24499614461132
+    },
+    "browserLocalPrivacyMs": {
+      "max": 5377.600000023842,
+      "mean": 4493.399999996026,
+      "median": 4098.599999964237,
+      "min": 4004.0,
+      "n": 3,
+      "nearestRankP95": 5377.600000023842,
+      "sampleStandardDeviation": 767.1991397513426
+    },
+    "browserOverallMs": {
+      "max": 5568.699999988079,
+      "mean": 4663.366666654746,
+      "median": 4255.199999988079,
+      "min": 4166.199999988079,
+      "n": 3,
+      "nearestRankP95": 5568.699999988079,
+      "sampleStandardDeviation": 785.303497593977
+    },
+    "calldataBytes": {
+      "max": 2340.0,
+      "mean": 2340.0,
+      "median": 2340.0,
+      "min": 2340.0,
+      "n": 3,
+      "nearestRankP95": 2340.0,
+      "sampleStandardDeviation": 0.0
+    },
+    "castGas": {
+      "max": 1866450.0,
+      "mean": 1866418.0,
+      "median": 1866414.0,
+      "min": 1866390.0,
+      "n": 3,
+      "nearestRankP95": 1866450.0,
+      "sampleStandardDeviation": 30.199337741083
+    },
+    "transactionLatencyMs": {
+      "max": 534.3348000000001,
+      "mean": 503.86600000000004,
+      "median": 491.7632,
+      "min": 485.5,
+      "n": 3,
+      "nearestRankP95": 534.3348000000001,
+      "sampleStandardDeviation": 26.57193535744062
+    },
+    "wrapperWallMs": {
+      "max": 35139.8907,
+      "mean": 34107.97573333333,
+      "median": 34122.218,
+      "min": 33061.8185,
+      "n": 3,
+      "nearestRankP95": 35139.8907,
+      "sampleStandardDeviation": 1039.109305474196
+    }
+  },
+  "warmupCount": 1
+}

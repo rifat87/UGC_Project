@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_PUBLICATION_ASSET_ARCHIVE_VALIDATION",
+  "manifestRows": 41,
+  "archiveEntries": 42,
+  "exactArchiveMemberSet": true,
+  "allTimestampsFixed": true,
+  "allMemberHashesVerified": true,
+  "archiveSha256": "aa52eedb5e3c2a9dff2e82d9995ba3ba7dc2dfcb80a5ab5eabad12e2eb5b8f8d",
+  "archiveSizeBytes": 47067,
+  "errors": []
+}

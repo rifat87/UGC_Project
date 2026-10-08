@@ -1,0 +1,251 @@
+    {
+        (
+            cfg.eligibleRoot,
+            cfg.electionId,
+            cfg.candidateManifestHash,
+            cfg.candidateCount,
+            cfg.contractDomain,
+            cfg.Yx,
+            cfg.Yy,
+            cfg.electionContextHash
+        ) =
+            WP4Fixture.config();
+    }
+
+    function _newDirect(
+        bool activateNow
+    )
+        internal
+        returns (
+            VoteChainDirect d,
+            VoteChainVoteDirectVerifier v
+        )
+    {
+        v =
+            new VoteChainVoteDirectVerifier();
+
+        d =
+            new VoteChainDirect(
+                address(v)
+            );
+
+        VoteChainBase
+            .ElectionConfig
+            memory cfg =
+                _config();
+
+        d.configure(
+            cfg
+        );
+
+        if (activateNow) {
+            d.activate();
+        }
+    }
+
+    function _newPoseidon(
+        bool activateNow
+    )
+        internal
+        returns (
+            VoteChainPoseidon p,
+            VoteChainVoteDigestVerifier v,
+            address poseidon
+        )
+    {
+        v =
+            new VoteChainVoteDigestVerifier();
+
+        poseidon =
+            _deployPoseidon();
+
+        p =
+            new VoteChainPoseidon(
+                address(v),
+                poseidon
+            );
+
+        VoteChainBase
+            .ElectionConfig
+            memory cfg =
+                _config();
+
+        p.configure(
+            cfg
+        );
+
+        if (activateNow) {
+            p.activate();
+        }
+    }
+
+    function _castDirectA(
+        VoteChainDirect d
+    )
+        internal
+    {
+        uint256[2] memory a;
+        uint256[2][2] memory b;
+        uint256[2] memory c;
+        uint256[73] memory ignored;
+
+        (
+            a,
+            b,
+            c,
+            ignored
+        ) =
+            WP4Fixture.directA();
+
+        (
+            uint256 nullifier,
+            uint256[16] memory rx,
+            uint256[16] memory ry,
+            uint256[16] memory sx,
+            uint256[16] memory sy
+        ) =
+            WP4Fixture.ballotA();
+
+        d.castVote(
+            a,
+            b,
+            c,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+
+    function _castDirectB(
+        VoteChainDirect d
+    )
+        internal
+    {
+        uint256[2] memory a;
+        uint256[2][2] memory b;
+        uint256[2] memory c;
+        uint256[73] memory ignored;
+
+        (
+            a,
+            b,
+            c,
+            ignored
+        ) =
+            WP4Fixture.directB();
+
+        (
+            uint256 nullifier,
+            uint256[16] memory rx,
+            uint256[16] memory ry,
+            uint256[16] memory sx,
+            uint256[16] memory sy
+        ) =
+            WP4Fixture.ballotB();
+
+        d.castVote(
+            a,
+            b,
+            c,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+
+    function _castPoseidonA(
+        VoteChainPoseidon p
+    )
+        internal
+    {
+        uint256[2] memory a;
+        uint256[2][2] memory b;
+        uint256[2] memory c;
+        uint256[10] memory ignored;
+
+        (
+            a,
+            b,
+            c,
+            ignored
+        ) =
+            WP4Fixture.digestA();
+
+        (
+            uint256 nullifier,
+            uint256[16] memory rx,
+            uint256[16] memory ry,
+            uint256[16] memory sx,
+            uint256[16] memory sy
+        ) =
+            WP4Fixture.ballotA();
+
+        p.castVote(
+            a,
+            b,
+            c,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+
+    function _castPoseidonB(
+        VoteChainPoseidon p
+    )
+        internal
+    {
+        uint256[2] memory a;
+        uint256[2][2] memory b;
+        uint256[2] memory c;
+        uint256[10] memory ignored;
+
+        (
+            a,
+            b,
+            c,
+            ignored
+        ) =
+            WP4Fixture.digestB();
+
+        (
+            uint256 nullifier,
+            uint256[16] memory rx,
+            uint256[16] memory ry,
+            uint256[16] memory sx,
+            uint256[16] memory sy
+        ) =
+            WP4Fixture.ballotB();
+
+        p.castVote(
+            a,
+            b,
+            c,
+            nullifier,
+            rx,
+            ry,
+            sx,
+            sy
+        );
+    }
+
+    function _assertAggregate(
+        VoteChainBase contractRef
+    )
+        internal
+        view
+    {
+        (
+            uint256[16] memory erx,
+            uint256[16] memory ery,
+            uint256[16] memory esx,
+            uint256[16] memory esy
+        ) =
+            WP4Fixture
+                .expectedAggregate();

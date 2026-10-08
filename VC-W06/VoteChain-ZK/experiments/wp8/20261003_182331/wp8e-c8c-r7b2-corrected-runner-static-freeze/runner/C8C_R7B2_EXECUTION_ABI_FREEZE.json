@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "constructorSignature": "constructor(address)",
+  "configureSendSignature": "configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+  "configureTupleComponentNames": [
+    "eligibleRoot",
+    "electionId",
+    "candidateManifestHash",
+    "candidateCount",
+    "contractDomain",
+    "Yx",
+    "Yy",
+    "electionContextHash"
+  ],
+  "configureTupleComponentTypes": [
+    "uint256",
+    "uint256",
+    "uint256",
+    "uint256",
+    "uint256",
+    "uint256",
+    "uint256",
+    "uint256"
+  ],
+  "activateSendSignature": "activate()",
+  "castVoteSendSignature": "castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])",
+  "getTallyCallSignature": "getTally(uint256)(uint256,uint256,uint256,uint256)",
+  "acceptedBallotCountCallSignature": "acceptedBallotCount()(uint256)",
+  "usedNullifierCallSignature": "usedNullifier(uint256)(bool)",
+  "phaseCallSignature": "phase()(uint8)",
+  "configuredCallSignature": "configured()(bool)",
+  "verifierCallSignature": "verifier()(address)",
+  "configGetterCallSignatures": {
+    "eligibleRoot": "eligibleRoot()(uint256)",
+    "electionId": "electionId()(uint256)",
+    "candidateManifestHash": "candidateManifestHash()(uint256)",
+    "candidateCount": "candidateCount()(uint256)",
+    "contractDomain": "contractDomain()(uint256)",
+    "Yx": "Yx()(uint256)",
+    "Yy": "Yy()(uint256)",
+    "electionContextHash": "electionContextHash()(uint256)"
+  },
+  "publicSignalCount": 73,
+  "publicSignalLayout": {
+    "eligibleRoot": 0,
+    "electionId": 1,
+    "candidateManifestHash": 2,
+    "candidateCount": 3,
+    "contractDomain": 4,
+    "Yx": 5,
+    "Yy": 6,
+    "electionContextHash": 7,
+    "nullifier": 8,
+    "Rx": [
+      9,
+      24
+    ],
+    "Ry": [
+      25,
+      40
+    ],
+    "Sx": [
+      41,
+      56
+    ],
+    "Sy": [
+      57,
+      72
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+WP8E C8B-R3F2 VERSIONED DEPLOY-ADDRESS PARSER AMENDMENT
+======================================================
+
+ROOT_CAUSE
+----------
+The aborted 20261003_012934 final fresh-chain microbenchmark
+encountered a valid forge-create leading JSON deployment object
+followed by non-JSON Alloy diagnostic text.
+
+Frozen Runner V2 extract_address() first attempted json.loads()
+on the complete stdout. That failed because of the trailing
+diagnostic. Its regex fallback then returned the first Ethereum
+address in the text, which was the deployer rather than deployedTo.
+
+The failure occurred during deployment validation before castVote
+for measured-12. No measured-12 vote transaction or latency
+observation exists.
+
+ABORTED_CAMPAIGN_POLICY
+-----------------------
+The aborted campaign remains preserved.
+Its 16 accepted vote observations are not eligible for final statistics.
+No observation will be reused.
+No missing latency will be reconstructed.
+
+AMENDMENT_SCOPE
+---------------
+Runner V3 is derived from frozen Runner V2.
+Only top-level function extract_address() changes.
+
+The amended deployment parser:
+- parses one leading JSON value with JSONDecoder.raw_decode();
+- requires a leading JSON object when JSON is present;
+- reads deployedTo/deployed_to/address/contractAddress/contract_address;
+- allows trailing non-JSON diagnostic text because raw stdout is preserved;
+- rejects a valid second top-level JSON value;
+- retains regex fallback only when no leading JSON value can be decoded.
+
+Microbenchmark Runner V2 is derived from frozen microbenchmark Runner V1.
+Its benchmark execution logic is unchanged.
+Only the underlying runner SHA/path is updated from Runner V2 to Runner V3.
+
+REGRESSION
+----------
+All 34 preserved verifier/direct deployment artifacts from the aborted
+campaign are regression tested.
+The one historical V2 mismatch is measured-12/direct-deploy.json.
+Runner V3 must resolve all 34 deployment addresses exactly.
+
+EXECUTION_STATUS
+----------------
+ANVIL_STARTED=NO
+TRANSACTION_SUBMITTED=NO
+NEW_FINAL_MICROBENCHMARK_STARTED=NO

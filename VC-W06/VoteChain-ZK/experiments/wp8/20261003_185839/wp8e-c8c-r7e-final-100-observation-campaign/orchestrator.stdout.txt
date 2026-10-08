@@ -1,0 +1,208 @@
+START 001/100 warmup-r01-k2
+PASS 001/100 warmup-r01-k2 gas=1866402 latency_ms=870.572500
+START 002/100 warmup-r01-k4
+PASS 002/100 warmup-r01-k4 gas=1866414 latency_ms=871.695200
+START 003/100 warmup-r01-k8
+PASS 003/100 warmup-r01-k8 gas=1866414 latency_ms=892.124600
+START 004/100 warmup-r01-k16
+PASS 004/100 warmup-r01-k16 gas=1866414 latency_ms=886.002600
+START 005/100 warmup-r02-k4
+PASS 005/100 warmup-r02-k4 gas=1866414 latency_ms=973.716800
+START 006/100 warmup-r02-k8
+PASS 006/100 warmup-r02-k8 gas=1866414 latency_ms=872.753700
+START 007/100 warmup-r02-k16
+PASS 007/100 warmup-r02-k16 gas=1866414 latency_ms=867.787300
+START 008/100 warmup-r02-k2
+PASS 008/100 warmup-r02-k2 gas=1866402 latency_ms=865.789500
+START 009/100 warmup-r03-k8
+PASS 009/100 warmup-r03-k8 gas=1866414 latency_ms=864.412800
+START 010/100 warmup-r03-k16
+PASS 010/100 warmup-r03-k16 gas=1866414 latency_ms=858.781400
+START 011/100 warmup-r03-k2
+PASS 011/100 warmup-r03-k2 gas=1866402 latency_ms=885.207000
+START 012/100 warmup-r03-k4
+PASS 012/100 warmup-r03-k4 gas=1866414 latency_ms=869.050300
+START 013/100 warmup-r04-k16
+PASS 013/100 warmup-r04-k16 gas=1866414 latency_ms=867.346500
+START 014/100 warmup-r04-k2
+PASS 014/100 warmup-r04-k2 gas=1866402 latency_ms=854.037100
+START 015/100 warmup-r04-k4
+PASS 015/100 warmup-r04-k4 gas=1866414 latency_ms=885.380400
+START 016/100 warmup-r04-k8
+PASS 016/100 warmup-r04-k8 gas=1866414 latency_ms=945.176300
+START 017/100 warmup-r05-k2
+PASS 017/100 warmup-r05-k2 gas=1866402 latency_ms=899.711800
+START 018/100 warmup-r05-k4
+PASS 018/100 warmup-r05-k4 gas=1866414 latency_ms=868.335700
+START 019/100 warmup-r05-k8
+PASS 019/100 warmup-r05-k8 gas=1866414 latency_ms=845.962300
+START 020/100 warmup-r05-k16
+PASS 020/100 warmup-r05-k16 gas=1866414 latency_ms=928.502600
+START 021/100 measured-r01-k2
+PASS 021/100 measured-r01-k2 gas=1866402 latency_ms=852.180600
+START 022/100 measured-r01-k4
+PASS 022/100 measured-r01-k4 gas=1866414 latency_ms=869.932700
+START 023/100 measured-r01-k8
+PASS 023/100 measured-r01-k8 gas=1866414 latency_ms=884.174800
+START 024/100 measured-r01-k16
+PASS 024/100 measured-r01-k16 gas=1866414 latency_ms=845.633200
+START 025/100 measured-r02-k4
+PASS 025/100 measured-r02-k4 gas=1866414 latency_ms=856.902800
+START 026/100 measured-r02-k8
+PASS 026/100 measured-r02-k8 gas=1866414 latency_ms=857.617300
+START 027/100 measured-r02-k16
+PASS 027/100 measured-r02-k16 gas=1866414 latency_ms=865.312000
+START 028/100 measured-r02-k2
+PASS 028/100 measured-r02-k2 gas=1866402 latency_ms=860.161000
+START 029/100 measured-r03-k8
+PASS 029/100 measured-r03-k8 gas=1866414 latency_ms=856.506600
+START 030/100 measured-r03-k16
+PASS 030/100 measured-r03-k16 gas=1866414 latency_ms=841.805300
+START 031/100 measured-r03-k2
+PASS 031/100 measured-r03-k2 gas=1866402 latency_ms=861.085000
+START 032/100 measured-r03-k4
+PASS 032/100 measured-r03-k4 gas=1866414 latency_ms=861.164500
+START 033/100 measured-r04-k16
+PASS 033/100 measured-r04-k16 gas=1866414 latency_ms=857.393900
+START 034/100 measured-r04-k2
+PASS 034/100 measured-r04-k2 gas=1866402 latency_ms=856.615000
+START 035/100 measured-r04-k4
+PASS 035/100 measured-r04-k4 gas=1866414 latency_ms=871.239100
+START 036/100 measured-r04-k8
+PASS 036/100 measured-r04-k8 gas=1866414 latency_ms=877.829800
+START 037/100 measured-r05-k2
+PASS 037/100 measured-r05-k2 gas=1866402 latency_ms=849.529900
+START 038/100 measured-r05-k4
+PASS 038/100 measured-r05-k4 gas=1866414 latency_ms=864.817400
+START 039/100 measured-r05-k8
+PASS 039/100 measured-r05-k8 gas=1866414 latency_ms=872.182000
+START 040/100 measured-r05-k16
+PASS 040/100 measured-r05-k16 gas=1866414 latency_ms=856.011200
+START 041/100 measured-r06-k4
+PASS 041/100 measured-r06-k4 gas=1866414 latency_ms=850.080700
+START 042/100 measured-r06-k8
+PASS 042/100 measured-r06-k8 gas=1866414 latency_ms=844.033600
+START 043/100 measured-r06-k16
+PASS 043/100 measured-r06-k16 gas=1866414 latency_ms=846.299500
+START 044/100 measured-r06-k2
+PASS 044/100 measured-r06-k2 gas=1866402 latency_ms=858.838700
+START 045/100 measured-r07-k8
+PASS 045/100 measured-r07-k8 gas=1866414 latency_ms=847.326700
+START 046/100 measured-r07-k16
+PASS 046/100 measured-r07-k16 gas=1866414 latency_ms=856.618800
+START 047/100 measured-r07-k2
+PASS 047/100 measured-r07-k2 gas=1866402 latency_ms=851.700100
+START 048/100 measured-r07-k4
+PASS 048/100 measured-r07-k4 gas=1866414 latency_ms=844.201800
+START 049/100 measured-r08-k16
+PASS 049/100 measured-r08-k16 gas=1866414 latency_ms=845.885700
+START 050/100 measured-r08-k2
+PASS 050/100 measured-r08-k2 gas=1866402 latency_ms=857.253400
+START 051/100 measured-r08-k4
+PASS 051/100 measured-r08-k4 gas=1866414 latency_ms=991.140000
+START 052/100 measured-r08-k8
+PASS 052/100 measured-r08-k8 gas=1866414 latency_ms=856.422200
+START 053/100 measured-r09-k2
+PASS 053/100 measured-r09-k2 gas=1866402 latency_ms=876.083100
+START 054/100 measured-r09-k4
+PASS 054/100 measured-r09-k4 gas=1866414 latency_ms=867.573200
+START 055/100 measured-r09-k8
+PASS 055/100 measured-r09-k8 gas=1866414 latency_ms=850.743300
+START 056/100 measured-r09-k16
+PASS 056/100 measured-r09-k16 gas=1866414 latency_ms=846.453200
+START 057/100 measured-r10-k4
+PASS 057/100 measured-r10-k4 gas=1866414 latency_ms=852.368800
+START 058/100 measured-r10-k8
+PASS 058/100 measured-r10-k8 gas=1866414 latency_ms=844.505300
+START 059/100 measured-r10-k16
+PASS 059/100 measured-r10-k16 gas=1866414 latency_ms=861.337100
+START 060/100 measured-r10-k2
+PASS 060/100 measured-r10-k2 gas=1866402 latency_ms=849.380300
+START 061/100 measured-r11-k8
+PASS 061/100 measured-r11-k8 gas=1866414 latency_ms=865.950100
+START 062/100 measured-r11-k16
+PASS 062/100 measured-r11-k16 gas=1866414 latency_ms=865.525400
+START 063/100 measured-r11-k2
+PASS 063/100 measured-r11-k2 gas=1866402 latency_ms=850.726300
+START 064/100 measured-r11-k4
+PASS 064/100 measured-r11-k4 gas=1866414 latency_ms=851.406900
+START 065/100 measured-r12-k16
+PASS 065/100 measured-r12-k16 gas=1866414 latency_ms=863.641900
+START 066/100 measured-r12-k2
+PASS 066/100 measured-r12-k2 gas=1866402 latency_ms=844.793900
+START 067/100 measured-r12-k4
+PASS 067/100 measured-r12-k4 gas=1866414 latency_ms=859.272100
+START 068/100 measured-r12-k8
+PASS 068/100 measured-r12-k8 gas=1866414 latency_ms=871.651500
+START 069/100 measured-r13-k2
+PASS 069/100 measured-r13-k2 gas=1866402 latency_ms=948.718700
+START 070/100 measured-r13-k4
+PASS 070/100 measured-r13-k4 gas=1866414 latency_ms=966.283100
+START 071/100 measured-r13-k8
+PASS 071/100 measured-r13-k8 gas=1866414 latency_ms=954.673500
+START 072/100 measured-r13-k16
+PASS 072/100 measured-r13-k16 gas=1866414 latency_ms=975.367900
+START 073/100 measured-r14-k4
+PASS 073/100 measured-r14-k4 gas=1866414 latency_ms=962.822900
+START 074/100 measured-r14-k8
+PASS 074/100 measured-r14-k8 gas=1866414 latency_ms=864.194300
+START 075/100 measured-r14-k16
+PASS 075/100 measured-r14-k16 gas=1866414 latency_ms=859.453600
+START 076/100 measured-r14-k2
+PASS 076/100 measured-r14-k2 gas=1866402 latency_ms=850.321400
+START 077/100 measured-r15-k8
+PASS 077/100 measured-r15-k8 gas=1866414 latency_ms=848.780900
+START 078/100 measured-r15-k16
+PASS 078/100 measured-r15-k16 gas=1866414 latency_ms=850.277000
+START 079/100 measured-r15-k2
+PASS 079/100 measured-r15-k2 gas=1866402 latency_ms=870.405900
+START 080/100 measured-r15-k4
+PASS 080/100 measured-r15-k4 gas=1866414 latency_ms=836.827900
+START 081/100 measured-r16-k16
+PASS 081/100 measured-r16-k16 gas=1866414 latency_ms=868.072700
+START 082/100 measured-r16-k2
+PASS 082/100 measured-r16-k2 gas=1866402 latency_ms=861.981200
+START 083/100 measured-r16-k4
+PASS 083/100 measured-r16-k4 gas=1866414 latency_ms=851.182300
+START 084/100 measured-r16-k8
+PASS 084/100 measured-r16-k8 gas=1866414 latency_ms=858.198900
+START 085/100 measured-r17-k2
+PASS 085/100 measured-r17-k2 gas=1866402 latency_ms=874.727800
+START 086/100 measured-r17-k4
+PASS 086/100 measured-r17-k4 gas=1866414 latency_ms=865.055600
+START 087/100 measured-r17-k8
+PASS 087/100 measured-r17-k8 gas=1866414 latency_ms=852.411300
+START 088/100 measured-r17-k16
+PASS 088/100 measured-r17-k16 gas=1866414 latency_ms=861.455500
+START 089/100 measured-r18-k4
+PASS 089/100 measured-r18-k4 gas=1866414 latency_ms=866.073300
+START 090/100 measured-r18-k8
+PASS 090/100 measured-r18-k8 gas=1866414 latency_ms=858.792700
+START 091/100 measured-r18-k16
+PASS 091/100 measured-r18-k16 gas=1866414 latency_ms=881.923200
+START 092/100 measured-r18-k2
+PASS 092/100 measured-r18-k2 gas=1866402 latency_ms=859.014200
+START 093/100 measured-r19-k8
+PASS 093/100 measured-r19-k8 gas=1866414 latency_ms=865.476000
+START 094/100 measured-r19-k16
+PASS 094/100 measured-r19-k16 gas=1866414 latency_ms=861.391100
+START 095/100 measured-r19-k2
+PASS 095/100 measured-r19-k2 gas=1866402 latency_ms=867.485700
+START 096/100 measured-r19-k4
+PASS 096/100 measured-r19-k4 gas=1866414 latency_ms=842.252600
+START 097/100 measured-r20-k16
+PASS 097/100 measured-r20-k16 gas=1866414 latency_ms=851.404600
+START 098/100 measured-r20-k2
+PASS 098/100 measured-r20-k2 gas=1866402 latency_ms=899.420000
+START 099/100 measured-r20-k4
+PASS 099/100 measured-r20-k4 gas=1866414 latency_ms=865.736200
+START 100/100 measured-r20-k8
+PASS 100/100 measured-r20-k8 gas=1866414 latency_ms=859.974400
+CAMPAIGN_STATUS=PASS
+TOTAL_OBSERVATIONS=100
+WARMUP_OBSERVATIONS=20
+MEASURED_OBSERVATIONS=80
+STATS_ELIGIBLE_OBSERVATIONS=80
+SILENT_RETRY_PERFORMED=NO
+PILOTS_INCLUDED=NO
+WARMUPS_INCLUDED_IN_FINAL_STATS=NO

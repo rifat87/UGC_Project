@@ -1,0 +1,10 @@
+CIRCOM_PATH=/c/Users/88018/.cargo/bin/circom
+CIRCOM_VERSION=circom compiler 2.2.3
+SNARKJS_PATH=/c/Users/88018/AppData/Roaming/npm/snarkjs
+NODE_VERSION=v22.15.0
+NPM_VERSION=10.9.1
+
+DISK_BEGIN
+Filesystem      Size  Used Avail Use% Mounted on
+D:              206G  193G   13G  94% /d
+DISK_END

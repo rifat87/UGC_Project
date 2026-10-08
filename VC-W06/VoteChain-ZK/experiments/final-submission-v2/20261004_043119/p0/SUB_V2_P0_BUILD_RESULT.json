@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "classification": "VERSIONED_FINAL_SUBMISSION_V2_BUILD",
+  "archiveRoot": "VC-W06_VoteChain_Final_Submission_v2",
+  "baseV1FilesPreserved": 779,
+  "publicationAssetFilesEmbedded": 42,
+  "generatedV2MetadataFiles": 2,
+  "manifestRows": 823,
+  "archiveFileEntries": 824,
+  "fixedZipTimestamp": "1980-01-01T00:00:00",
+  "zipCompression": "ZIP_DEFLATED",
+  "zipCompressionLevel": 9,
+  "baseV1ArchiveSha256": "afd8484c2ec70c2b01198cd6431e0ec328b7c45e7d6cc702312ea2dbfd802db2",
+  "publicationAssetArchiveSha256": "aa52eedb5e3c2a9dff2e82d9995ba3ba7dc2dfcb80a5ab5eabad12e2eb5b8f8d",
+  "manifestV2Sha256": "173c2821678585715b164afd5ccb4907eae8afba2ea754d6ef88327337f9a00e",
+  "archiveV2Sha256": "eb43c182a6c08867bb40c30ca712a40b86e649e750c910f46fc5e8971be862cc",
+  "archiveV2SizeBytes": 61525625,
+  "singleBuildInvocation": true,
+  "automaticRetry": false,
+  "reportBodyModified": false,
+  "sourceFilesModified": false
+}

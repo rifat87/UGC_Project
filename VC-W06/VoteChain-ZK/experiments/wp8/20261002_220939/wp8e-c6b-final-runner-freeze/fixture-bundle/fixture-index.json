@@ -1,0 +1,1389 @@
+{
+  "fixtureCount": 150,
+  "castVoteSelector": "0x84943e35",
+  "calldataBytesPerFixture": 2340,
+  "prefixCandidateDistributions": {
+    "25": [
+      7,
+      6,
+      6,
+      6
+    ],
+    "50": [
+      13,
+      13,
+      12,
+      12
+    ],
+    "75": [
+      19,
+      19,
+      19,
+      18
+    ],
+    "100": [
+      25,
+      25,
+      25,
+      25
+    ],
+    "150": [
+      38,
+      38,
+      37,
+      37
+    ]
+  },
+  "fixtures": [
+    {
+      "ballotId": "001",
+      "candidateIndex": 0,
+      "nullifier": "19589249225534687645981915177530060956969483808098726375605292302934433034158",
+      "fixtureFile": "fixtures/ballot-001.json",
+      "fixtureSha256": "5510e637f805dd37091e62c961f3313097ad7db2e09a937d1f786aa0d12c344e",
+      "calldataBytes": 2340,
+      "calldataSha256": "a883ca98a7149137725d057d481b18160c321afa55ca33c3c944a338ba8e7835"
+    },
+    {
+      "ballotId": "002",
+      "candidateIndex": 1,
+      "nullifier": "10977495667048092101315621769237605430491651151242343734779402577699472243431",
+      "fixtureFile": "fixtures/ballot-002.json",
+      "fixtureSha256": "138a9ae32eedadcbc7e48bbe86a65c24d4c64cdf653cbcd2757ea82fc458d17d",
+      "calldataBytes": 2340,
+      "calldataSha256": "da0668254cc50d6ce602b5b883c59cde50279a7021f34da5897169ca0f5a6dd1"
+    },
+    {
+      "ballotId": "003",
+      "candidateIndex": 2,
+      "nullifier": "908679766903634217081191222210187096973719206600136321264611444659281595280",
+      "fixtureFile": "fixtures/ballot-003.json",
+      "fixtureSha256": "47c4478a3711ada1142ca960907e03f9702cfd6b8fdad068fa014974ece9ad5c",
+      "calldataBytes": 2340,
+      "calldataSha256": "47f82b65504335ddb4facb985114ecd88588709d43a6e830e3702837ccec48c3"
+    },
+    {
+      "ballotId": "004",
+      "candidateIndex": 3,
+      "nullifier": "18008058054755717237885562119631485394978649949074434530801091624444872538573",
+      "fixtureFile": "fixtures/ballot-004.json",
+      "fixtureSha256": "79a78555fde29754e4eaee92dc3ec9336e8f8231769d6394d2f228aeb1b29658",
+      "calldataBytes": 2340,
+      "calldataSha256": "6d0e110e34efeca32d3782bc71f9a62d088f46b664bb158aa2a0dd32fe5526bf"
+    },
+    {
+      "ballotId": "005",
+      "candidateIndex": 0,
+      "nullifier": "5547866034446152056639670166308358023475041004093135026895608693922770067908",
+      "fixtureFile": "fixtures/ballot-005.json",
+      "fixtureSha256": "ec5cb8170bed017093908da67f022d2cdf8213bb55be653d8f3bd399f71359c6",
+      "calldataBytes": 2340,
+      "calldataSha256": "c51f072fb9b426df862000e5caeb00ad27d1c6c93a4d8bf900c655f8ffd3f71d"
+    },
+    {
+      "ballotId": "006",
+      "candidateIndex": 1,
+      "nullifier": "413232086737550501725298629359685124996254202905898289600160206009271036675",
+      "fixtureFile": "fixtures/ballot-006.json",
+      "fixtureSha256": "54d45e199aaf41dfd2108aefbeb00037b991cbf58fe6f1627a3e5bf6b57ad503",
+      "calldataBytes": 2340,
+      "calldataSha256": "6ebc3c7b9ad5a9fd6173becd8f2f3a43af3e465425e1dd2185aa6788a9b1eacc"
+    },
+    {
+      "ballotId": "007",
+      "candidateIndex": 2,
+      "nullifier": "612450694665362663192452836126510817159294591968662573174259280317040626445",
+      "fixtureFile": "fixtures/ballot-007.json",
+      "fixtureSha256": "e51e9a8dcfecd74765e6aee973578ed3a97db0847cebcc488b63ce53c80c5683",
+      "calldataBytes": 2340,
+      "calldataSha256": "df35779def1b63fba83a1e575e8ba11fbbcd68e7302da5dff9bb43b05cf5d035"
+    },
+    {
+      "ballotId": "008",
+      "candidateIndex": 3,
+      "nullifier": "6083393274480776909278070108359446265081513633472289063529700273262742636454",
+      "fixtureFile": "fixtures/ballot-008.json",
+      "fixtureSha256": "a9185e778ec00bc15a77189e15138522174a8397c7d3e86b5b0b97c6b955f97a",
+      "calldataBytes": 2340,
+      "calldataSha256": "fb76e009136a24b8a216ef88b75b5e73f100a1a68725ff22ef8e092f7db179a8"
+    },
+    {
+      "ballotId": "009",
+      "candidateIndex": 0,
+      "nullifier": "3844515242703879727200469434713025247734816120986271483119246297938989311502",
+      "fixtureFile": "fixtures/ballot-009.json",
+      "fixtureSha256": "ba1479a0b6f246e128ea14a234c56f4680f0805509747a81be436b9cbee90dc2",
+      "calldataBytes": 2340,
+      "calldataSha256": "a1250a814fdaa41bc875b427b2ad82091393bb8831811a03b451c1c2b0cbf304"
+    },
+    {
+      "ballotId": "010",
+      "candidateIndex": 1,
+      "nullifier": "7334650543661289998483815705201577717165519129671658523748449624040079654198",
+      "fixtureFile": "fixtures/ballot-010.json",
+      "fixtureSha256": "09fd35cc99949ead4ad53bdf5252af80aa853ec05602fe980649c13a212f4fe9",
+      "calldataBytes": 2340,
+      "calldataSha256": "07c1a0b850f461fb4aab84969f32e76c51ed6782921d1b810272c0effc3f363b"
+    },
+    {
+      "ballotId": "011",
+      "candidateIndex": 2,
+      "nullifier": "13976013879371020766361239182670147242528498991118288862891944366699270332104",
+      "fixtureFile": "fixtures/ballot-011.json",
+      "fixtureSha256": "6395117c132b86f0951194ee16594bc711b898cbcd50b2a8f4fc2c88615d9953",
+      "calldataBytes": 2340,
+      "calldataSha256": "3e0baa3db11a6d5fb0e858e08aaf50361f862d88c7cf0deb29574e9237b79922"
+    },
+    {
+      "ballotId": "012",
+      "candidateIndex": 3,
+      "nullifier": "7558707811047218523729716128841214125222887237644332773621919017643135486309",
+      "fixtureFile": "fixtures/ballot-012.json",
+      "fixtureSha256": "048b728076cbc47f2478a97044beb881b7ed7bc75ca0087dad5b32b66dd61690",
+      "calldataBytes": 2340,
+      "calldataSha256": "2da626835a95e797908d9a7ec4ad8e2da6a810fedc2a80049c4f0c6ef74426f5"
+    },
+    {
+      "ballotId": "013",
+      "candidateIndex": 0,
+      "nullifier": "478818212224019317675216990825589468542738487954866282067752951423236644079",
+      "fixtureFile": "fixtures/ballot-013.json",
+      "fixtureSha256": "2bc498f87b15d8233c81e01e4d8f9f4032f46d35e751d1b9d61a0fd7ec2756ff",
+      "calldataBytes": 2340,
+      "calldataSha256": "f781b8a2366be35fb7f8cfd0c94bc87c4958fff1f4a21d97abb8a40a04a6fd33"
+    },
+    {
+      "ballotId": "014",
+      "candidateIndex": 1,
+      "nullifier": "13363300399150343176160413954099736971341355114148242017008839249690869341725",
+      "fixtureFile": "fixtures/ballot-014.json",
+      "fixtureSha256": "619f22ed955f4959a227f737463bd335adacbc7369acd8ae9f48f0465e7abbe1",
+      "calldataBytes": 2340,
+      "calldataSha256": "95a7c410ee12938aee5c07fb46a039c7d7045fdeb827c6fb7584a89861baabd0"
+    },
+    {
+      "ballotId": "015",
+      "candidateIndex": 2,
+      "nullifier": "16567590038690497548862992713712464865862613665967037522542462672016919895868",
+      "fixtureFile": "fixtures/ballot-015.json",
+      "fixtureSha256": "872e6a8cb9e5f98102db9978fc50922372a93c475ea13560811e9607fb3a0846",
+      "calldataBytes": 2340,
+      "calldataSha256": "9fa97f57d9d8a0d21755997bf831b3aea7d1bd27eb5f7a823aedc397daa42d4f"
+    },
+    {
+      "ballotId": "016",
+      "candidateIndex": 3,
+      "nullifier": "377706689256188835208177657355491201831718171459401431170585740455978583288",
+      "fixtureFile": "fixtures/ballot-016.json",
+      "fixtureSha256": "5244e4b69aae6c6def3e82c1a1bd4f6f5323db9953c997e382f2504401baf15a",
+      "calldataBytes": 2340,
+      "calldataSha256": "c8698901764031046ffed6d9755224ae5b093191aef83b0e180991a5045d142e"
+    },
+    {
+      "ballotId": "017",
+      "candidateIndex": 0,
+      "nullifier": "12007013464010711895485764500000055444857530218389794665557809086642741198633",
+      "fixtureFile": "fixtures/ballot-017.json",
+      "fixtureSha256": "98b7651b4bdbcdcf85b5e7d6be2267bd4d7c9fe60af239be585fa9e3b5b6444c",
+      "calldataBytes": 2340,
+      "calldataSha256": "a8cb65d3467791636b758d33f611bd0485ef014ccc92573b719924826bbaed9d"
+    },
+    {
+      "ballotId": "018",
+      "candidateIndex": 1,
+      "nullifier": "14844651487883663796167820849430645823790504197891831863280245582082142036291",
+      "fixtureFile": "fixtures/ballot-018.json",
+      "fixtureSha256": "7b7ad8cdb323f3022a22dbffcd76a05a963a734999883fb76b2fb1100d2cd72b",
+      "calldataBytes": 2340,
+      "calldataSha256": "586a8d8174273a650bb59de2eb883a0726feb30e40b62dd892973f6c80e7d896"
+    },
+    {
+      "ballotId": "019",
+      "candidateIndex": 2,
+      "nullifier": "8467077796762952574143863002730790607825185816993106593029656503050176602933",
+      "fixtureFile": "fixtures/ballot-019.json",
+      "fixtureSha256": "55cd681c14a0144d123217d5b8e0f2c7094712e3fd802ae351dbc660078d9f04",
+      "calldataBytes": 2340,
+      "calldataSha256": "f2e9e57734a08b699cad15b2bbbf778f34e1974287484433e84e779f6cc6fffa"
+    },
+    {
+      "ballotId": "020",
+      "candidateIndex": 3,
+      "nullifier": "5835043629881352402830017759304331484223600665410446962796598278297566433243",
+      "fixtureFile": "fixtures/ballot-020.json",
+      "fixtureSha256": "3a88ecd2cfd0e5af4dcaf3356ebaf2ed1e680a418ea46eaecaf0092bca2cc0c0",
+      "calldataBytes": 2340,
+      "calldataSha256": "a63abf8b283d6da0ff80d0fc1cf1641fb1a0e0a20ac8c7eceb50bc72ca98f1f7"
+    },
+    {
+      "ballotId": "021",
+      "candidateIndex": 0,
+      "nullifier": "18769541742591697891349912066282701871458477530233204716110081467697085100336",
+      "fixtureFile": "fixtures/ballot-021.json",
+      "fixtureSha256": "b29999ac406ebb3af4d8850c1b6df93f27f85d2ae0f7fa0b64f2f135e63554f9",
+      "calldataBytes": 2340,
+      "calldataSha256": "68474ce0a7a4b8a6a0b17726920472ac8d344c0e4050a0f392273000376e6e5f"
+    },
+    {
+      "ballotId": "022",
+      "candidateIndex": 1,
+      "nullifier": "17299944907209455093866663548438766291203651053757427474997426272679488865219",
+      "fixtureFile": "fixtures/ballot-022.json",
+      "fixtureSha256": "7a0c1b5808bccff80708e01ca4a4c1b41d173ee877710bb5b92e9a2b3c6c186a",
+      "calldataBytes": 2340,
+      "calldataSha256": "71636f6ed5fdf93e5189cacaf15641c27e8689392c2909ded51895c88331229a"
+    },
+    {
+      "ballotId": "023",
+      "candidateIndex": 2,
+      "nullifier": "5949747677287993236254137408400077038719040047342656936110238421673621229682",
+      "fixtureFile": "fixtures/ballot-023.json",
+      "fixtureSha256": "c27c3ea26639985be951fe0387fe61e8bbfded2bd079e492af698082d6df950b",
+      "calldataBytes": 2340,
+      "calldataSha256": "31068e2c9068db1a114a2e7004cdbd60802b9c29d7857d56442552ce054e7590"
+    },
+    {
+      "ballotId": "024",
+      "candidateIndex": 3,
+      "nullifier": "6751579580909277741888812417099332702118487854246757005996744735499305396576",
+      "fixtureFile": "fixtures/ballot-024.json",
+      "fixtureSha256": "a11cd16e816f4dea12d34c497f9628b3de1524df00828e4c7846746cf3100520",
+      "calldataBytes": 2340,
+      "calldataSha256": "2d1d6332bd7eab1fd54a5e3d56a3aa5fe27d102e608e69af22e300b4f807be55"
+    },
+    {
+      "ballotId": "025",
+      "candidateIndex": 0,
+      "nullifier": "1478176888897292074958660304921840477585315455824506345729519433428184128936",
+      "fixtureFile": "fixtures/ballot-025.json",
+      "fixtureSha256": "6ed92de9d86d8242b2981f6bdc9398e3e8348e68fec97fb83f37e7a30f40776e",
+      "calldataBytes": 2340,
+      "calldataSha256": "dae53e12298a877dcf88916b80caa55953702a123d161f66d791f221bafa8bf4"
+    },
+    {
+      "ballotId": "026",
+      "candidateIndex": 1,
+      "nullifier": "1963153953999903449216510992799082094004125895262493502111893403209152280305",
+      "fixtureFile": "fixtures/ballot-026.json",
+      "fixtureSha256": "3cdc8fcc4e418c5ec840be2ccf9d12576b40a9bc708659be03ca8329e924c0eb",
+      "calldataBytes": 2340,
+      "calldataSha256": "f7aa2d0d270f084f83ca8b759d12ed2940d24c6e37d2ce651a8050822c5836e2"
+    },
+    {
+      "ballotId": "027",
+      "candidateIndex": 2,
+      "nullifier": "13747685233169183514991515837285270212725738452731779937723989311157839332555",
+      "fixtureFile": "fixtures/ballot-027.json",
+      "fixtureSha256": "69573fb22eeaf437308ab29c61a47074c30738e2ee76213ddd725a167b36ea08",
+      "calldataBytes": 2340,
+      "calldataSha256": "8197357f38ad8d7c700244573f54625d3080dff6f89a3356a000a26cfd780287"
+    },
+    {
+      "ballotId": "028",
+      "candidateIndex": 3,
+      "nullifier": "10787743662916505368834299446414612588762817628156336239804272066352016669007",
+      "fixtureFile": "fixtures/ballot-028.json",
+      "fixtureSha256": "9d65a4bd31b6717f7ca990cbb2090d3a88983e0ac2c50c8a43180f6ebf68641c",
+      "calldataBytes": 2340,
+      "calldataSha256": "b17c51f0b948d5ffc603b5fa6321a0f00da4aed58f1f5369235e7e2a4a7c0ea4"
+    },
+    {
+      "ballotId": "029",
+      "candidateIndex": 0,
+      "nullifier": "17472772190208330828317070246786246265582919226302362349621950707676051745747",
+      "fixtureFile": "fixtures/ballot-029.json",
+      "fixtureSha256": "0ab58de27f06d595a7f3e3c74e07af4b846f96d198ca07825383857ac8757709",
+      "calldataBytes": 2340,
+      "calldataSha256": "0cebb8f4fee2027d26821244ffd2c409081b2dd2bdcc72f1fab00997b8eb234d"
+    },
+    {
+      "ballotId": "030",
+      "candidateIndex": 1,
+      "nullifier": "5641005101923401383596173492175180824112108232680204170310059873811295175686",
+      "fixtureFile": "fixtures/ballot-030.json",
+      "fixtureSha256": "284dd0b4e447859cc2c0171c24813ae39e1d982e0f41aec62ff38d0994ddd141",
+      "calldataBytes": 2340,
+      "calldataSha256": "91e84f22b035d55f9183a018ffdadd1d9e4f2d05533a55a37bb4ca7dd1a83029"
+    },
+    {
+      "ballotId": "031",
+      "candidateIndex": 2,
+      "nullifier": "16442956220088400978603136534953881573112086877077062323188556179144290532121",
+      "fixtureFile": "fixtures/ballot-031.json",
+      "fixtureSha256": "5d95c081f8d1285a5f628aa02ab80f8e6af37950b9d4c1596837479d81420f9f",
+      "calldataBytes": 2340,
+      "calldataSha256": "e818739a98c591146339db2a04aa6b0f9f5d2731a21bc6bf99ac42705ec90c83"
+    },
+    {
+      "ballotId": "032",
+      "candidateIndex": 3,
+      "nullifier": "8678888917352104474859769569520749590750077204680329868381179365190825717668",
+      "fixtureFile": "fixtures/ballot-032.json",
+      "fixtureSha256": "9a42c34415857743912a7b58ad871025afed80c65ee31a893f61fa414453521b",
+      "calldataBytes": 2340,
+      "calldataSha256": "ef473102ce03a7121a5bab2e47343364aaa83c1f395b44cc6a498af7521294e4"
+    },
+    {
+      "ballotId": "033",
+      "candidateIndex": 0,
+      "nullifier": "14037260192098951064377590907452404346511799540048877589636517389529903941837",
+      "fixtureFile": "fixtures/ballot-033.json",
+      "fixtureSha256": "89d5176b9a367d042b1bf2c4f18050fad344b4e0ad0c85a4fdac3a228e3fa2ba",
+      "calldataBytes": 2340,
+      "calldataSha256": "34089baabfb0abb2d9bc0af8f2b3e568a90fcc3caa6294de50105daf85d2bfdc"
+    },
+    {
+      "ballotId": "034",
+      "candidateIndex": 1,
+      "nullifier": "5718958523358295757117178735795014957573397987183304894948399160458681618601",
+      "fixtureFile": "fixtures/ballot-034.json",
+      "fixtureSha256": "d6e0aff5b8f034c0ab162afb4421c4ff14bbed5e50ce6e623368bee1a2b6cd97",
+      "calldataBytes": 2340,
+      "calldataSha256": "1a64501e909d31a2ee794239a3cbbd3b96dc0f3bd6b0556aee4d2cbc65748838"
+    },
+    {
+      "ballotId": "035",
+      "candidateIndex": 2,
+      "nullifier": "13666517222360215487101160816873877885961349204155551253949019577983238506317",
+      "fixtureFile": "fixtures/ballot-035.json",
+      "fixtureSha256": "ddfc24b5f0fa6f7a45eebf23f456d9e19c2d0ee24ed71045dc78478e7ca4fdd5",
+      "calldataBytes": 2340,
+      "calldataSha256": "13e1dab6ada65dd64b3b4cbb105e4845bb29312a5fee8e0c6ba54df79a1f8b4a"
+    },
+    {
+      "ballotId": "036",
+      "candidateIndex": 3,
+      "nullifier": "13061469307594038069881443851043856673768734210798891718797133679212191520572",
+      "fixtureFile": "fixtures/ballot-036.json",
+      "fixtureSha256": "c9eea43ce57e60076c37adcc882655ea18f02eb56493fb7f8bc07716e67c6088",
+      "calldataBytes": 2340,
+      "calldataSha256": "389e0e0dc207530ddb3eac003e0d729228bdde5d3647d69100dc99c5849e66e3"
+    },
+    {
+      "ballotId": "037",
+      "candidateIndex": 0,
+      "nullifier": "3702029061365759446559319364067866493412676615732608276268315656317124785914",
+      "fixtureFile": "fixtures/ballot-037.json",
+      "fixtureSha256": "fa13bced740011d29e8acf8124289f16ca0d50f0047b5af1b1f981cd5111904f",
+      "calldataBytes": 2340,
+      "calldataSha256": "c5fdab58d4424ace784883e55abc5b863c373437f43b25ba61d798abbc1e930f"
+    },
+    {
+      "ballotId": "038",
+      "candidateIndex": 1,
+      "nullifier": "16270577987445452037686733375156035784916433811445751896771679850634442754415",
+      "fixtureFile": "fixtures/ballot-038.json",
+      "fixtureSha256": "a8efdfef93f7918e820ad3e33fbc2dbda68dcbf21edb47735f723d47ca3ccb68",
+      "calldataBytes": 2340,
+      "calldataSha256": "f69c6efedb0ff5109feb9bb97c52a8c376337c2733ef86295fff5cf5d0f55c11"
+    },
+    {
+      "ballotId": "039",
+      "candidateIndex": 2,
+      "nullifier": "20894572647370187536123314289102542165430415623381164329529680517898552193396",
+      "fixtureFile": "fixtures/ballot-039.json",
+      "fixtureSha256": "0ba023eed918fc17bf2719870ce005f4e4024773501049eb39a7979aa15de99b",
+      "calldataBytes": 2340,
+      "calldataSha256": "7474893f645d1321840969a3f52fb89ca3143bdde535b267122809273cb7ec53"
+    },
+    {
+      "ballotId": "040",
+      "candidateIndex": 3,
+      "nullifier": "12122965641179132263315537584993289830419960886038383785968385725258219504163",
+      "fixtureFile": "fixtures/ballot-040.json",
+      "fixtureSha256": "6edec608034111bf1c9e298db65c57f8b8105c5775e84dc52fa55f1849f86df8",
+      "calldataBytes": 2340,
+      "calldataSha256": "dc0ea0e61e25aefbed142557df387be4677dc1266d273d622728b6ee7582d0f3"
+    },
+    {
+      "ballotId": "041",
+      "candidateIndex": 0,
+      "nullifier": "21541156644238691409394292687934298417333922659940697930260571464107274229412",
+      "fixtureFile": "fixtures/ballot-041.json",
+      "fixtureSha256": "bba71b23b2d4ea315ee070dc053fa697f469f7fe5ca895e2bd98092fcc6bd3c5",
+      "calldataBytes": 2340,
+      "calldataSha256": "54bad38210fad80de9f4ba03fbeb3a5b900eca5a33aeea3aac19b408ee4d9625"
+    },
+    {
+      "ballotId": "042",
+      "candidateIndex": 1,
+      "nullifier": "7876134859588930873363358855971547183272910159102345821112469044504805151856",
+      "fixtureFile": "fixtures/ballot-042.json",
+      "fixtureSha256": "300481178297d1e604fc781f4329fc893eb8ef27480038bc6abfd034c40ccae1",
+      "calldataBytes": 2340,
+      "calldataSha256": "1d85eacf30bbccb69ccd6433659ad1de05e131ae610d4c57e09a4a51e39fbe33"
+    },
+    {
+      "ballotId": "043",
+      "candidateIndex": 2,
+      "nullifier": "4704075229157806439588607041178435157358197198649584895378271017213752871230",
+      "fixtureFile": "fixtures/ballot-043.json",
+      "fixtureSha256": "94f3e2d80205640f60958dce798fa0d20468a4270598ee69aca8b10f5c66735f",
+      "calldataBytes": 2340,
+      "calldataSha256": "9eae9ddae44d26f9831c23ad3c631164ec88d767412ac791cddac66c43e36da6"
+    },
+    {
+      "ballotId": "044",
+      "candidateIndex": 3,
+      "nullifier": "650779160005596311640595978409165118428416621182148897036764971028138398260",
+      "fixtureFile": "fixtures/ballot-044.json",
+      "fixtureSha256": "1c2c996cc54bd1a394b7baad5a37c5fc962f511e265bfdf7efc7769e7a3987b8",
+      "calldataBytes": 2340,
+      "calldataSha256": "37f3138659d9b709de95c480cbad5015b31e1b60cbea4da1d1d16a1ce9d21064"
+    },
+    {
+      "ballotId": "045",
+      "candidateIndex": 0,
+      "nullifier": "5859498774066004306927322064466024132549262624345374301612664317124984480694",
+      "fixtureFile": "fixtures/ballot-045.json",
+      "fixtureSha256": "a7ac98a555ea318a98fda2dd840b40164367e5eb8b2a2e9ffff68ee0c5a6d586",
+      "calldataBytes": 2340,
+      "calldataSha256": "2226288f9444a976c5d634b80e4039b5426e3f8ba9338b76de6d34f57837f023"
+    },
+    {
+      "ballotId": "046",
+      "candidateIndex": 1,
+      "nullifier": "4941993259803001763281131948405195149082534533622258575884566640201300445241",
+      "fixtureFile": "fixtures/ballot-046.json",
+      "fixtureSha256": "35247182620aa058f1075deccc927bf8506804cb0c972e32b4d4886839d50cf4",
+      "calldataBytes": 2340,
+      "calldataSha256": "e7f55bdbaa21a21f0cf0f3fdde6d33b89f2817628c71daed5bd2b4c8df8e3658"
+    },
+    {
+      "ballotId": "047",
+      "candidateIndex": 2,
+      "nullifier": "18619368939075443646352190190453368907201187650938134795016120663449629852025",
+      "fixtureFile": "fixtures/ballot-047.json",
+      "fixtureSha256": "a1770d4450f5ed4f3c2a46c39440fe4abc566c44e54c42bda287ea2273554302",
+      "calldataBytes": 2340,
+      "calldataSha256": "5c091583596d548dc47b52538f22db29dbc6fa3f77504fd1e32ef3438e1035dd"
+    },
+    {
+      "ballotId": "048",
+      "candidateIndex": 3,
+      "nullifier": "4066194732456308232899363095521646134336487699595278308911824763163179172085",
+      "fixtureFile": "fixtures/ballot-048.json",
+      "fixtureSha256": "c24eb878db8cb58cbca5d22dd84ffd944ce8d47da3feebb48ba5c84336aab9eb",
+      "calldataBytes": 2340,
+      "calldataSha256": "86a2023dcd077a7b200c8fae011b47f79965062473ad946fc859f6ee7b3ebcaa"
+    },
+    {
+      "ballotId": "049",
+      "candidateIndex": 0,
+      "nullifier": "21114101183428959823794850416691218850398119233959450465528905195452754359301",
+      "fixtureFile": "fixtures/ballot-049.json",
+      "fixtureSha256": "5b877df9c18eb0c095cac0b9c2ed5626c003754c653ef0a10467dd8c48c5eb2e",
+      "calldataBytes": 2340,
+      "calldataSha256": "f2374e75337b7f1b428fa1060936c4ecadc7b238d7e6cf071651da67ba207a8d"
+    },
+    {
+      "ballotId": "050",
+      "candidateIndex": 1,
+      "nullifier": "914463271862404407725207478081976624831298091073900987263526387319075543337",
+      "fixtureFile": "fixtures/ballot-050.json",
+      "fixtureSha256": "63629ac8f44f3be23e6dc7309fe31e15f1c57376caea7d1c2dbeefbac12ab8cc",
+      "calldataBytes": 2340,
+      "calldataSha256": "74b81718b787162a79f061b228cac4f8ad1a883a526584a51de59c9faa8cc9ff"
+    },
+    {
+      "ballotId": "051",
+      "candidateIndex": 2,
+      "nullifier": "6710177936808486312428404386332614941434750650845831817527481207135373099330",
+      "fixtureFile": "fixtures/ballot-051.json",
+      "fixtureSha256": "6bd91c65466888354470fc02b86820187737057411a7aa921e6dc389dde72fa1",
+      "calldataBytes": 2340,
+      "calldataSha256": "ae2fb51498a570a51755775b9f02f950a23977c1dc024f831574c3a8f78e3eda"
+    },
+    {
+      "ballotId": "052",
+      "candidateIndex": 3,
+      "nullifier": "7281565935284375116157598133306484529516943229014095352086658884894653669226",
+      "fixtureFile": "fixtures/ballot-052.json",
+      "fixtureSha256": "d9a7ce07f5b6c471881702ebe1de4b33390a9eeaae5aa5670b34ea57d3285e54",
+      "calldataBytes": 2340,
+      "calldataSha256": "285029a069b1c4e31bbf66b507160da11ff64a42da32cd24f25c16226711a03a"
+    },
+    {
+      "ballotId": "053",
+      "candidateIndex": 0,
+      "nullifier": "9104244845709517054983100488110552627222531617504236167515917139905109801913",
+      "fixtureFile": "fixtures/ballot-053.json",
+      "fixtureSha256": "5321c812b942e1600dc2260309cc6530d7c58d42d1ee31564730ada9e737ea82",
+      "calldataBytes": 2340,
+      "calldataSha256": "8d9eaddd8dcf5de0b3119071a0e0b42378fa0e1fd90a91a285a67fd26cab51f8"
+    },
+    {
+      "ballotId": "054",
+      "candidateIndex": 1,
+      "nullifier": "2152578344970588858220043802620758227453933796228861997558105328987345918449",
+      "fixtureFile": "fixtures/ballot-054.json",
+      "fixtureSha256": "a8c5928efe687defbf2da6333ee1572cee6e142a4921d5bd8988bad24adf4014",
+      "calldataBytes": 2340,
+      "calldataSha256": "0529abd00dda94576d0e49233eceb3fa833e4329cbc47b28b0562a1a3347c7b7"
+    },
+    {
+      "ballotId": "055",
+      "candidateIndex": 2,
+      "nullifier": "6765003011770351783909730262988156646114906269025341167888706843098919686638",
+      "fixtureFile": "fixtures/ballot-055.json",
+      "fixtureSha256": "67dcc02a7acfffbac760ce474d941191bffd5109e8ff0f53f914584fe4019ac0",
+      "calldataBytes": 2340,
+      "calldataSha256": "0e914b45aab8945b5f7a522abeb3e1543165f140f7c367535e572addf976eb14"
+    },
+    {
+      "ballotId": "056",
+      "candidateIndex": 3,
+      "nullifier": "5789718622365956254262393884961091522783724620515983578962812815532141668641",
+      "fixtureFile": "fixtures/ballot-056.json",
+      "fixtureSha256": "22f226e1a4a1bba73a776b46b2a35f1148d5598d00dc7322d6a0b15154cb997e",
+      "calldataBytes": 2340,
+      "calldataSha256": "c1d00ef9a7f5a19781ae75dd950c08162345f153462a403a94d339c44f32302d"
+    },
+    {
+      "ballotId": "057",
+      "candidateIndex": 0,
+      "nullifier": "8879181980744139750695598615873029205385244768713047783880469566133673709015",
+      "fixtureFile": "fixtures/ballot-057.json",
+      "fixtureSha256": "25b1fb7946f3766ac4ea76b0bea83cb15a57a0e7d4e95193c50bbfcdecd749b6",
+      "calldataBytes": 2340,
+      "calldataSha256": "6536c09208e69388327f0950242633a27036174770db3c1610ad5f9f375892e2"
+    },
+    {
+      "ballotId": "058",
+      "candidateIndex": 1,
+      "nullifier": "12087879947762210730222621074510794625751932189841003555320137507765982404823",
+      "fixtureFile": "fixtures/ballot-058.json",
+      "fixtureSha256": "274905a6b3775932f8d95990f2caa071931894a61a2fe053355c4e9b06ed5ffd",
+      "calldataBytes": 2340,
+      "calldataSha256": "b57e7a02994c4c9f8a24ef088d7c1078289f96b0abd0847126c4ee15d28a5627"
+    },
+    {
+      "ballotId": "059",
+      "candidateIndex": 2,
+      "nullifier": "17608081890439169099502873669069844272754578178688279493221326167337647802951",
+      "fixtureFile": "fixtures/ballot-059.json",
+      "fixtureSha256": "2184a15a7fef7aba236a2d17a4bbfb2421aaa69b5935b3c8c9209c5dc8dd967f",
+      "calldataBytes": 2340,
+      "calldataSha256": "b08e439cd08d290113b4293b54f42ff5e9e0a2565e47cf4cc995ec2e02e29685"
+    },
+    {
+      "ballotId": "060",
+      "candidateIndex": 3,
+      "nullifier": "20096235211050361079801628944627169456555669172773441039869070159587795895724",
+      "fixtureFile": "fixtures/ballot-060.json",
+      "fixtureSha256": "2d109f865c305d21dfe16bb330e5fd32d537be1200c2c2890f849343c46677d7",
+      "calldataBytes": 2340,
+      "calldataSha256": "a1d393519636bf53a20fdeb13a7433345a4c520634ad85fe781a0d3924b52a79"
+    },
+    {
+      "ballotId": "061",
+      "candidateIndex": 0,
+      "nullifier": "11490928304805831565439485561540266778720447954042124027533562924138126568578",
+      "fixtureFile": "fixtures/ballot-061.json",
+      "fixtureSha256": "314a8bd8a281323e52fb0995dc3b848a8399eb6ae1db9113f16fc6b25bbffb05",
+      "calldataBytes": 2340,
+      "calldataSha256": "29a001dcd1e35694109cc15b837c0c842b9962ea25bc99531f4790757a233929"
+    },
+    {
+      "ballotId": "062",
+      "candidateIndex": 1,
+      "nullifier": "1663098412107884010850821423515405287083817650390179420732968421095024682934",
+      "fixtureFile": "fixtures/ballot-062.json",
+      "fixtureSha256": "3e3652aa390150d82ae58ded316c6fa8de6752fe3a710ebdb724d95852defcb5",
+      "calldataBytes": 2340,
+      "calldataSha256": "0e2b83558c3a08ee01528944bbb58a759a25361818fc02bcba94dcc208950388"
+    },
+    {
+      "ballotId": "063",
+      "candidateIndex": 2,
+      "nullifier": "14817321278635831847710035479414466640991238136325886236523649086708671536316",
+      "fixtureFile": "fixtures/ballot-063.json",
+      "fixtureSha256": "3c93c323c4f831c388ad2ff424b6c8434b173a4931243b9db347aa137f10e230",
+      "calldataBytes": 2340,
+      "calldataSha256": "4b06362e5dd44e0f4901f886208cd55f4ea58768e8ff49d40935b2fcfe83eb85"
+    },
+    {
+      "ballotId": "064",
+      "candidateIndex": 3,
+      "nullifier": "12720306362367103125067064804544014782389299624432703818827990479897525240965",
+      "fixtureFile": "fixtures/ballot-064.json",
+      "fixtureSha256": "88834a004ce5dbc165780bed8a6d82334f035925c019397356e15b6797a1c69b",
+      "calldataBytes": 2340,
+      "calldataSha256": "1c7c70353ee342dc0198b975f857539da80b02549125435b369ef9b26b31ed6a"
+    },
+    {
+      "ballotId": "065",
+      "candidateIndex": 0,
+      "nullifier": "12619257754469521462410448049162585953826542648126995114132597026752667150150",
+      "fixtureFile": "fixtures/ballot-065.json",
+      "fixtureSha256": "157e823cad0d704af0d9db2554b61dde149019fc6849cd4f99fe8df43685cdc1",
+      "calldataBytes": 2340,
+      "calldataSha256": "625e50e2897235c964db1da82fc10ececb5431c7a77fde464d870b2327384561"
+    },
+    {
+      "ballotId": "066",
+      "candidateIndex": 1,
+      "nullifier": "10466828538641960175788813191321565216647757940570076465972431292527498867136",
+      "fixtureFile": "fixtures/ballot-066.json",
+      "fixtureSha256": "87bca13946607b84bce22773c59ac54939fca2b283a4ec6fbbef1e81e886f81d",
+      "calldataBytes": 2340,
+      "calldataSha256": "3dc237938a60ed4a22d3cce1a318bb9ca6dc535c2aa22d968186f2fd8f37e902"
+    },
+    {
+      "ballotId": "067",
+      "candidateIndex": 2,
+      "nullifier": "4752569800602818366699299735741567759964303541422332110376324061384991901695",
+      "fixtureFile": "fixtures/ballot-067.json",
+      "fixtureSha256": "d4e6052a5cf8dea1670104436f68166dfbdb4919b58c1ae0d53855c3e372cd83",
+      "calldataBytes": 2340,
+      "calldataSha256": "1c9b81109c203b16cf563025ce08990fcf18f0bfd6fd2284f6585fa56e7ac6fe"
+    },
+    {
+      "ballotId": "068",
+      "candidateIndex": 3,
+      "nullifier": "978347873242666318407947806120963748630145447061793937757713108010297947265",
+      "fixtureFile": "fixtures/ballot-068.json",
+      "fixtureSha256": "457876a562980cefff9f82edc7fed6a5d4be17481967390efa1f376690c6c6e0",
+      "calldataBytes": 2340,
+      "calldataSha256": "747b8d861f4f0a7412777a62ed18610546cde8eb93439b69e33aca5a91252d6e"
+    },
+    {
+      "ballotId": "069",
+      "candidateIndex": 0,
+      "nullifier": "4039412352518406019568050616236773589452462795992991594096112565337550607030",
+      "fixtureFile": "fixtures/ballot-069.json",
+      "fixtureSha256": "417e808c7da41c4caa9fea57e7746630ccb5013b030f84fef5bdd3fb535d147b",
+      "calldataBytes": 2340,
+      "calldataSha256": "7662fe09e44ed551496496dabec5ca6c3361a796f6a1c84183206dcd454df747"
+    },
+    {
+      "ballotId": "070",
+      "candidateIndex": 1,
+      "nullifier": "8111502566739900777076268482776535438703621181541586915882218630532043628034",
+      "fixtureFile": "fixtures/ballot-070.json",
+      "fixtureSha256": "07381155419cab7a61749ae0693534abdc4acb88eb184e9d9199bb665fc8c92a",
+      "calldataBytes": 2340,
+      "calldataSha256": "59c0030e88454644294cecbe9daf6f4b49717c14c7a431d981b036c3b76378c8"
+    },
+    {
+      "ballotId": "071",
+      "candidateIndex": 2,
+      "nullifier": "3518142868085035285843173239134513159056993445611608164761172731252985731980",
+      "fixtureFile": "fixtures/ballot-071.json",
+      "fixtureSha256": "13b9556a076348dedd0674b767eb78ffdedd26bfeacc431f7a4d61274d8ff141",
+      "calldataBytes": 2340,
+      "calldataSha256": "c616abd58d339051ef4e8c47d272bb2087708e67cbe1ce46ad971d99404af2ac"
+    },
+    {
+      "ballotId": "072",
+      "candidateIndex": 3,
+      "nullifier": "16687197850560898155512091899568038204107192746994903323776488549648747138291",
+      "fixtureFile": "fixtures/ballot-072.json",
+      "fixtureSha256": "b4ddb295232ff9c9560067229fb1c5f1a2be37b96f4df07a52777b48b59dd87f",
+      "calldataBytes": 2340,
+      "calldataSha256": "5c44d891972ce7e943a3647d90c43d7a4e3305d121899e519a98605b9d2d97af"
+    },
+    {
+      "ballotId": "073",
+      "candidateIndex": 0,
+      "nullifier": "4944269759679211253663513448607914698098200464956728398044482910710291842318",
+      "fixtureFile": "fixtures/ballot-073.json",
+      "fixtureSha256": "37b9204adf5b7475237a57c9bd64c572d9a072f4b6e5ff3d9f9ebf8c4de6a07a",
+      "calldataBytes": 2340,
+      "calldataSha256": "2a4b185f58ee824efe63c5240fd3b8b32a73cd65882595f80c431c8ad778cbae"
+    },
+    {
+      "ballotId": "074",
+      "candidateIndex": 1,
+      "nullifier": "17714226570583525580686794956740589195747936642435152424440921086614925967484",
+      "fixtureFile": "fixtures/ballot-074.json",
+      "fixtureSha256": "fbab295b805ab4a531e5aa5dcf324dc82027cea80af840338476b8dc71657b6a",
+      "calldataBytes": 2340,
+      "calldataSha256": "d229bfee79c26e7e083c83156910e2dc73aaa05855a5bbf91802cdd5da51a734"
+    },
+    {
+      "ballotId": "075",
+      "candidateIndex": 2,
+      "nullifier": "3274319902519599885374102596117432761074442492449087796094875366467620625924",
+      "fixtureFile": "fixtures/ballot-075.json",
+      "fixtureSha256": "55a75961a9387dc7909086333785e863e3899d96035a6f66ee6bfd72d0cd82f8",
+      "calldataBytes": 2340,
+      "calldataSha256": "2755acce787e4c0edf16799a0526578270f1ead650e6d107d29f30f0208381ce"
+    },
+    {
+      "ballotId": "076",
+      "candidateIndex": 3,
+      "nullifier": "14633373402219374396504890937919305066543432224008393982247613073485433820911",
+      "fixtureFile": "fixtures/ballot-076.json",
+      "fixtureSha256": "3b6b87205e77067c824b47dd27042351631817d29915d53bed26288d2fe0eb22",
+      "calldataBytes": 2340,
+      "calldataSha256": "dc06e968b5813ace31620e12056a1a882d78ff7a87d6c809c2f2e9a5cdde81ab"
+    },
+    {
+      "ballotId": "077",
+      "candidateIndex": 0,
+      "nullifier": "15346185033964756076051027797535840600829709408892190839091605127477002172849",
+      "fixtureFile": "fixtures/ballot-077.json",
+      "fixtureSha256": "3d8d75f346664efb03c775238c9b87c15ff2305f47baf69dbda7605ca59a4faf",
+      "calldataBytes": 2340,
+      "calldataSha256": "fe726d4a97988f2dba926bc1b9f192747fdd8f6c6d22788b70884ee150c27911"
+    },
+    {
+      "ballotId": "078",
+      "candidateIndex": 1,
+      "nullifier": "12603946193924533370302237371455250331871608440365199314722518283784214418815",
+      "fixtureFile": "fixtures/ballot-078.json",
+      "fixtureSha256": "3c3f54f8c2ed00243428266cb50a8067e5c796d46286d9f95a0559e95277c63e",
+      "calldataBytes": 2340,
+      "calldataSha256": "8211a9d3fdbbb011e7fe44d73379386b53510422ca4bafe61ae42ae4306d7e5f"
+    },
+    {
+      "ballotId": "079",
+      "candidateIndex": 2,
+      "nullifier": "11349780268996125623392026461035587438589003254374010341110577204847867525116",
+      "fixtureFile": "fixtures/ballot-079.json",
+      "fixtureSha256": "25825f311cade729cc0f1faaad2e31912acea29ecfbf96e28ad1f27454fda672",
+      "calldataBytes": 2340,
+      "calldataSha256": "f9667085d66f5bc787359a901562f900cfe867220a96384b2aac57c92415014b"
+    },
+    {
+      "ballotId": "080",
+      "candidateIndex": 3,
+      "nullifier": "3711858250200264248304314456016621974630009326879692984822232117442560770725",
+      "fixtureFile": "fixtures/ballot-080.json",
+      "fixtureSha256": "bc3da122278ab5e00be50358c4f33489af53e33cfddab2f25e54261a810ce545",
+      "calldataBytes": 2340,
+      "calldataSha256": "03eca755c3f4704155bb74bd6daea6bbe2e4a08f7d462e45974910c2146e4571"
+    },
+    {
+      "ballotId": "081",
+      "candidateIndex": 0,
+      "nullifier": "4252690850056979230942534543272976846777431498502664387080627042623844405229",
+      "fixtureFile": "fixtures/ballot-081.json",
+      "fixtureSha256": "f19274dbfe4dec6f6a0060cc066428cebc04dc28fbd768c343603ab119098413",
+      "calldataBytes": 2340,
+      "calldataSha256": "0fa12305f5fb59bf9ef182af9871bde604eb045965d94cfcb56b0f8e82e6e59d"
+    },
+    {
+      "ballotId": "082",
+      "candidateIndex": 1,
+      "nullifier": "3626722203718821892400193139629435913738004505104061699835179640182868869190",
+      "fixtureFile": "fixtures/ballot-082.json",
+      "fixtureSha256": "ef536cc9cc0693a2568bb123b6b0f6004449c23da812cae24ebf67071d52b130",
+      "calldataBytes": 2340,
+      "calldataSha256": "787ecade9ec33415dcf7f9905bbc5c2411295d074c221752e0dfdd54690d7496"
+    },
+    {
+      "ballotId": "083",
+      "candidateIndex": 2,
+      "nullifier": "6582433463469221194442261638327531657705275383819902219728119471470333129984",
+      "fixtureFile": "fixtures/ballot-083.json",
+      "fixtureSha256": "c8b2b931237ff598f9da7595b0ca7bf8c18d029cb58659ecc28d7a00d34d787e",
+      "calldataBytes": 2340,
+      "calldataSha256": "c4df9e17e134b20d8ddae85585fdae5e19eb8d244320c6d53df35dfab4aca1b0"
+    },
+    {
+      "ballotId": "084",
+      "candidateIndex": 3,
+      "nullifier": "10865518790699038634091950913019293934269551185712039323947370774856630414184",
+      "fixtureFile": "fixtures/ballot-084.json",
+      "fixtureSha256": "a1111160e3bb1a6fc17dca0af3934e3e390150a52a2a39d8b24c6bb27f7015ad",
+      "calldataBytes": 2340,
+      "calldataSha256": "1302b9893c0e7b5e5693c9a67a921d6ceebc8dc95a0b21fbd510e2a97f32282f"
+    },
+    {
+      "ballotId": "085",
+      "candidateIndex": 0,
+      "nullifier": "10956069847477997529346964683288455598327805656385190998914697268128098395948",
+      "fixtureFile": "fixtures/ballot-085.json",
+      "fixtureSha256": "fa700aea35d2aa20858f6409788f9deaf8052910b6d0c9f0f541d924ce940a19",
+      "calldataBytes": 2340,
+      "calldataSha256": "e572ad32f5c5327f967abda6f5e6da630f622923ba1eae698b6fcdfe2025003c"
+    },
+    {
+      "ballotId": "086",
+      "candidateIndex": 1,
+      "nullifier": "20505038359565564643122107304163661241923350516025150781753166448870282556825",
+      "fixtureFile": "fixtures/ballot-086.json",
+      "fixtureSha256": "03918501e9d59f59a70b2fff430dca49051bd62ee0b844a29f5a09b06ee010cb",
+      "calldataBytes": 2340,
+      "calldataSha256": "196295e45ad3021fae0fefdb3ffaae89cfe88130a6e5e0aa8a1e5a97bd67cbc8"
+    },
+    {
+      "ballotId": "087",
+      "candidateIndex": 2,
+      "nullifier": "16793067817152054504104201514961016505019513198170797170134292606462672022001",
+      "fixtureFile": "fixtures/ballot-087.json",
+      "fixtureSha256": "dd0ab1b31a4374c126e5fd41a0bb94d8f3fc12f6f16f49f5a132ada42edb7f23",
+      "calldataBytes": 2340,
+      "calldataSha256": "5c68a97c6a1af8b69dda11ea1fa68ddb976a6e4c35d42358a19662497bb9ec47"
+    },
+    {
+      "ballotId": "088",
+      "candidateIndex": 3,
+      "nullifier": "9118962752489983240795943037119410770295133043372988089305749169095141422018",
+      "fixtureFile": "fixtures/ballot-088.json",
+      "fixtureSha256": "4430d8f750b707984938a4e04b2bc916193c7f4b047f8d4848f0c5fbf388bbb3",
+      "calldataBytes": 2340,
+      "calldataSha256": "25bfd4dfce892c5b1cd9bd15b2edbae01f45310ec793d3c5bd34cea24bf486f2"
+    },
+    {
+      "ballotId": "089",
+      "candidateIndex": 0,
+      "nullifier": "5039994651566728329579591907798819330293661213180841672882626610579421078353",
+      "fixtureFile": "fixtures/ballot-089.json",
+      "fixtureSha256": "188fc4616211bad53f06b2377e4426567d7be9f280dcaef7f52efb3697b7d18a",
+      "calldataBytes": 2340,
+      "calldataSha256": "96e8835a72a4747da739d92602b996dd0a61edeaae7f84be72d6f5dda70efe88"
+    },
+    {
+      "ballotId": "090",
+      "candidateIndex": 1,
+      "nullifier": "8249022104815748083149416352109264468442107077620798701726960100933166069638",
+      "fixtureFile": "fixtures/ballot-090.json",
+      "fixtureSha256": "cb6303d93b47f769fce66aae8984807972c95f57c20f394ec33aa0ac96a82100",
+      "calldataBytes": 2340,
+      "calldataSha256": "17f1dc391247bf2ad82bb466a6e17360ad71ffcac0615b3865c78e90be6bf8fc"
+    },
+    {
+      "ballotId": "091",
+      "candidateIndex": 2,
+      "nullifier": "3934593700972635620616908057913696378011068884507778874461258690213436811642",
+      "fixtureFile": "fixtures/ballot-091.json",
+      "fixtureSha256": "5da46c0f47f4e5f3e5553a54abd304cc9731b22a9e43dc078a43db4fa28b65bc",
+      "calldataBytes": 2340,
+      "calldataSha256": "1e5f3a5afc15653cd21a7d1d62e3f21122c306d3265f5b28e1f9b82570ffd9b8"
+    },
+    {
+      "ballotId": "092",
+      "candidateIndex": 3,
+      "nullifier": "18568692820869129894803765518436576508484265621456849139275227118554820533861",
+      "fixtureFile": "fixtures/ballot-092.json",
+      "fixtureSha256": "736d5f097dd6080bf89713930d22cc6e1fd0db83081a4e38f4993287f300728f",
+      "calldataBytes": 2340,
+      "calldataSha256": "9396ceaa63fef7afafb2ecb167e754b09323e43b201aff1a6740b7a0c07f88f6"
+    },
+    {
+      "ballotId": "093",
+      "candidateIndex": 0,
+      "nullifier": "12510174117940362168756932913603776916879399701939964773535514739011715517495",
+      "fixtureFile": "fixtures/ballot-093.json",
+      "fixtureSha256": "9369d67aff134a786596580ba1f5a8ab9a07c4640d99cd5de1bf8f6c7cf80852",
+      "calldataBytes": 2340,
+      "calldataSha256": "566dde04b9ad85687b243af8334516b81c64f116476668696b382676cabd2dde"
+    },
+    {
+      "ballotId": "094",
+      "candidateIndex": 1,
+      "nullifier": "5758057080731199725089156101813377789261916390265310376337085414054581285821",
+      "fixtureFile": "fixtures/ballot-094.json",
+      "fixtureSha256": "6af61715cfb5390712171cd1c086e05aeb09535c0c20def66d77bca7c34cf404",
+      "calldataBytes": 2340,
+      "calldataSha256": "66d472fa64ccca6d7b44f3ef677ce6fd938e5b6b1d5d33e5105830a9d0e11b04"
+    },
+    {
+      "ballotId": "095",
+      "candidateIndex": 2,
+      "nullifier": "21342558499554490024528352337255532489800098390840707814201567981470012555116",
+      "fixtureFile": "fixtures/ballot-095.json",
+      "fixtureSha256": "79dfea6e8abe19d6c5a56e70d2e3283b2f4519ef18200331cf789b5ab34fef98",
+      "calldataBytes": 2340,
+      "calldataSha256": "f48ca348c4fb3dd04e21ebe8b6401097ef09a5448a8b7d04928b150a50ff9fb6"
+    },
+    {
+      "ballotId": "096",
+      "candidateIndex": 3,
+      "nullifier": "17235154516908834750968818814847352384436610737212864611714594475970435697920",
+      "fixtureFile": "fixtures/ballot-096.json",
+      "fixtureSha256": "ba250feece91084477e201320e9ac3e65ba3b8846c21e7e342288acdad1dedfb",
+      "calldataBytes": 2340,
+      "calldataSha256": "fec88cfd30c39c4e05d8fea6f2c9bc1b0f5301c42f2f69b19c7c11b3b87c08be"
+    },
+    {
+      "ballotId": "097",
+      "candidateIndex": 0,
+      "nullifier": "11587261733682280243455268483071631846786395080495673448141818383001631589490",
+      "fixtureFile": "fixtures/ballot-097.json",
+      "fixtureSha256": "ef8fc28aaf30cd8bb2ce94975cc84cb99d866f5037a7a80309f05159bbce57d9",
+      "calldataBytes": 2340,
+      "calldataSha256": "f10a8faa803ffc8894a2a7a82c55b707ac4f34cbd6c9e2c2c8fa2fde1aeae5d0"
+    },
+    {
+      "ballotId": "098",
+      "candidateIndex": 1,
+      "nullifier": "19016969794070237159482337449577056699552871255435048289109314899221174401522",
+      "fixtureFile": "fixtures/ballot-098.json",
+      "fixtureSha256": "ef5c8125d9eeb9d081ff99892de214c22da3bf8d8dfbb9942641d124f8102b55",
+      "calldataBytes": 2340,
+      "calldataSha256": "453eae9f436be911f7bc8139d660934914afe260a5c60fba2dbdc42f42b33f61"
+    },
+    {
+      "ballotId": "099",
+      "candidateIndex": 2,
+      "nullifier": "18143426773902761875015774362805843725471911537747979930012810387270757482186",
+      "fixtureFile": "fixtures/ballot-099.json",
+      "fixtureSha256": "a073571784048d99e71f645167341e43d2b94de307410d4311f72e199a02bd53",
+      "calldataBytes": 2340,
+      "calldataSha256": "796b25accd0b2f1fa4521192f3ab158d879f7dddbdc8c3f591f5bf1249419dfb"
+    },
+    {
+      "ballotId": "100",
+      "candidateIndex": 3,
+      "nullifier": "11999375422902926092686196853886859827388772456634722893884812830820451457805",
+      "fixtureFile": "fixtures/ballot-100.json",
+      "fixtureSha256": "9643742484533ecf15aa5f5971bddffbd86f1cd262a0f4823d2c884a0c7e5f95",
+      "calldataBytes": 2340,
+      "calldataSha256": "ec6ca2baee68d05c4fe6ff4235c6d6f9cfe732bf530676da4d455b807af8e83f"
+    },
+    {
+      "ballotId": "101",
+      "candidateIndex": 0,
+      "nullifier": "19962408681062035350023522878467553173171300592105249821611793657853718737982",
+      "fixtureFile": "fixtures/ballot-101.json",
+      "fixtureSha256": "73eebdfa1ecdf6127bc8c1e98cb3cadbc7ec4da6d1c6416e072e442169586499",
+      "calldataBytes": 2340,
+      "calldataSha256": "7e48773aadc360866d2d65f0270121962a1d78afd2737479a90f3ee5deb4acd6"
+    },
+    {
+      "ballotId": "102",
+      "candidateIndex": 1,
+      "nullifier": "19182503778270002740924694819740364126863477238653715057025246278948827714664",
+      "fixtureFile": "fixtures/ballot-102.json",
+      "fixtureSha256": "abc2fa7e225d28d665f6fee5af16d4d60068222297f0fb5d6d7b6209ada6e4df",
+      "calldataBytes": 2340,
+      "calldataSha256": "c0c42a751b7e207a003b13b7823811dad2b3b92d4f896357adac25c603764e52"
+    },
+    {
+      "ballotId": "103",
+      "candidateIndex": 2,
+      "nullifier": "7545295609655970004848079827325224788014995639376470419221483874224269551627",
+      "fixtureFile": "fixtures/ballot-103.json",
+      "fixtureSha256": "cb9ac71d00c45d96ed8c6994dc6ab5ccf51a077c53e21e88b9f0b5e01a8e34e2",
+      "calldataBytes": 2340,
+      "calldataSha256": "2c6b9095bcad0026b919a6b8c488a911f833aeb5d10319166b53921bdb1df55a"
+    },
+    {
+      "ballotId": "104",
+      "candidateIndex": 3,
+      "nullifier": "19355637806072653575884839967519486666344751201620346492088451636259723210206",
+      "fixtureFile": "fixtures/ballot-104.json",
+      "fixtureSha256": "e689dd90da910333824cb0cf94c953f33f34fbb4b44d65bdc70b2a0409db7f6b",
+      "calldataBytes": 2340,
+      "calldataSha256": "bf2a0de052361f9f5a27f6ec68fe48d8afb77f66759dd28141d1e07efc59f889"
+    },
+    {
+      "ballotId": "105",
+      "candidateIndex": 0,
+      "nullifier": "3601781536813902816591464241214663232247642199937645882428154604173899181039",
+      "fixtureFile": "fixtures/ballot-105.json",
+      "fixtureSha256": "3005fbcf09997fccf7879bff672b4c1e41a2cb1672fca12f29aee38ae753671c",
+      "calldataBytes": 2340,
+      "calldataSha256": "0d9281d5e30c03e4c0bedf630f9c03b99b3d3bad99e1f93bf7f7a949d9b16e5d"
+    },
+    {
+      "ballotId": "106",
+      "candidateIndex": 1,
+      "nullifier": "8803170418196454228398049174182544023634681695279605860967092787357881288092",
+      "fixtureFile": "fixtures/ballot-106.json",
+      "fixtureSha256": "f11e57e70325bada0f7d65e2060f034336215f196528c158b88a4d54a7c3d4a1",
+      "calldataBytes": 2340,
+      "calldataSha256": "6f279796a60997c5c1aab6d745fba5a1539fb6e2194acf94116b8a277cd9e46a"
+    },
+    {
+      "ballotId": "107",
+      "candidateIndex": 2,
+      "nullifier": "2219513071588895028228641378395737608103935839534500115295079652145259370625",
+      "fixtureFile": "fixtures/ballot-107.json",
+      "fixtureSha256": "de0cc4b5fbff7359d21f5e68196d414a3bfa940a2c326051fe20c0da2e436c02",
+      "calldataBytes": 2340,
+      "calldataSha256": "65e754b015e31bbe2e2b0985500e62abcbfd7dd8ed0aeff05a9c5e045ce285c3"
+    },
+    {
+      "ballotId": "108",
+      "candidateIndex": 3,
+      "nullifier": "17184711188168477322690715876386767517743538940775433058936900553091936394338",
+      "fixtureFile": "fixtures/ballot-108.json",
+      "fixtureSha256": "2674754770f0d755df345c40d75fd577e350a4759abb4540af193cb4fa57043a",
+      "calldataBytes": 2340,
+      "calldataSha256": "198688b82b583607f8abf887e9e51e3c93abdad68bd07e381435f7c639be08ad"
+    },
+    {
+      "ballotId": "109",
+      "candidateIndex": 0,
+      "nullifier": "4303737633185942520530133117260061506627495259138050145435720566343573412847",
+      "fixtureFile": "fixtures/ballot-109.json",
+      "fixtureSha256": "eabb0ec2159b2e663779ffc43322eca59887c6cd477021be8cf0ac477b0a89e6",
+      "calldataBytes": 2340,
+      "calldataSha256": "3e77afe3758ffbc40953a84d1aa14dd4872f79f4d39d77fa857a1004962552f9"
+    },
+    {
+      "ballotId": "110",
+      "candidateIndex": 1,
+      "nullifier": "1906250319100916115142491635676610296048613927401322447826946684269201224333",
+      "fixtureFile": "fixtures/ballot-110.json",
+      "fixtureSha256": "fd731965202787d1249e00d5cb8c1282a4cd6f618008b4d2a8af3a255491b9c2",
+      "calldataBytes": 2340,
+      "calldataSha256": "329a8b81d52debfa2e348547af3f5f66788c991f7f0417dec0cfea3a976c2b24"
+    },
+    {
+      "ballotId": "111",
+      "candidateIndex": 2,
+      "nullifier": "15999041147234290292316428385097208860166370677548180660863146455475909836921",
+      "fixtureFile": "fixtures/ballot-111.json",
+      "fixtureSha256": "466061b5528e3d993f6a746319281be5954f59aa96c378aacd97ef1fa8be483b",
+      "calldataBytes": 2340,
+      "calldataSha256": "b9e00d7c7fe4b2dd7c1494733df836d4a9a3fb55ddeac747b43cba14b0291645"
+    },
+    {
+      "ballotId": "112",
+      "candidateIndex": 3,
+      "nullifier": "4478386126385386974650784282337197930219320831733814450346553815766502891739",
+      "fixtureFile": "fixtures/ballot-112.json",
+      "fixtureSha256": "f1bbd6893a8ca01f8927adca9990d138a676d03a52b716d4ec7c81c97efd5b12",
+      "calldataBytes": 2340,
+      "calldataSha256": "cd81777dfd575d50e2c7fa284530ff873d9da83171a95d934e110e2a24b6be89"
+    },
+    {
+      "ballotId": "113",
+      "candidateIndex": 0,
+      "nullifier": "14065864678046749338398716851032539180674311199848183478272782339774358818386",
+      "fixtureFile": "fixtures/ballot-113.json",
+      "fixtureSha256": "02fbc71b0b6cc51b8f59eea98e40e8f2705cfffd8bd6b0ca0f2d9509a7e34748",
+      "calldataBytes": 2340,
+      "calldataSha256": "eb3f19ad052d05d30d86e093f243972bf8a43058af51676d97d1858601004ea7"
+    },
+    {
+      "ballotId": "114",
+      "candidateIndex": 1,
+      "nullifier": "9807959243403255397327731878424599250978119362484438972901447636467015678506",
+      "fixtureFile": "fixtures/ballot-114.json",
+      "fixtureSha256": "b55ae4835f9674807811aeb8e7a5b68f1233bb03e432bb65b065eadcef3a20e0",
+      "calldataBytes": 2340,
+      "calldataSha256": "6c6b04403fdd6ab63bf3af4e6f9c571913052fdfb094ec387b2845f67853e6e5"
+    },
+    {
+      "ballotId": "115",
+      "candidateIndex": 2,
+      "nullifier": "2051394423808287592853346178474181866486804229511395786057783939497766718951",
+      "fixtureFile": "fixtures/ballot-115.json",
+      "fixtureSha256": "d3cb593dc4d36ea5e9cc546f945b571aca8abf17fa65472ffee233b39c27c0c8",
+      "calldataBytes": 2340,
+      "calldataSha256": "0be6f8dd6f72d873179581777d5d38f06f58f5e48e572e45d08bcdb38c19313c"
+    },
+    {
+      "ballotId": "116",
+      "candidateIndex": 3,
+      "nullifier": "4924124007930142797146926491164580554801856284448134005727827527545251505243",
+      "fixtureFile": "fixtures/ballot-116.json",
+      "fixtureSha256": "151be35b1c0a2ea1d83f2ff77936cd53a51ab5cfd2ac3e6af1ac1d4ce3df315c",
+      "calldataBytes": 2340,
+      "calldataSha256": "de5f9d2fc283229b6a48618bf51a4ccd91b3325c72bfc8f38e9dfe1b70fb2896"
+    },
+    {
+      "ballotId": "117",
+      "candidateIndex": 0,
+      "nullifier": "8052719393827178868888678604250063811057309998932200936400678932367606342263",
+      "fixtureFile": "fixtures/ballot-117.json",
+      "fixtureSha256": "570d94c66bda68442fc8b1430465862f6a45baef7f9a71be93a016a54eef5cba",
+      "calldataBytes": 2340,
+      "calldataSha256": "851cb561ba83abf09d7dbdd0a09f9aeec4a7cfa0525cd123fec8f11b3028b8b8"
+    },
+    {
+      "ballotId": "118",
+      "candidateIndex": 1,
+      "nullifier": "5850107147576139049064000547930671872463204502774687155599227569349926094541",
+      "fixtureFile": "fixtures/ballot-118.json",
+      "fixtureSha256": "7303ea7285a55dda6d6e0f89282ac1a4456b84e2e86d642758eb2bb7e84aab8a",
+      "calldataBytes": 2340,
+      "calldataSha256": "e23f1847ddf5f10c1160efce22a009360ed3bf85aa9b48e6dc5093da0d0679dd"
+    },
+    {
+      "ballotId": "119",
+      "candidateIndex": 2,
+      "nullifier": "11268387987965834160190215701619027714300279942050723341561852581700751553250",
+      "fixtureFile": "fixtures/ballot-119.json",
+      "fixtureSha256": "de0af0fd023dd12a49d7fa9975a1304b783b4b90bc4dd1e98dbe3aec5b7b07de",
+      "calldataBytes": 2340,
+      "calldataSha256": "feb37a18a754efa010cc2c9c4b4336b1c6f969134a09f4f2e4fe9183619c8583"
+    },
+    {
+      "ballotId": "120",
+      "candidateIndex": 3,
+      "nullifier": "12178513344482449814936263097374736159893821392086462521926705193215934093052",
+      "fixtureFile": "fixtures/ballot-120.json",
+      "fixtureSha256": "0ac8deb653e69de964680c1ac8c3a7a75cfa3267685d2af7a020994e7cb063ae",
+      "calldataBytes": 2340,
+      "calldataSha256": "d9511d3a1c294ccf78a2ab1ee0fc2940265f824468322689bafbde1eb35f972d"
+    },
+    {
+      "ballotId": "121",
+      "candidateIndex": 0,
+      "nullifier": "9807197614149131315847343670220827635299976937832910194884776433580418981944",
+      "fixtureFile": "fixtures/ballot-121.json",
+      "fixtureSha256": "7e8f60e79aa99fe78c41a105c30606e7c0e581db3575ac391806d549cf1100f6",
+      "calldataBytes": 2340,
+      "calldataSha256": "86307e5f30dddd214ed310b438c34cbd147557cfbaae0a0aa99effe77dd86f8b"
+    },
+    {
+      "ballotId": "122",
+      "candidateIndex": 1,
+      "nullifier": "8122986935043642934855437143909275129173811585800404829608092281871692114841",
+      "fixtureFile": "fixtures/ballot-122.json",
+      "fixtureSha256": "a0e3af55971b7fc73ccf15b30e127f4d876432881969c21f741fbe5ef072a387",
+      "calldataBytes": 2340,
+      "calldataSha256": "fb8e32b06242f90741fda1d90d20cfbda8a18c342af543f19a10345f3d764f87"
+    },
+    {
+      "ballotId": "123",
+      "candidateIndex": 2,
+      "nullifier": "19050452633490891111285495877063437578121381494076561680487741784102581456523",
+      "fixtureFile": "fixtures/ballot-123.json",
+      "fixtureSha256": "5d95ed13729204537456f26dc11f43d10835a3530c43694397eb136aa7fff683",
+      "calldataBytes": 2340,
+      "calldataSha256": "3f65b8e8da289f9a68c5fc03c8218f2e8545fda08c5102f2e6822f4d43e1eefd"
+    },
+    {
+      "ballotId": "124",
+      "candidateIndex": 3,
+      "nullifier": "21883824480363072260437022291445202017138043336218234168196654308593470318106",
+      "fixtureFile": "fixtures/ballot-124.json",
+      "fixtureSha256": "2e53eea7db5f6ba6681316bd017a2ac1eb0cff4b1183e8b00399cf69ce917379",
+      "calldataBytes": 2340,
+      "calldataSha256": "448a653e3351f3e7e00f90c5cac259006f1efcc35839bbad0ec9b466eb339c59"
+    },
+    {
+      "ballotId": "125",
+      "candidateIndex": 0,
+      "nullifier": "3655133536075337567380115658396014882716681210629596333296487663218010018561",
+      "fixtureFile": "fixtures/ballot-125.json",
+      "fixtureSha256": "9e9ad4437f0f3ad731f550d3433a281bdf34ff39389b2b52148216dc3b80e1ce",
+      "calldataBytes": 2340,
+      "calldataSha256": "d72ca3ec9c0f03a1f1584901408bf86af18afbc41fdf1a02ca19fed2f8c7a85b"
+    },
+    {
+      "ballotId": "126",
+      "candidateIndex": 1,
+      "nullifier": "11152431042631762939707457000128030035722701626892713634934103025924534494573",
+      "fixtureFile": "fixtures/ballot-126.json",
+      "fixtureSha256": "4ec33d4c6c75e34d14b8158cddd149e9e459f3995060d6d072a0b564258b6ba5",
+      "calldataBytes": 2340,
+      "calldataSha256": "4b3d026b180f8c4c38a9aeb416da41f5f5fc8164384038493b14037be92e5328"
+    },
+    {
+      "ballotId": "127",
+      "candidateIndex": 2,
+      "nullifier": "13401084214874263653286648221365935734632588130655508703180267551088409942292",
+      "fixtureFile": "fixtures/ballot-127.json",
+      "fixtureSha256": "1f5d1e24beddb87418eff89be41c7ce725aba551383a5fb993f4153467ec5f8a",
+      "calldataBytes": 2340,
+      "calldataSha256": "23b86c383472a300785e39384a68453b391e1582384bdd072082134535157df9"
+    },
+    {
+      "ballotId": "128",
+      "candidateIndex": 3,
+      "nullifier": "12428532000149373292044285942453114251054819425525539654514424919202827188665",
+      "fixtureFile": "fixtures/ballot-128.json",
+      "fixtureSha256": "8eb34b646b2d0cd17df55108ad9a13a2daf5420b8ac50cff4767aeef2d8f78dc",
+      "calldataBytes": 2340,
+      "calldataSha256": "8a6a89ea886dd0092bcf4f00d48a5859c8f71e12cc6bd9ed8467a2e5722d0d48"
+    },
+    {
+      "ballotId": "129",
+      "candidateIndex": 0,
+      "nullifier": "3582028752354074455074002737433446854862526344421862996738465559191025207225",
+      "fixtureFile": "fixtures/ballot-129.json",
+      "fixtureSha256": "51a2c9987d701164ef510e74d5cd86d9981f0bc27e6a7f0858ecc490da5e29cf",
+      "calldataBytes": 2340,
+      "calldataSha256": "6bdb38aa39a0aaf62f80b8ae95a2bb5f1e9faa1f6973d97bd67f1dd0a8277adb"
+    },
+    {
+      "ballotId": "130",
+      "candidateIndex": 1,
+      "nullifier": "4178693616208602394611217501763947966232289405242426506566710398569970533330",
+      "fixtureFile": "fixtures/ballot-130.json",
+      "fixtureSha256": "7469ab399ec03e7e79ba24503d6343cc9a4bf6e8b409ec462c8634c39bbd454f",
+      "calldataBytes": 2340,
+      "calldataSha256": "64f39efceb2c967e2b98370bbfe41dbe4a989e2ef4bde7acf26e817df467b71f"
+    },
+    {
+      "ballotId": "131",
+      "candidateIndex": 2,
+      "nullifier": "20922520753050086602709563379466445895849324260502609831353245439458435524986",
+      "fixtureFile": "fixtures/ballot-131.json",
+      "fixtureSha256": "d3cdcd283f81e06576358c3d996665411ed45fdb02c634b5799158024b62b4ac",
+      "calldataBytes": 2340,
+      "calldataSha256": "c5a62cede08354213c8ce3548b8a52fd726f4056447f7f699cff50aba513a003"
+    },
+    {
+      "ballotId": "132",
+      "candidateIndex": 3,
+      "nullifier": "21665562052954178162892644166089667539899016003682598124489098009527771668082",
+      "fixtureFile": "fixtures/ballot-132.json",
+      "fixtureSha256": "770a569f9d9ff436df6986f7fbf3bb08fb0aaf2ddbdf59a706d87c69c9fd70e9",
+      "calldataBytes": 2340,
+      "calldataSha256": "1502f39f201747547097eb38d5b71d7f35e39cd5f4a4ccc31d339f8b0a90216a"
+    },
+    {
+      "ballotId": "133",
+      "candidateIndex": 0,
+      "nullifier": "4955947213915908582282347327342220003545777453791114252360212616967795055933",
+      "fixtureFile": "fixtures/ballot-133.json",
+      "fixtureSha256": "8a1e71e8abb1e0242009a67a6089441cf01b213b1f0254a8b5ad41c5b9e09a5a",
+      "calldataBytes": 2340,
+      "calldataSha256": "5b4c5803868f5c1a287cbee7daf13743057e161b11e6131fac11017467b42ae2"
+    },
+    {
+      "ballotId": "134",
+      "candidateIndex": 1,
+      "nullifier": "8159504934407343405697725718882371612103400063926563394451888420684074444979",
+      "fixtureFile": "fixtures/ballot-134.json",
+      "fixtureSha256": "4825dfe3b6b05f6873a980eb0cec7de7dd66c9bac34b2336debc38b9b869a1b6",
+      "calldataBytes": 2340,
+      "calldataSha256": "58801a6835cfa4c1a42c181ed05eb430e89e9df0cb3eb8ab6b81aea8880b94f8"
+    },
+    {
+      "ballotId": "135",
+      "candidateIndex": 2,
+      "nullifier": "4742197481874130732940635200842171823093084448634839477072272012944686643642",
+      "fixtureFile": "fixtures/ballot-135.json",
+      "fixtureSha256": "bc830bbe1c4a8304d82aa13cf95f76928b98c5f75b87b65919d944bffcc6fa3b",
+      "calldataBytes": 2340,
+      "calldataSha256": "f62cdaf4b7a44e93d8b54b94f0859e1b4d59b28904c0453dde529092583f8fa2"
+    },
+    {
+      "ballotId": "136",
+      "candidateIndex": 3,
+      "nullifier": "18948282775101632314250459681617706729956046026783839170594210472578049339292",
+      "fixtureFile": "fixtures/ballot-136.json",
+      "fixtureSha256": "a30349c32505954b27723c8665da232ad51e98bd2d30fd2a70317dca77bbb6ba",
+      "calldataBytes": 2340,
+      "calldataSha256": "c38b72f5c2a1f5c373c442ebfe2977df42ea5562f197e98bef12123e71409287"
+    },
+    {
+      "ballotId": "137",
+      "candidateIndex": 0,
+      "nullifier": "15820900583381311362982143583217896106827709191875278394311146817753526339080",
+      "fixtureFile": "fixtures/ballot-137.json",
+      "fixtureSha256": "9f75d44d80c012e7d843aa0981b331fd7af4478b5e288709a4a7547ff747176e",
+      "calldataBytes": 2340,
+      "calldataSha256": "c3d52818b59f64572b2103c350b55e9bb59dd51b98365bb2438f137b62dfb5ea"
+    },
+    {
+      "ballotId": "138",
+      "candidateIndex": 1,
+      "nullifier": "9605379246751768784807502670943452339345044529143646860510835104073071144485",
+      "fixtureFile": "fixtures/ballot-138.json",
+      "fixtureSha256": "28e277c06e22aa19322b03a2f3453117721d3edf51b4ad5d21dfc20ef259a1ec",
+      "calldataBytes": 2340,
+      "calldataSha256": "efeca34b8200f202f95a8028703bfae238a8612f415b89e4694ed577e79265e1"
+    },
+    {
+      "ballotId": "139",
+      "candidateIndex": 2,
+      "nullifier": "8497541146145133800267753737322120192111638071979762144797930997401656779452",
+      "fixtureFile": "fixtures/ballot-139.json",
+      "fixtureSha256": "a1cded348ad902b4bbdce7267e75bc776e705da8d0b58cab8df72a9e7a207897",
+      "calldataBytes": 2340,
+      "calldataSha256": "ba93fd6988c319f1752503aa0ea47dc35649d26b38bbaa2adc5c803df2dfb110"
+    },
+    {
+      "ballotId": "140",
+      "candidateIndex": 3,
+      "nullifier": "15320996818133018479674056715599751458921336036934362553061323385901765484027",
+      "fixtureFile": "fixtures/ballot-140.json",
+      "fixtureSha256": "4fdde98b1ec525ea6abdb83a8c00e4f6b7939c3dd97627f079b764cb170e5bce",
+      "calldataBytes": 2340,
+      "calldataSha256": "c5215e7aac61dae954b52f77757aa81b0b5b3c747d0d928bd45210d2cd815601"
+    },
+    {
+      "ballotId": "141",
+      "candidateIndex": 0,
+      "nullifier": "14083433801851734082758664057490855443533135371913198981411475840782580459102",
+      "fixtureFile": "fixtures/ballot-141.json",
+      "fixtureSha256": "e4cf327c90d00a9160656d460395030ed068b56dfbd9d6ab5394665541639ce1",
+      "calldataBytes": 2340,
+      "calldataSha256": "1dd1193bc6578d63927ffa0138bfe907275a845b7b6c06e9a74c66c592015e84"
+    },
+    {
+      "ballotId": "142",
+      "candidateIndex": 1,
+      "nullifier": "10030822667291038865697166759657966008324936501573950770489199368474779334784",
+      "fixtureFile": "fixtures/ballot-142.json",
+      "fixtureSha256": "78806116963e316962f9da7c9bd9a2a56366ba7ff720f67db52ad0d217178606",
+      "calldataBytes": 2340,
+      "calldataSha256": "9e39cf85662439067f5777208958a85a971a319523ba4a8ed2a735849914ad81"
+    },
+    {
+      "ballotId": "143",
+      "candidateIndex": 2,
+      "nullifier": "4290067629961064943262028585476544051636387158660958771259919224713595331019",
+      "fixtureFile": "fixtures/ballot-143.json",
+      "fixtureSha256": "a7dedba23f6ebcca7311558a53c7cfd3c116886788849709e82ef6ad4103616a",
+      "calldataBytes": 2340,
+      "calldataSha256": "78039eb5c8a44ace9774b8207f41c1c023d81b297593fd35a3d885299030dbde"
+    },
+    {
+      "ballotId": "144",
+      "candidateIndex": 3,
+      "nullifier": "7389380875545325299913836423775368047499376784813139134371830911762805150381",
+      "fixtureFile": "fixtures/ballot-144.json",
+      "fixtureSha256": "89f521f2037402c2072fbcd88b1d57062e13b846dc18eeb4f0b61b786441d279",
+      "calldataBytes": 2340,
+      "calldataSha256": "9770cf1bfb5b64e5cba25dc94aa82c0cda8dc490d3527556b79a41d0b4bd5f6f"
+    },
+    {
+      "ballotId": "145",
+      "candidateIndex": 0,
+      "nullifier": "4300605573762119719793295129916883607329502475320812943733596992915444551784",
+      "fixtureFile": "fixtures/ballot-145.json",
+      "fixtureSha256": "51f20cb91e3eda5a5cc3ef28571a2fa5c3687eaf6379b816cc785d8e2166af9e",
+      "calldataBytes": 2340,
+      "calldataSha256": "2d4437598da715df861389a5439ec1df6f2ec42820ba5576a46879a3728772aa"
+    },
+    {
+      "ballotId": "146",
+      "candidateIndex": 1,
+      "nullifier": "10465170802225574315153507550440273725726795748472254002773369236056129701964",
+      "fixtureFile": "fixtures/ballot-146.json",
+      "fixtureSha256": "c936615d61874930ef71ea250c73d39809e9f949ef01d7cf1d8d240d3526990c",
+      "calldataBytes": 2340,
+      "calldataSha256": "7b92024389be30cf09785a312e0fca05170a103f5e003e690152003fe30df912"
+    },
+    {
+      "ballotId": "147",
+      "candidateIndex": 2,
+      "nullifier": "19577321952295362727323640937478157200414945818948024047650638050570063324046",
+      "fixtureFile": "fixtures/ballot-147.json",
+      "fixtureSha256": "ea673591d1f98b45d63d95a2f1387874917fab534c7aa2a90c69be14e48f1604",
+      "calldataBytes": 2340,
+      "calldataSha256": "471bf5bcbdc2e20813ed230e2ea7079218e7ae6147c154ed07df669b5ce569f7"
+    },
+    {
+      "ballotId": "148",
+      "candidateIndex": 3,
+      "nullifier": "20719041432641128466749227368015849588595149311827155685836368804132055275957",
+      "fixtureFile": "fixtures/ballot-148.json",
+      "fixtureSha256": "ec7ed2ea98fd28334fbd1df61f2597585029efdddd4c4bb60e68cc451cf977d5",
+      "calldataBytes": 2340,
+      "calldataSha256": "67868f13778ff93e8974841fa5896cc6e190fbeceab7f821f049478b4ec5a0ce"
+    },
+    {
+      "ballotId": "149",
+      "candidateIndex": 0,
+      "nullifier": "18326228834451339642985866139993920773262300304576935331512720637810185334427",
+      "fixtureFile": "fixtures/ballot-149.json",
+      "fixtureSha256": "4de757acb4b1770b647ee6a215fd687bb14ea9e4cbc7af4630a7d09beb5965bc",
+      "calldataBytes": 2340,
+      "calldataSha256": "9542ae54235d1d3978d9f450c67fd4bc8f84990f5f4f2cc4f8dcf3664680f6cf"
+    },
+    {
+      "ballotId": "150",
+      "candidateIndex": 1,
+      "nullifier": "5374507000044062203022469923382095429305615125042186577417422198187147768255",
+      "fixtureFile": "fixtures/ballot-150.json",
+      "fixtureSha256": "2610f4169d0190b2a93a94590ce7502b6e8394bd292f8a4a6461d16ae96fea8d",
+      "calldataBytes": 2340,
+      "calldataSha256": "f7ae3fd33079e2954d1cd70564097572a54ea4b7ce835ec15ee1919a9bf7e2a2"
+    }
+  ]
+}

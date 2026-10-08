@@ -1,0 +1,99 @@
+{
+  "status": "PASS",
+  "classification": "ELIGIBLE_SET_SCALING_BENCHMARK_PROTOCOL_STATIC_FREEZE",
+  "eligibleSetLevels": [10, 100, 1000, 10000],
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "candidateCount": 16,
+  "selectedVoterIndex": 0,
+  "controlledVariable": "occupied eligible-set size N",
+  "controlledCircuitInputFieldsThatChange": [
+    "eligibleRoot",
+    "siblings"
+  ],
+  "metrics": {
+    "M1": {
+      "name": "ELIGIBLE_IDENTITY_LEAF_MATERIALIZATION_MS",
+      "implementation": "in-process sequential wp5Hash([identityDomain, selectedVoterSecret + index]) for index 0..N-1",
+      "includesFileIO": false,
+      "includesProcessLaunch": false
+    },
+    "M2": {
+      "name": "MERKLE_SNAPSHOT_ROOT_AND_TARGET_PATH_BUILD_MS",
+      "implementation": "in-process active buildWp5MerkleSnapshot(records, 0)",
+      "includesFileIO": false,
+      "includesProcessLaunch": false,
+      "purePathExtractionClaimAllowed": false
+    },
+    "M3": {
+      "name": "CIRCUIT_WITNESS_GENERATION_MS",
+      "implementation": "wall-clock around snarkjs 0.7.5 wtns calculate",
+      "includesSnarkjsChildProcessLaunch": true,
+      "wtnsCheckTimed": false
+    },
+    "M4": {
+      "name": "GROTH16_PROVE_MS",
+      "implementation": "wall-clock around snarkjs 0.7.5 groth16 prove",
+      "includesSnarkjsChildProcessLaunch": true
+    },
+    "M5": {
+      "name": "GROTH16_VERIFY_MS",
+      "implementation": "wall-clock around snarkjs 0.7.5 groth16 verify",
+      "includesSnarkjsChildProcessLaunch": true,
+      "semanticLogParsingTimed": false
+    }
+  },
+  "prewarm": {
+    "required": true,
+    "timed": false,
+    "recipe": "one wp5Hash call plus one 1-leaf buildWp5MerkleSnapshot call before the first observation in each campaign process",
+    "purpose": "exclude one-time Poseidon/backend initialization from M1 and M2"
+  },
+  "untimedValidationPerObservation": [
+    "generated controlled input must deep-equal the frozen R3B input for the same N",
+    "target path length must remain 17",
+    "target pathBits must remain all zero",
+    "wtns check must return RC 0",
+    "public signal array must contain exactly 73 signals",
+    "all 73 public signals must bind to the controlled input",
+    "verification log must semantically match snarkJS:\\s*OK! after ANSI/CR sanitization"
+  ],
+  "successfulObservationRetention": {
+    "inputJson": "preserve",
+    "proofJson": "preserve",
+    "publicJson": "preserve",
+    "verifyLog": "preserve",
+    "resultJson": "preserve",
+    "witnessWtns": "hash then delete"
+  },
+  "failedObservationRetention": "preserve all files and stop campaign; no automatic retry",
+  "statisticsPolicyForFinalMeasuredCampaign": [
+    "n",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sample SD",
+    "nearest-rank p95"
+  ],
+  "pilotPolicy": {
+    "requiredBeforeFinalMatrixFreeze": true,
+    "pilotObservations": 4,
+    "onePerN": true,
+    "excludedFromFinalStatistics": true
+  },
+  "finalMatrixStatus": "NOT_YET_FROZEN",
+  "defaultFinalPolicyCandidate": "5 warmup plus 20 measured observations per N",
+  "reductionPolicy": "any reduction due proving burden must be justified and frozen only after excluded pilot evidence",
+  "interpretationGuardrails": [
+    "report N and configured Merkle depth together",
+    "do not equate occupied leaf count N with Merkle path depth",
+    "report M1 through M5 separately",
+    "do not claim pure path extraction timing",
+    "do not infer causal opcode cost",
+    "do not compare local cryptographic stage latency directly with published 10-15 second biometric/IoT end-to-end voting time",
+    "no on-chain eligible-set scaling claim is authorized by this campaign"
+  ],
+  "benchmarkTimingStarted": false,
+  "onchainExecutionStarted": false
+}

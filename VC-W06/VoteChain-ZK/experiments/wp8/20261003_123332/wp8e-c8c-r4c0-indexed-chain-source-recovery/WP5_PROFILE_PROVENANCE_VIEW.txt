@@ -1,0 +1,8 @@
+profile=VoteChain-ZK-WP5-Application-v1
+inheritedWp3Profile=VoteChain-ZK-WP3-v1
+maxCandidates=16
+merkleDepth=17
+eligibleCapacity=131072
+fieldModulus=21888242871839275222246405745257275088548364400416034343698204186575808495617
+
+candidateManifest={"algorithm":"POSEIDON_INDEXED_CHAIN_V1","candidateIds16":["101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116"],"historicalWp3Wp4SyntheticAlgorithm":"POSEIDON_DOMAIN_PLUS_IDS_V1","indexBase":0,"lengthBound":"Poseidon(D_MANIFEST,candidateCount)","manifest16":"8725646181372109278719673995639063952864499962493037230511085907915024360632","oneShotK16Error":"Invalid poseidon size","oneShotK16Supported":false}

@@ -1,0 +1,10 @@
+RECOVERED_SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts
+SHA256=7802e24372be865692237dffa027f08e0ba350878484cad4ec3dde7c6b5ded47
+RECOVERED_SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/services/zk/wp5PrivacyService.js
+SHA256=386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7
+RECOVERED_SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5b-compatibility-regression.mjs
+SHA256=65dec4fbb1a6093a59e54330e89b77593295a2db102c4528765d0231bab5e75d
+RECOVERED_SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-frontend-ts/scripts/wp5d-deploy-runtime.mjs
+SHA256=05a89e72e1467342cc70b73ea4e2308e07cee47081fdd49c80cd62c5ba620ad9
+RECOVERED_SOURCE=/d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/experiments/wp5/20260930_195059/wp5b-compatibility/resume-patch-wp5-manifest.mjs
+SHA256=5bed5e0394bd738468cd8df326ceee512246bbb0dbb9703d837a24438ac67656

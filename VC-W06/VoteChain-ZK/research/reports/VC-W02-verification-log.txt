@@ -1,0 +1,89 @@
+VoteChain VC-W02 Revision Verification Log
+Date: 18 August 2026
+Revision purpose: master-review fixes for candidateId migration/index safety and raw public-data exposure.
+
+1. Frozen VC-W01 hashes after revision
+b5718b72b0ef3762c84c611234bc376d49b76bd09c139a9886fd91e1dd19133a  src/LocalVoting.sol
+a74ebea5402b6fcdc07a5a0a79fe8c3a7add6199cf17c472cc36d1c24c97ee90  test/LocalVotingTest.t.sol
+e28c54d0ce1627f4ea317298db6717af8f6f73a338be98c917a7f66b42f423db  script/LocalDeployVoting.s.sol
+293d244052efb22060f6133a8821a6356de89eea2a1e5c89198b0a44beb72bdc  research/gas/VC-W01-clean-baseline-gas.txt
+
+2. Foundry verification supplied by the user from MINGW64 environment
+Command: forge fmt --check
+Result: PASS
+Relevant output: no formatting errors/output.
+
+Command: forge build
+Result: PASS
+Relevant output: Compiling 22 files with Solc 0.8.17; compiler run successful with warnings only.
+Warnings were the pre-existing unused deployment-script local, two test mutability notes, plain-import notes, and modifier-wrapping notes.
+
+Command: forge test -vv
+Result: PASS
+Relevant output: Suite result: ok. 33 passed; 0 failed; 0 skipped.
+The shared-wallet regression test passed.
+
+The VC-W02 revision did not modify any frozen Solidity/test/deployment/gas file, so this user-run Foundry evidence remains applicable to the frozen contract baseline.
+
+3. Backend tests
+Command: npm test -- --runInBand
+Working directory: votechain-central-server
+Result: PASS
+Relevant output: 12 tests passed; 0 failed; 0 skipped.
+New revision coverage includes:
+- multiple legacy candidate records with missing/null candidateId plus existing allocated IDs;
+- counter flooring above the highest existing ID;
+- replacement of unsafe candidateId-only index by a partial unique index;
+- duplicate existing candidateId stop-before-index-change behavior;
+- candidate and voter privacy projections;
+- removal of unused raw Candidate/Voter GET routes.
+
+4. JavaScript syntax/import parsing
+Command: node --check for all non-node_modules backend .js/.mjs files
+Result: PASS
+Relevant output: JS_SYNTAX_OK
+
+5. ABI verification
+Command: cmp/hash generated frontend and backend LocalVoting ABI files
+Result: PASS
+Relevant output: both copies SHA-256 8b43cbe4ce81cd89b5f565225af4d755ab55955dc4c190a4ac8753735d0184af and byte-identical.
+
+Command: node scripts/sync-local-voting-abi.mjs
+Result: NOT TESTED / ENVIRONMENT BLOCKED
+Reason: this worker environment has no Forge installation and the packaged source intentionally has no out/ Foundry artifact. The command failed only because out/LocalVoting.sol/LocalVoting.json was absent. No success is claimed for real-artifact synchronization in this environment.
+
+6. Frontend dependency/build/lint gates
+Command: npm ci --no-audit --no-fund (and prefer-offline retry)
+Result: NOT TESTED / ENVIRONMENT BLOCKED
+Reason: dependency installation timed out in the worker environment.
+
+Command: npm run build
+Result: NOT TESTED / ENVIRONMENT BLOCKED
+Reason: the incomplete dependency installation left TypeScript declaration packages missing; tsc reported missing type definition files. This is not reported as a successful build.
+
+Command: npm run lint
+Result: NOT TESTED / ENVIRONMENT BLOCKED
+Reason: eslint was unavailable because npm ci did not complete.
+
+7. Public-data/privacy static checks
+Result: PASS
+- Removed GET /api/candidates and GET /api/candidates/:id raw document reads.
+- Removed GET /api/voters and GET /api/voters/voter raw document reads.
+- Candidate create/update workflow responses use a privacy-safe projection and omit candidate nationalId.
+- Voter update response uses a privacy-safe projection and omits nationalId, voterHash, encryptedSalt, and dateOfBirth.
+- Fingerprint enrollment no longer echoes NID; directly touched biometric logging no longer prints raw NID/device payloads.
+- Public election response remains candidateId/name/party/location/voteCount only.
+
+Frozen Phase-1 exception: voterHash is still returned only where the frozen non-ZKP application flow requires it (admin voter registration and successful biometric verification for castVote). It is not exposed by public/raw document-read routes or ordinary public/voter displays.
+
+8. Migration execution
+Result: NOT RUN AGAINST PRODUCTION DATABASE
+The migration logic is covered by dependency-light tests. No production/Atlas migration was executed.
+
+9. Local MongoDB/Anvil smoke flow
+Result: NOT TESTED
+Reason: mongod/anvil are unavailable in the worker runtime; no safe local integration environment was available.
+
+10. Biometric hardware
+Result: NOT HARDWARE-TESTED
+No claim of real face/fingerprint hardware verification is made in this revision.

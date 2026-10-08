@@ -1,0 +1,210 @@
+13:FOUNDRY="$ROOT/contracts/wp4-foundry"
+25:ANVIL_PORT=8547
+26:BACKEND_PORT=5007
+27:VITE_PORT=4175
+28:CDP_PORT=9225
+30:RPC="http://127.0.0.1:$ANVIL_PORT"
+31:BACKEND_URL="http://127.0.0.1:$BACKEND_PORT"
+32:VITE_URL="http://127.0.0.1:$VITE_PORT"
+33:CDP_URL="http://127.0.0.1:$CDP_PORT"
+35:ANVIL_PID=""
+50:        "${ANVIL_PID:-}"
+53:            kill "$pid" 2>/dev/null || true
+58:    rm -f \
+68:trap cleanup EXIT INT TERM
+77:echo "Mocked biometric-success boundary."
+80:echo "Actual browser worker."
+81:echo "Actual Groth16."
+82:echo "Actual DIRECT contract."
+83:echo "MongoDB access forbidden."
+110:    "$BACK/services/zk/wp5PrivacyService.js"
+112:    "$BACK/utils/wp5Contract.js"
+114:    "$FRONT/src/privacy/wp5Privacy.worker.ts"
+115:    "$FRONT/src/privacy/wp5PrivacyClient.ts"
+116:    "$FRONT/src/components/Biometric/VerificationModal.tsx"
+120:sha256sum "${SOURCE_FILES[@]}" \
+121:    > "$EVIDENCE/application-before.sha256"
+126:# 3. PORT / TOOL PREFLIGHT
+130:echo "=== 3. PORT / TOOL PREFLIGHT ==="
+133:    node \
+134:    forge \
+135:    anvil \
+145:if cast chain-id --rpc-url "$RPC" >/dev/null 2>&1; then
+146:    echo "ERROR: Anvil research port $ANVIL_PORT already occupied."
+153:    "$CDP_URL/json/version"
+156:        echo "ERROR: research port already occupied: $url"
+161:echo "RESEARCH_PORTS=FREE"
+164:# 4. LOCATE CHROMIUM
+168:echo "=== 4. LOCATE CHROMIUM ==="
+173:    "/c/Program Files/Google/Chrome/Application/chrome.exe" \
+174:    "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
+185:    echo "ERROR: Chrome/Edge not found."
+200:forge build \
+201:    > "$EVIDENCE/forge-build.log" \
+209:# 6. START ISOLATED ANVIL
+213:echo "=== 6. START ANVIL ==="
+215:anvil \
+217:    --port "$ANVIL_PORT" \
+219:    > "$EVIDENCE/anvil.log" \
+222:ANVIL_PID=$!
+226:        --rpc-url "$RPC" \
+235:    --rpc-url "$RPC" \
+238:echo "ANVIL_RUNTIME=PASS"
+249:cat > "$SERVER" <<'NODE'
+250:import fs from "node:fs"
+251:import path from "node:path"
+252:import mongoose from "mongoose"
+253:import express from "express"
+255:import {
+256:  ContractFactory,
+257:  JsonRpcProvider,
+260:import {
+267:  rpcUrl,
+268:  portText,
+275:const port =
+276:  Number(portText)
+278:process.env.RPC_URL =
+279:  rpcUrl
+329:    await import(
+336:    await import(
+346:  hashCandidateManifest,
+347:  wp5Hash,
+349:  await import(
+350:    "../services/zk/wp5PrivacyService.js"
+354:  mongoose.connection.readyState !== 0
+357:    "Research backend unexpectedly connected to MongoDB",
+377:  new JsonRpcProvider(
+378:    rpcUrl,
+385:  await new ContractFactory(
+397:  await new ContractFactory(
+407:const contractAddress =
+410:process.env.WP5_CONTRACT_ADDRESS =
+411:  contractAddress
+415: * CONTRACT_ADDRESS variable even though the WP5 adapter itself uses
+416: * WP5_CONTRACT_ADDRESS. For this isolated research runtime both point
+417: * to the freshly deployed DIRECT contract.
+419:process.env.CONTRACT_ADDRESS =
+420:  contractAddress
+502: * No mongoose.connect() is performed.
+544:  await hashCandidateManifest(
+574:const contractDomain =
+576:    profile.testContractDomain,
+585:  await wp5Hash([
+592:    contractDomain,
+605:    contractDomain.toString(),
+627:    "Actual WP5 public-config service did not match research contract",
+637:    rpcUrl,
+639:    contractAddress,
+642:    candidateManifestHash:
+644:    mongoReadyState:
+645:      mongoose.connection.readyState,
+646:    biometricBoundary:
+647:      "MOCKED_SUCCESS",
+769:        "authorization-request-server.json",
+810:       * The biometric-success boundary is mocked.
+836:          "Synthetic biometric boundary accepted; WP5 authorization issued",
+862:    port,
+870:        `DIRECT_ADDRESS=${contractAddress}`,
+874:        `MONGOOSE_READY_STATE=${mongoose.connection.readyState}`,
+906:node \
+908:    "$RPC" \
+909:    "$BACKEND_PORT" \
+946:# 9. VERIFY NO MONGODB CONNECTION
+950:echo "=== 9. VERIFY NO MONGODB ==="
+952:MONGO_STATE="$(
+953:    node -e '
+962:  String(x.mongoReadyState)
+967:echo "MONGOOSE_READY_STATE=$MONGO_STATE"
+969:if [ "$MONGO_STATE" != "0" ]; then
+970:    echo "ERROR: MongoDB connection was unexpectedly active."
+974:echo "MONGODB_ACCESSED=NO"
+983:cat > "$FRONT/.env.wp5e" <<EOF
+985:VITE_RPC_URL=$RPC
+988:cat > "$FRONT/wp5e-runtime.html" <<'HTML'
+1009:cat > "$FRONT/src/wp5e-runtime.ts" <<'TS'
+1010:import {
+1015:import {
+1018:  resetWp5PrivacySession,
+1019:} from "./privacy/wp5PrivacyClient"
+1256:    biometricBoundary:
+1257:      "MOCKED_SUCCESS",
+1301:  resetWp5PrivacySession()
+1322:  resetWp5PrivacySession()
+1360:node \
+1364:    --port "$VITE_PORT" \
+1365:    --strictPort \
+1390:# 12. START CHROME CDP
+1394:echo "=== 12. START CHROME CDP ==="
+1396:CHROME_PROFILE="$EVIDENCE/chrome-profile"
+1407:    --remote-debugging-port="$CDP_PORT" \
+1408:    --user-data-dir="$CHROME_PROFILE" \
+1410:    > "$EVIDENCE/chrome.log" \
+1417:        "$CDP_URL/json/version" \
+1426:    "$CDP_URL/json/version" \
+1429:echo "CHROME_CDP=PASS"
+1432:# 13. CDP COLLECTOR
+1436:echo "=== 13. WAIT FOR BACKEND → WORKER RUNTIME ==="
+1438:CDP_RUNNER="$EVIDENCE/wp5e-cdp-runner.mjs"
+1440:cat > "$CDP_RUNNER" <<'NODE'
+1441:import fs from "node:fs"
+1446:  cdpBase,
+1469:      `${cdpBase}/json/list`,
+1521:            "CDP websocket failed",
+1658:      `CDP_STATUS_${iteration}=${status}`,
+1719:    "BACKEND_HTTP_TO_BROWSER_WORKER=PASS",
+1736:node \
+1737:    "$CDP_RUNNER" \
+1738:    "$CDP_URL" \
+1740:    | tee "$EVIDENCE/cdp.log"
+1749:SERVER_REQUEST="$EVIDENCE/authorization-request-server.json"
+1772:cat > "$SUBMIT" <<'NODE'
+1773:import fs from "node:fs"
+1775:import {
+1776:  Contract,
+1777:  JsonRpcProvider,
+1826:  new JsonRpcProvider(
+1827:    metadata.rpcUrl,
+1833:const contract =
+1834:  new Contract(
+1835:    metadata.contractAddress,
+1841:  await contract
+1848:  await contract.castVote(
+1869:        tx.hash,
+1897:  await contract
+1901:  await contract
+1922:    await contract
+1963:    await contract.castVote(
+1989:  contract.interface
+2014:  txHash:
+2015:    receipt.hash,
+2077:node \
+2083:    | tee "$EVIDENCE/onchain.log"
+2096:cat > "$PRIVACY_CHECKER" <<'NODE'
+2097:import fs from "node:fs"
+2098:import {
+2289:  "BACKEND_TO_BROWSER_TO_CONTRACT=PASS",
+2293:node \
+2307:sha256sum "${SOURCE_FILES[@]}" \
+2308:    > "$EVIDENCE/application-after.sha256"
+2311:    "$EVIDENCE/application-before.sha256" \
+2312:    "$EVIDENCE/application-after.sha256"
+2325:node -e '
+2389:# 19. EVIDENCE HASHES
+2393:echo "=== 19. EVIDENCE HASHES ==="
+2395:sha256sum \
+2397:    "$EVIDENCE/authorization-request-server.json" \
+2402:    > "$EVIDENCE/wp5e-evidence.sha256"
+2404:cat "$EVIDENCE/wp5e-evidence.sha256"
+2411:    node -e '
+2420:    node -e '
+2429:    node -e '
+2438:    node -e '
+2453:rm -f \
+2479:    echo "BIOMETRIC_BOUNDARY=MOCKED_SUCCESS"
+2480:    echo "REAL_BIOMETRIC_EXECUTION=NO"
+2481:    echo "MONGODB_ACCESSED=NO"
+2485:    echo "ACTUAL_HKDF_SHA256=PASS"
+2498:    echo "BROWSER_WORKER_AFTER_BACKEND_AUTH=PASS"
+2499:    echo "BROWSER_DIRECT_GROTH16=PASS"
+2507:    echo "BACKEND_TO_BROWSER_TO_CONTRACT=PASS"
+2531:} | tee "$SUMMARY"

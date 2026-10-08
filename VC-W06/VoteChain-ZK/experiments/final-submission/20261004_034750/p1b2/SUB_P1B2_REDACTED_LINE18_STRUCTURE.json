@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "classification": "LOCAL_CHAIN_DEVELOPMENT_PRIVATE_KEY_LITERAL",
+  "targetLine": 18,
+  "lineLength": 96,
+  "quotedRegionCount": 1,
+  "quotedRegionMetadata": [
+    {
+      "quoteType": "DOUBLE",
+      "contentLength": 66,
+      "hex32Count": 1
+    }
+  ],
+  "powerShellVariableReferences": [
+    "$env:DEPLOYER_PRIVATE_KEY"
+  ],
+  "privateKeyContext": true,
+  "localChainContext": {
+    "mentionsAnvil": true,
+    "mentionsLocalhost": true,
+    "filenameIsStartLocalChain": true
+  },
+  "quoted32ByteHexCandidateCount": 1,
+  "maskedStructure": "$env:DEPLOYER_PRIVATE_KEY = <QUOTED:DOUBLE:LEN=66:HEX32_COUNT=1>",
+  "rawTargetLinePrinted": false,
+  "secretValuePrinted": false,
+  "sanitizerEligible": true,
+  "packageAction": "REPLACE_SCRIPT_IN_PACKAGE_WITH_ENV_REFERENCE_SANITIZED_COPY",
+  "replacementEnvironmentVariable": "VOTECHAIN_LOCAL_PRIVATE_KEY",
+  "sanitizedChangedLine": 18,
+  "sourceSha256": "20c91757f4bccb2b17798b01415627b6679794105bab0910ab72c4caf0856ef5",
+  "sanitizedSha256": "a1a2c189afd0a4b9f17bb6437912c17a284394985b9e2e943ca7f5b6ef49c55c",
+  "sourceModified": false,
+  "secretLiteralCopied": false
+}

@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "classification": "READ_ONLY_ELIGIBLE_SET_SCALING_BASIS_AUDIT",
+  "canonicalActiveCircuit": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/circuits/VoteChainVoteDirect.circom",
+  "canonicalC1Generator": "D:/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/crypto/scripts/wp4-build-contract-vectors.mjs",
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "maxCandidates": 16,
+  "eligibleSetTargets": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "eligibilityLeafRecipe": "Poseidon(D_ID, voterSecret)",
+  "zeroSubtreeRecipe": "zero[0]=0; zero[level+1]=Poseidon(zero[level],zero[level])",
+  "pathDirectionRecipe": {
+    "0": "Poseidon(current,sibling)",
+    "1": "Poseidon(sibling,current)"
+  },
+  "frozenInputPathLengths": [
+    17
+  ],
+  "canonicalC1GeneratorScope": "two canonical voters at leaf indices 0 and 1 inside a fixed depth-17 sparse tree",
+  "canonicalC1GeneratorGenericArbitraryN": false,
+  "requiredChecks": {
+    "generatorDepthFromProfile": true,
+    "generatorDepth17Guard": true,
+    "generatorK16Guard": true,
+    "identityLeafRecipe": true,
+    "zeroSeed": true,
+    "zeroRecurrence": true,
+    "rootRecompute": true,
+    "pathBitConvention": true,
+    "activeCircuitEligibleRoot": true,
+    "activeCircuitPathSemantics": true,
+    "frozenInputDepth17Path": true,
+    "canonicalC1TwoVoterConstruction": true
+  },
+  "interpretationGuardrails": [
+    "Eligible-set size N is not equivalent to Merkle path depth.",
+    "Report N and configured depth=17 together.",
+    "Tree population/root-building cost may vary with N and must be measured separately.",
+    "Witness/proving circuit shape remains fixed-depth; do not assume N-scaling without measurement.",
+    "The C1 generator is authoritative for canonical leaf/hash/path semantics but is not an arbitrary-N fixture generator."
+  ],
+  "fixtureGenerationStarted": false,
+  "witnessGenerationStarted": false,
+  "proofGenerationStarted": false,
+  "onchainExecutionStarted": false
+}

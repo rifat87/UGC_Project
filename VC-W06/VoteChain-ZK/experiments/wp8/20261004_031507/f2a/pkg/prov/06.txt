@@ -1,0 +1,29 @@
+C8B FRESH-CHAIN METRIC SCHEMA
+=============================
+
+TOP_LEVEL_KEYS=status,classification,finalCampaignRun,rawRows,warmupRows,measuredRows,warmupsIncludedInFinalStatistics,pilotIncludedInFinalStatistics,abortedCampaignIncludedInFinalStatistics,silentOutlierDeletion,latencyReconstruction,p95Method,standardDeviation,freshChainPerIteration,ballotId,candidateIndex,calldataBytes,timedInterval,setupInsideTimedInterval,postReceiptChecksInsideTimedInterval,measuredGasDeterministic,warmupSummary,measuredSummary,diagnosticsFromFinalPostvalidation
+
+METRIC_CANDIDATE_1_PATH=warmupSummary.gas
+METRIC_CANDIDATE_1_KEYS=n,mean,median,min,max,sampleSd,nearestRankP95
+METRIC_CANDIDATE_1_OBJECT={"max": 1866414, "mean": 1866414, "median": 1866414, "min": 1866414, "n": 5, "nearestRankP95": 1866414, "sampleSd": 0.0}
+
+METRIC_CANDIDATE_2_PATH=warmupSummary.latencyMs
+METRIC_CANDIDATE_2_KEYS=n,mean,median,min,max,sampleSd,nearestRankP95
+METRIC_CANDIDATE_2_OBJECT={"max": 749.324, "mean": 735.08568, "median": 740.5749, "min": 714.0196, "n": 5, "nearestRankP95": 749.324, "sampleSd": 15.083523245482125}
+
+METRIC_CANDIDATE_3_PATH=measuredSummary.gas
+METRIC_CANDIDATE_3_KEYS=n,mean,median,min,max,sampleSd,nearestRankP95
+METRIC_CANDIDATE_3_OBJECT={"max": 1866414, "mean": 1866414, "median": 1866414.0, "min": 1866414, "n": 20, "nearestRankP95": 1866414, "sampleSd": 0.0}
+
+METRIC_CANDIDATE_4_PATH=measuredSummary.latencyMs
+METRIC_CANDIDATE_4_KEYS=n,mean,median,min,max,sampleSd,nearestRankP95
+METRIC_CANDIDATE_4_OBJECT={"max": 741.5839, "mean": 724.03026, "median": 723.3014499999999, "min": 707.3267, "n": 20, "nearestRankP95": 741.1692, "sampleSd": 10.000788152593408}
+
+PERCENTILE_LIKE_KEYS
+--------------------
+p95Method="nearest-rank"
+warmupSummary.gas.nearestRankP95=1866414
+warmupSummary.latencyMs.nearestRankP95=749.324
+measuredSummary.gas.nearestRankP95=1866414
+measuredSummary.latencyMs.nearestRankP95=741.1692
+

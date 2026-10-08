@@ -1,0 +1,106 @@
+5-/*
+6- * DIRECT ciphertext binding.
+7- *
+8- * All submitted ciphertext coordinates are Groth16 public inputs.
+9- */
+10-
+11-template VoteChainVoteDirect(
+12-    MAX_CANDIDATES,
+13:    MERKLE_DEPTH
+14-) {
+15:    signal input secret;
+16-
+17:    signal input siblings[MERKLE_DEPTH];
+18:    signal input pathBits[MERKLE_DEPTH];
+19-
+20-    signal input bit[MAX_CANDIDATES];
+21-    signal input randomness[MAX_CANDIDATES];
+22-
+23:    signal input eligibleRoot;
+24-
+25-    signal input electionId;
+26-    signal input candidateManifestHash;
+27-    signal input candidateCount;
+28-    signal input contractDomain;
+29-
+30-    signal input Yx;
+31-    signal input Yy;
+--
+36-    signal input Rx[MAX_CANDIDATES];
+37-    signal input Ry[MAX_CANDIDATES];
+38-    signal input Sx[MAX_CANDIDATES];
+39-    signal input Sy[MAX_CANDIDATES];
+40-
+41-    component core =
+42-        VoteChainVoteCore(
+43-            MAX_CANDIDATES,
+44:            MERKLE_DEPTH
+45-        );
+46-
+47:    core.secret <==
+48:        secret;
+49-
+50:    core.eligibleRoot <==
+51:        eligibleRoot;
+52-
+53-    core.electionId <==
+54-        electionId;
+55-
+56-    core.candidateManifestHash <==
+57-        candidateManifestHash;
+58-
+59-    core.candidateCount <==
+--
+71-    core.electionContextHash <==
+72-        electionContextHash;
+73-
+74-    core.nullifier <==
+75-        nullifier;
+76-
+77-    for (
+78-        var d = 0;
+79:        d < MERKLE_DEPTH;
+80-        d++
+81-    ) {
+82:        core.siblings[d] <==
+83:            siblings[d];
+84-
+85:        core.pathBits[d] <==
+86:            pathBits[d];
+87-    }
+88-
+89-    /*
+90-     * Circom component rule:
+91-     * initialize every core input before reading any core output.
+92-     */
+93-    for (
+94-        var j = 0;
+--
+116-        Sx[k] ===
+117-            core.Sx[k];
+118-
+119-        Sy[k] ===
+120-            core.Sy[k];
+121-    }
+122-}
+123-
+124:component main {
+125-    public [
+126:        eligibleRoot,
+127-        electionId,
+128-        candidateManifestHash,
+129-        candidateCount,
+130-        contractDomain,
+131-        Yx,
+132-        Yy,
+133-        electionContextHash,
+134-        nullifier,
+135-        Rx,
+136-        Ry,
+137-        Sx,
+138-        Sy
+139-    ]
+140-} = VoteChainVoteDirect(
+141-    VC_MAX_CANDIDATES(),
+142:    VC_MERKLE_DEPTH()
+143-);

@@ -1,0 +1,25 @@
+name	signature	outputs	stateMutability	inputCount	inputNames	inputTypes	outputNames	outputTypes
+Yx	Yx()	(uint256)	view	0				uint256
+Yy	Yy()	(uint256)	view	0				uint256
+acceptedBallotCount	acceptedBallotCount()	(uint256)	view	0				uint256
+activate	activate()		nonpayable	0				
+admin	admin()	(address)	view	0				address
+candidateCount	candidateCount()	(uint256)	view	0				uint256
+candidateManifestHash	candidateManifestHash()	(uint256)	view	0				uint256
+castVote	castVote(uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16])		nonpayable	8	a,b,c,nullifier,rx,ry,sx,sy	uint256[2],uint256[2][2],uint256[2],uint256,uint256[16],uint256[16],uint256[16],uint256[16]		
+configure	configure((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))		nonpayable	1	cfg	(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)		
+configured	configured()	(bool)	view	0				bool
+contractDomain	contractDomain()	(uint256)	view	0				uint256
+electionContextHash	electionContextHash()	(uint256)	view	0				uint256
+electionId	electionId()	(uint256)	view	0				uint256
+eligibleRoot	eligibleRoot()	(uint256)	view	0				uint256
+endElection	endElection()		nonpayable	0				
+finalizationTranscriptHash	finalizationTranscriptHash()	(bytes32)	view	0				bytes32
+finalizeTally	finalizeTally(uint256[16],bytes32)		nonpayable	2	totals,transcriptHash	uint256[16],bytes32		
+getFinalResult	getFinalResult(uint256)	(uint256)	view	1	slot	uint256		uint256
+getTally	getTally(uint256)	(uint256,uint256,uint256,uint256)	view	1	slot	uint256	rx,ry,sx,sy	uint256,uint256,uint256,uint256
+phase	phase()	(uint8)	view	0				uint8
+setTrusteeTranscriptHash	setTrusteeTranscriptHash(bytes32)		nonpayable	1	transcriptHash	bytes32		
+trusteeTranscriptHash	trusteeTranscriptHash()	(bytes32)	view	0				bytes32
+usedNullifier	usedNullifier(uint256)	(bool)	view	1		uint256		bool
+verifier	verifier()	(address)	view	0				address

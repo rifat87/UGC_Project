@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "decision": "REUSE_ACTIVE_BACKEND_BUILDWP5MERKLESNAPSHOT",
+  "reuseMode": "DIRECT_IMPORT_WITH_EXPERIMENT_ONLY_ADAPTER",
+  "backendRelativePath": "votechain-central-server/services/zk/wp5PrivacyService.js",
+  "backendSha256": "386e07efd177acdc36dcc5b218a4df904752d40f40f03bd0a69929a318335ab7",
+  "cryptoProfileRelativePath": "crypto/config/wp3-build-profile.json",
+  "cryptoProfileSha256": "3185dd6253f40fbda036fd733848f680d9f084f6cdc980f8ffddb2be0aeed00f",
+  "identityDomain": "10304592805145852052914897443128100987694469729912842507111180023223117126083",
+  "configuredMerkleDepth": 17,
+  "configuredMerkleCapacity": 131072,
+  "maxCandidates": 16,
+  "eligibleSetLevels": [
+    10,
+    100,
+    1000,
+    10000
+  ],
+  "selectedTargetIndex": 0,
+  "recordInputShape": {
+    "indexField": "wp5GroupIndex",
+    "commitmentField": "wp5IdentityCommitment"
+  },
+  "activeBuilderOutputs": [
+    "root",
+    "size",
+    "depth",
+    "siblings",
+    "pathBits"
+  ],
+  "sourceChecks": {
+    "exportsWp5Hash": true,
+    "exportsSnapshot": true,
+    "normalizesRecords": true,
+    "contiguousIndexGuard": true,
+    "capacityGuard": true,
+    "depthLoop": true,
+    "targetIndex": true,
+    "zeroFallback": true,
+    "returnsRoot": true,
+    "returnsSize": true,
+    "returnsDepth": true,
+    "returnsSiblings": true,
+    "returnsPathBits": true
+  },
+  "profileResolution": "SOURCE_VARIABLE_BINDING",
+  "newMerkleAlgorithmAuthored": false,
+  "activeBackendSourceModified": false
+}

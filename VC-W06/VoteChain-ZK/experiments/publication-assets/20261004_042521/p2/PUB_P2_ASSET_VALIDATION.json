@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "classification": "INDEPENDENT_PUBLICATION_ASSET_VALIDATION",
+  "frozenSourceHashChecks": 16,
+  "markdownTables": 5,
+  "latexTables": 5,
+  "benchmarkSvgFigures": 6,
+  "systemSvgDiagrams": 5,
+  "svgDocumentsValidated": 11,
+  "captionRows": 16,
+  "provenanceRows": 16,
+  "tableValuesRecomputed": false,
+  "errors": []
+}

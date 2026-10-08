@@ -1,0 +1,8 @@
+{
+  "label": "FAILED_R4_N10",
+  "rawByteCount": 40,
+  "ansiOrControlDecorationDetected": true,
+  "semanticPattern": "snarkJS:\\s*OK!",
+  "semanticOk": true,
+  "sanitizedText": "[INFO]  snarkJS: OK!\n"
+}

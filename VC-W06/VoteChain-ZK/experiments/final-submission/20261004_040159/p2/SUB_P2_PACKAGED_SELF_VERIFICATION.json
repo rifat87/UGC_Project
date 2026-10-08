@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "classification": "PACKAGED_SELF_VERIFICATION",
+  "shortPathExtractionUsed": true,
+  "archiveEntriesExtracted": 779,
+  "packagedVerifierReturnCode": 0,
+  "manifestRowsVerified": 778,
+  "packagedVerifierPassMarker": true,
+  "verificationDirectoryRemovedAfterSuccess": true
+}

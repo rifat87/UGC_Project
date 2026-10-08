@@ -1,0 +1,78 @@
+239:        WP4Profile.MAX_CANDIDATES;
+305:    uint256[16] internal finalResults;
+310:    uint256[16] internal tallyRx;
+311:    uint256[16] internal tallyRy;
+312:    uint256[16] internal tallySx;
+313:    uint256[16] internal tallySy;
+334:    event TallyFinalized(
+360:            tallyRy[i] = 1;
+361:            tallySy[i] = 1;
+548:    function finalizeTally(
+549:        uint256[16] calldata totals,
+612:        emit TallyFinalized(
+641:    function getTally(
+659:            tallyRx[slot],
+660:            tallyRy[slot],
+661:            tallySx[slot],
+662:            tallySy[slot]
+667:        uint256[16] calldata rx,
+668:        uint256[16] calldata ry,
+669:        uint256[16] calldata sx,
+670:        uint256[16] calldata sy
+690:    function _applyTally(
+691:        uint256[16] calldata rx,
+692:        uint256[16] calldata ry,
+693:        uint256[16] calldata sx,
+694:        uint256[16] calldata sy
+705:                    tallyRx[i],
+706:                    tallyRy[i]
+717:                    tallySx[i],
+718:                    tallySy[i]
+739:            tallyRx[i] =
+742:            tallyRy[i] =
+745:            tallySx[i] =
+748:            tallySy[i] =
+755:        uint256[16] calldata rx,
+756:        uint256[16] calldata ry,
+757:        uint256[16] calldata sx,
+758:        uint256[16] calldata sy
+779:        _applyTally(
+827:        uint256[16] calldata rx,
+828:        uint256[16] calldata ry,
+829:        uint256[16] calldata sx,
+830:        uint256[16] calldata sy
+924:        uint256[16] calldata rx,
+925:        uint256[16] calldata ry,
+926:        uint256[16] calldata sx,
+927:        uint256[16] calldata sy
+1045:        uint256[16] calldata rx,
+1046:        uint256[16] calldata ry,
+1047:        uint256[16] calldata sx,
+1048:        uint256[16] calldata sy
+1088:        uint256[16] calldata rx,
+1089:        uint256[16] calldata ry,
+1090:        uint256[16] calldata sx,
+1091:        uint256[16] calldata sy
+1118:        uint256[16] calldata rx,
+1119:        uint256[16] calldata ry,
+1120:        uint256[16] calldata sx,
+1121:        uint256[16] calldata sy
+1204:contract BabyJubTallyHarness {
+1205:    uint256[16] internal tallyRx;
+1206:    uint256[16] internal tallyRy;
+1207:    uint256[16] internal tallySx;
+1208:    uint256[16] internal tallySy;
+1216:            tallyRy[i] = 1;
+1217:            tallySy[i] = 1;
+1222:        uint256[16] calldata rx,
+1223:        uint256[16] calldata ry,
+1224:        uint256[16] calldata sx,
+1225:        uint256[16] calldata sy
+1237:                        tallyRx[i],
+1238:                        tallyRy[i]
+1249:                        tallySx[i],
+1250:                        tallySy[i]
+1258:            tallyRx[i] =
+1261:            tallyRy[i] =
+1264:            tallySx[i] =
+1267:            tallySy[i] =

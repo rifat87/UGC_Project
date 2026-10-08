@@ -1,0 +1,17 @@
+910dce26d8c1ac49887a1a80eb9ae647ac34cab95dbb23fd7e1ddb93e219a096 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/config/env.js
+aa1927ada1a723861d48d408cadaa4ebb87b8143f46b241530448e84f25530b6 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/electionController.js
+aa796c7677fdf419dfaf7c017dc2bb53de4bfa27195aae989d8813e7cbdbbf03 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/fingerprintController.js
+ca8614e0919479659d81058ffe5960cd1fe3871dec9b067450ccca3bab4c11cd */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voteController.js
+1609a3f27fefddc0aae41fda2c2afc13ef09f895012a6f1ed3110e39c4b9eea6 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/voterController.js
+c08644d01843cd048ad4202f89a74497f70dbce92940a02feebbd82fdc68b348 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/controllers/wp5Controller.js
+cf54533218a2fe467486a7f30b7aec615369039a99780a83913452c0aec66520 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validate.js
+be83c221dbfa93265c14a397f976d88c5032d440e4422e51f7774c3a82d30680 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/validators/voterValidator.js
+e2062caee293b90eecc7ebb554e1ba7b9b8e7e4603e429e3ae120ece15e347d7 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/middleware/wp5AuthorizationSecurity.js
+c3e162c2885e5ffc28d7d1d61b423dca691f24416090b3c875db5e988539783b */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/biometricRoutes.js
+f6124886cc620a2b3d71e03ca1a404b34902dd91a27bcd64bb71b344453e76d2 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/blockchainRoutes.js
+5b283aaff864dd6421fee3341a2c8dbc33c92c0bdc93894b09fd9b4e007d1c6b */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/candidateRoutes.js
+7916f98f37f6882f0f98c53410508e64ef47215ede6e4755cc2afbc36a01cfce */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/electionRoutes.js
+323fb31a0976ce75ecfef07596a4ddca9b6c6e5a9eeccb044712a41a81d6c06e */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voteRoutes.js
+ef7b031686660a51b4631fa0315bab7dd67e70dc462fbb4a7ee70407e704128c */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/voterRoutes.js
+d403964727e249a640d5a5a02eafe7d33a7b5d31dfc1212e0a2dbe4c4bd0d3c5 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/routes/wp5Routes.js
+f1037c8f456207fa88bd599ecfd0746bd42356e67ec836433fa0fd66cc195499 */d/University/4thYear2ndSemester/Capstone/UGC_Project/VC-W06/VoteChain-ZK/votechain-central-server/server.js

@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "classification": "FINAL_ELIGIBLE_SET_CAMPAIGN_EXECUTION_CONTRACT",
+  "runner": {
+    "relativePath": "experiments/wp8/20261004_012504/wp8e-c8d-r5-benchmark-runner-static-freeze/runner/c8d-r5-eligible-set-benchmark-runner.mjs",
+    "sha256": "a8d76895663a25b95965b10e6cac56b43c007b2cc6a166c74c6ea2a8056a8547"
+  },
+  "protocol": {
+    "relativePath": "experiments/wp8/20261004_012504/wp8e-c8d-r5-benchmark-runner-static-freeze/C8D_R5_BENCHMARK_PROTOCOL.json",
+    "sha256": "941f97b515dfce38b550f3f425bac64c4f5fb69739751f12e6064e26b409c742"
+  },
+  "reuseContract": {
+    "relativePath": "experiments/wp8/20261004_004603/wp8e-c8d-r2a-profile-binding-static-adapter-freeze/C8D_R2A_BACKEND_REUSE_CONTRACT.json",
+    "sha256": "7757a2212d935dc0ae9fb47265b7745884d79719ec259df758dcb98230ff171e"
+  },
+  "baseInput": {
+    "relativePath": "experiments/wp8/20261003_154135/wp8e-c8c-r5b-four-level-input-corpus/corpus/inputs/candidatecount-k16-input.json",
+    "sha256": "4c22f77bdd5e7d001d25b904bd01501166516d124c9c209214eaa0830be65e43"
+  },
+  "expectedInputDir": "experiments/wp8/20261004_010529/wp8e-c8d-r3b-four-level-fixture-witness-validation-resume/fixtures/inputs",
+  "fixtureIndex": {
+    "relativePath": "experiments/wp8/20261004_010529/wp8e-c8d-r3b-four-level-fixture-witness-validation-resume/C8D_R3B_FIXTURE_INDEX.tsv",
+    "sha256": "36c3a6331572d94bb753d0185935f4cce58b1d21e62a2008f00fff70da677aed"
+  },
+  "r1cs": {
+    "relativePath": "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect.r1cs",
+    "sha256": "11b1340614c539a9cafb42dd6a10d2b8cf3a19b0680002c8f81952007c885ae0"
+  },
+  "wasm": {
+    "relativePath": "circuits/build/wp3/20260930_170614/direct/VoteChainVoteDirect_js/VoteChainVoteDirect.wasm",
+    "sha256": "02af9e5b38f104cbb39f5a56a444de509091953b1e002722cf0ccb4ddccebf6a"
+  },
+  "zkey": {
+    "relativePath": "circuits/artifacts/wp3/20260930_170614/direct/VoteChainVoteDirect_final.zkey",
+    "sha256": "867837bbcb2eb6f01fa9bc86610228b71109c2bb5f9c9838397e58ce7aa15e50"
+  },
+  "vkey": {
+    "relativePath": "circuits/artifacts/wp3/20260930_170614/direct/verification_key.json",
+    "sha256": "90b48f1c8c2f0c1f4ed5a54635fda4107a7a4c053ba375e9952b530d3a93c0f1"
+  },
+  "snarkjsCli": {
+    "relativePath": ".zk-deps/node_modules/snarkjs/build/cli.cjs",
+    "sha256": "092c70dbf8bef02b666456db7429127aa51c5dbfce91cef038638d7da3bfdcea"
+  },
+  "finalPlan": {
+    "relativePath": "experiments/wp8/20261004_013406/wp8e-c8d-r7-final-matrix-campaign-plan-freeze/C8D_R7_FINAL_CAMPAIGN_PLAN.tsv",
+    "sha256": "c93334d7e4782f198b09d273bdb6a2ea6dac8929969605cc4f251f64695a5e85",
+    "warmupRows": 20,
+    "measuredRows": 80,
+    "totalRows": 100
+  },
+  "campaignInvocationCount": 1,
+  "campaignProcessPrewarm": "UNTIMED",
+  "campaignOutputDirectoryMustNotExist": true,
+  "automaticRetry": false,
+  "resumeAfterFailure": false,
+  "pilotArtifactsIncluded": false,
+  "onchainExecution": false,
+  "campaignExecuted": false
+}

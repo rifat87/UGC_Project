@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<title>Eligible-set construction and path-integrated preparation scaling</title>
+<metadata>{&quot;source&quot;: &quot;T05_ELIGIBLE_SET_MEAN_MATRIX.tsv&quot;, &quot;statisticsRecomputed&quot;: false}</metadata>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"/>
+<text x="800.0" y="58" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" fill="#111">Eligible-set construction and path-integrated preparation scaling</text>
+<line x1="165" y1="135" x2="165" y2="710" stroke="#111" stroke-width="3"/>
+<line x1="165" y1="710" x2="1460" y2="710" stroke="#111" stroke-width="3"/>
+<line x1="155" y1="710.0" x2="1460" y2="710.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="717.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">-63.519</text>
+<line x1="155" y1="595.0" x2="1460" y2="595.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="602.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">123.919</text>
+<line x1="155" y1="480.0" x2="1460" y2="480.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="487.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">311.358</text>
+<line x1="155" y1="365.0" x2="1460" y2="365.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="372.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">498.796</text>
+<line x1="155" y1="250.0" x2="1460" y2="250.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="257.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">686.235</text>
+<line x1="155" y1="135.0" x2="1460" y2="135.0" stroke="#111" stroke-width="1" stroke-dasharray="4 8"/>
+<text x="147" y="142.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="normal" text-anchor="end" fill="#111">873.673</text>
+<line x1="165.0" y1="702" x2="165.0" y2="718" stroke="#111" stroke-width="2"/>
+<text x="165.0" y="752" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#111">10</text>
+<line x1="596.6666666666666" y1="702" x2="596.6666666666666" y2="718" stroke="#111" stroke-width="2"/>
+<text x="596.6666666666666" y="752" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#111">100</text>
+<line x1="1028.3333333333333" y1="702" x2="1028.3333333333333" y2="718" stroke="#111" stroke-width="2"/>
+<text x="1028.3333333333333" y="752" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#111">1000</text>
+<line x1="1460.0" y1="702" x2="1460.0" y2="718" stroke="#111" stroke-width="2"/>
+<text x="1460.0" y="752" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="middle" fill="#111">10000</text>
+<polyline points="165.0,670.3448275862069 596.6666666666666,664.7386854038803 1028.3333333333333,615.8600140918525 1460.0,174.65517241379314" fill="none" stroke="#111" stroke-width="4"/>
+<circle cx="165.0" cy="670.3448275862069" r="7" fill="#111111"/>
+<circle cx="596.6666666666666" cy="664.7386854038803" r="7" fill="#111111"/>
+<circle cx="1028.3333333333333" cy="615.8600140918525" r="7" fill="#111111"/>
+<circle cx="1460.0" cy="174.65517241379314" r="7" fill="#111111"/>
+<line x1="260" y1="105" x2="315" y2="105" stroke="#111" stroke-width="4"/>
+<text x="332" y="112" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="start" fill="#111">M1 mean</text>
+<polyline points="165.0,668.6078076433084 596.6666666666666,663.7132026782726 1028.3333333333333,616.8002799689597 1460.0,181.45411733208618" fill="none" stroke="#111" stroke-width="4" stroke-dasharray="12 8"/>
+<circle cx="165.0" cy="668.6078076433084" r="7" fill="#111111"/>
+<circle cx="596.6666666666666" cy="663.7132026782726" r="7" fill="#111111"/>
+<circle cx="1028.3333333333333" cy="616.8002799689597" r="7" fill="#111111"/>
+<circle cx="1460.0" cy="181.45411733208618" r="7" fill="#111111"/>
+<line x1="620" y1="105" x2="675" y2="105" stroke="#111" stroke-width="4" stroke-dasharray="12 8"/>
+<text x="692" y="112" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="normal" text-anchor="start" fill="#111">M2 mean</text>
+<text x="800.0" y="825" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#111">Eligible-set size N (10, 100, 1000, 10000; fixed depth 17)</text>
+<text x="34" y="422.5" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" text-anchor="start" fill="#111">Milliseconds</text>
+<text x="800.0" y="868" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" fill="#111">Frozen source: T05_ELIGIBLE_SET_MEAN_MATRIX.tsv</text>
+</svg>
