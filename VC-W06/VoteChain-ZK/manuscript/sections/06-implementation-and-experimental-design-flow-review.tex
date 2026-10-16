@@ -1,0 +1,290 @@
+
+\section{Implementation and Experimental Design}
+\label{sec:06}
+\label{sec:implementation-experiments}
+
+\subsection{Implementation Configuration}
+\label{subsec:implementation-profile}
+
+
+
+VoteChain-ZK extends the established biometric voting architecture
+with a cryptographic ballot-processing protocol
+\citep{rifat2026biometric}. The implementation separates voter
+authentication from encrypted ballot construction. A voter-facing
+web client manages candidate selection and initiates biometric
+authorization. The credential authorization service authenticates
+the voter and releases the protected voting credential. A
+client-side privacy worker then prepares the encrypted ballot
+and generates its validity proof.
+The web client is implemented using React and TypeScript.
+The authentication and election management services use Node.js.
+The privacy worker performs credential recovery, ballot encryption,
+witness generation, and local proof verification. Face and fingerprint
+recognition are provided by the existing authentication components.
+The cryptographic experiments do not repeat the biometric
+recognition evaluation reported in the earlier study.
+
+The voting relation is implemented in Circom 2. The selected
+circuit uses a fixed Merkle depth of 17 and represents each
+ballot through 16 encrypted candidate slots. Witness generation
+and Groth16 proving are performed using \texttt{snarkjs}.
+A generated Solidity verifier checks the submitted proof.
+The \texttt{VoteChainDirect} contract enforces election-state
+conditions, rejects previously used nullifiers, and updates
+the encrypted tally after successful verification.
+
+The system also implements threshold-based result recovery.
+Five trustees participate under a reconstruction threshold
+of three. The threshold protocol verifies distributed
+key-generation information, partial decryptions, and
+their accompanying consistency proofs. Valid contributions
+are combined to recover aggregate candidate counts.
+These cryptographic checks are performed outside the
+voting contract. The contract subsequently records the
+result values and finalization-transcript hash after
+checking its specified state and arithmetic conditions.
+The evaluated cryptographic artifacts use a development-stage
+Groth16 trusted setup. Blockchain execution takes place
+within a controlled local environment. The experimental
+design therefore measures the implemented protocol under
+research conditions rather than a deployed public election.
+
+
+% Implementation evidence at pinned revision:
+% 17c7453c50793643b590fb5beac6ad77b9aa53ce
+% crypto/config/wp5-application-profile.json
+% circuits/VoteChainVoteDirect.circom
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts
+% contracts/wp4-foundry/src/VoteChainWP4.sol
+% crypto/src/wp6-threshold.mjs
+% votechain-central-server/services/elections/electionFinalizationService.js
+
+\subsection{Experimental Environment and Measurement Scope}
+\label{subsec:experimental-environment}
+
+
+
+The experiments were conducted on a Windows-based AMD64
+computer with 16 logical processors and approximately
+10.6~GB of physical memory. The recorded software
+environment included Python 3.10.11, Node.js, Circom,
+\texttt{snarkjs}, Foundry, and Anvil.
+Blockchain measurements were performed using a local
+Anvil network. Transaction gas consumption was obtained
+from successful encrypted-ballot submissions. Transaction
+latency was measured from the beginning of submission
+to the return of the corresponding receipt. This interval
+captures local transaction execution and receipt retrieval.
+It does not include biometric authentication, credential
+authorization, or proof preparation.
+
+Cryptographic operations were measured independently
+from blockchain execution. The measured stages include
+eligible-identity materialization, Merkle-tree preparation,
+circuit witness generation, Groth16 proof generation,
+and local proof verification.
+The evaluation comprises four experimental campaigns.
+Each campaign examines a different computational
+condition. Accepted-ballot transactions are evaluated
+separately from fresh-chain execution. Candidate-count
+and eligible-set experiments assess the effects of
+their respective configuration parameters.
+
+\subsection{Performance Campaign Design}
+\label{subsec:experimental-campaigns}
+
+
+
+Table~\ref{tab:implementation-campaigns} summarizes
+the completed experimental workloads. The campaigns
+use repeated measurements and exclude warm-up
+observations from their statistical summaries.
+
+\begin{table}[t]
+\centering
+\caption{Experimental configurations and measured sample sizes.}
+\label{tab:implementation-campaigns}
+\small
+\begin{tabular}{@{}p{0.23\linewidth}p{0.44\linewidth}p{0.25\linewidth}@{}}
+\toprule
+\textbf{Campaign} &
+\textbf{Experimental configuration} &
+\textbf{Measured observations} \\
+\midrule
+Accepted ballots
+& 25 independent elections, with five elections at each
+size of 25, 50, 75, 100, and 150 accepted ballots
+& 2,000 transactions \\
+\addlinespace
+Fresh-chain first ballot
+& First accepted private ballot following a fresh
+local-chain setup
+& 20 trials \\
+\addlinespace
+Candidate count
+& Active candidate counts of 2, 4, 8, and 16
+with a fixed 16-slot representation
+& 20 trials per count \\
+\addlinespace
+Eligible set
+& Eligible populations of 10, 100, 1,000, and
+10,000 with Merkle depth fixed at 17
+& 20 trials per population \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Accepted-ballot transactions.}
+
+The accepted-ballot experiment examines transaction
+costs across successive votes within an election.
+Five independent elections were evaluated at each
+of five election sizes. These sizes were 25, 50,
+75, 100, and 150 accepted ballots. The resulting
+25 elections produced 2,000 measured transactions.
+An additional 400 warm-up transactions were excluded
+from the statistical analysis. Gas consumption and
+local submission-to-receipt latency were measured
+for each accepted transaction. The experiment
+captures variation across the recorded election
+workloads rather than considering only the first
+vote after contract deployment.
+
+\paragraph{Fresh-chain execution.}
+
+The fresh-chain experiment isolates the first
+accepted private ballot following local-chain
+initialization. Each iteration begins with a
+fresh execution environment. The measurement
+interval starts at transaction submission and
+ends when the corresponding receipt is returned.
+Contract preparation and post-receipt checks
+remain outside this interval. The experiment
+contains 20 measured trials. Five additional
+warm-up trials were excluded from the final
+statistics.
+This experiment provides a separate measurement
+of first-ballot execution under a fresh contract
+state. Its observations are not pooled with
+the successive-ballot campaign.
+
+\paragraph{Candidate-count sensitivity.}
+
+The candidate-count experiment evaluates four
+configurations containing 2, 4, 8, and 16
+active candidates. Each configuration contributes
+20 measured transactions. Five warm-up trials
+per configuration were excluded. Candidate
+positions were balanced across the recorded
+trial sequence.
+The cryptographic circuit maintains the same
+16-slot representation in all configurations.
+Consequently, the circuit dimensions and
+ciphertext structure remain fixed while
+the active candidate count changes.
+This experiment evaluates transaction behavior
+under different active candidate counts. It
+does not measure the cost of increasing the
+number of circuit slots or deploying circuits
+of different widths.
+
+\paragraph{Eligible-set sensitivity.}
+
+The eligible-set experiment evaluates synthetic
+populations of 10, 100, 1,000, and 10,000
+registered commitments. The selected voter
+occupies the first indexed position in each
+eligible-set fixture.
+The Merkle depth remains fixed at 17,
+corresponding to a nominal capacity of
+131,072 leaves. The ballot circuit also
+retains its fixed 16-slot representation.
+Each population contributes 20 measured runs
+following five warm-up runs. The execution
+order varies across population sizes to
+distribute their positions within the
+measurement sequence.
+
+Five computational stages are measured separately.
+The first stage materializes eligible identity
+leaves. The second constructs the Merkle snapshot,
+root, and target authentication path.
+The remaining stages measure circuit witness
+generation, Groth16 proof generation, and
+local Groth16 proof verification.
+The campaign does not submit blockchain
+transactions. Its verification measurements
+therefore represent off-chain proof verification
+rather than Solidity verifier execution.
+Because the Merkle depth remains fixed,
+this experiment measures the effect of
+eligible-set population on the specified
+operations. It does not measure the
+performance of circuits with increasing
+Merkle depth.
+
+
+% Experimental evidence:
+% experiments/wp8/20261002_232814/wp8e-c7-final-statistics/
+%   C7_FINAL_STATISTICAL_RECORD.txt
+% experiments/wp8/20261003_020418/
+%   wp8e-c8b-r4-final-microbenchmark-statistics/
+%   C8B_R4_FINAL_STATISTICS.json
+% experiments/wp8/20261003_212713/
+%   wp8e-c8c-r7f-final-measured-statistics/
+%   C8C_R7F_STATISTICAL_VALIDATION.json
+% experiments/wp8/20261004_014001/
+%   wp8e-c8d-r8-final-100-observation-campaign/
+%   C8D_R8_FINAL_CAMPAIGN_VALIDATION.json
+
+\subsection{Statistical Analysis and Validity Checks}
+\label{subsec:experimental-analysis}
+
+
+
+Statistical analysis was performed using the measured
+observations from each campaign. Warm-up trials were
+excluded according to the experimental protocol.
+Pilot and aborted campaign observations were not
+combined with the finalized measurements. No measured
+outliers were removed from the statistical analyses.
+Performance metrics are summarized using sample size,
+mean, median, minimum, maximum, sample standard
+deviation, and 95th percentile. The sample standard
+deviation uses the denominator $n-1$. The 95th
+percentile is calculated using the nearest-rank
+method.
+
+These statistics describe the observed computational
+behavior under the evaluated configurations.
+The candidate-count campaign uses descriptive
+comparison rather than inferential regression.
+The fixed circuit dimensions also define the
+scope of the eligible-set measurements.
+Cryptographic validity checks accompanied the
+eligible-set experiment. Generated witnesses
+were checked against their expected constraints.
+The corresponding Groth16 proofs were verified
+locally. The measured observations also passed
+the public-signal consistency checks.
+
+Functional tests additionally examine rejection
+conditions and protocol correctness. These
+include malformed ballot witnesses, repeated
+nullifiers, and threshold-verification conditions.
+Such tests are distinct from the positive
+performance measurements.
+Threshold cryptographic operations were also
+examined through functional and integration
+checks. However, the four quantitative
+campaigns do not provide a repeated timing
+estimate for complete threshold finalization.
+These measurements are therefore not combined
+with accepted-ballot or proof-generation
+performance statistics.
+The following section presents the measured
+results. Their computational and operational
+implications are examined in the subsequent
+discussion.
+
