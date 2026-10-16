@@ -1,0 +1,253 @@
+\section{System Model and Threat Assumptions}
+\label{sec:03}
+\label{sec:system-model}
+
+\subsection{System scope and participating entities}
+\label{subsec:system-entities}
+
+The earlier voting architecture combined off-chain fingerprint and facial
+verification with blockchain-based voter registration and election
+operations \citep{rifat2026biometric}. The present study retains this
+identity-verification foundation but changes ballot handling after
+authentication. In the private-voting pathway, the biometric authorization
+request excludes the selected candidate. The voter-facing web client
+constructs an encrypted ballot and proves its validity. The voting contract
+then accumulates encrypted candidate-slot totals without publishing the
+selected candidate. The biometric recognition results belong to the earlier
+study. They are not measurements of the cryptographic voting procedure
+examined here.
+
+The system involves the voter-facing web client, biometric authentication
+service, credential authorization service, election administrator, smart
+contracts, public blockchain observers, and five tally trustees. The
+administrator configures election parameters, controls lifecycle transitions,
+and submits the final result transaction. The biometric authentication service
+identifies the voter. The credential authorization service manages registered
+voting credentials and issues authorization data. The web client's privacy
+worker constructs encrypted ballots and zero-knowledge proofs. The trustees
+provide partial-decryption evidence for the result-publication procedure.
+These roles have separate security responsibilities. Their separation does
+not establish independent organizational control in the prototype.
+
+Registration uses a Semaphore-based group and election anchor. The
+private-voting pathway instead uses a custom Poseidon commitment tree and
+the \texttt{VoteChainDirect} contract. An accepted private ballot is checked
+against the custom eligibility root configured for \texttt{VoteChainDirect}.
+The two commitment structures therefore serve different purposes. They do
+not form a single eligibility proof.
+
+% Implementation evidence at Git revision 17c7453c50793643b590fb5beac6ad77b9aa53ce:
+% src/ZKLocalVoting.sol and contracts/wp4-foundry/src/VoteChainWP4.sol
+% votechain-central-server/services/zk/wp5PrivacyService.js
+% votechain-frontend-ts/src/components/Voter/VoteCasting.tsx
+
+\subsection{Authorization, membership witness, and ballot submission}
+\label{subsec:system-authorization-path}
+
+Before voting, the custom eligibility registry associates each enrolled voter
+with a Poseidon identity commitment. This commitment is derived from a private
+credential secret. For each election, the election management service
+constructs a Merkle tree from registered custom commitments. Its root is
+configured in the private-voting contract. The contract uses this public
+root to verify ballot eligibility. The credential secret is not published
+on-chain.
+The voter first selects a candidate in the web client. The selection stays
+within the voting interface while biometric authorization takes place. A
+separate face or fingerprint request carries an ephemeral credential public
+key. The dedicated authorization endpoints reject additional request-body
+fields, including the candidate identifier.
+
+After a successful biometric match, the credential authorization service
+identifies the enrolled voter and checks the custom credential registration.
+It retrieves the Merkle siblings and path directions associated with that
+voter's commitment. The service also checks the resulting eligibility root
+against the root configured in the active \texttt{VoteChainDirect} contract.
+The credential authorization service recovers the stored credential secret.
+It then protects the secret for delivery to the requesting web client. This
+process uses an ephemeral P-256 key agreement, HKDF-SHA-256 key derivation,
+and AES-256-GCM encryption. The authorization response contains the protected
+credential envelope, Merkle membership witness, election identifier, and an
+expiry time.
+
+The browser privacy worker holds the corresponding ephemeral private key and
+opens the credential envelope locally. It recomputes the identity commitment
+and Merkle root. The worker then checks the election identifier, candidate
+manifest, encryption public key, and election-context binding against the
+public election configuration. Any mismatch stops ballot preparation before
+proof generation.
+Once these checks pass, the worker constructs a one-hot ballot vector for the
+locally selected candidate. The vector uses a fixed 16-slot representation.
+The worker encrypts each slot under the election's BabyJub public key using
+exponential ElGamal. It also derives the election-scoped nullifier.
+
+The worker next generates a Groth16 proof. This proof binds the submitted
+ciphertext to the eligibility and ballot-validity constraints. The proof
+system follows the witness-hiding construction of Groth
+\citep{groth2016snark}. Before submission, the worker checks the public
+signals and verifies the generated proof locally.
+The transaction interface receives the proof, nullifier, and ciphertext
+coordinates. It does not receive the plaintext candidate identifier. These
+values are submitted through an Ethereum-compatible vote-submission wallet
+to \texttt{VoteChainDirect.castVote}. The contract reconstructs the configured
+public inputs and rejects previously used nullifiers. It then verifies the
+Groth16 proof. Only an accepted ballot is incorporated into the encrypted
+tally.
+
+% Implementation evidence:
+% votechain-central-server/middleware/wp5AuthorizationSecurity.js:142-195
+% votechain-central-server/controllers/wp5Controller.js:206-240
+% votechain-central-server/controllers/fingerprintController.js:131-179
+% votechain-central-server/services/zk/wp5PrivacyService.js:482-578
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:680-814,940-1147
+% votechain-frontend-ts/src/components/Voter/VoteCasting.tsx:253-315
+% contracts/wp4-foundry/src/VoteChainWP4.sol:825-976
+
+\subsection{Public information and identity linkage}
+\label{subsec:information-boundaries}
+
+Each registered voter has a private voting-credential secret $s$. The election
+identifier is represented by $e$. The circuit derives a nullifier specific
+to that election:
+\begin{equation}
+  n_e = \mathsf{Poseidon}(d_{\mathrm{null}},s,e).
+  \label{eq:system-nullifier}
+\end{equation}
+Here, $d_{\mathrm{null}}$ is the configured nullifier domain separator.
+Poseidon is an established hash primitive for zero-knowledge circuits
+\citep{grassi2021poseidon}. The membership and ballot-selection witnesses
+remain private circuit inputs. The public inputs contain the election
+configuration, nullifier, and ciphertext coordinates.
+
+A blockchain observer can inspect an accepted private-vote transaction and
+its election-specific nullifier. However, the transaction does not disclose
+the credential secret or plaintext candidate choice. Candidate
+confidentiality depends on ballot encryption, not on the nullifier
+calculation.
+The credential authorization service has more information than a public
+blockchain observer. It performs identity-aware credential release and
+associates stored credentials with identified voters. During authorization,
+the service can decrypt a stored credential secret to prepare the protected
+browser envelope.
+
+A party with access to this decryption capability can derive $n_e$ from $s$
+and $e$. The result can be compared with public voting transactions. This
+creates a potential link between an identified voter and an accepted ballot
+transaction.
+Such a link does not reveal the candidate choice by itself. Recovering that
+choice would additionally require compromising the client's selection,
+defeating the ballot-encryption confidentiality conditions, or obtaining
+sufficient trustee decryption authority. Groth16 hides the private witness
+from the proof verifier. It cannot conceal a secret from a service that
+already possesses it.
+
+The election administrator and credential authorization service have
+different capabilities. Administrative authority to configure or finalize an
+election does not itself provide the credential-decryption key. Conversely,
+the credential service possesses information unavailable through an ordinary
+blockchain transaction. Table~\ref{tab:system-visibility} summarizes these
+information boundaries.
+
+\begin{table}[t]
+\centering
+\caption{Information exposure and verification responsibilities in the private-ballot pathway.}
+\label{tab:system-visibility}
+\small
+\begin{tabular}{@{}p{0.23\linewidth}p{0.34\linewidth}p{0.35\linewidth}@{}}
+\toprule
+\textbf{Entity} & \textbf{Information available} & \textbf{Security consequence} \\
+\midrule
+Credential authorization and biometric authentication services
+& Voter identity, stored credential, eligibility data, and authorization request
+& Can authorize without receiving the candidate choice. Access to the credential-decryption key permits computation of the voter's nullifier. \\
+\addlinespace
+Voter-facing web client and privacy worker
+& Candidate choice, released credential, membership path, encryption randomness, and proof witness during preparation
+& Protecting the local selection and credential depends on client integrity. \\
+\addlinespace
+Public blockchain observer
+& Election context, transaction metadata, nullifier, proof, ciphertext slots, and encrypted aggregate
+& The accepted private-vote call omits the plaintext candidate and civil identifier. \\
+\addlinespace
+Election administrator
+& Configured election state, encrypted aggregate, finalization hash, and submitted totals
+& On-chain administrative authority alone does not establish possession of voter credentials or trustee shares. \\
+\addlinespace
+Tally trustees and transcript auditor
+& Public encrypted tally and verification transcript, with each trustee additionally holding its own secret-share material
+& At least three valid trustee contributions are required by the verifier. The confidentiality analysis depends on trustee-share custody. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ballot acceptance, tally integrity, and threat conditions}
+\label{subsec:system-security-objectives}
+
+Ballot acceptance depends on the cryptographic proof and the contract's state
+checks. The circuit constrains membership in the configured custom
+eligibility tree. It also binds the nullifier to the election and verifies the
+election context. Ballot selection must be one-hot within the active candidate
+count. Unused candidate slots must contain zero-valued choices, and the
+ciphertexts must satisfy the specified construction.
+The contract permits ballot submission only during the active voting phase.
+It rejects a reused nullifier or a ciphertext that fails canonical
+representation checks. The submitted Groth16 proof must also verify against
+the configured public inputs. These checks establish ballot validity under
+the implemented circuit relation. They also prevent a second accepted
+transaction using the same election nullifier.
+Civil-identity uniqueness and credential issuance remain responsibilities of
+enrollment and authorization. An accepted on-chain proof does not establish
+that a live biometric match occurred at the moment of transaction submission.
+
+During active voting, the contract combines encrypted candidate slots from
+accepted ballots. Plaintext totals are recovered through a separate
+finalization procedure after the election ends. The external verifier first
+checks the distributed key-generation transcript. It then validates trustee
+partial-decryption evidence for each candidate slot.
+At least three valid trustee shares are required before the verifier recovers
+the aggregate candidate totals. The election management service compares
+the encrypted aggregates and accepted-ballot count in the transcript with
+the corresponding on-chain state. After successful verification, the
+administrator submits the recovered totals and finalization-transcript hash.
+The contract checks the election phase and the previously pinned
+trustee-transcript hash. It also enforces candidate padding, per-slot bounds,
+and equality between the reported total votes and the accepted-ballot count.
+
+The distinction between external and on-chain verification is important for
+auditability. The contract does not verify the trustees' decryption proofs or
+independently recover plaintext totals from the encrypted aggregate. Instead,
+it records a finalization hash that identifies the transcript used in the
+separate verification procedure.
+A successful finalization transaction therefore confirms compliance with the
+contract's state and arithmetic checks. It does not, by itself, establish
+the validity of every trustee partial decryption. An independent auditor must
+obtain the full transcript and verify it against the published encrypted
+aggregate and pinned hashes.
+
+% Implementation evidence:
+% circuits/lib/VoteChainVoteCore.circom:87-214,305-487
+% crypto/src/wp6-threshold.mjs:2307-2595
+% votechain-central-server/services/elections/electionFinalizationService.js:994-1257
+% contracts/wp4-foundry/src/VoteChainWP4.sol:532-616,692-749,919-976
+
+The threat model includes public observers who can inspect contract state,
+transactions, senders, timestamps, and proofs. It also considers ballot
+submitters who attempt malformed or repeated votes. The cryptographic
+validity relation and contract checks address the specified invalid-ballot
+and nullifier-reuse cases.
+These mechanisms do not prevent every form of information exposure. A
+compromised browser may reveal the selected candidate or credential. A
+malicious credential custodian may issue credentials without authorization.
+External transaction metadata may also support voter correlation.
+
+Ballot confidentiality depends on the election encryption key and the
+trustee-share custody arrangements. Three collaborating trustees with
+sufficient valid shares could recover decryption capability. This could allow
+them to decrypt individual public ballots as well as the aggregate. The
+configured three-out-of-five threshold does not itself establish independent
+organizational custody of the shares.
+These conditions define the limits of the evaluated system. The available
+implementation and experiments do not establish coercion resistance or
+receipt-freeness. The local-chain research environment also does not
+demonstrate production election deployment. The following section explains
+how these security responsibilities are connected through the implemented
+voting architecture.
