@@ -1,0 +1,146 @@
+\section{Related Work}
+
+\label{sec:02}
+
+\label{sec:related-work}
+
+Several surveys document the breadth of blockchain voting research rather than a single common security architecture. Ohize et al.\ review system architectures and their challenges, Vladucu et al.\ examine deployed and proposed blockchain voting approaches, and Berenjestanaki et al.\ survey the underlying technologies and implementations \citep{ohize2025survey,vladucu2023survey,berenjestanaki2024review}. Jafar et al.\ focus specifically on scalability in blockchain-based elections \citep{jafar2022scalability}. These syntheses help locate the present work, but conclusions about any individual protocol require examination of its original design and evaluation. Accordingly, the comparisons below prioritize primary studies when discussing the particular authorization, encryption, proof, and tally mechanisms.
+
+\label{subsec:related-biometric}
+Biometric authentication addresses the problem of establishing voter identity before an electronic ballot is accepted. Fingerprint and facial recognition have been integrated with blockchain voting systems to strengthen enrollment and authorization procedures. However, verifying a person's identity and protecting the content of that person's ballot are distinct security requirements. Hossain Faruk et al.\ investigated an online voting architecture combining facial and fingerprint authentication with Hyperledger Fabric \citep{hossainfaruk2024biometric}. Their work demonstrates the integration of biometric identification with a blockchain-based election application. Adeniyi et al.\ explored a different relationship between biometrics and cryptographic identity. Their approach derives voting key material from fingerprint features for use in a blockchain voting system \citep{adeniyi2024biometrickeys}. Earlier systems also differ in their biometric and infrastructure boundaries. ElectionBlock combines fingerprint authentication with blockchain-based voting \citep{ibrahim2021electionblock}. Rathee et al.\ address the deployment of blockchain voting in an IoT-oriented smart-city environment \citep{rathee2021iot}, while the multi-level MBCSD-IoT architecture incorporates biometric inputs within a hierarchy of blockchain-assisted, software-defined networking components \citep{indrason2025mbcsd}. These works establish precedents for integrating voter identification and distributed voting infrastructure; they do not establish the same private, proof-bound ballot statement evaluated in this paper.
+
+These approaches emphasize different authorization mechanisms. Biometric matching can control access to voting, while biometric-derived cryptographic keys connect identity verification more directly to transaction authorization. Neither approach, by itself, establishes that candidate selection is concealed from an identity-aware voting service. The previously published VoteChain architecture combined IoT-assisted fingerprint acquisition, facial recognition, liveness-aware checks, and blockchain voting operations \citep{rifat2026biometric}. It provided the authentication foundation retained in the present study. The earlier architecture did not implement the encrypted-ballot and threshold-tally procedure investigated here. Its previously reported biometric measurements remain historical findings rather than results of the new cryptographic evaluation. For the present investigation, the relevant design question is how successful biometric authorization can release eligibility material without requiring the selected candidate to be disclosed to the authentication service.
+
+\label{subsec:related-blockchain}
+Beyond biometric authorization, electronic voting systems require a distinction between recording election activity and verifying the correctness of the outcome. An auditable record can expose transaction history, but that visibility does not automatically establish ballot secrecy or correct result computation. Helios provides an established example of web-based, open-audit electronic voting \citep{adida2008helios}. Its design demonstrates the importance of cryptographic election verification independently of blockchain transaction recording. Blockchain-based constructions place election records and verification operations within a distributed ledger. Yang et al.\ investigated a publicly verifiable blockchain voting protocol that seeks to avoid dependence on trusted tallying authorities \citep{yang2020blockchain}. This illustrates an alternative distribution of election authority rather than a requirement that all voting systems adopt an identical trust model.
+
+Formal election verifiability also requires a more precise definition than public access to a transaction record. Cortier et al.\ systematize verifiability notions and the assumptions under which they apply \citep{cortier2016sok}. Granata et al.\ examine vulnerability assessment and threat modelling for an Ethereum-based voting platform \citep{granata2024threat}. The latter provides a methodological precedent, not evidence of an independent security audit of VoteChain-ZK. The ledger and consensus design is itself an active line of voting research. Esposito and Choi developed an Algorand-based voting implementation \citep{esposito2023algorand}. Somasekhar et al.\ combine the InterPlanetary File System with practical Byzantine fault tolerance for a distributed voting design \citep{somasekhar2024ipfs}. Razaque et al.\ investigate smart contracts with a prioritized delegated proof-of-stake model \citep{razaque2026dpos}, while Chaudhary et al.\ study a smart-contract voting approach in a 5G networking context \citep{chaudhary2023voting5g}. These contributions address execution, storage, networking, and governance choices that differ from the fixed-circuit proof and local-EVM cost experiments conducted here. Thakkar et al.\ implemented a small-scale Solidity voting system and discussed zero-knowledge proofs as a means of improving ballot privacy \citep{thakkar2021privacy}. Their discussion of that technique should not be treated as experimental evidence for the specific encrypted-ballot relation implemented in VoteChain-ZK.
+
+Public and permissioned ledgers also create different conditions for information disclosure. A public blockchain exposes transaction metadata and contract state to general observers. A permissioned network controls participation and may restrict access through its governance and membership arrangements. These distinctions matter when assessing privacy. Jonker et al.\ review how the notions of privacy and verifiability vary across cryptographic election systems \citep{jonker2013privacy}. Even when an encrypted ballot conceals the selected candidate, transaction senders, timing, nullifiers, and other metadata may remain observable. Ledger transparency must therefore be considered separately from ballot confidentiality.
+
+\label{subsec:related-zero-knowledge}
+To verify protected ballots, zero-knowledge proofs allow a voting system to check a specified relation without requiring disclosure of the private values satisfying it. The privacy and integrity properties obtained depend on the statement being proved and the public information provided to the verifier. Groth's pairing-based argument system provides the foundation for the Groth16 proofs employed in many succinct verification applications \citep{groth2016snark}. Poseidon provides a hash construction designed for efficient use within zero-knowledge circuits \citep{grassi2021poseidon}. Neither primitive is specific to the present voting system. Of particular relevance, Huber et al.\ investigated Groth16 proofs for validating exponential-ElGamal-encrypted ballots \citep{huber2025ballotvalidity}. Their feasibility study examined different voting methods and ballot formats. It established that general-purpose succinct proofs can support encrypted ballot-validity checks in practical implementations. This work is close technical prior art for the use of Groth16 to prove the correct construction of encrypted candidate selections. The present study does not claim to introduce that proof technique. The ZK-VOTE framework also applies zk-SNARK components to eligibility and vote-validity checks in a blockchain voting protocol \citep{ismail2025zkvote}. Its simulated system evaluation is relevant as an architectural precedent but is not a matched benchmark for the fixed-width circuit and local Anvil measurements reported here.
+
+Other research examines different proof constructions. Kraavi and Willemson implemented and benchmarked a Bulletproof-based approach to vote correctness in the IVXV voting setting \citep{kraavi2025ivxv}. Farzaliyev et al.\ developed lattice-based zero-knowledge proofs for several electronic voting requirements \citep{farzaliyev2025lattice}. These studies show that ballot correctness can be expressed through different cryptographic relations and proof systems. Their security assumptions, encryption schemes, proof sizes, and computational workloads are not identical. The present implementation uses a specific Groth16 statement combining membership in a frozen eligibility tree, an election-scoped nullifier, election-context binding, a one-hot candidate selection, and the coordinates of the encrypted ballot. The remaining technical comparison is therefore not whether zero-knowledge ballot validity is possible. It concerns the exact combined statement enforced by the implemented voting contract and the measured costs of constructing and verifying that proof.
+
+\label{subsec:related-encrypted-tally}
+Beyond proving individual ballot validity, encrypted voting systems seek to conceal individual selections while preserving the ability to compute and verify election results. Homomorphic encryption supports this objective by allowing compatible ciphertexts to be combined without first revealing their plaintexts. Cramer et al.\ presented an influential multi-authority election construction that distributes the cryptographic responsibilities of encrypted voting and result recovery \citep{cramer1997multiauthority}. Such schemes establish that encrypted aggregation and distributed election authority are longstanding research directions. ElectionGuard provides a more recent example of cryptographic tools for verifiable elections \citep{benaloh2024electionguard}. Its design uses encrypted ballots, homomorphic tallying, and verifiable decryption to support independent examination of election results. Sallal et al.\ investigated privacy and verifiability in a permissioned-blockchain voting system that includes a threshold decryption stage \citep{sallal2023pvpbc}. The use of a permissioned ledger and its associated authority model differs from direct encrypted ballot accumulation within a publicly inspectable EVM contract.
+
+Other approaches combine confidentiality and distributed result processing through different cryptographic mechanisms. Wang et al.\ integrate non-interactive proofs, aggregated blind signatures, and threshold encryption in a blockchain voting scheme \citep{wang2024versatile}. Another multi-party scheme uses ring signatures, distributed storage, and key-sharing for vote counting \citep{wang2024multiparty}. Schiedermeier et al.\ investigate distributed-ledger-assisted secure multiparty computation for confidential voting \citep{schiedermeier2024mpc}. These constructions pursue related goals, but their counting procedures and verification statements are not interchangeable with proof-bound ElGamal ciphertext accumulation or per-slot trustee partial-decryption checks. These studies demonstrate that encrypting individual ballots and producing a verifiable tally are related but separate requirements. The encryption of stored ballots does not alone establish the correctness of their aggregation or later decryption. For VoteChain-ZK, the relevant distinction is between verifying an encrypted ballot before inclusion in the tally and verifying the recovery of final candidate counts. The former is checked by the voting contract. The latter depends on separate threshold verification evidence.
+
+\label{subsec:related-threshold}
+Result disclosure additionally depends on threshold cryptography, which distributes the ability to decrypt election data among multiple authorities. Its security conditions depend on the number of shares required, the protection of individual shares, and the validity of submitted decryption contributions. Public verification of the final result requires more than the presence of a threshold parameter. An examiner must be able to determine whether the accepted partial decryptions correspond to the election key and recorded encrypted tally. The result-publication policy also affects the privacy objective. Huber et al.\ developed Kryvos for publicly tally-hiding verifiable elections \citep{huber2022kryvos}. Its objective differs from systems that publish the complete plaintext candidate totals after tally decryption. The present implementation publishes plaintext candidate totals after threshold reconstruction and finalization. It does not attempt to hide the complete tally from the public after finalization.
+
+Receipt-freeness is another distinct property. BeleniosRF addresses receipt-freeness through a specifically designed verifiable voting protocol \citep{chaidos2016beleniosrf}. Encryption and proof-checked ballots do not, by themselves, give VoteChain-ZK the receipt-freeness guarantee studied in that work. VoteChain-ZK's three-out-of-five threshold protocol uses trustee contributions accompanied by discrete-logarithm equality evidence. These records are checked by an external verifier. The on-chain contract records the finalized totals and transcript commitment, but it does not execute the trustee decryption-proof checks. This distinction is important for evaluating result verifiability. A committed transcript can support subsequent independent examination, provided the complete evidence is available. A transcript hash alone cannot establish the correctness of the decryption process.
+
+\label{subsec:related-integrated-systems}
+Recent integrated research increasingly combines eligibility proofs, encrypted ballots, nullifiers, and blockchain verification within complete election architectures. These studies provide closer system-level comparisons than individual cryptographic primitive papers. Alsuwat presented a blockchain voting framework that combines Dilithium authentication, zero-knowledge eligibility verification, encrypted ballots, and nullifier-based duplicate-vote prevention \citep{alsuwat2026voting}. The proposed system uses a permissioned consensus environment and a different credential management arrangement from the implementation evaluated here. Solanki and Meva combined Hyperledger Fabric with Paillier-based homomorphic encryption and zero-knowledge mechanisms \citep{solanki2026hybrid}. Their design illustrates how encrypted voting and verification can be implemented using a different ledger architecture and cryptographic combination. Galal et al.\ consider confidentiality using AES and RSA encryption with a Hyperledger Fabric-based voting framework \citep{galal2026framework}. This differs from a system in which a zero-knowledge argument explicitly constrains the public ElGamal ciphertext coordinates and a contract verifies the argument during acceptance.
+
+Jung et al.\ developed an anonymous voting framework on Hyperledger Fabric using nullifiers, encrypted aggregation, ballot-validity proofs, and practical mechanisms intended to mitigate coercion \citep{jung2026anonymous}. Its key-management and consortium endorsement procedures differ from the per-slot threshold decryption and verification arrangement studied in VoteChain-ZK. Emami et al.\ also investigated a privacy-preserving blockchain voting construction involving zero-knowledge off-chain computation and threshold homomorphic cryptography \citep{emami2023scalable}. This provides additional precedent for combining several privacy mechanisms in one election protocol. The cited studies are not directly interchangeable as complete election systems. Table~\ref{tab:rw-comparison} therefore compares eleven selected primary contributions using the properties most relevant to the present authorization, ballot-validity, and tally-verification boundaries. The selection includes implemented integrated architectures, two biometric voting precedents, and focused proof or tally-verification studies. Foundational cryptographic papers and surveys inform the surrounding discussion but are not treated as competing voting implementations.
+
+% Requires \usepackage{longtable} in main.tex (booktabs already loaded).
+% The multipage comparison remains embedded in this section.
+% Eleven selected studies, ordered by publication year (ascending).
+% For equal years, rows are alphabetical by first author / study name.
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.17}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.125\linewidth}>{\centering\arraybackslash}p{0.055\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\caption{Evidence-bounded comparison of selected electronic-voting studies, ordered by publication year.}\label{tab:rw-comparison}\\
+\toprule
+\textbf{Study / focus} & \textbf{Year} & \textbf{Authorization / eligibility} & \textbf{Ballot privacy / validity} & \textbf{Tally / result verification} & \textbf{Platform / evaluation} \\
+\midrule
+\endfirsthead
+\multicolumn{6}{@{}l}{\textit{Table~\thetable\ (continued)}}\\[2pt]
+\toprule
+\textbf{Study / focus} & \textbf{Year} & \textbf{Authorization / eligibility} & \textbf{Ballot privacy / validity} & \textbf{Tally / result verification} & \textbf{Platform / evaluation} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r@{}}{\textit{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Emami et al.} \citep{emami2023scalable}\newline Integrated voting
+& 2023
+& Merkle-based eligibility model in publisher-visible description
+& Off-chain zero-knowledge computations; exact circuit relation not verified here
+& Threshold homomorphic cryptography reported; detailed trustee checks not verified here
+& Ethereum test-network prototype; limited full-method access \\
+\addlinespace[3pt]
+\textbf{Sallal et al.} \citep{sallal2023pvpbc}\newline PVPBC
+& 2023
+& Distributed authorization using revocable anonymity
+& Selene-based verifiability with plaintext ballot/tracker publication at result stage
+& Teller-mediated procedure; not the same per-slot DLEQ-verified ElGamal tally
+& Permissioned ledger; authorization/latency/cost measurements \\
+\addlinespace[3pt]
+\textbf{Adeniyi et al.} \citep{adeniyi2024biometrickeys}\newline Biometric keys
+& 2024
+& Fingerprint-derived cryptographic key material
+& Signature/key-based voting identity; proof-bound ciphertext validity not established in the examined study
+& Blockchain voting scheme; analogous threshold-result verification not established
+& Prototype using fingerprint data \\
+\addlinespace[3pt]
+\textbf{ElectionGuard} \citep{benaloh2024electionguard}\newline Audit toolkit
+& 2024
+& Election administration and guardian setup; voter authentication lies outside toolkit's core focus
+& Encrypted ballot construction and publicly verifiable election record
+& Homomorphic tally with guardian-assisted verifiable decryption
+& Cryptographic toolkit; reported deployments rather than EVM gas trials \\
+\addlinespace[3pt]
+\textbf{Hossain Faruk et al.} \citep{hossainfaruk2024biometric}\newline Biometric voting
+& 2024
+& Face and fingerprint voter authentication
+& Biometric access controls; no equivalent encrypted-ballot proof assessed
+& Blockchain voting records; comparable homomorphic tally mechanism not established in the examined study
+& Hyperledger Fabric; prototype with 100 participants \\
+\addlinespace[3pt]
+\textbf{Wang et al.} \citep{wang2024versatile}\newline Integrated voting
+& 2024
+& Aggregated blind-signature authorization
+& Zero-knowledge mechanisms supporting vote validation
+& Threshold encryption and distributed result processing
+& Implemented and evaluated with Fabric and Ethereum \\
+\addlinespace[3pt]
+\textbf{Huber et al.} \citep{huber2025ballotvalidity}\newline Ballot proof
+& 2025
+& Voter identity and enrollment outside the studied proof task
+& Groth16 validity proofs for exponential-ElGamal ballots and multiple ballot formats
+& Discusses encrypted tally context; not a complete threshold-election deployment
+& Implemented circuit benchmarks; no EVM transaction experiment \\
+\addlinespace[3pt]
+\textbf{Ismail et al.} \citep{ismail2025zkvote}\newline ZK-VOTE
+& 2025
+& Voting credentials and zk-SNARK eligibility checks
+& ZK evidence for eligibility and ballot validity; encrypted submissions
+& Describes aggregation/result checking by authorized parties
+& Permissioned-chain framework; experimental/simulation analysis \\
+\addlinespace[3pt]
+\textbf{Alsuwat} \citep{alsuwat2026voting}\newline Integrated voting
+& 2026
+& Dilithium signatures, local credential commitments, nullifier controls
+& ZK verification of eligibility and candidate validity; encrypted ballots
+& Smart-contract election checks; an equivalent DLEQ trustee audit is not established in examined material
+& Permissioned BFT architecture; prototype throughput measurements \\
+\addlinespace[3pt]
+\textbf{Jung et al.} \citep{jung2026anonymous}\newline Integrated voting
+& 2026
+& Election nullifiers and consortium-managed eligibility
+& ZK ballot-validity checks; exponential-ElGamal ciphertexts
+& Homomorphic tally; Shamir sharing of AES master-key material, not per-slot trustee DLEQ
+& Fabric prototype; endorsement, coercion-mitigation and load evaluation \\
+\addlinespace[3pt]
+\textbf{Solanki and Meva} \citep{solanki2026hybrid}\newline Hybrid crypto
+& 2026
+& SHA-256 identity controls and ECDSA authentication
+& AES ballot confidentiality and ZK mechanisms; different proof statement
+& Paillier-based homomorphic aggregation
+& Fabric-oriented architecture; throughput and latency evaluation \\
+\end{longtable}
+\endgroup
+
+The comparison reports the mechanisms established by the examined material, not a universal inventory of the capabilities or absences of each system. Expressions such as ``not established'' or ``not verified here'' indicate an evidence limit, not proof that a mechanism is absent. In particular, consortium endorsement, threshold key sharing, and per-ciphertext trustee verification are distinct operations. The available publisher-level material for Emami et al.\ does not support a fine-grained claim about its proof statement or trustee-verification procedure. Quantitative results are compared separately in Section~\ref{sec:discussion-comparison} because different implementations report different workloads, environments, and measurement boundaries. Taken together, these systems demonstrate substantial prior work on the integration of cryptographic voting components. The present research does not claim to be the first blockchain voting system with zero-knowledge proofs, encrypted tallying, or distributed decryption authority. Their evaluation results also require careful interpretation. Permissioned-chain throughput, public-chain gas, client-side proving time, and end-to-end voter latency describe different measurements. A numerical ranking would require aligned proof statements, hardware configurations, blockchain execution conditions, and measurement intervals. Those conditions are not established across the studies reviewed here.
+
+Against this literature, the present study examines three connected technical boundaries: separating candidate choice from the inherited identity-aware biometric authorization interface; binding eligibility and encrypted ballot validity to one on-chain acceptance statement; and making threshold result disclosure independently checkable through externally verified evidence. These are integration and verification contributions under the specified trust assumptions, not claims to have invented the underlying primitives. The controlled experiments characterize the costs of the implemented protocol. They provide supporting evidence rather than a separate cryptographic innovation or a numerical claim of superiority over differently configured voting systems. The following section defines the participating entities, information exposure, and trust assumptions needed to evaluate these properties.
