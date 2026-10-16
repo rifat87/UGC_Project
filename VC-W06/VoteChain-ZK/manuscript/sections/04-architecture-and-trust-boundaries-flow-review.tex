@@ -1,0 +1,293 @@
+\section{Architecture and Trust Boundaries}
+\label{sec:04}
+\label{sec:architecture}
+
+\subsection{Architectural Overview}
+\label{subsec:architecture-overview}
+
+The architecture extends the previously developed biometric blockchain
+voting system \citep{rifat2026biometric}. The inherited biometric
+authentication layer identifies the voter. The private-voting extension
+changes how an authenticated voter prepares and submits a ballot. Candidate
+selection is separated from biometric authorization. Ballot verification
+and tallying operate on encrypted data.
+Table~\ref{tab:architecture-prior-comparison} identifies the architectural
+changes relative to the previously published VoteChain system
+\citep{rifat2026biometric}. The comparison concerns the respective voting
+paths and their trust boundaries, not a controlled performance benchmark.
+The legacy \texttt{LocalVoting} design and the present private-voting
+extension perform different ballot-validation and tally operations.
+The implementation comprises five connected parts. These are the biometric
+authentication service, credential authorization and election management
+services, the voter-facing web client with its privacy worker, the
+Ethereum-compatible voting contracts, and the threshold trustees. Each part
+has a defined role in the protocol. The web client prepares the encrypted
+ballot. The voting contract checks its validity and maintains the encrypted
+tally.
+
+\begin{table}[tbp]
+\centering
+\caption{Voting-path architecture in the previously published VoteChain
+system and the present VoteChain-ZK extension. The legacy column describes
+the earlier published design; the current column describes the implemented
+private-ballot pathway.}
+\label{tab:architecture-prior-comparison}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}@{}}
+\toprule
+\textbf{Aspect} & \textbf{Previous VoteChain (2026)} & \textbf{VoteChain-ZK (present study)} \\
+\midrule
+Biometric authorization &
+Face/fingerprint verification authorizes voting through identity-aware services. &
+Inherited face/fingerprint services authorize release of a protected voting credential; the circuit does not prove biometric matching. \\
+\addlinespace[3pt]
+Eligibility credential &
+Salted pseudonymous voter hash, derived using the registered identity; checked against the contract's voter registry. &
+Separate custom Poseidon credential commitment and frozen depth-17 Merkle root; the existing Semaphore registration anchor is not this proof root. \\
+\addlinespace[3pt]
+Candidate information flow &
+The voting application prepares a transaction containing the selected candidate identifier. &
+Candidate selection stays in the web client during biometric authorization and enters the local privacy worker for encryption. \\
+\addlinespace[3pt]
+Ballot submitted on-chain &
+Candidate identifier and registered pseudonymous voter hash supplied to \texttt{LocalVoting.castVote}. &
+Groth16 proof, election-scoped nullifier, and 16 encrypted candidate-slot ciphertexts supplied to \texttt{VoteChainDirect.castVote}; no plaintext candidate identifier. \\
+\addlinespace[3pt]
+Ballot acceptance &
+Checks registered voter hash, unused vote status, and valid candidate identifier. &
+Checks election phase, unused nullifier, canonical ciphertext coordinates, and a 73-public-signal Groth16 ballot-validity statement. \\
+\addlinespace[3pt]
+Tally during voting &
+Plaintext \texttt{voteCount} incremented for the selected candidate. &
+BabyJub exponential-ElGamal ciphertexts accumulated for fixed candidate slots; no plaintext per-candidate tally during voting. \\
+\addlinespace[3pt]
+Result disclosure &
+Candidate counts directly readable from the contract; no trustee-decryption step. &
+Three-of-five trustee partial decryptions checked off-chain; final totals and transcript hash recorded on-chain after separate state and arithmetic checks. \\
+\addlinespace[3pt]
+Residual trust &
+Identity-aware service can reconstruct the mapping between voter identity and pseudonymous hash. &
+Credential custodian can derive an identified voter's nullifier; ballot secrecy further depends on client integrity and trustee-share custody. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two commitment structures are present. A Semaphore identity and the
+\texttt{ZKLocalVoting} contract support registration and election anchoring.
+A separate custom Poseidon identity commitment supports the encrypted-voting
+pathway. These commitments are derived from separately generated credentials
+and are not interchangeable.
+The private-voting workflow uses the custom commitment tree and
+\texttt{VoteChainDirect}. Its eligibility proof is constructed against the
+root configured for that contract. The \texttt{ZKLocalVoting} contract also
+contains a candidate-indexed voting method. That method is separate from the
+encrypted-ballot submission studied here.
+
+% Source verification:
+% votechain-central-server/controllers/voterController.js
+% src/ZKLocalVoting.sol
+% contracts/wp4-foundry/src/VoteChainWP4.sol
+
+\subsection{Voter Registration and Election Configuration}
+\label{subsec:architecture-registration}
+
+Voter enrollment begins in the identity-aware registration service. The
+service creates a Semaphore identity and a separate custom voting credential.
+The custom credential contains a randomly generated secret. A Poseidon
+identity commitment is derived from this secret. Both credentials are stored
+in protected form alongside the enrolled voter record.
+The two credentials serve different registration procedures. The Semaphore
+commitment is associated with on-chain registration. The custom commitment
+is retained for membership verification in the private-voting protocol. This
+separation allows the encrypted-voting circuit to use its own eligibility
+relation. The Semaphore group root is not used as the ballot-verification
+root in \texttt{VoteChainDirect}.
+
+Before election activation, the election management service collects the
+registered custom commitments into an election-specific membership snapshot.
+It constructs a fixed-depth Poseidon Merkle tree from these commitments. The
+implementation uses a depth of 17. The resulting root identifies the
+eligible commitment set for that election.
+The service also prepares a candidate snapshot. Registered candidates are
+ordered by candidate identifier and assigned fixed ballot slots. A
+candidate-manifest hash binds this ordering to the election configuration.
+The private ballot representation supports up to 16 candidate slots.
+
+Trustee configuration is completed before election activation. Five trustees
+participate in the configured distributed key-generation procedure. Its
+public transcript contains verification material and the collective
+encryption public key. The election management service verifies the
+transcript and stores its canonical hash with the election record.
+The election-start procedure deploys or resolves a Groth16 verifier and a
+\texttt{VoteChainDirect} contract for the election. The election management
+service configures the contract with the eligibility root, election
+identifier, candidate manifest, candidate count, encryption public key, and
+context-binding values.
+The administrator then records the trustee-transcript hash on-chain while
+the contract remains in its registration phase. After the configured values
+are checked, the election is activated. Subsequent private ballots must
+satisfy the frozen configuration.
+
+% Source verification:
+% votechain-central-server/services/zk/wp5PrivacyService.js
+% votechain-central-server/services/elections/electionSnapshotService.js
+% votechain-central-server/services/elections/electionTrusteeService.js
+% votechain-central-server/services/elections/electionChainService.js
+
+\subsection{Candidate-Blind Biometric Authorization}
+\label{subsec:architecture-biometric-authorization}
+
+The voter selects a candidate in the voter-facing web client. The selection
+remains local during biometric authorization. The authorization request does
+not transmit the candidate identifier.
+The browser privacy worker first generates an ephemeral key pair for
+credential release. Its public key is sent to the appropriate biometric
+authorization endpoint. The private-voting pathway supports face and
+fingerprint verification through separate routes. Both routes use the same
+candidate-blind request structure.
+The biometric authentication service processes the requested verification
+through the corresponding acquisition and matching interface. After a
+successful match, the credential authorization service identifies the
+enrolled voter record. It checks whether the voter has an active custom
+voting credential.
+
+The credential authorization service retrieves the voter's membership path
+from the frozen election snapshot. It reconstructs the Merkle root from the
+registered commitment and path elements. This value must match the
+eligibility root stored in \texttt{VoteChainDirect}. Authorization stops if
+the values differ.
+The credential authorization service then recovers the stored custom secret.
+It protects the secret for delivery to the web client using ephemeral P-256
+key agreement, HKDF-SHA-256, and AES-256-GCM. The authorization response
+contains the encrypted credential envelope and Merkle witness. It also
+identifies the election and specifies an authorization expiry time.
+
+This separation has a specific privacy purpose. Biometric authentication
+establishes which enrolled voter requests authorization. It does not require
+the candidate selection. That selection is supplied to the privacy worker
+after authorization, when the encrypted ballot is constructed.
+The biometric and credential services remain identity-aware components. The
+credential authorization service can associate a registered voter with the
+stored credential and recover its secret during authorization. The resulting
+identity-linkage boundary is defined in Section~\ref{sec:system-model}.
+
+% Source verification:
+% votechain-central-server/middleware/wp5AuthorizationSecurity.js
+% votechain-central-server/controllers/wp5Controller.js
+% votechain-central-server/controllers/fingerprintController.js
+% votechain-central-server/services/zk/wp5PrivacyService.js
+% votechain-frontend-ts/src/components/Biometric/VerificationModal.tsx
+
+\subsection{Local Encrypted Ballot Construction and Submission}
+\label{subsec:architecture-ballot-submission}
+
+After authorization, the web client passes the credential envelope and
+membership witness to its privacy worker. The worker uses the ephemeral
+private key to recover the custom voting secret. It reconstructs the
+identity commitment and verifies the supplied Merkle path against the
+configured eligibility root.
+The worker checks the election identifier and candidate manifest. It also
+recomputes the election-context binding using the configured candidate
+count, contract domain, and encryption public key. These checks stop ballot
+preparation if the public election data are inconsistent.
+
+The selected candidate is represented as a one-hot vector. Exactly one
+active candidate slot contains the value one. The remaining slots contain
+zero. The vector retains the fixed 16-slot representation used by the
+voting circuit.
+The worker encrypts each slot using exponential ElGamal over BabyJub. It
+generates fresh encryption randomness for the individual slots. Each
+ciphertext contains two curve points. The candidate selection and encryption
+randomness remain private proof inputs.
+
+The worker computes the election-scoped nullifier from the credential secret
+and election identifier. It then generates a Groth16 proof using the custom
+Circom circuit. The proof binds eligibility, election context, ballot
+structure, and ciphertext construction to the submitted public values
+\citep{groth2016snark}.
+The worker checks the returned 73 public signals against the expected
+election values, nullifier, and ciphertext coordinates. It then verifies
+the generated proof locally. Any mismatch or failed proof verification
+stops submission.
+
+The web client passes the verified proof, nullifier, and ciphertext
+coordinates to the wallet transaction interface. The transaction invokes
+\texttt{VoteChainDirect.castVote}. It does not include a plaintext candidate
+identifier.
+The contract checks that the election is active and the nullifier has not
+been used. It also checks the canonical representation of the ciphertext
+coordinates. The Groth16 verifier evaluates the proof against the
+contract's configured public inputs.
+Once these checks succeed, the contract records the nullifier and adds the
+ciphertext to the encrypted tally. It increments the accepted-ballot count
+and emits an acceptance event. The event records the nullifier, a ciphertext
+hash, and the updated ballot count rather than the selected candidate.
+
+% Source verification:
+% votechain-frontend-ts/src/components/Voter/VoteCasting.tsx
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts
+% votechain-frontend-ts/src/services/wp5Direct.ts
+% circuits/VoteChainVoteDirect.circom
+% circuits/lib/VoteChainVoteCore.circom
+% contracts/wp4-foundry/src/VoteChainWP4.sol
+
+\subsection{Encrypted Tallying and Result Finalization}
+\label{subsec:architecture-finalization}
+
+The voting contract maintains an encrypted aggregate for each of the 16
+candidate slots. After an accepted ballot, the corresponding ciphertext
+points are added to the current aggregate using BabyJub curve operations.
+The accepted-ballot count is updated separately.
+During active voting, the contract stores encrypted aggregates rather than
+plaintext candidate totals. This encrypted state is publicly inspectable.
+Recovering the candidate counts requires the corresponding decryption
+capability.
+
+After voting ends, the administrator changes the contract state from Active
+to Ended. The election management service reads the encrypted aggregates and
+accepted-ballot count from \texttt{VoteChainDirect}. These values are used
+to check the threshold-finalization transcript.
+The finalization protocol uses a three-out-of-five trustee threshold.
+Trustees produce partial decryptions and accompanying verification records
+for the encrypted candidate aggregates. An external verifier checks the
+distributed key-generation transcript and the partial-decryption evidence.
+For each candidate slot, the verifier requires at least three valid trustee
+contributions. It combines those contributions and recovers the aggregate
+count within the permitted vote-count range. The election management service
+also checks that the finalization transcript matches the encrypted tally and
+accepted-ballot count recorded on-chain.
+
+After successful external verification, the administrator submits the
+recovered candidate totals and finalization-transcript hash to
+\texttt{VoteChainDirect}. The contract requires the election to be in its
+Ended phase and a trustee transcript to have been pinned beforehand.
+The contract enforces additional checks. Candidate slots outside the active
+manifest must have zero totals. No candidate total may exceed the
+accepted-ballot count. The sum of the active candidate totals must equal the
+number of accepted ballots.
+If these conditions hold, the contract records the final totals and
+transcript hash. It then changes the election state to Finalized. Plaintext
+candidate results become accessible through its finalized-result interface.
+
+The contract does not directly verify trustee partial-decryption proofs.
+Those checks are performed by the external transcript verifier before the
+finalization transaction is submitted. The contract's arithmetic checks
+alone therefore do not prove that the submitted totals were derived from
+valid threshold decryptions.
+Independent verification requires the complete transcript and published
+encrypted aggregate. An auditor can check the trustee evidence and compare
+the verified transcript hash with the on-chain commitment. This provides an
+externally auditable result-disclosure procedure under the stated trust and
+transcript-availability conditions.
+The architecture connects biometric authorization, private ballot
+construction, proof-verified encrypted accumulation, and threshold-based
+result disclosure. The following section specifies the cryptographic
+relations and verification operations used at these stages.
+
+% Source verification:
+% crypto/src/wp6-threshold.mjs
+% votechain-central-server/services/elections/electionFinalizationService.js
+% contracts/wp4-foundry/src/VoteChainWP4.sol
+
