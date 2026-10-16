@@ -1,0 +1,343 @@
+\section{Cryptographic Voting and Tally Protocol}
+\label{sec:05}
+\label{sec:cryptographic-protocol}
+
+\subsection{Notation and public statement}
+\label{subsec:protocol-notation}
+
+The protocol uses a custom Circom voting relation and an election-specific
+\texttt{VoteChainDirect} contract. The circuit operates over the BN254
+scalar field $\mathbb{F}$ and uses Poseidon for commitment and context calculations
+\citep{grassi2021poseidon}. Ballot encryption uses the prime-order BabyJub
+subgroup $\mathbb{G}$. Table~\ref{tab:protocol-notation} gives the notation used in
+Sections~\ref{sec:system-model}--\ref{sec:cryptographic-protocol}.
+
+% Keep the notation table with this section rather than allowing a float
+% to move above the section heading in the CAS single-column class.
+\begin{center}
+\begin{minipage}{\linewidth}
+\centering
+\makeatletter\def\@captype{table}\makeatother
+\caption{Consolidated notation for the private-voting and tally protocol.}
+\label{tab:protocol-notation}
+\footnotesize
+\begin{tabular}{@{}p{0.29\linewidth}p{0.63\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$e$, $s$ & Election identifier and private voter credential secret \\
+$\mathbb{F}$, $\mathbb{G}$, $q$ & Circuit field, prime-order BabyJub subgroup, and subgroup order \\
+$G$, $Y=(Y_x,Y_y)$ & Subgroup generator and election encryption public key \\
+$d_{\mathrm{id}}$, $d_{\mathrm{null}}$, $d_{\mathrm{ctx}}$ & Poseidon domain separators for identity, nullifier, and election context \\
+$H_P$ & Poseidon hash with the ordered inputs shown in each equation \\
+$\rho_e$, $p$ & Frozen election eligibility root and private Merkle authentication path \\
+$\mu_e$, $\delta$, $\chi_e$ & Candidate-manifest hash, contract-domain value, and election-context hash \\
+$K$, $M$, $L$ & Active candidates, candidate-slot capacity ($16$), and Merkle depth ($17$) \\
+$C_s$, $n_e$ & Voter identity commitment and election-scoped nullifier \\
+$v_j$, $r_j$ & Private ballot bit and encryption scalar for slot $j$ \\
+$C_j=(R_j,S_j)$ & Exponential-ElGamal ciphertext for ballot slot $j$ \\
+$\mathbf{w}$, $\mathbf{u}$, $\pi$ & Private circuit witness, public-signal vector, and Groth16 proof \\
+$\mathcal{R}_{\mathrm{VC}}$ & Constrained relation verified by the direct voting circuit \\
+$B$, $\overline{C}_j$ & Number of accepted ballots and encrypted aggregate for slot $j$ \\
+$x_i$, $X_i$ & Trustee $i$'s private share and corresponding public share $x_iG$ \\
+$D_{i,j}$, $\gamma_{i,j}$ & Trustee $i$'s partial decryption and its consistency proof for slot $j$ \\
+$I$, $\lambda_i$, $t_j$ & Valid trustee set, reconstruction coefficient, and recovered slot total \\
+$T_{\mathrm{DKG}}$, $T_{\mathrm{fin}}$ & Distributed-key-generation and finalization transcripts \\
+$h_{\mathrm{DKG}}$, $h_{\mathrm{fin}}$ & Canonical SHA-256 hashes of the corresponding transcripts \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+
+The compiled circuit fixes $M=16$ candidate slots and a Merkle depth of
+$L=17$. The active candidate count satisfies $1\leq K\leq M$.
+These values describe the current implementation, rather than a variable-size
+circuit family. The Merkle path has one sibling and one direction bit per
+level. Its root is frozen in the election contract before voting begins.
+The Groth16 verifier receives a public vector containing nine election and
+nullifier values followed by four coordinate arrays of length $M$:
+\begin{equation}
+\label{eq:protocol-public-inputs}
+\mathbf{u}=\bigl(
+\rho_e,e,\mu_e,K,\delta,Y_x,Y_y,\chi_e,n_e,
+\mathbf{R}_x,\mathbf{R}_y,\mathbf{S}_x,\mathbf{S}_y
+\bigr).
+\end{equation}
+The resulting dimension is $9+4M=73$. The prover's private witness
+$\mathbf{w}$ contains the credential secret, Merkle siblings and path
+bits, candidate-selection bits, and encryption scalars. The circuit
+does not take a civil identifier or biometric measurement as an input.
+
+% Verified source:
+% circuits/VoteChainVoteDirect.circom:11-143
+% circuits/config/VoteChainBuildProfile.circom:13-54
+% contracts/wp4-foundry/src/VoteChainWP4.sol:825-917
+
+\subsection{Eligibility, nullifier, and election binding}
+\label{subsec:protocol-eligibility}
+
+The custom credential secret $s$ is a nonzero field element. Its identity
+commitment is derived using the identity domain separator:
+\begin{equation}
+\label{eq:protocol-identity}
+C_s=H_P(d_{\mathrm{id}},s).
+\end{equation}
+The circuit reconstructs the Merkle root from $C_s$ and the private
+authentication path $p$. At every level, a Boolean direction bit determines
+the order of the current node and its sibling. The final value must equal
+the configured root $\rho_e$:
+\begin{equation}
+\label{eq:protocol-merkle}
+\operatorname{MerkleRoot}_{L}(C_s,p)=\rho_e.
+\end{equation}
+The path therefore establishes membership of the committed credential in
+the frozen eligibility set. It does not perform biometric recognition.
+That earlier authorization step supplies access to the credential and path.
+
+The circuit also enforces the election-scoped nullifier already defined in
+Eq.~\eqref{eq:system-nullifier}. The same credential and election identifier
+produce the same public nullifier. This permits the contract to reject a
+second accepted ballot using that value. The mechanism does not prevent
+multiple credentials from being issued to one person during enrollment.
+The election-context hash binds the public election identifier, manifest,
+active candidate count, contract-domain value, and encryption key:
+\begin{equation}
+\label{eq:protocol-context}
+\chi_e=H_P\bigl(
+ d_{\mathrm{ctx}},e,\mu_e,K,\delta,Y_x,Y_y
+\bigr).
+\end{equation}
+The circuit recomputes this hash from the declared public values. The
+contract supplies those values from its stored election configuration.
+The voter-facing web client separately recomputes the candidate manifest
+from the registered candidate identifiers and compares it with the
+contract configuration. The circuit binds the manifest hash but does not
+reconstruct the candidate list from individual candidate records.
+
+% Verified source:
+% circuits/lib/VoteChainVoteCore.circom:78-243
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:680-814
+% contracts/wp4-foundry/src/VoteChainWP4.sol:825-864
+
+\subsection{Ballot constraints and ciphertext construction}
+\label{subsec:protocol-encryption}
+
+The selected candidate is encoded as a private binary vector of length $M$.
+The bit $v_j$ represents candidate slot $j$, with indices starting at zero.
+The circuit constrains each bit, requires exactly one active selection, and
+sets all padding slots to zero:
+\begin{equation}
+\label{eq:protocol-onehot}
+\begin{aligned}
+ v_j&\in\{0,1\} && (0\leq j<M),\\
+ \sum_{j=0}^{M-1}v_j&=1,\\
+ v_j&=0 && (K\leq j<M).
+\end{aligned}
+\end{equation}
+It also checks the range $1\leq K\leq16$. These constraints exclude
+empty, multiple-choice, and out-of-manifest plaintext ballot vectors
+within the stated single-choice election model. Such proof checks for
+exponential-ElGamal ballots are established prior art
+\citep{huber2025ballotvalidity}.
+
+For ballot encryption, $G$ is the configured BabyJub subgroup generator.
+The public key $Y$ must lie on the curve, be non-identity, and belong to
+the prime-order subgroup. The circuit checks these conditions. For each
+slot, the client supplies a private scalar $r_j$ with $1\leq r_j<q$.
+The corresponding exponential-ElGamal ciphertext is
+\begin{equation}
+\label{eq:protocol-elgamal}
+\begin{aligned}
+ R_j &= r_jG,\\
+ S_j &= r_jY+v_jG,\\
+ C_j &= (R_j,S_j),\qquad 0\leq j<M.
+\end{aligned}
+\end{equation}
+Here, the group identity represents an encrypted zero contribution after
+removing the shared-key term. Every slot is encrypted, including padding
+slots. The client generates the encryption scalars locally. The circuit
+checks their range and the ciphertext equations, not the entropy of the
+client's random-number generator.
+The direct circuit wrapper equates its 64 public ciphertext coordinates
+with the points calculated by the core circuit. This equality is part of
+the proof statement. Consequently, a valid proof cannot be paired with a
+different ciphertext array without causing verification to fail, subject
+to the proof system's soundness assumptions.
+
+% Verified source:
+% circuits/lib/VoteChainVoteCore.circom:245-488
+% circuits/VoteChainVoteDirect.circom:89-143
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:855-1147
+
+\subsection{Zero-knowledge proof and on-chain ballot acceptance}
+\label{subsec:protocol-verification}
+
+The direct voting relation combines credential membership, nullifier
+consistency, election-context binding, one-hot validity, and correctness of
+all encrypted slots. It can be expressed as
+\begin{equation}
+\label{eq:protocol-relation}
+\mathcal{R}_{\mathrm{VC}}(\mathbf{u},\mathbf{w})=1
+\end{equation}
+when the constraints in Eqs.~\eqref{eq:protocol-identity}--
+\eqref{eq:protocol-elgamal} hold for the public inputs in
+Eq.~\eqref{eq:protocol-public-inputs}. The private path and credential
+remain within the witness. The locally selected candidate is likewise
+not included among the public signals.
+
+The client runs the Groth16 prover with the voting circuit and its proving
+key. It checks the returned public signals against the expected election
+configuration and ciphertext coordinates. The client then verifies the
+proof locally before preparing the transaction. This local check does not
+replace on-chain verification \citep{groth2016snark}.
+A call to \texttt{VoteChainDirect.castVote} supplies $\pi$, $n_e$, and the
+64 ciphertext coordinates. The contract requires an active election and
+an unused nullifier. It checks that the ciphertext coordinates are in the
+canonical field range. It then reconstructs the 73 public inputs using its
+stored configuration and calls the Groth16 verifier. Only after successful
+verification does the contract record the nullifier and update the tally.
+
+The proof attests to the circuit relation, not to a fresh biometric match.
+Its validity also depends on the correct proving and verification artifacts.
+The research implementation does not establish an independently audited,
+production-grade trusted-setup ceremony.
+
+% Verified source:
+% votechain-frontend-ts/src/privacy/wp5Privacy.worker.ts:1027-1147
+% contracts/wp4-foundry/src/VoteChainWP4.sol:825-976
+
+\subsection{Encrypted aggregation and threshold decryption}
+\label{subsec:protocol-threshold}
+
+The contract initializes each encrypted candidate aggregate to the BabyJub
+identity points. After accepting a ballot, it adds the corresponding
+ciphertext points to every slot. For $B$ accepted ballots, the aggregate at
+slot $j$ is
+\begin{equation}
+\label{eq:protocol-aggregation}
+\overline{C}_j=(\overline{R}_j,\overline{S}_j)
+ =\sum_{b=1}^{B}C_{b,j}.
+\end{equation}
+The addition is componentwise in the BabyJub group. By the ElGamal
+construction, the resulting second point contains the encoded candidate
+total $t_jG$ masked by the aggregate encryption term. The contract does
+not maintain plaintext candidate counts during the active private ballot
+phase.
+
+Multi-authority encrypted election tallies have established precedent
+\citep{cramer1997multiauthority}. The implementation specifies five
+trustees and a reconstruction threshold of three. The verified distributed-key-generation
+transcript defines the election public key and public trustee shares.
+Each trustee holds a private share $x_i$ associated with its public point
+$X_i=x_iG$. For an aggregate $\overline{C}_j$, a trustee can produce
+\begin{equation}
+\label{eq:protocol-partial}
+D_{i,j}=x_i\overline{R}_j.
+\end{equation}
+The partial-decryption record contains a discrete-logarithm equality
+proof $\gamma_{i,j}$. It binds the trustee identifier, election identifier,
+slot number, public share, aggregate point, and partial decryption.
+In the implemented non-interactive proof, the trustee forms commitment
+points $A_{1,i,j}=k_{i,j}G$ and
+$A_{2,i,j}=k_{i,j}\overline{R}_j$. A domain-separated Poseidon challenge
+$c_{i,j}$ is computed from the election and trustee context together with
+the relevant points. The response is
+$z_{i,j}=k_{i,j}+c_{i,j}x_i\pmod q$.
+The transcript verifier recomputes the challenge and checks
+\begin{equation}
+\label{eq:protocol-dleq}
+\begin{aligned}
+ z_{i,j}G&=A_{1,i,j}+c_{i,j}X_i,\\
+ z_{i,j}\overline{R}_j&=A_{2,i,j}+c_{i,j}D_{i,j}.
+\end{aligned}
+\end{equation}
+These checks establish consistency of an accepted partial decryption with
+the public trustee share and the specified aggregate point, under the
+proof's cryptographic assumptions. They are implemented in the external
+transcript verifier rather than the voting contract.
+
+For a set $I$ of at least three distinct trustees with valid records, the
+verifier combines partial decryptions using Lagrange coefficients at zero:
+\begin{equation}
+\label{eq:protocol-lagrange}
+\begin{aligned}
+ \lambda_i&=\prod_{\substack{k\in I\\k\neq i}}
+ \frac{-k}{i-k}\pmod q,\\
+ D_j&=\sum_{i\in I}\lambda_iD_{i,j}.
+\end{aligned}
+\end{equation}
+The recovered message point is
+\begin{equation}
+\label{eq:protocol-tally}
+ t_jG=\overline{S}_j-D_j,\qquad 0\leq t_j\leq B.
+\end{equation}
+The verifier decodes $t_j$ within the accepted-ballot bound using a
+bounded baby-step/giant-step search. It rejects a transcript if there are
+fewer than three valid partial records for any slot. It also rejects
+nonzero totals in padded slots and a final active-slot sum different from
+$B$.
+
+The threshold controls who can collectively decrypt. It does not make
+individual encrypted ballots intrinsically undecryptable to a colluding
+threshold of trustees. Confidentiality therefore depends on the actual
+custody and independence of the private shares.
+
+% Verified source:
+% contracts/wp4-foundry/src/VoteChainWP4.sol:690-801
+% crypto/src/wp6-threshold.mjs:27-43,1643-1719,1721-2040
+% crypto/src/wp6-threshold.mjs:2042-2150,2307-2654
+
+\subsection{Finalization transcript and audit boundary}
+\label{subsec:protocol-finalization}
+
+The finalization evidence contains the verified DKG transcript, encrypted
+candidate aggregates, trustee partial-decryption records, and reconstructed
+totals. The application first checks that the election identifiers, frozen
+configuration, accepted-ballot count, and aggregate ciphertexts match the
+corresponding on-chain values. The threshold verifier then validates the
+transcript and recovers the candidate totals.
+
+Both transcript commitments use canonical JSON serialization followed by
+SHA-256. Their relation to the published evidence is
+\begin{equation}
+\label{eq:protocol-transcript-hash}
+\begin{aligned}
+ h_{\mathrm{DKG}}&=\mathsf{SHA256}
+ (\mathsf{Canon}(T_{\mathrm{DKG}})),\\
+ h_{\mathrm{fin}}&=\mathsf{SHA256}
+ (\mathsf{Canon}(T_{\mathrm{fin}})).
+\end{aligned}
+\end{equation}
+The DKG hash is pinned during election configuration. Before finalization,
+the application requires the supplied DKG transcript to match this hash.
+It also checks that the supplied aggregates match the contract state.
+A verified finalization produces the plaintext totals and
+$h_{\mathrm{fin}}$ for submission.
+
+The administrator calls \texttt{finalizeTally} after the election enters its
+Ended phase. The contract requires a previously pinned DKG-transcript hash
+and a nonzero finalization hash. It checks that padded totals are zero,
+that each active total is no larger than $B$, and that their sum equals
+$B$. The contract then records the totals and $h_{\mathrm{fin}}$ and moves
+to Finalized.
+
+The on-chain transition does not verify the DKG transcript, DLEQ proofs,
+or the derivation of plaintext totals from the encrypted aggregate. Those
+cryptographic checks occur outside the contract. A complete audit therefore
+requires the finalization transcript, the pinned hashes, and the published
+encrypted aggregates. The recorded hash allows an auditor to detect a
+mismatch between the supplied transcript and the on-chain commitment.
+It does not force the administrator to submit only a cryptographically
+verified transcript. The contract's arithmetic checks must not be
+interpreted as an on-chain proof of correct threshold decryption.
+The protocol thus separates two verifiable statements. Groth16 is checked
+on-chain when an encrypted ballot is accepted. Trustee-decryption evidence
+is checked by the external verifier during result disclosure. The next
+section documents the corresponding implementation and experimental
+procedures without treating these distinct checks as equivalent.
+
+% Verified source, pinned revision:
+% votechain-central-server/services/elections/electionFinalizationService.js:994-1257
+% crypto/src/wp6-threshold.mjs:2307-2654
+% contracts/wp4-foundry/src/VoteChainWP4.sol:532-616
+% Git commit 17c7453c50793643b590fb5beac6ad77b9aa53ce
