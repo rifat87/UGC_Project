@@ -1,0 +1,47 @@
+\section{Limitations}
+\label{sec:09}
+\label{sec:limitations}
+
+VoteChain-ZK relies on identity-aware biometric enrollment and credential
+authorization. Although the authorization request omits candidate choice, the
+credential custodian can recover each stored voting secret, derive its
+election-scoped nullifier, and associate a public ballot transaction with an
+identified voter. This identity link does not itself reveal the encrypted candidate
+selection. Moreover, the Groth16 membership proof does not establish one credential
+per eligible person or verify that a fresh biometric match occurred when the
+transaction was submitted.
+
+Ballot confidentiality also depends on the voting client and trustee-share custody.
+A compromised browser can observe the plaintext selection before encryption; the
+circuit cannot attest to client integrity or the quality of locally generated
+randomness. Three colluding trustees with sufficient shares could decrypt individual
+published ciphertexts as well as aggregate totals, and independent organizational
+custody of the five shares was not established. The implementation does not
+establish receipt-freeness or coercion resistance.
+
+The evaluated Groth16 setup used development-stage artifacts rather than an
+independently audited production ceremony. Ballot proofs are checked on-chain,
+whereas distributed-key-generation records and trustee discrete-logarithm equality
+proofs are verified externally. The contract's finalization checks enforce election
+state, padded-slot restrictions, count bounds, and agreement with the
+accepted-ballot count; they do not prove that published totals were correctly
+decrypted. Independent auditing requires the complete finalization transcript and
+verification against the on-chain commitments and encrypted aggregates.
+
+Experiments used fixed Merkle depth 17 and 16 encrypted ballot slots.
+Candidate-count trials varied active candidates, not circuit width, while
+eligible-set trials used synthetic commitments and fixed-depth membership paths.
+Consequently, the results do not establish costs for deeper circuits, greater
+ballot-slot capacity, or national-scale enrollment. Measured proof-stage intervals
+include runtime overhead and should not be treated as isolated
+cryptographic-operation timings.
+
+Transaction measurements came from a local Anvil network and cover
+submission-to-receipt intervals, not public-network confirmation, throughput, or
+actual fees. They exclude biometric acquisition, authorization, credential delivery,
+and proof preparation; the predecessor system's biometric evaluation was not
+repeated. Complete threshold finalization also lacks a repeated timing campaign.
+Production readiness requires stronger client and credential protections,
+independent trustee administration, adversarial and concurrent-load testing,
+reliable transcript availability, operational recovery procedures, and end-to-end
+voter-session measurements.
