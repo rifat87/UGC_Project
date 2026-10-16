@@ -1,0 +1,235 @@
+\section{Results}
+\label{sec:07}
+\label{sec:results}
+
+This section reports the outcomes of the four measurement campaigns defined in Section~\ref{sec:implementation-experiments}. Results are organized by the operation measured: encrypted-ballot transactions across elections and on fresh chains, transaction sensitivity to the active candidate count, and eligible-set preparation and proof computation. The final subsection reports the recorded proof-verification outcomes and the boundary of the available measurements. Transaction latency denotes local submission-to-receipt time on Anvil; the separately measured cryptographic stages are not included in that interval.
+
+\subsection{Encrypted-Ballot Transaction Results}
+\label{subsec:results-accepted-ballots}
+
+Across 25 independent elections, the accepted-ballot campaign recorded 2,000 successful transactions after excluding warm-up observations. Mean gas consumption was 1,314,307.123 gas, whereas the median was 1,307,355 gas. Local submission-to-receipt latency averaged 760.640~ms, with a median of 755.111~ms. Table~\ref{tab:results-accepted-overall} provides the distributions, including the observed extrema, sample standard deviations, and nearest-rank 95th percentiles.
+
+\begin{table}[t]
+\centering
+\caption{Accepted-ballot transaction performance
+across 2,000 measured observations.
+Warm-up transactions are excluded.}
+\label{tab:results-accepted-overall}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Metric} &
+\textbf{Mean} &
+\textbf{Median} &
+\textbf{Min.} &
+\textbf{Max.} &
+\textbf{SD} &
+\textbf{P95} \\
+\midrule
+Gas
+& 1,314,307.123
+& 1,307,355
+& 1,306,506
+& 1,866,414
+& 62,133.009
+& 1,307,783 \\
+Latency (ms)
+& 760.640
+& 755.111
+& 669.912
+& 1,026.097
+& 54.870
+& 845.693 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The gas measurements distinguish the initial accepted transaction of an election from subsequent accepted transactions. Each measured election had an initial ballot costing 1,866,414 gas; later ballots generally consumed less gas. The difference is visible in the aggregate statistics: mean gas exceeds the median, while the 95th percentile of 1,307,783 gas remains close to the median. The maximum of 1,866,414 gas is consequently not representative of the cost of most accepted ballots in this campaign.
+
+The same campaign included five independent elections at each size of 25, 50, 75, 100, and 150 accepted ballots. Table~\ref{tab:results-accepted-scale} separates the observed transaction costs and local receipt latencies by those election sizes. Mean gas decreased from 1,329,671.680 gas in the 25-ballot configuration to 1,311,046.147 gas in the 150-ballot configuration, whereas the group medians remained near 1.307 million gas. Mean local receipt latency ranged from 749.866 to 773.656~ms, with no monotonic increase across the five sizes.
+
+\begin{table}[t]
+\centering
+\caption{Accepted-ballot performance by election size.
+Latency values are measured in milliseconds.}
+\label{tab:results-accepted-scale}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+\textbf{Ballots} &
+\textbf{Trials} &
+\textbf{Gas mean} &
+\textbf{Gas median} &
+\textbf{Latency mean} &
+\textbf{Latency P95} \\
+\midrule
+25
+& 125
+& 1,329,671.680
+& 1,307,326
+& 758.558
+& 851.258 \\
+50
+& 250
+& 1,318,524.940
+& 1,307,403
+& 749.866
+& 841.332 \\
+75
+& 375
+& 1,314,766.013
+& 1,307,350
+& 759.730
+& 846.840 \\
+100
+& 500
+& 1,312,904.370
+& 1,307,361
+& 773.656
+& 859.314 \\
+150
+& 750
+& 1,311,046.147
+& 1,307,352.5
+& 756.355
+& 838.877 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The declining group-level gas mean is consistent with the higher-cost first ballot comprising a smaller proportion of the measured transactions as election size increases. This observation concerns the distribution of accepted transactions within the tested elections; it is not a measurement of public-network throughput or of the time required to complete a voter session.
+
+\label{subsec:results-fresh-chain}
+A separate fresh-chain campaign isolated the first accepted encrypted ballot after local-chain initialization. All 20 measured trials consumed exactly 1,866,414 gas, giving a gas standard deviation of zero. Mean local submission-to-receipt latency was 724.030~ms (median 723.301~ms; 95th percentile 741.169~ms), as reported in Table~\ref{tab:results-fresh-chain}.
+
+\begin{table}[t]
+\centering
+\caption{Fresh-chain first-ballot performance
+over 20 measured trials.}
+\label{tab:results-fresh-chain}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Metric} &
+\textbf{Mean} &
+\textbf{Median} &
+\textbf{Min.} &
+\textbf{Max.} &
+\textbf{SD} &
+\textbf{P95} \\
+\midrule
+Gas
+& 1,866,414
+& 1,866,414
+& 1,866,414
+& 1,866,414
+& 0
+& 1,866,414 \\
+Latency (ms)
+& 724.030
+& 723.301
+& 707.327
+& 741.584
+& 10.001
+& 741.169 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The fresh-chain gas value matches the first-ballot value observed within the 25-election campaign. The campaigns nonetheless used different execution conditions, so their latency summaries are presented separately rather than pooled or treated as interchangeable estimates.
+
+\subsection{Sensitivity to Active Candidate Count}
+\label{subsec:results-candidate-count}
+
+The candidate-count campaign varied the active candidate count across 2, 4, 8, and 16 candidates, using 20 measured transactions per configuration. Every configuration retained the same 16-slot encrypted-ballot circuit. Table~\ref{tab:results-candidate-count} reports the resulting gas consumption and local submission-to-receipt latency statistics.
+
+\begin{table}[t]
+\centering
+\caption{Transaction performance across active
+candidate counts. Each configuration contains
+20 measured trials.}
+\label{tab:results-candidate-count}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\textbf{Candidates} &
+\textbf{Mean gas} &
+\textbf{Mean latency} &
+\textbf{Latency SD} &
+\textbf{Latency P95} \\
+\midrule
+2  & 1,866,402 & 865.021 & 23.340 & 899.420 \\
+4  & 1,866,414 & 874.817 & 43.828 & 966.283 \\
+8  & 1,866,414 & 864.572 & 23.814 & 884.175 \\
+16 & 1,866,414 & 863.063 & 28.150 & 881.923 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mean gas consumption was 1,866,402 for two active candidates and 1,866,414 for four, eight, and 16 active candidates: a difference of 12 gas. The recorded calldata length remained 2,340 bytes in all four configurations, with the small gas difference corresponding to calldata byte composition. Mean receipt latency varied from 863.063 to 874.817~ms, with the highest mean at four candidates and no monotonic pattern. These observations describe changes in the active candidate count within a fixed 16-slot circuit; they do not measure the costs of increasing the circuit's slot capacity.
+
+\subsection{Eligible-Set Preparation and Proof Computation}
+\label{subsec:results-eligible-set}
+
+The eligible-set campaign evaluated synthetic eligible populations of 10, 100, 1,000, and 10,000 commitments while fixing the Merkle depth at 17 and the encrypted-ballot capacity at 16 slots. Each population contributed 20 measured trials. Five separately timed stages were recorded: identity-leaf materialization, Merkle-tree and path preparation, witness generation, Groth16 proving, and local proof verification. Table~\ref{tab:results-eligible-set} reports the stage-wise means in milliseconds.
+
+\begin{table}[t]
+\centering
+\caption{Mean execution times in milliseconds
+for eligible-set configurations.
+Each population contains 20 measured trials.
+Merkle depth remains fixed at 17.}
+\label{tab:results-eligible-set}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+\textbf{Eligible} &
+\textbf{Leaf prep.} &
+\textbf{Tree/path} &
+\textbf{Witness} &
+\textbf{Proving} &
+\textbf{Verification} \\
+\midrule
+10
+& 1.115
+& 3.946
+& 1,100.572
+& 5,423.311
+& 1,039.343 \\
+100
+& 10.252
+& 11.923
+& 1,090.561
+& 5,372.540
+& 1,030.482 \\
+1,000
+& 89.919
+& 88.387
+& 1,045.809
+& 5,292.146
+& 1,031.747 \\
+10,000
+& 809.040
+& 797.958
+& 1,044.414
+& 5,298.752
+& 1,018.918 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two eligible-set preparation stages showed the largest changes across populations. Mean leaf-materialization time rose from 1.115~ms at 10 commitments to 809.040~ms at 10,000, while mean Merkle-tree and path preparation rose from 3.946 to 797.958~ms. By comparison, mean witness-generation time ranged from 1,044.414 to 1,100.572~ms; mean Groth16 proving time ranged from 5,292.146 to 5,423.311~ms; and mean local verification time ranged from 1,018.918 to 1,039.343~ms.
+
+The highest observed mean proving time was 5,423.311~ms for 10 eligible commitments (nearest-rank 95th percentile 6,234.871~ms). For 10,000 commitments, the mean was 5,298.752~ms and the corresponding 95th percentile was 5,380.110~ms. Thus, the measured variation in eligible-set preparation is distinguishable from the proof stages under the fixed-depth circuit. This campaign did not vary the Merkle depth, and it did not submit blockchain transactions; its verification times are local proof-verification times rather than Solidity-verifier execution times.
+
+\subsection{Verification Outcomes and Measurement Coverage}
+\label{subsec:results-verification}
+
+All 80 measured eligible-set observations passed their recorded witness checks and local Groth16 proof-verification checks. For every observation, the expected 73 public signals also passed the recorded consistency comparisons. These outcomes describe the tested synthetic instances and do not independently establish the security of biometric enrollment, credential custody, or trustee administration.
+
+The four quantitative campaigns do not contain repeated measurements of the complete threshold-finalization procedure, so no end-to-end finalization-latency estimate is reported. Similarly, the transaction timings above exclude biometric authentication, credential release, and client-side proof preparation. Section~\ref{sec:discussion-comparison} discusses the implications of these findings, their comparison limits, and the associated trust boundaries.
