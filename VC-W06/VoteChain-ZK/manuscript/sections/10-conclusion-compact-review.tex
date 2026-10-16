@@ -1,0 +1,34 @@
+\section{Conclusion}
+\label{sec:10}
+\label{sec:conclusion}
+
+VoteChain-ZK extends the previously developed biometric-blockchain voting architecture
+with a candidate-blind authorization and encrypted-ballot pathway. Biometric verification
+authorizes release of a protected voting credential without receiving the voter's
+candidate selection. A client-side privacy worker uses that credential to construct a
+fixed-slot encrypted ballot and an election-bound Groth16 proof of eligibility, nullifier
+consistency, and ballot validity. The voting contract verifies the proof, rejects reused
+election-scoped nullifiers, and accumulates ciphertexts without learning the selected
+candidate. Following voting, three of five trustees support aggregate decryption, with
+their evidence checked externally before the contract records final totals and a
+transcript commitment.
+
+The controlled evaluation recorded 2,000 accepted encrypted-ballot transactions across 25
+elections, with mean gas consumption of 1,314,307.123 per accepted ballot and mean local
+submission-to-receipt latency of 760.640 ms. Candidate-count trials showed limited gas
+variation within the fixed 16-slot circuit. Under the fixed depth-17 Merkle configuration,
+eligible-set preparation costs increased with population size, whereas mean Groth16
+proving time remained between 5.292 and 5.423 seconds. These observations characterize the
+tested components and execution environment; they do not measure complete
+biometric-to-receipt voting time or public-network throughput.
+
+The resulting privacy and verifiability guarantees remain conditional on credential
+custody, client integrity, trustworthy cryptographic setup, and trustee-share protection.
+In particular, the custodian may link voter identities to election nullifiers, and the
+contract does not verify trustee decryption proofs: independent checking requires the
+complete external finalization transcript. Future work should evaluate end-to-end voting
+sessions and concurrent public-network operation, establish independently managed trustee
+custody and production-grade setup, and investigate stronger identity unlinkability and
+expanded circuit configurations. The present results support a bounded implementation of
+encrypted, proof-checked voting and externally auditable tally recovery, not a
+production-election security claim.
