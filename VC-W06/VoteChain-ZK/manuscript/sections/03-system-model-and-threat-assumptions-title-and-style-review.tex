@@ -1,0 +1,84 @@
+\section{System Model and Threat Assumptions}
+\label{sec:03}
+\label{sec:system-model}
+
+\subsection{System Model and Participating Entities}
+\label{subsec:system-entities}
+
+The present study extends the biometric voting architecture reported in
+\emph{Blockchain--integrated IoT biometric architecture for secure and
+decentralized electronic voting} \citep{rifat2026biometric}. That study
+combined fingerprint and facial verification with off-chain identity
+management and blockchain vote processing. In the present system, the
+authorization step does not receive the selected candidate. The voter-facing
+client constructs an encrypted ballot, and the contract verifies its
+zero-knowledge proof before accumulating ciphertexts. The application
+maintains a Semaphore-based registration group and election anchor, whereas
+the private-ballot pathway uses a separate custom Poseidon commitment tree.
+The \texttt{VoteChainDirect} contract checks membership against the custom
+eligibility root. These structures serve different purposes and do not form
+a single membership proof. Biometric recognition results from the earlier
+publication are not measurements of the present cryptographic procedure.
+
+The participating entities are the voter-facing client and privacy worker,
+biometric authentication service, credential authorization service,
+election administrator, voting contract, public blockchain observers, five
+tally trustees, and an external transcript auditor. The authentication
+service identifies voters, while the credential service controls access
+to registered voting secrets and releases authorization material. The
+client prepares encrypted ballots and proofs. The contract validates
+submitted ballots and maintains the encrypted aggregate. The administrator
+configures election state and submits recovered results. Trustees provide
+partial-decryption evidence, which an external auditor can independently
+check. Public observers can inspect transactions, nullifiers, proofs, and
+ciphertexts, but not plaintext candidate choices from accepted ballot data.
+Administrative authority alone does not establish access to credential
+secrets or trustee shares. These roles describe access boundaries without
+assuming independent organizational control.
+
+\subsection{Threat Model and Security Assumptions}
+\label{subsec:system-security-objectives}
+
+The threat model considers observers of public transaction data and
+submitters attempting ineligible, malformed, or repeated ballots. It
+also includes compromised voting clients, credential custodians, and
+colluding trustees. Ballot acceptance depends on the configured circuit
+relation and contract checks. A Groth16 proof binds membership in the
+custom eligibility tree, the election context, a one-hot candidate
+selection, and the submitted encrypted ballot slots
+\citep{groth2016snark}. The contract verifies the proof and rejects a
+previously used election nullifier before adding a ballot to the
+encrypted tally. These checks do not independently establish correct
+civil-identity enrollment, a fresh biometric match at transaction
+submission, or the integrity of the voter's device.
+
+Let $s$ be a registered private voting-credential secret and $e$ the
+election identifier. The circuit computes the election-scoped nullifier
+as
+\begin{equation}
+  n_e = \mathsf{Poseidon}(d_{\mathrm{null}},s,e).
+  \label{eq:system-nullifier}
+\end{equation}
+where $d_{\mathrm{null}}$ denotes the configured domain separator.
+Poseidon is used as a hash primitive within the proof circuit
+\citep{grassi2021poseidon}. The nullifier is public, while the
+membership witness and candidate selection are private. Nevertheless,
+the credential authorization service can recover a stored credential
+secret during authorization. It can therefore compute the corresponding
+nullifier and link an identified voter to an accepted public transaction.
+This identity linkage does not by itself reveal the candidate choice.
+Candidate confidentiality also depends on ballot encryption and the
+integrity of the client. A compromised client may expose the selection
+before encryption.
+
+Ballot confidentiality further depends on the protection of the
+election decryption key shares. Three colluding trustees with sufficient
+shares could decrypt individual published ballots, not only the
+aggregate tally. The contract verifies ballot proofs on-chain, but
+distributed-key-generation and partial-decryption evidence are
+verified externally. Finalization records reported totals and a
+transcript hash after contract-state and arithmetic checks. It does not
+verify trustee decryption proofs on-chain. Independent tally verification
+requires access to the full transcript and its corresponding encrypted
+aggregate. These assumptions do not establish receipt-freeness,
+coercion resistance, or security under production-election conditions.
