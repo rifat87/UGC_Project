@@ -1,0 +1,370 @@
+% Complete consolidated Section 5, Results and Discussion.
+% Manuscript-writing branch: manuscript/introduction-three-contributions-20261016
+% Sources: existing 07-results, 08-discussion, and 09-limitations LaTeX files.
+% The seven original tables, numeric entries, and associated labels are retained.
+% Use this as sections/07-results.tex; do not also input the superseded 08 and 09.
+% On the agreed six-main-section layout, Methods is the immediately preceding section.
+
+\section{Results and Discussion}
+\label{sec:results-discussion}
+\label{sec:07}
+\label{sec:results}
+
+This section reports the four completed performance campaigns and interprets their findings in relation to the implemented encrypted-voting protocol. The measurements concern accepted ballot transactions, fresh-chain execution, active candidate-count configurations, and fixed-depth eligible-set preparation. Results are reported before comparisons with the previously published biometric voting architecture and independently published voting systems. The final discussion examines the two research questions and the evaluation boundaries, with particular attention to the distinction between on-chain ballot verification and external tally verification. All transaction latencies refer to local submission-to-receipt intervals on Anvil rather than complete biometric voting sessions.
+
+\subsection{Experimental Evaluation Overview}
+\label{subsec:results-evaluation-overview}
+
+The accepted-ballot campaign contains 2,000 successful transactions measured across 25 elections, while a separate campaign contains 20 first-ballot observations after fresh local-chain initialization. Two sensitivity campaigns examine four active candidate counts and four synthetic eligible populations, respectively, with 20 measured trials for each configuration. Warm-up observations were excluded as specified in Section~\ref{subsec:experimental-campaigns}. The candidate-count experiment maintained the 16-slot circuit representation, and the eligible-set experiment retained a Merkle depth of 17. These controls allow comparisons among the tested configurations but do not establish performance for wider circuits, deeper Merkle trees, or a distributed public network.
+
+Gas and local transaction-receipt intervals are described separately from witness generation, proof generation, and local proof verification. The latter stages were measured during eligible-set experiments and were not part of the blockchain receipt interval. Descriptive statistics include the mean, median, extrema, sample standard deviation, and nearest-rank 95th percentile where available. This separation prevents measurements obtained from different campaigns from being combined into an unsupported end-to-end latency or throughput figure.
+
+\subsection{Encrypted-Ballot Transaction Performance}
+\label{subsec:results-accepted-ballots}
+\label{subsec:discussion-transaction-costs}
+
+Across the 25 measured elections, the accepted-ballot campaign produced a mean transaction gas cost of 1,314,307.123 and a median of 1,307,355 gas. The mean local submission-to-receipt latency was 760.640~ms, compared with a median of 755.111~ms. Table~\ref{tab:results-accepted-overall} reports the full measured distributions, including standard deviations and nearest-rank 95th percentiles. The 2,000-observation mean corresponds to the frozen unrounded gas mean of 1,314,307.1225 and latency mean of 760.639934~ms, with the table displaying rounded values. These results characterize local execution and receipt retrieval for proof-verified encrypted ballot submissions; they do not include biometric recognition, credential delivery, or client-side proof preparation.
+
+\begin{table}[t]
+\centering
+\caption{Accepted-ballot transaction performance
+across 2,000 measured observations.
+Warm-up transactions are excluded.}
+\label{tab:results-accepted-overall}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Metric} &
+\textbf{Mean} &
+\textbf{Median} &
+\textbf{Min.} &
+\textbf{Max.} &
+\textbf{SD} &
+\textbf{P95} \\
+\midrule
+Gas
+& 1,314,307.123
+& 1,307,355
+& 1,306,506
+& 1,866,414
+& 62,133.009
+& 1,307,783 \\
+Latency (ms)
+& 760.640
+& 755.111
+& 669.912
+& 1,026.097
+& 54.870
+& 845.693 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The distribution is affected by the first accepted ballot in each election. Those initial transactions consumed 1,866,414 gas, whereas later ballots generally required less. Consequently, the overall mean exceeds the median even though the 95th percentile is 1,307,783 gas, close to the median. The maximum reflects the first-ballot execution state rather than the usual cost of an additional accepted ballot. The experiment did not separately instrument the gas contributions of Groth16 verification, BabyJub point arithmetic, and contract storage operations, so the observed difference should not be assigned quantitatively to a single component.
+
+The accepted-ballot campaign included five independent elections at each of the 25-, 50-, 75-, 100-, and 150-ballot configurations. Their observation counts and group-level summaries appear in Table~\ref{tab:results-accepted-scale}. Mean gas declined from 1,329,671.680 in the 25-ballot configuration to 1,311,046.147 in the 150-ballot configuration, while the group medians remained near 1.307 million gas. This pattern is consistent with a constant number of high-cost initial ballots representing a decreasing proportion of each larger election group. Mean local receipt latency ranged from 749.866 to 773.656~ms and did not increase monotonically with the tested election sizes. These election-size groups are not independent measurements of public-network scalability or throughput.
+
+\begin{table}[t]
+\centering
+\caption{Accepted-ballot performance by election size.
+Latency values are measured in milliseconds.}
+\label{tab:results-accepted-scale}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+\textbf{Ballots} &
+\textbf{Trials} &
+\textbf{Gas mean} &
+\textbf{Gas median} &
+\textbf{Latency mean} &
+\textbf{Latency P95} \\
+\midrule
+25
+& 125
+& 1,329,671.680
+& 1,307,326
+& 758.558
+& 851.258 \\
+50
+& 250
+& 1,318,524.940
+& 1,307,403
+& 749.866
+& 841.332 \\
+75
+& 375
+& 1,314,766.013
+& 1,307,350
+& 759.730
+& 846.840 \\
+100
+& 500
+& 1,312,904.370
+& 1,307,361
+& 773.656
+& 859.314 \\
+150
+& 750
+& 1,311,046.147
+& 1,307,352.5
+& 756.355
+& 838.877 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A separate fresh-chain experiment isolated the first accepted encrypted ballot after local-chain initialization. Each of its 20 measured trials consumed exactly 1,866,414 gas, producing zero gas standard deviation. Mean local receipt latency was 724.030~ms, with a median of 723.301~ms and a 95th percentile of 741.169~ms, as shown in Table~\ref{tab:results-fresh-chain}. The gas value matches the initial accepted-ballot value in the 25-election campaign, but the two campaigns used different initialization and measurement conditions. Their timing results therefore remain separate rather than being pooled as a single first-vote or full-session estimate.
+\label{subsec:results-fresh-chain}
+
+\begin{table}[t]
+\centering
+\caption{Fresh-chain first-ballot performance
+over 20 measured trials.}
+\label{tab:results-fresh-chain}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Metric} &
+\textbf{Mean} &
+\textbf{Median} &
+\textbf{Min.} &
+\textbf{Max.} &
+\textbf{SD} &
+\textbf{P95} \\
+\midrule
+Gas
+& 1,866,414
+& 1,866,414
+& 1,866,414
+& 1,866,414
+& 0
+& 1,866,414 \\
+Latency (ms)
+& 724.030
+& 723.301
+& 707.327
+& 741.584
+& 10.001
+& 741.169 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Sensitivity to Active Candidate Count}
+\label{subsec:results-candidate-count}
+
+The candidate-count campaign compared 2, 4, 8, and 16 active candidates, with 20 measured transactions for each configuration. Every transaction retained 16 encrypted candidate slots and the same fixed voting-circuit dimensions. Table~\ref{tab:results-candidate-count} shows that mean gas consumption was 1,866,402 for two candidates and 1,866,414 for four, eight, and 16 candidates. The difference across these means was 12 gas. The recorded calldata length was 2,340 bytes in every configuration, so the results do not indicate growth in the submitted ballot width. Variation in calldata byte composition is consistent with the small gas difference, although this campaign does not identify a separate causal contribution for each encoded byte.
+
+\begin{table}[t]
+\centering
+\caption{Transaction performance across active
+candidate counts. Each configuration contains
+20 measured trials.}
+\label{tab:results-candidate-count}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\textbf{Candidates} &
+\textbf{Mean gas} &
+\textbf{Mean latency} &
+\textbf{Latency SD} &
+\textbf{Latency P95} \\
+\midrule
+2  & 1,866,402 & 865.021 & 23.340 & 899.420 \\
+4  & 1,866,414 & 874.817 & 43.828 & 966.283 \\
+8  & 1,866,414 & 864.572 & 23.814 & 884.175 \\
+16 & 1,866,414 & 863.063 & 28.150 & 881.923 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mean local receipt latency ranged from 863.063 to 874.817~ms, with the highest mean observed for four active candidates. There was no monotonic latency trend across the four configurations, and the standard deviations indicate variability within the recorded trials. The observed similarity in execution costs follows from the fixed representation used by the implementation, not from a claim that accommodating arbitrarily many candidates would have negligible cost. Testing higher slot capacities would require separate circuit configurations and measurements that are absent from this campaign.
+
+\subsection{Eligible-Set Preparation and Proof Computation}
+\label{subsec:results-eligible-set}
+\label{subsec:discussion-proof-costs}
+\label{subsec:discussion-eligible-population}
+
+The eligible-set campaign evaluated synthetic populations of 10, 100, 1,000, and 10,000 registered commitments while holding the Merkle path depth at 17 and the encrypted-ballot width at 16 slots. Each population had 20 measured runs. The five recorded stages were identity-leaf materialization, Merkle-tree and authentication-path preparation, witness generation, Groth16 proof generation, and local Groth16 proof verification. Table~\ref{tab:results-eligible-set} reports their mean durations in milliseconds. Unlike the transaction campaigns, these measurements did not involve blockchain submissions and cannot be interpreted as on-chain verification latency.
+
+\begin{table}[t]
+\centering
+\caption{Mean execution times in milliseconds
+for eligible-set configurations.
+Each population contains 20 measured trials.
+Merkle depth remains fixed at 17.}
+\label{tab:results-eligible-set}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+\textbf{Eligible} &
+\textbf{Leaf prep.} &
+\textbf{Tree/path} &
+\textbf{Witness} &
+\textbf{Proving} &
+\textbf{Verification} \\
+\midrule
+10
+& 1.115
+& 3.946
+& 1,100.572
+& 5,423.311
+& 1,039.343 \\
+100
+& 10.252
+& 11.923
+& 1,090.561
+& 5,372.540
+& 1,030.482 \\
+1,000
+& 89.919
+& 88.387
+& 1,045.809
+& 5,292.146
+& 1,031.747 \\
+10,000
+& 809.040
+& 797.958
+& 1,044.414
+& 5,298.752
+& 1,018.918 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two preparation stages changed most strongly with eligible-set population. Mean leaf preparation increased from 1.115~ms for 10 commitments to 809.040~ms for 10,000, while mean tree and path preparation increased from 3.946 to 797.958~ms. By contrast, mean witness-generation time ranged from 1,044.414 to 1,100.572~ms, and mean Groth16 proving time ranged from 5,292.146 to 5,423.311~ms. Mean local verification time ranged from 1,018.918 to 1,039.343~ms. These are measured software-stage intervals that include the relevant invocation and runtime overhead, not isolated arithmetic-operation timings or Solidity verifier costs.
+
+The highest mean proving time was 5,423.311~ms for the 10-commitment configuration, with a recorded 95th percentile of 6,234.871~ms. For 10,000 commitments, the mean proving time was 5,298.752~ms and the 95th percentile was 5,380.110~ms. The relatively narrow range of proof-stage means is consistent with the fixed-depth and fixed-width circuit, whereas preparation of the populated set requires more work as the number of commitments grows. It does not establish a scaling law for increased Merkle depth or national-scale eligibility databases. Network and consensus scalability, which are considered in wider blockchain-voting studies, were not varied here \citep{jafar2022scalability,indrason2025mbcsd}.
+
+\subsection{Verification Outcomes and Measurement Coverage}
+\label{subsec:results-verification}
+
+All 80 measured eligible-set observations passed their recorded witness checks, local Groth16 proof-verification checks, and expected 73-public-signal consistency checks. These positive outcomes establish that the generated instances satisfied the configured test workflow under the measured conditions. They do not establish a security proof for the complete biometric enrollment process, independently validate trusted-setup artifacts, or certify the absence of client compromise. Functional and integration tests additionally exercise selected rejection and threshold-validation conditions, but those tests are distinct from the four positive performance campaigns and are not a substitute for an independent adversarial audit.
+
+The available quantitative evidence also has deliberate stage boundaries. The transaction timings begin at submission and end upon local receipt retrieval, while the eligible-set computations are recorded separately. No repeated complete biometric-to-receipt measurement or complete threshold-finalization timing campaign is available. Accordingly, no complete voting-session latency, trustee-finalization time, concurrent-load throughput, or public-network confirmation figure is inferred from these data. The following comparisons use only directly reported observations and preserve the differences between the operations being compared.
+
+\subsection{Historical Transaction-Cost Context}
+\label{subsec:discussion-historical-cost}
+
+The earlier study, \emph{Blockchain\textendash{}integrated IoT biometric architecture for secure and decentralized electronic voting}, reported a mean of 52,221 gas for six recorded calls to \texttt{LocalVoting.castVote} in its Foundry function gas report \citep{rifat2026biometric}. That pathway submitted a candidate-identifying vote and updated plaintext tallies. The present \texttt{VoteChainDirect.castVote} instead verifies an election-bound Groth16 proof and nullifier and updates 16 encrypted candidate aggregates. Differences in ballot representation, contract behavior, state transitions, and experimental sample design mean that the historical result is not a matched experimental control. The earlier biometric recognition measurements likewise cannot be combined with local encrypted-ballot receipt timings to estimate a complete system improvement.
+
+Table~\ref{tab:discussion-historical-cost} retains gas as the primary reported quantity. It also displays illustrative USD values derived under the same historical assumptions used in the earlier publication: 20~Gwei per gas and USD~3,890 per ether. The scenario conversion is $\mathrm{USD}=\mathrm{gas}\times20\times10^{-9}\times3{,}890$. The legacy USD value is taken from the earlier publication, while the present values apply the same arithmetic to measured gas. They are accounting illustrations, not observed payments, current network prices, or forecasts of production deployment costs. First-ballot gas remains separately identified because its initial storage state differs from later accepted ballots.
+
+\begin{table}[tbp]
+\centering
+\caption{Ballot-submission cost accounting for the previously published and present implementations. USD figures use the \emph{illustrative} shared assumptions of 20~Gwei and USD~3,890/ETH; this is not a controlled matched performance comparison.}
+\label{tab:discussion-historical-cost}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.17}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.43\linewidth}r>{\raggedleft\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}@{}}
+\toprule
+\textbf{Voting transaction / statistic} & \textbf{Gas} & \textbf{USD (scenario)} & \textbf{Source / scope} \\
+\midrule
+Earlier \texttt{LocalVoting.castVote}: mean
+& 52,221 & 4.0628 & 2026 paper, gas-report Fig.~8 and cost Table~6; six calls \\
+\addlinespace[3pt]
+Current \texttt{VoteChainDirect.castVote}: accepted-ballot mean
+& 1,314,307.123 & 102.25 & 2,000 accepted ballots, 25 elections \\
+\addlinespace[3pt]
+Current \texttt{VoteChainDirect.castVote}: accepted-ballot median
+& 1,307,355 & 101.71 & Same measured campaign \\
+\addlinespace[3pt]
+Current \texttt{VoteChainDirect.castVote}: first accepted ballot
+& 1,866,414 & 145.21 & First ballots in measured elections; also observed in 20 fresh-chain trials \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The tabulated values cannot establish a percentage speedup, a marginal cryptographic overhead, or an overall cost-effectiveness ranking. An attribution of the additional gas to proof verification, ciphertext storage, or curve operations would require matched contract variants and workload instrumentation. The historical comparison instead explains why the cost of a proof-verified encrypted-ballot call should not be equated with the predecessor's simpler candidate-identifying transaction.
+
+\subsection{Comparative Performance Analysis}
+\label{subsec:discussion-literature-comparison}
+\label{sec:08}
+\label{sec:discussion-comparison}
+
+Published voting-system measurements offer context only when the operation and environment are identified. A Groth16 proof for a particular ballot relation cannot be equated with a proof based on a different relation, proving library, or hardware. Likewise, a full transaction through a permissioned blockchain's endorsement and ordering pipeline is not equivalent to submission-to-receipt timing on a local Anvil chain. Table~\ref{tab:discussion-external-metrics} juxtaposes selected primary-source quantitative results with the closest available observations from the present implementation. Its comparison boundaries are part of the evidence and must be considered alongside the numerical values rather than treated as footnotes to an implicit performance ranking.
+
+% The supplied manuscript preamble includes longtable, booktabs, and array support.
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}@{}}
+\caption{Primary-source quantitative reports and their comparability with the present study. External values retain their original measurement settings; no row represents a matched benchmark.}\label{tab:discussion-external-metrics}\\
+\toprule
+\textbf{Study} & \textbf{Reported result} & \textbf{Protocol / measurement setting} & \textbf{Present evidence} & \textbf{Comparison boundary} \\
+\midrule
+\endfirsthead
+\multicolumn{5}{@{}l}{\textit{Table~\thetable\ (continued)}}\\[2pt]
+\toprule
+\textbf{Study} & \textbf{Reported result} & \textbf{Protocol / measurement setting} & \textbf{Present evidence} & \textbf{Comparison boundary} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r@{}}{\textit{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\textbf{Huber et al.} \citep{huber2025ballotvalidity}
+& Approximately 2.5~s for a 25-candidate tournament-style ballot-validity proof (Fig.~4).
+& Groth16/BN254 with exponential-ElGamal ballot relations; \texttt{libsnark} on an i5-7500T, 16-GB PC.
+& Mean proving 5.292--5.423~s; fixed 16 encrypted slots and depth-17 eligibility path.
+& Different ballot statement, candidate configuration, library and machine. \\
+\addlinespace[3pt]
+\textbf{Alsuwat} \citep{alsuwat2026voting}
+& Mean proof generation 146.80~ms; mean verifier operation 7.83~ms (Table~12).
+& ZK-eligibility voting with Dilithium authorization; voter client and validator timing in permissioned BFT setup.
+& Mean proving 5.292--5.423~s; local verification 1.019--1.039~s (includes runtime overhead).
+& Proof relations and timing boundaries differ; not a relative speed measurement. \\
+\addlinespace[3pt]
+\textbf{Solanki and Meva} \citep{solanki2026hybrid}
+& Approximately 18~ms ZKP generation; 2.521~s average transaction latency.
+& Schnorr-style proof with Paillier encryption; Hyperledger Fabric/Raft, laboratory transaction workload.
+& Groth16 proving 5.292--5.423~s; local Anvil receipt mean 760.640~ms.
+& Different proof family and transaction lifecycle; no direct latency ranking. \\
+\addlinespace[3pt]
+\textbf{Sallal et al. (PVPBC)} \citep{sallal2023pvpbc}
+& Approximately $2.8\times10^{5}$ to $7.43\times10^{5}$ gas for casting/storing an encrypted ballot and tracker across one to seven candidates (Fig.~10).
+& Quorum permissioned-chain ballot-storage path with Selene-style tracking; candidate count varies in the encoded ballot.
+& Mean accepted-ballot cost 1,314,307.123 gas for fixed 16-slot proof-verified ElGamal acceptance.
+& Different contract tasks and ledger; gas figures are contextual, not matched. \\
+\addlinespace[3pt]
+\textbf{Jung et al.} \citep{jung2026anonymous}
+& Peak 40.7~TPS at 1,000 concurrent voters; mean latency 6,608~ms at that load (reported workload table).
+& Hyperledger Fabric~2.5, endorsement and ordering pipeline; concurrent load on the study's test setup.
+& No concurrent-load TPS series; 760.640~ms is sequential local receipt timing.
+& Throughput and receipt timing cannot be ranked across these settings. \\
+\end{longtable}
+\endgroup
+
+The published results provide useful references for encrypted-ballot validity, threshold recovery, and blockchain execution without establishing that one complete system outperforms another. Ballot validity, homomorphic aggregation, and multi-authority tallying are established cryptographic approaches \citep{huber2025ballotvalidity,cramer1997multiauthority,wang2024versatile,schiedermeier2024mpc}. The contribution examined here is the particular integration of identity-aware biometric authorization, election-bound ballot proofs, encrypted on-chain aggregation, and independently checkable result disclosure. Differences in proof statement, candidate representation, ledger platform, network load, and timing boundaries preclude a controlled ranking from the tabulated figures.
+
+The absence of corresponding measurements is equally important. The present experiments do not include sustained concurrent-voter throughput, a repeated complete threshold-finalization timing series, or a public-chain gas-price study. Consequently, a reported network TPS figure cannot be paired with a fabricated counterpart, and an external end-to-end latency cannot be ranked against our local receipt interval. Alternative blockchain voting architectures, including those based on Algorand or distinct consensus and networking arrangements, operate under additional assumptions \citep{esposito2023algorand,razaque2026dpos,chaudhary2023voting5g}. A future matched benchmark would need to align ballot relations, workload size, hardware, ledger configuration, and measured stage before drawing quantitative conclusions.
+
+\subsection{Discussion and Research-Question Synthesis}
+\label{subsec:discussion-privacy}
+\label{subsec:discussion-implications}
+
+For RQ1, the implemented authorization workflow separates candidate selection from the identity-aware biometric request. After authorization, the client-side privacy worker prepares the one-hot encrypted ballot and generates a Groth16 proof that binds the custom Poseidon eligibility membership, election context, scoped nullifier, valid candidate choice, and ciphertext coordinates. The contract checks this statement and rejects reused nullifiers before updating its encrypted aggregate. As a result, the accepted ballot transaction does not need to contain a plaintext candidate identifier, and the biometric service does not need to receive candidate choice during the inspected authorization flow. This realizes an integration of existing cryptographic techniques with the previously published biometric foundation rather than a new primitive or proof of the biometric recognition process \citep{rifat2026biometric,groth2016snark,huber2025ballotvalidity}.
+
+The distinction between candidate privacy and identity unlinkability remains essential. The credential custodian is identity-aware and can recover a stored voting secret to construct the protected client envelope. Possession of this secret permits computation of the election nullifier and comparison with the public ledger, potentially linking an accepted ballot transaction to the enrolled voter. Public transaction timing and sender metadata may create additional correlation channels, while a compromised client can observe the plaintext choice before encryption. These capabilities do not automatically reveal encrypted candidate content, but they prevent an unqualified claim of anonymity, client-independent secrecy, or receipt-freeness. The tested candidate-blind request structure addresses one defined information-flow boundary rather than every possible identity-to-vote linkage.
+
+For RQ2, the on-chain contract accumulates only ciphertexts that pass the configured ballot proof and state checks. A three-of-five trustee procedure then enables recovery of aggregate candidate counts, provided sufficient valid partial decryptions are available. The external transcript verifier checks the distributed-key-generation evidence and trustee DLEQ consistency proofs and compares the recovered tally with the on-chain aggregate. In contrast, the contract's finalization function checks election status, active and padded candidate totals, count bounds, and the accepted-ballot sum before recording the results and transcript commitment. A transaction satisfying those arithmetic conditions is not itself proof that the external DLEQ evidence was valid. Independent auditing requires the complete transcript and verification against the on-chain aggregate and hashes \citep{cramer1997multiauthority,cortier2016sok}.
+
+These observations support three bounded contributions: candidate-blind biometric authorization with protected local credential release, election-bound Groth16 verification of encrypted one-hot ballots, and threshold-verifiable result recovery through externally checked evidence. The performance campaigns characterize the computational and transaction costs of the implemented configuration without establishing independent security assurance or a matched performance advantage over prior work. The measured results therefore support the two research questions within the prototype's explicit trust and experimental boundaries. They do not establish coercion resistance, universal identity unlinkability, independence of the five trustees, or production-election readiness.
+
+\subsection{Study Limitations}
+\label{sec:09}
+\label{sec:limitations}
+
+The security properties are conditional on identity-aware enrollment, credential authorization, and a trustworthy voting client. The authorization request excludes candidate choice, but the credential custodian can recover the corresponding secret, derive the election nullifier, and associate an accepted transaction with an enrolled voter. A compromised browser can observe or replace the plaintext selection before encryption, and the circuit does not prove that the displayed candidate matches the voter's intention. It also does not establish one credential per person or a fresh biometric match for every accepted transaction. These limitations are detailed by the trust and adversary model in Section~\ref{sec:system-model} and are not removed by successful Groth16 verification.
+
+Tally confidentiality and recovery rely on the actual custody and availability of three of five trustee shares. A coalition with three usable shares could potentially decrypt individual published ballots, while too few available trustees could delay aggregate recovery. The experiments did not establish independent institutional management of the trustee keys. Distributed-key-generation and partial-decryption proofs are checked outside the smart contract, so an on-chain transcript commitment and acceptable count arithmetic do not replace independent verification of the full cryptographic evidence. The development-stage Groth16 parameters also lack the assurances of an independently audited production setup, and the prototype does not establish coercion resistance or receipt-freeness.
+
+The evaluation fixes Merkle depth at 17 and ballot width at 16 ciphertext slots. Candidate-count tests vary active candidate count rather than circuit capacity, while eligible-set tests use synthetic commitments and do not increase the constrained membership path length. The observed proof-stage times include software-invocation overhead, and the study does not characterize larger circuits or nationwide registration conditions. Receipt measurements were performed on a local Anvil network without public-network congestion, geographically distributed users, or concurrent network-load experiments. Their interval excludes biometric acquisition, authorization, credential delivery, and proof preparation, and no repeated complete threshold-finalization timing campaign was recorded. Production deployment would require additional client and credential protections, independent trustee governance, full transcript availability, resilient recovery procedures, and broader adversarial and end-to-end testing.
