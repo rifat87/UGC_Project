@@ -1,0 +1,734 @@
+% Manuscript consolidation draft, 2026-10-21.
+% Authoritative inputs: the existing architecture, protocol, and experimental
+% methods sources in this manuscript branch; core source implementation pinned
+% at Git revision 17c7453c50793643b590fb5beac6ad77b9aa53ce.
+% Standalone Section 4: do not also include the superseded Sections 5 and 6.
+% No new results, references, experiment rows, mathematical labels, or figures.
+
+\section{Materials and Methods}
+\label{sec:04}
+\label{sec:architecture}
+
+This section presents the research design, implemented cryptographic voting
+protocol, and experimental methodology. It first identifies the changes made
+to the previously published biometric voting architecture and defines the
+notation used to describe the new ballot-processing pathway. It then follows
+the sequence of election initialization, candidate-blind biometric
+authorization, local encrypted-ballot construction, proof verification,
+homomorphic accumulation, and threshold result recovery. The final
+subsections document the implemented software, controlled workloads, timing
+boundaries, and statistical treatment. Security assumptions and residual
+adversarial capabilities have already been established in
+Section~\ref{sec:system-model}. The methodology described here concerns the
+new cryptographic investigation, not a repeat of the earlier biometric
+recognition experiments.
+
+\subsection{Research Design and System Architecture}
+\label{subsec:architecture-overview}
+
+The study uses a system-design and controlled experimental evaluation
+approach to examine the integration of biometric authorization with
+cryptographically validated, encrypted voting. Its starting point is the
+previously published \emph{Blockchain\textendash{}integrated IoT biometric
+architecture for secure and decentralized electronic voting}
+\citep{rifat2026biometric}. That work combined fingerprint and facial
+verification, identity-aware application services, and blockchain voting
+operations. The present study retains the authentication foundation while
+changing how an authorized person prepares, submits, and has a ballot counted.
+In particular, candidate selection is excluded from the inspected
+biometric-authorization request, ballot admissibility is expressed as a
+zero-knowledge relation, and accepted votes contribute encrypted points
+rather than plaintext candidate counts during the voting period.
+
+The architecture connects the enrollment and biometric services, credential
+and election management services, a voter-facing web client with its local
+privacy worker, an Ethereum-compatible voting contract, and the tally
+trustees. The biometric service determines which enrolled person is
+requesting authorization, while the credential service controls release of
+the applicable secret and eligibility witness. Candidate selection,
+encryption, and proof generation take place in the client-side privacy
+worker. The smart contract verifies the submitted proof and nullifier before
+updating the encrypted aggregate. After voting closes, three of five
+trustees can contribute partial decryptions, whose consistency is checked
+outside the contract before the administrator submits the recovered result.
+These are separate verification boundaries rather than a single
+identity-to-tally security mechanism.
+
+Two independent commitment structures coexist in the application.
+Semaphore-based identity registration and the \texttt{ZKLocalVoting}
+contract provide the existing registration and election-anchoring pathway.
+The encrypted-voting pathway instead uses a separately generated custom
+credential, an election-specific Poseidon commitment tree, and the
+\texttt{VoteChainDirect} contract. The validity circuit proves membership
+against the custom eligibility root frozen for the relevant election. A
+Semaphore group root cannot be substituted for that root. The
+\texttt{ZKLocalVoting} contract also exposes a separate candidate-indexed
+voting method, which is not part of the encrypted-ballot measurements.
+Table~\ref{tab:architecture-prior-comparison} records the architectural
+differences. It is a comparison of information flow and contract
+responsibilities, not a matched transaction-cost experiment.
+
+\begin{table}[tbp]
+\centering
+\caption{Voting-path architecture in the previously published previously published system and the present encrypted-ballot extension. The legacy column describes
+the earlier published design; the current column describes the implemented
+private-ballot pathway.}
+\label{tab:architecture-prior-comparison}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}@{}}
+\toprule
+\textbf{Aspect} & \textbf{Previously published system (2026)} & \textbf{Proposed encrypted-ballot pathway} \\
+\midrule
+Biometric authorization &
+Face/fingerprint verification authorizes voting through identity-aware services. &
+Inherited face/fingerprint services authorize release of a protected voting credential; the circuit does not prove biometric matching. \\
+\addlinespace[3pt]
+Eligibility credential &
+Salted pseudonymous voter hash, derived using the registered identity; checked against the contract's voter registry. &
+Separate custom Poseidon credential commitment and frozen depth-17 Merkle root; the existing Semaphore registration anchor is not this proof root. \\
+\addlinespace[3pt]
+Candidate information flow &
+The voting application prepares a transaction containing the selected candidate identifier. &
+Candidate selection stays in the web client during biometric authorization and enters the local privacy worker for encryption. \\
+\addlinespace[3pt]
+Ballot submitted on-chain &
+Candidate identifier and registered pseudonymous voter hash supplied to \texttt{LocalVoting.castVote}. &
+Groth16 proof, election-scoped nullifier, and 16 encrypted candidate-slot ciphertexts supplied to \texttt{VoteChainDirect.castVote}; no plaintext candidate identifier. \\
+\addlinespace[3pt]
+Ballot acceptance &
+Checks registered voter hash, unused vote status, and valid candidate identifier. &
+Checks election phase, unused nullifier, canonical ciphertext coordinates, and a 73-public-signal Groth16 ballot-validity statement. \\
+\addlinespace[3pt]
+Tally during voting &
+Plaintext \texttt{voteCount} incremented for the selected candidate. &
+BabyJub exponential-ElGamal ciphertexts accumulated for fixed candidate slots; no plaintext per-candidate tally during voting. \\
+\addlinespace[3pt]
+Result disclosure &
+Candidate counts directly readable from the contract; no trustee-decryption step. &
+Three-of-five trustee partial decryptions checked off-chain; final totals and transcript hash recorded on-chain after separate state and arithmetic checks. \\
+\addlinespace[3pt]
+Residual trust &
+Identity-aware service can reconstruct the mapping between voter identity and pseudonymous hash. &
+Credential custodian can derive an identified voter's nullifier; ballot secrecy further depends on client integrity and trustee-share custody. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Cryptographic Preliminaries and Notation}
+\label{subsec:protocol-notation}
+\label{sec:05}
+\label{sec:cryptographic-protocol}
+
+The voting relation is represented as a Circom circuit over the BN254
+scalar field $\mathbb{F}$. Poseidon is used to compute credential
+commitments, membership-tree nodes, election-scoped nullifiers, and
+election-context bindings \citep{grassi2021poseidon}. Ballot encryption
+uses exponential ElGamal in the configured prime-order BabyJub subgroup
+$\mathbb{G}$. Groth16 provides a succinct argument for the combined
+eligibility and ballot-construction relation
+\citep{groth2016snark}. These primitives have established prior uses.
+Their role here is to support one concrete proof statement verified
+during encrypted-ballot acceptance, followed by separately checkable
+threshold recovery.
+
+Table~\ref{tab:protocol-notation} defines the notation used in the
+remaining methodology. The configured circuit has $M=16$ encrypted
+candidate slots and a fixed Merkle depth of $L=17$. The active
+candidate count $K$ satisfies $1\leq K\leq M$, so changing $K$ does not
+change the fixed-width ciphertext representation or the circuit depth.
+The Merkle witness supplies one sibling and one direction bit per
+tree level. The public input vector contains nine election and nullifier
+values followed by four coordinate arrays of length $M$:
+
+\begin{center}
+\begin{minipage}{\linewidth}
+\centering
+\makeatletter\def\@captype{table}\makeatother
+\caption{Consolidated notation for the private-voting and tally protocol.}
+\label{tab:protocol-notation}
+\footnotesize
+\begin{tabular}{@{}p{0.29\linewidth}p{0.63\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$e$, $s$ & Election identifier and private voter credential secret \\
+$\mathbb{F}$, $\mathbb{G}$, $q$ & Circuit field, prime-order BabyJub subgroup, and subgroup order \\
+$G$, $Y=(Y_x,Y_y)$ & Subgroup generator and election encryption public key \\
+$d_{\mathrm{id}}$, $d_{\mathrm{null}}$, $d_{\mathrm{ctx}}$ & Poseidon domain separators for identity, nullifier, and election context \\
+$H_P$ & Poseidon hash with the ordered inputs shown in each equation \\
+$\rho_e$, $p$ & Frozen election eligibility root and private Merkle authentication path \\
+$\mu_e$, $\delta$, $\chi_e$ & Candidate-manifest hash, contract-domain value, and election-context hash \\
+$K$, $M$, $L$ & Active candidates, candidate-slot capacity ($16$), and Merkle depth ($17$) \\
+$C_s$, $n_e$ & Voter identity commitment and election-scoped nullifier \\
+$v_j$, $r_j$ & Private ballot bit and encryption scalar for slot $j$ \\
+$C_j=(R_j,S_j)$ & Exponential-ElGamal ciphertext for ballot slot $j$ \\
+$\mathbf{w}$, $\mathbf{u}$, $\pi$ & Private circuit witness, public-signal vector, and Groth16 proof \\
+$\mathcal{R}_{\mathrm{VC}}$ & Constrained relation verified by the direct voting circuit \\
+$B$, $\overline{C}_j$ & Number of accepted ballots and encrypted aggregate for slot $j$ \\
+$x_i$, $X_i$ & Trustee $i$'s private share and corresponding public share $x_iG$ \\
+$D_{i,j}$, $\gamma_{i,j}$ & Trustee $i$'s partial decryption and its consistency proof for slot $j$ \\
+$I$, $\lambda_i$, $t_j$ & Valid trustee set, reconstruction coefficient, and recovered slot total \\
+$T_{\mathrm{DKG}}$, $T_{\mathrm{fin}}$ & Distributed-key-generation and finalization transcripts \\
+$h_{\mathrm{DKG}}$, $h_{\mathrm{fin}}$ & Canonical SHA-256 hashes of the corresponding transcripts \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\begin{equation}
+\label{eq:protocol-public-inputs}
+\mathbf{u}=\bigl(
+\rho_e,e,\mu_e,K,\delta,Y_x,Y_y,\chi_e,n_e,
+\mathbf{R}_x,\mathbf{R}_y,\mathbf{S}_x,\mathbf{S}_y
+\bigr).
+\end{equation}
+
+The public statement therefore has $9+4M=73$ field signals.
+The private witness $\mathbf{w}$ comprises the custom credential secret,
+Merkle authentication path, candidate-selection bits, and per-slot
+encryption scalars. Neither a biometric measurement nor a civil identifier
+is an input to the circuit. The public election-context values are supplied
+by the configured contract when it reconstructs the verifier inputs.
+
+\subsection{Voter Registration and Election Initialization}
+\label{subsec:architecture-registration}
+\label{subsec:protocol-eligibility}
+
+Enrollment takes place through the existing identity-aware registration
+service. For an enrolled voter, the application prepares a Semaphore
+identity and a separate custom credential with a randomly generated,
+nonzero secret $s$. The respective credentials are stored in protected
+form alongside the voter record, but support distinct functions.
+Semaphore registration does not determine membership in the custom
+encrypted-voting relation. For the latter, a Poseidon commitment $C_s$
+is calculated with the identity-specific domain separator:
+
+\begin{equation}
+\label{eq:protocol-identity}
+C_s=H_P(d_{\mathrm{id}},s).
+\end{equation}
+
+Before election activation, the election management service gathers
+registered custom commitments and constructs a frozen, election-specific
+Poseidon Merkle tree of depth $L=17$. A voter proves that the private
+credential commitment belongs to this approved set by reconstructing the
+root from a private path $p$. At each level, a Boolean direction bit
+determines the ordering of the current node and its sibling. The final
+root must match the election's configured value $\rho_e$:
+
+\begin{equation}
+\label{eq:protocol-merkle}
+\operatorname{MerkleRoot}_{L}(C_s,p)=\rho_e.
+\end{equation}
+
+This proves membership of a committed credential, not the correctness of
+the underlying civil registration or any biometric measurement. The
+credential custodian maintains access to the enrolled voting secrets under
+the trust assumptions stated in Section~\ref{sec:system-model}.
+
+Election configuration also freezes the ordered candidate manifest and
+its hash $\mu_e$. Candidates are ordered by their registered identifiers
+and mapped into the first $K$ positions of the 16-slot ballot. The
+remaining positions are reserved padding. The administrator additionally
+sets the election identifier, context-binding parameters, and collective
+encryption public key. Five designated trustees participate in the
+distributed-key-generation workflow. Its transcript provides the public
+election key and public-share verification material. The election
+management service checks that transcript and stores its canonical hash
+with the election record.
+
+The election-start procedure deploys or resolves the configured Groth16
+verifier and the direct voting contract. It assigns the frozen eligibility
+root, election identifier, candidate-manifest hash, candidate count,
+contract domain, and encryption key. While the contract remains in its
+registration phase, the administrator pins the trustee-transcript hash.
+After activation, ballot proofs must satisfy this configured election
+statement. Changes to administrative eligibility or candidate ordering
+are not silently propagated to an already frozen proof root and manifest.
+
+\subsection{Candidate-Blind Biometric Authorization}
+\label{subsec:architecture-biometric-authorization}
+
+The voter-facing application keeps the selected candidate within the
+client during biometric authorization. The local privacy worker first
+generates an ephemeral public-private key pair to protect credential
+delivery. The browser submits the ephemeral public key and the required
+authorization data to the face or fingerprint endpoint without transmitting
+a plaintext candidate identifier. The inherited biometric service handles
+acquisition and recognition through the corresponding interface. Following
+successful identification, the credential service resolves the enrolled
+record and checks that the election-specific custom voting credential is
+available. These checks are identity-aware and remain separate from the
+Groth16 voting relation.
+
+The credential service obtains the voter's Merkle witness from the frozen
+election snapshot and checks that the reconstructed root matches the
+value configured in the direct voting contract. A mismatch prevents
+authorization from continuing. It then recovers the stored custom secret
+and prepares a protected credential envelope using ephemeral P-256 key
+agreement, HKDF-SHA-256, and AES-256-GCM. The response supplies the
+encrypted envelope, Merkle witness, election context, and authorization
+expiry information. This procedure delivers the credential material
+needed for local ballot preparation without passing the intended
+candidate through the biometric authorization interface.
+
+The protection is deliberately described as candidate-blind authorization,
+not authority-blind anonymity. The biometric and credential services
+identify the voter requesting access, and the credential custodian can
+recover the stored private secret. Its ability to recompute an
+election-scoped nullifier creates the identity-linkage exposure discussed
+in Section~\ref{sec:system-model}. Moreover, a valid on-chain ballot
+proof demonstrates the prescribed cryptographic relation. It does not
+certify that a fresh biometric match was performed at the instant of
+transaction submission.
+
+\subsection{Ballot Encoding, Encryption and Nullifier Construction}
+\label{subsec:architecture-ballot-submission}
+\label{subsec:protocol-encryption}
+
+After authorization, the privacy worker decrypts the temporary credential
+envelope using its ephemeral private key. It reconstructs the corresponding
+custom commitment and checks the supplied membership path against the
+election's eligibility root. The worker also compares the election
+identifier and ordered candidate manifest against the public configuration.
+The election-context hash $\chi_e$ binds the election identifier, manifest
+hash, active candidate count, contract-domain value, and encryption
+public-key coordinates:
+
+\begin{equation}
+\label{eq:protocol-context}
+\chi_e=H_P\bigl(
+ d_{\mathrm{ctx}},e,\mu_e,K,\delta,Y_x,Y_y
+\bigr).
+\end{equation}
+
+The circuit recomputes this value from the public inputs, while the client
+checks the candidate ordering against the configured manifest. The circuit
+does not reconstruct the entire candidate list from individual candidate
+records. These checks establish consistency with the published election
+configuration and not the legitimacy of its administrative selection.
+
+The selected candidate is encoded as a private one-hot vector
+$\mathbf{v}$ of length $M=16$. Each $v_j$ is Boolean, exactly one
+entry is selected, and all slots outside the active candidate range are
+constrained to zero:
+
+\begin{equation}
+\label{eq:protocol-onehot}
+\begin{aligned}
+ v_j&\in\{0,1\} && (0\leq j<M),\\
+ \sum_{j=0}^{M-1}v_j&=1,\\
+ v_j&=0 && (K\leq j<M).
+\end{aligned}
+\end{equation}
+
+The fixed representation applies to every evaluated active candidate
+count. A proof for this relation excludes empty, multiple-choice, and
+out-of-manifest ballot vectors under the implemented single-choice
+election model. Such constrained encrypted-ballot validity has prior
+cryptographic precedent \citep{huber2025ballotvalidity}; the present
+method incorporates it alongside custom membership and election
+binding.
+
+For each slot $j$, the worker samples a private scalar $r_j$ with
+$1\leq r_j<q$ and encrypts the bit $v_j$ under the collective
+BabyJub public key $Y$ using exponential ElGamal. With generator $G$,
+the ciphertext $C_j$ consists of two curve points:
+
+\begin{equation}
+\label{eq:protocol-elgamal}
+\begin{aligned}
+ R_j &= r_jG,\\
+ S_j &= r_jY+v_jG,\\
+ C_j &= (R_j,S_j),\qquad 0\leq j<M.
+\end{aligned}
+\end{equation}
+
+All 16 slots are encrypted, including inactive padding slots. The
+voter's chosen candidate and encryption scalars remain in the proof
+witness. The circuit checks the encryption-scalar range, supported
+curve and subgroup conditions, and ciphertext equations, but does not
+establish the quality of the client's random-number generator. The direct
+circuit wrapper equates its calculated ciphertexts to the 64 public
+coordinate signals. Changing a submitted ciphertext without changing
+the corresponding valid witness would therefore invalidate the proof
+under the soundness assumption.
+
+For duplicate-ballot prevention, the worker computes the
+election-scoped nullifier defined in
+Eq.~\eqref{eq:system-nullifier}. The same custom secret and election
+identifier yield the same nullifier irrespective of the transaction
+signer. The election-specific derivation permits reuse of an eligible
+credential in a different configured election without simply repeating
+the same public nullifier. It does not prevent one person from voting
+through multiple independently issued credentials when enrollment
+controls fail.
+
+\subsection{Zero-Knowledge Voting Relation and Proof Generation}
+\label{subsec:protocol-verification}
+
+The configured Groth16 relation combines custom commitment membership,
+nullifier consistency, election-context binding, a valid one-hot selection,
+and correctness of every encrypted slot. Using the public signal vector
+$\mathbf{u}$ and private witness $\mathbf{w}$, the relation is expressed as
+
+\begin{equation}
+\label{eq:protocol-relation}
+\mathcal{R}_{\mathrm{VC}}(\mathbf{u},\mathbf{w})=1
+\end{equation}
+
+when the constraints in
+Eqs.~\eqref{eq:protocol-identity}--\eqref{eq:protocol-elgamal}
+hold for the public values of
+Eq.~\eqref{eq:protocol-public-inputs}. The Merkle siblings,
+path directions, credential secret, selected candidate, and encryption
+randomness remain private. The public proof inputs contain the
+election-scoped nullifier, frozen election configuration, and ciphertext
+coordinates. The statement does not disclose which active candidate
+corresponds to the selected one-hot position.
+
+The client uses the configured circuit and proving key to construct
+the Groth16 witness and proof. Before sending a transaction, the worker
+compares the resulting 73 public signals against the expected election
+configuration, nullifier, and ciphertext array, then performs local
+proof verification. A mismatch prevents submission. These local checks
+are useful defenses against inconsistent client-side artifacts, but do not
+replace contract verification. Proof correctness remains conditional on
+the deployed circuit, the associated proving and verification artifacts,
+and the cryptographic assumptions of Groth16. The research setup is
+development-stage and has not undergone an independently audited
+production ceremony.
+
+\subsection{On-Chain Verification and Encrypted Aggregation}
+\label{subsec:protocol-onchain-acceptance}
+
+The client transmits the verified proof, election-scoped nullifier, and
+64 ciphertext coordinates through the wallet transaction interface to
+\texttt{VoteChainDirect.castVote}. No plaintext candidate identifier is
+submitted in this call. The contract requires an active election,
+checks that the nullifier has not been used, and validates the canonical
+field representation of the ciphertext coordinates. It reconstructs
+the complete 73-field public statement using the frozen election
+configuration and supplied ciphertexts, then invokes the Groth16
+verifier. Only a transaction satisfying these checks can mark the
+nullifier as used and modify the accepted encrypted tally.
+
+The contract maintains one encrypted aggregate for each of the 16
+candidate slots. Every aggregate begins at the BabyJub identity
+points, and an accepted ballot is added componentwise to the current
+ciphertext state. For $B$ accepted ballots, the encrypted sum in slot
+$j$ is
+
+\begin{equation}
+\label{eq:protocol-aggregation}
+\overline{C}_j=(\overline{R}_j,\overline{S}_j)
+ =\sum_{b=1}^{B}C_{b,j}.
+\end{equation}
+
+The aggregate represents an encryption of the accumulated candidate
+count $t_j$ without making that count plaintext while voting is active.
+The contract increments the accepted-ballot count and emits an
+acceptance event recording the public nullifier, a ciphertext hash, and
+updated count. Public observers can inspect these records and submitted
+ciphertexts, but the contract does not expose the voter's plaintext
+choice as part of the accepted ballot. Confidentiality additionally
+depends on client integrity, encryption security, and threshold-share
+custody, as established in Section~\ref{sec:system-model}.
+
+\subsection{Threshold Decryption and Auditable Finalization}
+\label{subsec:architecture-finalization}
+\label{subsec:protocol-threshold}
+\label{subsec:protocol-finalization}
+
+After voting ends, the administrator advances the contract from
+\texttt{Active} to \texttt{Ended}. The finalization service retrieves
+the accepted-ballot count and 16 encrypted aggregate ciphertexts from
+the contract. The implemented recovery procedure uses five trustees
+with a reconstruction threshold of three. The previously checked
+distributed-key-generation transcript specifies the collective public
+key and trustee public shares. Trustee $i$ holds a secret share $x_i$
+with corresponding public point $X_i=x_iG$. For candidate slot $j$,
+its partial decryption of the aggregate first point is
+
+\begin{equation}
+\label{eq:protocol-partial}
+D_{i,j}=x_i\overline{R}_j.
+\end{equation}
+
+Each partial-decryption record includes a non-interactive
+discrete-logarithm equality proof $\gamma_{i,j}$. The verifier must
+establish that the same secret share relates the generator $G$ to the
+public share $X_i$ and the aggregate point $\overline{R}_j$ to the
+submitted partial decryption. The trustee constructs commitments
+$A_{1,i,j}=k_{i,j}G$ and
+$A_{2,i,j}=k_{i,j}\overline{R}_j$, derives a domain-separated Poseidon
+challenge $c_{i,j}$ from the election, trustee, slot, and curve-point
+context, and returns
+$z_{i,j}=k_{i,j}+c_{i,j}x_i\pmod q$.
+The external transcript verifier recomputes the challenge and checks
+
+\begin{equation}
+\label{eq:protocol-dleq}
+\begin{aligned}
+ z_{i,j}G&=A_{1,i,j}+c_{i,j}X_i,\\
+ z_{i,j}\overline{R}_j&=A_{2,i,j}+c_{i,j}D_{i,j}.
+\end{aligned}
+\end{equation}
+
+These equations validate consistency with the public trustee share
+and specified encrypted aggregate under the proof assumptions. They
+are not executed by the Solidity finalization function.
+
+For at least three distinct trustees with valid evidence, the verifier
+combines partial decryptions with Lagrange interpolation coefficients
+evaluated at zero:
+
+\begin{equation}
+\label{eq:protocol-lagrange}
+\begin{aligned}
+ \lambda_i&=\prod_{\substack{k\in I\\k\neq i}}
+ \frac{-k}{i-k}\pmod q,\\
+ D_j&=\sum_{i\in I}\lambda_iD_{i,j}.
+\end{aligned}
+\end{equation}
+
+It then removes the reconstructed masking term from the aggregate
+second point, obtaining an encoded candidate count bounded by the
+number of accepted ballots:
+
+\begin{equation}
+\label{eq:protocol-tally}
+ t_jG=\overline{S}_j-D_j,\qquad 0\leq t_j\leq B.
+\end{equation}
+
+The bounded discrete logarithm is recovered by the implemented
+baby-step/giant-step procedure. A transcript is rejected if a slot
+lacks three valid partial contributions, a padded slot decrypts to a
+nonzero count, or active-slot totals do not sum to the accepted-ballot
+count. The ability of a threshold coalition to recover aggregate totals
+also implies that colluding trustees with sufficient usable shares may
+decrypt individually published ballot ciphertexts. The prototype's
+locally managed trustees do not establish independently governed
+organizational share custody.
+
+The evidence used for independent checking includes the
+distributed-key-generation record, the encrypted aggregates,
+partial-decryption records and their proofs, and the reconstructed
+totals. The application checks the election identifiers, frozen
+configuration, ballot count, and supplied aggregates against the
+contract's public state. The canonicalized DKG and finalization
+transcripts are committed using SHA-256:
+
+\begin{equation}
+\label{eq:protocol-transcript-hash}
+\begin{aligned}
+ h_{\mathrm{DKG}}&=\mathsf{SHA256}
+ (\mathsf{Canon}(T_{\mathrm{DKG}})),\\
+ h_{\mathrm{fin}}&=\mathsf{SHA256}
+ (\mathsf{Canon}(T_{\mathrm{fin}})).
+\end{aligned}
+\end{equation}
+
+The DKG transcript hash is pinned during election configuration.
+Before finalization, the application validates the supplied transcript
+against that commitment, verifies trustee contributions, and checks the
+aggregate against the ledger. Once the external checks succeed, the
+administrator submits the recovered totals and the finalization
+transcript hash through \texttt{finalizeTally}. The contract requires the
+\texttt{Ended} phase and a previously pinned DKG commitment. It also
+requires a nonzero finalization hash, zero totals in padded slots,
+active totals no greater than $B$, and a sum of active totals equal to
+$B$. If these conditions hold, it stores the plaintext totals and hash
+and advances to \texttt{Finalized}.
+
+The on-chain transition does not verify the DKG record, DLEQ proofs,
+or derivation of the submitted plaintext counts from the encrypted
+aggregate. A committed transcript permits mismatch detection only when
+the full evidence can be obtained and independently checked. Therefore,
+successful finalization and a matching hash must not be presented as
+on-chain proof of correct threshold decryption. On-chain Groth16
+verification at ballot acceptance and external verification at result
+disclosure provide different, complementary checks.
+
+\subsection{Prototype Implementation}
+\label{sec:06}
+\label{sec:implementation-experiments}
+\label{subsec:implementation-profile}
+
+The prototype combines the inherited biometric services with a
+React and TypeScript voter-facing web client and Node.js election
+and credential services. The browser privacy worker performs
+credential-envelope recovery, election-context checks, ballot
+encryption, witness generation, Groth16 proving, and local proof
+verification. The private voting relation is compiled from Circom 2
+using the fixed 16-slot, depth-17 configuration. The proof workflow
+uses \texttt{snarkjs}, while a generated Solidity verifier validates
+the 73-signal statement within the
+\texttt{VoteChainDirect} contract. The contract enforces election
+state and nullifier conditions and maintains the encrypted
+BabyJub tally.
+
+The separate threshold implementation prepares and validates the DKG
+record, trustee partial decryptions, consistency proofs, aggregate
+recovery, and finalization transcript. Its cryptographic checks occur
+outside Solidity. The final contract transaction records the result
+values and transcript commitment only after its own state and arithmetic
+conditions hold. These components form the evaluated encrypted-voting
+pathway. The predecessor's fingerprint and facial recognition
+measurements were not repeated as part of the four quantitative
+campaigns described below.
+
+The cryptographic proving parameters were generated using a
+development-stage setup. The experimental transactions were executed
+on local Anvil rather than a public blockchain or a permissioned
+multi-validator deployment. The reported observations consequently
+characterize this implemented research configuration, not production
+election throughput, network-finality behavior, or secure distributed
+operation of independent trustee institutions.
+
+\subsection{Experimental Procedure and Measurement Scope}
+\label{subsec:experimental-environment}
+\label{subsec:experimental-campaigns}
+
+The controlled experiments used a Windows-based AMD64 computer
+with 16 logical processors and approximately 10.6~GB of available
+physical memory. The recorded software environment included
+Python~3.10.11, Node.js, Circom, \texttt{snarkjs}, Foundry, and
+Anvil. The transaction campaigns used a local Anvil network and
+recorded gas consumed by accepted encrypted-ballot calls.
+Submission-to-receipt latency was measured from transaction
+submission until receipt retrieval. This interval excludes
+biometric acquisition, identity authorization, protected credential
+delivery, and local ballot proof preparation. Accordingly, it
+must not be interpreted as complete voter-session time or as a
+public-network confirmation measurement.
+
+Cryptographic measurements were collected independently from
+blockchain receipts. The eligible-set campaign timed identity-leaf
+preparation, construction of a Merkle tree and target path, witness
+generation, Groth16 proof generation, and local proof verification.
+The four finalized campaigns were accepted-ballot transactions,
+fresh-chain first-ballot execution, active candidate-count
+sensitivity, and eligible-set sensitivity. Each addresses a
+different computational condition. Table~\ref{tab:implementation-campaigns}
+records the measured sample sizes and configuration ranges.
+
+\begin{table}[t]
+\centering
+\caption{Experimental configurations and measured sample sizes.}
+\label{tab:implementation-campaigns}
+\small
+\begin{tabular}{@{}p{0.23\linewidth}p{0.44\linewidth}p{0.25\linewidth}@{}}
+\toprule
+\textbf{Campaign} &
+\textbf{Experimental configuration} &
+\textbf{Measured observations} \\
+\midrule
+Accepted ballots
+& 25 independent elections, with five elections at each
+size of 25, 50, 75, 100, and 150 accepted ballots
+& 2,000 transactions \\
+\addlinespace
+Fresh-chain first ballot
+& First accepted private ballot following a fresh
+local-chain setup
+& 20 trials \\
+\addlinespace
+Candidate count
+& Active candidate counts of 2, 4, 8, and 16
+with a fixed 16-slot representation
+& 20 trials per count \\
+\addlinespace
+Eligible set
+& Eligible populations of 10, 100, 1,000, and
+10,000 with Merkle depth fixed at 17
+& 20 trials per population \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The accepted-ballot campaign measured 2,000 successful
+transactions across 25 independent elections. Five elections
+were run at each target size of 25, 50, 75, 100, and 150
+accepted ballots, producing the recorded total of 2,000
+observations. An additional 400 warm-up transactions were
+excluded from the final statistics. Each accepted transaction
+contributed a gas observation and a local submission-to-receipt
+interval. Because successive ballots share the evolving state
+of an election, this campaign includes both initial and later
+accepted ballots rather than characterizing only an empty tally.
+
+The fresh-chain campaign independently isolated the first
+accepted encrypted ballot after fresh local-chain initialization.
+It recorded 20 measured trials after five excluded warm-ups.
+Contract preparation and checks performed after receipt retrieval
+lay outside the timed interval. These observations were
+analyzed separately from the 2,000-ballot campaign, since the
+state and execution conditions define a different measurement
+population.
+
+The candidate-count campaign used 2, 4, 8, and 16 active
+candidates, with 20 measured transactions per configuration
+after five excluded warm-ups. Candidate positions were balanced
+within the recorded trial sequence. All trials used the same
+16-slot ciphertext representation and compiled proof relation.
+Thus, the campaign measures changes in active candidate
+configuration within a fixed-width circuit, not a family of
+circuits with increasing capacity.
+
+The eligible-set campaign used synthetic populations of
+10, 100, 1,000, and 10,000 registered custom commitments.
+Each configuration contributed 20 measured runs following
+five warm-ups, with execution order varied across sizes.
+The selected voter occupied the first indexed position in
+the respective fixture. Every run used Merkle depth 17 and
+16 encrypted candidate slots. The nominal depth-17 capacity
+is 131,072 leaves, but the campaign neither populated that
+full capacity nor varied circuit depth. No blockchain
+transactions were submitted during this campaign. Its
+verification observations represent local proof checking,
+not the Solidity verification gas or execution latency.
+
+\subsection{Evaluation Metrics and Statistical Analysis}
+\label{subsec:experimental-analysis}
+
+The transaction campaigns report gas consumption and local
+submission-to-receipt latency, while the eligible-set campaign
+reports individual preparation and cryptographic processing
+intervals. The four measurement campaigns retain their own
+observation boundaries and are not combined into a fabricated
+end-to-end voting time. For every finalized measurement group,
+descriptive summaries include sample size, mean, median,
+minimum, maximum, sample standard deviation, and
+95th percentile. The sample standard deviation is calculated
+using the $n-1$ denominator, and the 95th percentile follows
+the nearest-rank method. All recorded warm-ups, pilot runs,
+and aborted campaigns were excluded as specified by the
+experimental procedure. No measured outliers were removed.
+
+The candidate-count experiment is assessed descriptively,
+without inferential regression across its four fixed-width
+configurations. In the eligible-set experiment, the population
+may affect leaf materialization and tree construction, but
+the membership circuit continues to constrain a path of
+constant depth. The recorded processing stages are therefore
+reported individually, with no unmeasured inference about
+larger circuits, network-wide throughput, or complete
+biometric-to-ballot execution. Proof-generation intervals
+reflect the measured software invocation and runtime
+boundary rather than isolated primitive timings.
+
+Functional and integration checks supplement the positive
+performance campaigns. They cover witness and public-signal
+consistency, local Groth16 verification, selected malformed-ballot
+and reused-nullifier rejection paths, and threshold-transcript
+verification conditions. Such checks do not amount to a
+comprehensive adversarial security audit. In particular, the
+four quantitative campaigns do not produce a repeated timing
+estimate for the complete threshold-finalization workflow.
+That stage is therefore described by its implementation and
+functional verification evidence, without assigning it an
+unsupported end-to-end latency. The corresponding measured
+results are presented in the following section.
