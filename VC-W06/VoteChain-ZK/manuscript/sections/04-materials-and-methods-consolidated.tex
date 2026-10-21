@@ -70,7 +70,7 @@ responsibilities, not a matched transaction-cost experiment.
 
 \begin{table}[tbp]
 \centering
-\caption{Voting-path architecture in the previously published previously published system and the present encrypted-ballot extension. The legacy column describes
+\caption{Voting-path architecture in the previously published system and the present encrypted-ballot extension. The legacy column describes
 the earlier published design; the current column describes the implemented
 private-ballot pathway.}
 \label{tab:architecture-prior-comparison}
@@ -441,6 +441,10 @@ custody, as established in Section~\ref{sec:system-model}.
 \label{subsec:architecture-finalization}
 \label{subsec:protocol-threshold}
 \label{subsec:protocol-finalization}
+
+Multi-authority encrypted election tallying has established cryptographic precedent
+\citep{cramer1997multiauthority}. The implementation here uses a
+three-of-five threshold, with the specific verification checks stated below.
 
 After voting ends, the administrator advances the contract from
 \texttt{Active} to \texttt{Ended}. The finalization service retrieves
