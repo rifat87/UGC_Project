@@ -1,0 +1,96 @@
+% Consolidated Section 6: Conclusion and Future Scope.
+% Standalone manuscript source. Replace sections/10-conclusion.tex with this file.
+% The title, equation labels, results tables, and earlier sections are not modified.
+% Original conclusion and accepted Sections 3--5 provide the scientific basis.
+
+\section{Conclusion and Future Scope}
+\label{sec:10}
+\label{sec:conclusion}
+
+The present study investigated how identity-aware biometric authorization can
+be connected to encrypted ballot processing without transmitting a voter's
+candidate selection through the inspected authorization request. Building
+on \emph{Blockchain\textendash{}integrated IoT biometric architecture for
+secure and decentralized electronic voting}
+\citep{rifat2026biometric}, the proposed framework retains the inherited
+fingerprint and facial authentication services while changing the voting
+operations that follow authorization. A protected credential and an
+election-specific membership witness are supplied to the voter-facing client,
+where a local privacy worker constructs the encrypted ballot and its validity
+proof. The architecture deliberately separates the existing Semaphore
+registration and anchoring pathway from the custom Poseidon commitment tree
+used for private-ballot membership. This implementation addresses the first
+research question by demonstrating candidate-blind authorization at the
+inspected service boundary alongside cryptographically checked ballot
+submission. It does not establish that the credential custodian is unable to
+identify the authorized voter or associate that voter with a public nullifier.
+
+The encrypted voting relation combines membership in a frozen eligibility
+set, an election-scoped nullifier, election-context binding, a valid one-hot
+candidate selection, and consistency of the encrypted ballot coordinates.
+Its fixed-depth Groth16 circuit uses a depth-17 Merkle path and 16 BabyJub
+exponential-ElGamal candidate slots, with 73 public signals verified by the
+voting contract. For an accepted submission, the contract rejects a reused
+nullifier and adds the ciphertexts to an encrypted candidate-wise aggregate
+without recording the selected candidate in plaintext. After the election
+ends, the implemented three-of-five trustee procedure supports recovery of
+aggregate counts through externally checked distributed-key-generation and
+partial-decryption evidence. The contract checks the final result's state
+and arithmetic conditions and records a commitment to the finalization
+transcript. This establishes a concrete separation between on-chain
+verification of encrypted-ballot validity and independent checking of tally
+recovery. The recorded transcript hash alone does not prove correct
+threshold decryption, and an independent auditor must obtain and verify the
+complete evidence against the published encrypted aggregate.
+
+The experimental evaluation characterizes the costs of this implemented
+configuration rather than a general-purpose election deployment. Across
+2,000 accepted encrypted-ballot transactions from 25 elections, mean gas
+consumption was 1,314,307.123 gas and mean local submission-to-receipt
+latency was 760.640~ms. A separate 20-trial fresh-chain campaign recorded
+1,866,414 gas for the first accepted ballot, reflecting a different
+execution state and measurement population. Candidate-count experiments
+with 2, 4, 8, and 16 active candidates showed only a small gas difference
+while retaining the same 16-slot ballot representation. With synthetic
+eligible sets of 10 to 10,000 commitments and Merkle depth fixed at 17,
+preparation costs increased as the populated set grew, whereas measured
+mean Groth16 proving times remained between 5.292 and 5.423 seconds. These
+findings address the measurement component of the second research question
+within the controlled workloads. They do not measure complete
+biometric-to-receipt sessions, public-network throughput, the cost of wider
+circuits, or the performance of deeper Merkle relations. The historical
+plaintext-voting gas figures are not a matched experimental baseline for
+the more extensive encrypted-ballot operation.
+
+The interpretation of these results depends on the threat boundaries
+established for the prototype. The credential service can recover stored
+voting secrets and derive identity-associated election nullifiers, even
+though it does not receive the candidate choice through the inspected
+authorization pathway. A compromised voting client may expose or alter the
+selection before encryption, and a valid Groth16 proof cannot establish
+that the interface displayed the voter's intended choice. Ballot secrecy
+also depends on the integrity of encryption and protection of trustee
+shares, since a sufficient coalition could target individually recorded
+ciphertexts. Development-stage proving parameters, locally managed trustees,
+and execution on Anvil limit the strength of deployment conclusions.
+Functional checks and the measured performance campaigns do not establish
+coercion resistance, receipt-freeness, independent trustee governance, or
+production-election security assurance.
+
+Future research should first strengthen the operational and cryptographic
+boundaries that are most consequential for deployment. A credential design
+with reduced custodian knowledge, stronger protection against terminal
+compromise, and independently administered trustee shares would address
+identity linkage and concentration of decryption capability. A
+production-oriented evaluation would require a publicly reviewable proof
+setup, accessible canonical decryption transcripts, and independently
+reproducible verification of both the encrypted aggregate and the recovered
+result. Further experiments should measure a complete biometric-to-receipt
+session, varied client hardware, concurrent submission on distributed
+networks, and threshold recovery under trustee failures. Testing additional
+slot capacities and Merkle depths would distinguish fixed-configuration
+performance from genuine circuit scaling. These investigations are needed
+before extrapolating the present findings to operational elections. Within
+its measured scope, the study demonstrates an integrated pathway for
+candidate-blind biometric authorization, proof-verified encrypted voting,
+and externally auditable threshold tally recovery.
