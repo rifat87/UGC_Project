@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="205mm" height="82mm" viewBox="0 0 2050 820" role="img" aria-labelledby="title desc">
+  <title id="title">VoteChain-ZK encrypted-ballot transaction gas</title>
+  <desc id="desc">Compact academic diagram showing fixed encrypted ballot input, castVote gas-producing stages, first-versus-later ballot gas, and fixed-width candidate-count behavior.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8.5" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5E6C7A"/>
+    </marker>
+    <style>
+      .title{font:700 43px Arial,Helvetica,sans-serif;fill:#17324D}
+      .section{font:700 36px Arial,Helvetica,sans-serif;fill:#17324D}
+      .body{font:400 32px Arial,Helvetica,sans-serif;fill:#26323D}
+      .bodyb{font:700 32px Arial,Helvetica,sans-serif;fill:#26323D}
+      .small{font:400 27px Arial,Helvetica,sans-serif;fill:#5E6C7A}
+      .smallb{font:700 27px Arial,Helvetica,sans-serif;fill:#41505E}
+      .metric{font:700 57px Arial,Helvetica,sans-serif;fill:#17324D}
+      .metricTeal{font:700 57px Arial,Helvetica,sans-serif;fill:#2A7F7A}
+      .pill{font:700 28px Arial,Helvetica,sans-serif;fill:#17324D}
+      .white{fill:#FFFFFF}
+    </style>
+  </defs>
+
+  <rect width="2050" height="820" fill="#FFFFFF"/>
+  <text class="title" x="60" y="70">Encrypted-ballot transaction gas</text>
+  <text class="small" x="60" y="110">VoteChainDirect.castVote • receipt-based local Anvil measurements</text>
+
+  <rect x="60" y="165" width="420" height="360" rx="10" fill="#F4F7FA" stroke="#17324D" stroke-width="2.2"/>
+  <rect x="60" y="165" width="420" height="58" rx="10" fill="#17324D"/>
+  <rect x="60" y="211" width="420" height="12" fill="#17324D"/>
+  <text class="section white" x="88" y="207">Fixed ballot input</text>
+  <text class="bodyb" x="90" y="282">π + nullifier + 16 ciphertexts</text>
+  <text class="body" x="90" y="335">73 ABI words</text>
+  <text class="body" x="90" y="384">2,340 B calldata</text>
+  <line x1="90" y1="420" x2="448" y2="420" stroke="#CBD4DC" stroke-width="2"/>
+  <text class="smallb" x="90" y="462">Same width for K = 2, 4, 8, 16</text>
+  <text class="small" x="90" y="500">All 16 encrypted slots are submitted.</text>
+
+  <line x1="492" y1="345" x2="548" y2="345" stroke="#5E6C7A" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="565" y="145" width="850" height="410" rx="10" fill="#FFFFFF" stroke="#2A7F7A" stroke-width="2.4"/>
+  <rect x="565" y="145" width="850" height="64" rx="10" fill="#EDF6F5"/>
+  <rect x="565" y="197" width="850" height="12" fill="#EDF6F5"/>
+  <text class="section" x="598" y="188">VoteChainDirect.castVote</text>
+
+  <circle cx="635" cy="282" r="28" fill="#17324D"/>
+  <text x="635" y="293" text-anchor="middle" class="bodyb white">1</text>
+  <text class="bodyb" x="686" y="268">Groth16 verification</text>
+  <text class="small" x="686" y="307">73 public signals • BN254 verifier</text>
+  <line x1="615" y1="342" x2="1368" y2="342" stroke="#D7DEE4" stroke-width="2"/>
+
+  <circle cx="635" cy="405" r="28" fill="#2A7F7A"/>
+  <text x="635" y="416" text-anchor="middle" class="bodyb white">2</text>
+  <text class="bodyb" x="686" y="391">Encrypted tally update</text>
+  <text class="small" x="686" y="430">16 slots • 32 BabyJub point additions</text>
+  <line x1="615" y1="465" x2="1368" y2="465" stroke="#D7DEE4" stroke-width="2"/>
+
+  <circle cx="635" cy="510" r="28" fill="#5E6C7A"/>
+  <text x="635" y="521" text-anchor="middle" class="bodyb white">3</text>
+  <text class="bodyb" x="686" y="496">Persistent state update</text>
+  <text class="small" x="686" y="535">nullifier • 64 tally coordinates • ballot count</text>
+
+  <line x1="1428" y1="345" x2="1488" y2="345" stroke="#5E6C7A" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="1505" y="145" width="485" height="410" rx="10" fill="#F8FAFB" stroke="#5E6C7A" stroke-width="2.2"/>
+  <text class="section" x="1540" y="193">Measured gas</text>
+  <text class="smallb" x="1540" y="255">First accepted ballot</text>
+  <text class="metric" x="1540" y="318">1.866M</text>
+  <text class="small" x="1775" y="318">gas</text>
+  <line x1="1540" y1="350" x2="1955" y2="350" stroke="#CBD4DC" stroke-width="2"/>
+  <text class="smallb" x="1540" y="408">Later accepted ballots</text>
+  <text class="metricTeal" x="1540" y="472">≈1.307M</text>
+  <text class="small" x="1815" y="472">gas</text>
+  <text class="small" x="1540" y="525">First tally-state transition is costlier.</text>
+
+  <rect x="60" y="610" width="1930" height="150" rx="10" fill="#F4F7FA" stroke="#AAB6C0" stroke-width="2"/>
+  <text class="section" x="88" y="654">Fixed-width candidate experiment</text>
+  <text class="small" x="88" y="697">Same 16-slot ballot and 2,340 B calldata → gas is effectively constant across tested active-candidate counts.</text>
+
+  <rect x="1230" y="631" width="165" height="64" rx="32" fill="#E8EEF3"/>
+  <text class="pill" x="1312" y="672" text-anchor="middle">K = 2</text>
+  <rect x="1410" y="631" width="165" height="64" rx="32" fill="#E8EEF3"/>
+  <text class="pill" x="1492" y="672" text-anchor="middle">K = 4</text>
+  <rect x="1590" y="631" width="165" height="64" rx="32" fill="#E8EEF3"/>
+  <text class="pill" x="1672" y="672" text-anchor="middle">K = 8</text>
+  <rect x="1770" y="631" width="190" height="64" rx="32" fill="#E8EEF3"/>
+  <text class="pill" x="1865" y="672" text-anchor="middle">K = 16</text>
+
+  <text class="smallb" x="1235" y="735">1,866,402–1,866,414 gas</text>
+  <text class="small" x="1648" y="735">12-gas spread</text>
+</svg>
