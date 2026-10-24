@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1050" viewBox="0 0 1800 1050">
+<defs>
+  <linearGradient id="bp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F4F9FF"/><stop offset="100%" stop-color="#EAF4FF"/></linearGradient>
+  <linearGradient id="pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F8F6FF"/><stop offset="100%" stop-color="#F0EDFF"/></linearGradient>
+  <linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F6FFF9"/><stop offset="100%" stop-color="#ECFAF1"/></linearGradient>
+  <marker id="ab" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#2563EB"/></marker>
+  <marker id="ap" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#5145B8"/></marker>
+  <marker id="ag" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#15803D"/></marker>
+  <style>
+    .t{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:30px;fill:#102A56}
+    .pt{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:22px;fill:#fff}
+    .s{font-family:Arial,Helvetica,sans-serif;font-size:15px;fill:#24415F}
+    .h{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:17px;fill:#17345B}
+    .b{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#2E4663}
+    .sm{font-family:Arial,Helvetica,sans-serif;font-size:13px;fill:#49627D}
+    .rh{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:17px;fill:#B91C1C}
+    .rt{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#A61B1B}
+    .gh{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:17px;fill:#146B35}
+    .box{fill:#fff;stroke:#C8D7E8;stroke-width:1.6}.boxp{fill:#fff;stroke:#CEC7F3;stroke-width:1.6}.boxg{fill:#fff;stroke:#BCDCC8;stroke-width:1.6}
+  </style>
+</defs>
+<rect width="1800" height="1050" fill="#fff"/>
+<text x="900" y="48" text-anchor="middle" class="t">Figure 2: Candidate-Blind Biometric Authorization</text>
+
+<!-- 1. Voter client -->
+<rect x="18" y="112" width="352" height="700" rx="10" fill="url(#bp)" stroke="#3B82F6" stroke-width="1.7"/>
+<rect x="28" y="126" width="332" height="48" rx="7" fill="#1F5C99"/>
+<text x="48" y="157" class="pt">1. Voter Client (EVM Client)</text>
+<text x="40" y="197" class="s">Candidate selection and session preparation</text>
+
+<rect x="30" y="236" width="328" height="262" rx="9" class="box"/>
+<circle cx="84" cy="285" r="13" fill="#91A9C8"/><path d="M64 318 Q84 300 104 318 V330 H64 Z" fill="#91A9C8"/>
+<circle cx="60" cy="349" r="6" fill="none" stroke="#315A8A" stroke-width="2"/><line x1="75" y1="349" x2="116" y2="349" stroke="#B9C9DB" stroke-width="8" stroke-linecap="round"/>
+<circle cx="60" cy="379" r="6" fill="none" stroke="#315A8A" stroke-width="2"/><line x1="75" y1="379" x2="116" y2="379" stroke="#5F8FD6" stroke-width="8" stroke-linecap="round"/>
+<circle cx="60" cy="409" r="6" fill="none" stroke="#315A8A" stroke-width="2"/><line x1="75" y1="409" x2="116" y2="409" stroke="#B9C9DB" stroke-width="8" stroke-linecap="round"/>
+<text x="142" y="274" class="h">Select Candidate</text>
+<text x="142" y="307" class="b">• Voter chooses candidate</text><text x="142" y="329" class="b">  locally in the client</text>
+<text x="142" y="359" class="b">• Candidate ID is stored</text><text x="142" y="381" class="b">  in local state (not sent)</text>
+<rect x="42" y="417" width="304" height="66" rx="7" fill="#FFF1F2" stroke="#FDA4AF"/>
+<rect x="57" y="449" width="26" height="24" rx="4" fill="#E11D48"/><path d="M63 449v-8a7 7 0 0 1 14 0v8" fill="none" stroke="#E11D48" stroke-width="4"/>
+<text x="96" y="442" class="rt" font-weight="700">Candidate ID remains local</text><text x="96" y="462" class="rt">and is never included in the</text><text x="96" y="480" class="rt">authorization request.</text>
+<line x1="194" y1="498" x2="194" y2="545" stroke="#2563EB" stroke-width="3" marker-end="url(#ab)"/>
+
+<rect x="30" y="552" width="328" height="230" rx="9" class="box"/>
+<circle cx="72" cy="615" r="14" fill="#0F4C81"/><circle cx="72" cy="615" r="5" fill="#EAF4FF"/><path d="M84 623l28 28h-14l-7-7h-9l-7-7z" fill="#0F4C81"/>
+<text x="124" y="585" class="h">Prepare Authorization Session</text>
+<text x="124" y="621" class="b">• Generate ephemeral P-256</text><text x="124" y="643" class="b">  ECDH key pair (in browser)</text>
+<text x="124" y="675" class="b">• Export public key (JWK)</text><text x="124" y="707" class="b">• Keep private key in isolated</text><text x="124" y="729" class="b">  Web Worker</text>
+
+<!-- Privacy boundary -->
+<line x1="518" y1="82" x2="518" y2="820" stroke="#E11D48" stroke-width="4" stroke-dasharray="12 10"/>
+<rect x="390" y="116" width="258" height="90" rx="9" fill="#FFF7F8" stroke="#F43F5E" stroke-width="1.6"/>
+<text x="519" y="144" text-anchor="middle" class="rh">Privacy Boundary</text><text x="519" y="171" text-anchor="middle" class="b">Candidate information</text><text x="519" y="191" text-anchor="middle" class="b">does not cross this boundary.</text>
+<circle cx="518" cy="240" r="24" fill="#E11D48"/><line x1="505" y1="227" x2="531" y2="253" stroke="#fff" stroke-width="6" stroke-linecap="round"/><line x1="531" y1="227" x2="505" y2="253" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+
+<!-- Request -->
+<rect x="390" y="344" width="240" height="324" rx="9" fill="#F7FBFF" stroke="#78A7E8" stroke-width="1.6"/>
+<path d="M410 366h28l14 14v42h-42z" fill="#DCEBFA" stroke="#245A93" stroke-width="2"/><path d="M438 366v14h14" fill="none" stroke="#245A93" stroke-width="2"/>
+<text x="470" y="375" class="h">Authorization</text><text x="470" y="396" class="h">Request</text>
+<text x="510" y="451" text-anchor="middle" class="h" font-family="monospace">{ credentialPublicKey }</text>
+<rect x="403" y="474" width="214" height="56" rx="7" fill="#F0FDF4" stroke="#BBF7D0"/><circle cx="430" cy="502" r="14" fill="#2E9D5B"/><path d="M423 502l5 5 10-12" fill="none" stroke="#fff" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="454" y="495" class="b" font-weight="700" fill="#146B35">Only this field</text><text x="454" y="516" class="b" fill="#146B35">is sent</text>
+<rect x="403" y="539" width="214" height="112" rx="7" fill="#FFF1F2" stroke="#FECDD3"/><circle cx="430" cy="572" r="14" fill="#C81E3A"/><line x1="424" y1="566" x2="436" y2="578" stroke="#fff" stroke-width="3"/><line x1="436" y1="566" x2="424" y2="578" stroke="#fff" stroke-width="3"/>
+<text x="454" y="567" class="rt" font-weight="700">No candidateId</text><text x="454" y="588" class="rt">No selectedCandidate</text><text x="454" y="609" class="rt">No ballot data</text><text x="454" y="630" class="rt">No other fields</text>
+<line x1="370" y1="462" x2="390" y2="462" stroke="#2563EB" stroke-width="4"/><line x1="630" y1="462" x2="654" y2="462" stroke="#2563EB" stroke-width="4" marker-end="url(#ab)"/>
+
+<!-- 2. Authorization -->
+<rect x="654" y="112" width="494" height="700" rx="10" fill="url(#pp)" stroke="#6D5BD0" stroke-width="1.7"/>
+<rect x="664" y="126" width="474" height="48" rx="7" fill="#5145B8"/>
+<text x="684" y="157" class="pt">2. Candidate-Blind Biometric Authorization</text>
+<text x="901" y="198" text-anchor="middle" class="s">Identity verification and eligibility validation</text><text x="901" y="218" text-anchor="middle" class="s">(without candidate information)</text>
+
+<rect x="666" y="240" width="470" height="176" rx="9" class="boxp"/><text x="684" y="268" class="h">Biometric Authentication</text>
+<rect x="680" y="282" width="190" height="112" rx="8" fill="#FBFCFF" stroke="#D7D4F7"/><circle cx="720" cy="330" r="17" fill="none" stroke="#5248B7" stroke-width="3"/><path d="M704 314h-8v-8h8M736 314h8v-8h-8M704 346h-8v8h8M736 346h8v8h-8" fill="none" stroke="#5248B7" stroke-width="3" stroke-linecap="round"/>
+<text x="752" y="306" class="h">Face Verification</text><text x="752" y="332" class="sm">• Recognition &amp;</text><text x="752" y="350" class="sm">  liveness</text><text x="752" y="370" class="sm">• Resolve voter</text>
+<text x="894" y="342" text-anchor="middle" class="h">OR</text>
+<rect x="914" y="282" width="210" height="112" rx="8" fill="#FBFCFF" stroke="#D7D4F7"/><path d="M947 360q-18-12-18-34q0-28 25-28q25 0 25 28q0 28-20 42" fill="none" stroke="#725ED9" stroke-width="3"/><path d="M954 307q15 0 15 20q0 20-14 31" fill="none" stroke="#725ED9" stroke-width="3"/><path d="M944 313q-7 6-7 15q0 15 11 23" fill="none" stroke="#725ED9" stroke-width="3"/>
+<text x="985" y="306" class="h">Fingerprint Verification</text><text x="985" y="332" class="sm">• Detect fingerprint</text><text x="985" y="350" class="sm">• Resolve voter</text><text x="985" y="368" class="sm">  (NID)</text>
+
+<rect x="666" y="436" width="470" height="166" rx="9" class="boxp"/><ellipse cx="710" cy="476" rx="22" ry="9" fill="#5A50BA"/><rect x="688" y="476" width="44" height="45" fill="#5A50BA"/><ellipse cx="710" cy="521" rx="22" ry="9" fill="#5A50BA"/>
+<text x="750" y="470" class="h">Voter and Election Eligibility Validation</text><text x="750" y="498" class="b">• Retrieve registered WP5 credential</text><text x="750" y="522" class="b">• Check frozen election membership</text><text x="750" y="546" class="b">• Verify Poseidon Merkle root</text><text x="750" y="570" class="b">• Confirm root matches active contract</text><text x="750" y="594" class="b">• Validate credential integrity</text>
+<line x1="901" y1="416" x2="901" y2="436" stroke="#5145B8" stroke-width="3" marker-end="url(#ap)"/>
+
+<rect x="666" y="621" width="470" height="171" rx="9" class="boxp"/><path d="M705 655l22 8v23c0 17-10 31-22 38c-12-7-22-21-22-38v-23z" fill="#5145B8"/><path d="M696 684l7 7 13-15" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="748" y="651" class="h">Credential Protection and Release</text><text x="748" y="680" class="b">• Decrypt stored voting secret (server-side)</text><text x="748" y="704" class="b">• ECDH (P-256) with client public key</text><text x="748" y="728" class="b">• Derive AES key using HKDF-SHA256</text><text x="748" y="752" class="b">• Encrypt credential with AES-256-GCM</text><text x="748" y="776" class="b">• Bind to commitment, election ID, version, expiry</text>
+<line x1="901" y1="602" x2="901" y2="621" stroke="#5145B8" stroke-width="3" marker-end="url(#ap)"/>
+
+<!-- Response -->
+<rect x="1155" y="344" width="184" height="324" rx="9" fill="#F7F4FF" stroke="#9B8EEB" stroke-width="1.6"/>
+<text x="1232" y="376" class="h">Protected</text><text x="1232" y="397" class="h">Authorization</text><text x="1232" y="418" class="h">Response</text>
+<text x="1170" y="459" class="b">• Encrypted credential</text><text x="1170" y="480" class="b">  envelope (AES-256-GCM)</text><text x="1170" y="512" class="b">• Election ID and context</text><text x="1170" y="544" class="b">• Merkle membership</text><text x="1170" y="565" class="b">  witness</text><text x="1170" y="597" class="b">• Expiry time (2 minutes)</text>
+<line x1="1136" y1="462" x2="1155" y2="462" stroke="#5145B8" stroke-width="4"/><line x1="1339" y1="462" x2="1360" y2="462" stroke="#5145B8" stroke-width="4" marker-end="url(#ap)"/>
+
+<!-- 3. Local worker -->
+<rect x="1360" y="112" width="416" height="700" rx="10" fill="url(#gp)" stroke="#3C9B64" stroke-width="1.7"/>
+<rect x="1370" y="126" width="396" height="48" rx="7" fill="#21824E"/><text x="1390" y="157" class="pt">3. Local Privacy Worker (Browser)</text>
+<text x="1568" y="198" text-anchor="middle" class="s">Candidate and credential combined locally</text>
+<rect x="1376" y="236" width="384" height="205" rx="9" class="boxg"/><rect x="1410" y="303" width="35" height="38" rx="5" fill="#198754"/><path d="M1417 303v-12a10 10 0 0 1 20 0v12" fill="none" stroke="#198754" stroke-width="5"/>
+<text x="1468" y="270" class="h">Receive and Decrypt Authorization</text><text x="1468" y="304" class="b">• Decrypt credential using</text><text x="1468" y="326" class="b">  ephemeral private key</text><text x="1468" y="348" class="b">  (inside Web Worker)</text><text x="1468" y="380" class="b">• Verify context, expiry and integrity</text><text x="1468" y="404" class="b">• Validate Merkle membership</text>
+<line x1="1568" y1="441" x2="1568" y2="474" stroke="#15803D" stroke-width="3" marker-end="url(#ag)"/>
+<rect x="1376" y="482" width="384" height="185" rx="9" class="boxg"/><circle cx="1428" cy="538" r="21" fill="#1D8B52"/><circle cx="1428" cy="538" r="8" fill="#fff"/>
+<text x="1470" y="516" class="h">Combine with Local Candidate</text><text x="1470" y="548" class="b">• Use locally stored candidate ID</text><text x="1470" y="570" class="b">  (never sent to authorization service)</text><text x="1470" y="602" class="b">• Construct private ballot data</text><text x="1470" y="624" class="b">  (one-hot candidate vector)</text><text x="1470" y="646" class="b">• Prepare for zero-knowledge proof</text>
+<rect x="1450" y="710" width="286" height="80" rx="8" fill="#F4FFF7" stroke="#4AA36E" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="1510" y="738" class="gh">Next Stage:</text><text x="1510" y="760" class="gh">Private Ballot Construction</text><text x="1510" y="780" class="sm">(encryption, ZK proof, on-chain submission)</text>
+
+<!-- Candidate remains local -->
+<path d="M194 782V850H1408V680" fill="none" stroke="#2563EB" stroke-width="3" stroke-dasharray="10 7" marker-end="url(#ab)"/>
+<rect x="265" y="834" width="255" height="30" rx="6" fill="#fff"/><text x="392" y="855" text-anchor="middle" class="s" fill="#2563EB">Selected candidate (local only)</text>
+<text x="900" y="1005" text-anchor="middle" class="sm">Candidate identity is excluded from the authorization API; voter identity remains known to the biometric/credential service.</text>
+</svg>
